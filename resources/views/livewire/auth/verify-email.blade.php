@@ -39,12 +39,14 @@
             </form>
 
             <flux:subheading class="text-center">
-                Didn't receive code? <flux:link href="#">Resend</flux:link>
+                Didn't receive code? Resend in
+                <span id="countdown">02:00</span>
+                <flux:link id="resend-btn" wire:click="resend" href="javascript:void(0)" style="display:none;">Resend</flux:link>
             </flux:subheading>
 
-            <flux:subheading class="text-center">
-                <flux:link href=" {{route('logout')}} ">Logout</flux:link>
-            </flux:subheading>
+            <div class="flex justify-center">
+                @include('partials.logout')
+            </div>
         </div>
     </div>
 </div>
@@ -54,8 +56,10 @@
         const inputs = document.querySelectorAll('#otp-container input');
         const hiddenInput = document.getElementById('otp-hidden');
         const submitBtn = document.getElementById('otp-submit');
-        const form = document.getElementById('otp-form');
-        const resendBtn = document.getElementById('resend-otp');
+
+        const countdownEl = document.getElementById('countdown');
+        const resendBtn = document.getElementById('resend-btn');
+        let totalSeconds = 120; // 2 minutes
 
         // Auto-advance and backspace handling
         inputs.forEach((input, index) => {
@@ -102,21 +106,37 @@
             submitBtn.disabled = Array.from(inputs).some(i => i.value === '');
         }
 
-        // Resend button
-        resendBtn.addEventListener('click', e => {
-            e.preventDefault();
-            inputs.forEach(i => i.value = '');
-            hiddenInput.value = '';
-            updateSubmitState();
-            inputs[0].focus();
-
-            // Dispatch Livewire event
-            if (typeof Livewire !== 'undefined') {
-                Livewire.emit('resend');
-            }
-        });
-
         // Auto-focus first input on load
         inputs[0].focus();
+
+        function startCountdown(seconds) {
+            totalSeconds = seconds;
+            resendBtn.style.display = 'none'; // hide resend button
+
+            const interval = setInterval(() => {
+                const min = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+                const sec = (totalSeconds % 60).toString().padStart(2, '0');
+                countdownEl.textContent = `${min}:${sec}`;
+
+                if (totalSeconds <= 0) {
+                    clearInterval(interval);
+                    countdownEl.style.display = 'none';
+                    resendBtn.style.display = 'inline'; // show resend
+                }
+
+                totalSeconds--;
+            }, 1000);
+        }
+
+        resendBtn.addEventListener('click', () => {
+            // Reload the page after 4 seconds
+            setTimeout(() => {
+                window.location.reload();
+            }, 4000); // 4000 milliseconds = 4 seconds
+        });
+
+
+        // Start countdown on page load
+        startCountdown(totalSeconds);
     });
 </script>

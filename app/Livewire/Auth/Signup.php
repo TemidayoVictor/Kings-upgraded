@@ -38,9 +38,6 @@ class Signup extends Component
 //          Create User
             $user = SignupAction::execute($dto);
 
-//            Log user in
-            Auth::login($user);
-
 //          Send success toast if successful. Using session to retain toast when redirect happens
             session()->flash('toast', [
                 'type' => 'success',
@@ -54,12 +51,14 @@ class Signup extends Component
 
         } catch (\Exception $e) {
 //          Send error toast if error occurs
-            $this->dispatch('notify', [
+            session()->flash('toast', [
                 'type' => 'error',
                 'message' => $e->getMessage(),
                 'title' => 'Something went wrong!',
                 'duration' => 5000,
             ]);
+
+            return back();
         }
     }
 

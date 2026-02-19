@@ -5,14 +5,25 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use App\DTOs\Auth\VerificationCodeDTO;
 use App\Actions\Auth\VerificationCodeAction;
+use App\Actions\Auth\SendVerificationCodeAction;
+use App\DTOs\Auth\SendVerificationCodeDTO;
+use App\Traits\Toastable;
 
 class VerifyEmail extends Component
 {
+    use Toastable;
     public string $code = '';
     protected int $user_id;
+    public int $resendCooldown = 120; // 2 minutes in seconds
+    public bool $canResend = false;
+    protected $listeners = ['countdownTick'];
     protected array $rules = [
         'code' => 'required|string|size:6',
     ];
+
+    public function mount(): void {
+        $this->startCooldown();
+    }
     public function submit() {
         $this->validate();
         $this->user_id = auth()->id();
@@ -26,22 +37,48 @@ class VerifyEmail extends Component
 
         try {
             VerificationCodeAction::execute($dto);
-            // Send success toast if successful
-            $this->dispatch('notify', [
+//            trigger successful toast
+            session()->flash('toast', [
                 'type' => 'success',
-                'message' => 'Mail verified successfully',
+                'message' => 'Email verified successfully',
                 'title' => 'Success',
-                'duration' => '5000',
+                'duration' => 5000,
             ]);
+//            redirect
+            return redirect()->route('select-role');
+
         } catch (\Exception $e) {
             // Send error toast if error occurs
-            $this->dispatch('notify', [
-                'type' => 'error',
-                'message' => $e->getMessage(),
-                'title' => 'Failed!',
-                'duration' => '5000',
-            ]);
+            $this->toast('error', $e->getMessage());
         }
+    }
+
+    public function resend(){
+//        if (!$this->canResend) return; // checking if user can click resend button
+        $user = auth()->user();
+
+//        Build user data
+        $buildDto = [
+          'id' => $user->id,
+          'name' => $user->name,
+          'email' => $user->email,
+        ];
+
+        $dto = SendVerificationCodeDTO::fromArray($buildDto);
+
+//      Send verification code
+        SendVerificationCodeAction::execute($dto);
+
+//        Restart timer
+        $this->startCooldown();
+
+        $this->toast('success', 'Verification code resent');
+    }
+
+    public function startCooldown(): void
+    {
+        $this->canResend = false;
+        $this->dispatch('start-resend-timer', ['seconds' => $this->resendCooldown]);
     }
 
     public function render()

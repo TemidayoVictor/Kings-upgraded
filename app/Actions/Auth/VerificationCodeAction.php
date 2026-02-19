@@ -13,15 +13,15 @@ class VerificationCodeAction
             ->where('user_id', $dto->userId)
             ->first();
 
-        $user = User::findOrFail($dto->userId);
-        $user->update([
-            'email_verified_at' => now(),
-            'onboarding_step' => 'email_verified',
-        ]);
-
         if (!$verification) {
             throw new \Exception('Invalid verification code.');
         }
+
+        $user = User::findOrFail($dto->userId);
+        $user->update([
+            'email_verified_at' => now(),
+            'onboarding_step' => 'role_selection',
+        ]);
 
         $verification->delete();
 

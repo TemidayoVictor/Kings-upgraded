@@ -16,19 +16,6 @@
     </head>
     <body x-data>
         <div>
-            {{-- Toast from Session --}}
-            @if (session()->has('toast'))
-                <script>
-                    window.addEventListener('DOMContentLoaded', () => {
-                        window.dispatchEvent(
-                            new CustomEvent('notify', {
-                                detail: @json(session('toast'))
-                            })
-                        );
-                    });
-                </script>
-            @endif
-
             {{-- Toast from notify --}}
             <x-toast position="top-right" duration="5000" />
             {{ $slot }}

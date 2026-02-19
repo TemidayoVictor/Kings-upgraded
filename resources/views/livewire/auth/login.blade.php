@@ -1,31 +1,54 @@
 <div class="flex min-h-screen">
     <div class="flex-1 flex justify-center items-center">
         <div class="w-80 max-w-80 space-y-6">
-            <div class="flex justify-center">
+            <div class="flex flex-col items-center justify-center">
                 <a href="{{ route('home')  }}" class="group flex items-center gap-3">
                     <img src="{{ asset('images/Logo-Crown.svg') }}" alt="Logo" class="w-12 h-12">
                 </a>
+                <flux:heading class="text-center" size="xl">Ollo, Welcome back</flux:heading>
             </div>
 
-            <flux:heading class="text-center" size="xl">Ollo, Welcome back</flux:heading>
+            <form class="flex flex-col gap-6" wire:submit="login">
+                <!-- Email Address -->
+                <flux:input
+                    name="email"
+                    :label="__('Email address')"
+                    :value="old('email')"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="email@example.com"
+                    wire:model.defer="email"
+                />
 
-            <div class="flex flex-col gap-6">
-                <flux:input label="Email" type="email" placeholder="email@example.com" />
+                <!-- Password -->
+                <div class="relative">
+                    <flux:input
+                        name="password"
+                        :label="__('Password')"
+                        type="password"
+                        required
+                        autocomplete="new-password"
+                        :placeholder="__('Password')"
+                        viewable
+                        wire:model.defer="password"
+                    />
 
-                <flux:field>
-                    <div class="mb-3 flex justify-between">
-                        <flux:label>Password</flux:label>
+                    <flux:link class="absolute top-0 text-sm end-0" wire:navigate>
+                        {{ __('Forgot your password?') }}
+                    </flux:link>
 
-                        <flux:link href="#" variant="subtle" class="text-sm">Forgot password?</flux:link>
-                    </div>
-
-                    <flux:input type="password" placeholder="Your password" />
-                </flux:field>
+                </div>
 
                 <flux:checkbox label="Remember me for 30 days" />
 
-                <flux:button variant="primary" class="w-full">Log in</flux:button>
-            </div>
+                <div class="flex items-center justify-end">
+                    <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
+                        <flux:icon.loading wire:loading wire:target="login" />
+                        <span wire:loading.remove wire:target="login">{{ __('Login') }}</span>
+                    </flux:button>
+                </div>
+            </form>
 
             <flux:separator text="or" />
 
@@ -45,7 +68,7 @@
             </div>
 
             <flux:subheading class="text-center">
-                First time around here? <flux:link href="{{route('signup')}}">Sign up for free</flux:link>
+                First time around here? <flux:link href="{{route('signup')}}" wire:navigate>Sign up for free</flux:link>
             </flux:subheading>
         </div>
     </div>

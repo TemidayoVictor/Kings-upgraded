@@ -12,7 +12,7 @@
     @if(session()->has('toast'))
         add(@js(session('toast')));
     @endif"
-    @notify.window="add($event.detail)"
+    @notify.window="add($event.detail[0])"
     @clear-toasts.window="clear()"
     class="fixed z-50 pointer-events-none inset-0"
     x-cloak
@@ -46,8 +46,8 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
-                    @mouseenter="pauseToast(index)"
-                    @mouseleave="resumeToast(index)"
+{{--                    @mouseenter="$el.querySelector('.progress-bar').style.animationPlayState = 'paused'"--}}
+{{--                    @mouseleave="$el.querySelector('.progress-bar').style.animationPlayState = 'running'"--}}
                     @click="remove(index)"
                     :class="{
                         'bg-emerald-50 border-emerald-200': toast.type === 'success',
@@ -63,14 +63,14 @@
                     {{-- Progress Bar - Full width on mobile --}}
                     <div
                         x-show="toast.duration > 0"
-                        class=" absolute bottom-0 left-0 h-1 rounded-b-sm sm:rounded-b-xl"
-                        :style="`width: ${toast.progress}%; transition: width 50ms linear;`"
+                        class="progress-bar absolute bottom-0 left-0 h-1"
                         :class="{
                             'bg-emerald-500': toast.type === 'success',
                             'bg-rose-500': toast.type === 'error',
                             'bg-amber-500': toast.type === 'warning',
                             'bg-sky-500': toast.type === 'info',
                         }"
+                        :style="`animation: shrink ${toast.duration}ms linear forwards;`"
                     ></div>
 
                     {{-- Icon --}}
@@ -98,7 +98,7 @@
                     </div>
 
                     {{-- Content --}}
-                    <div class="flex-1 pt-0.5">
+                    <div class="flex-1 pt-0.5 capitalize">
                         <p class="text-sm font-semibold" :class="{
                             'text-emerald-800': toast.type === 'success',
                             'text-rose-800': toast.type === 'error',
@@ -161,20 +161,9 @@
             startTimer(toast) {
                 if (toast.duration <= 0) return;
 
-                const startTime = Date.now();
-                const endTime = startTime + toast.duration;
-
-                toast.timer = setInterval(() => {
-                    if (!toast.pause && toast.show) {
-                        const now = Date.now();
-                        const remaining = endTime - now;
-                        toast.progress = (remaining / toast.duration) * 100;
-
-                        if (remaining <= 0) {
-                            this.removeById(toast.id);
-                        }
-                    }
-                }, 50);
+                toast.timer = setTimeout(() => {
+                    this.removeById(toast.id);
+                }, toast.duration);
             },
 
             pauseToast(index) {
@@ -228,4 +217,8 @@
 
 <style>
     [x-cloak] { display: none !important; }
+    @keyframes shrink {
+        from { width: 100%; }
+        to { width: 0%; }
+    }
 </style>

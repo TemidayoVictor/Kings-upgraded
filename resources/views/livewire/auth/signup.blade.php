@@ -1,14 +1,13 @@
 
     <div class="flex min-h-screen">
         <div class="flex-1 flex justify-center items-center">
-            <div class="w-80 max-w-80 space-y-6">
-                <div class="flex justify-center">
+            <div class="space-y-6 mx-auto min-w-[85%] md:min-w-90">
+                <div class="flex flex-col items-center justify-center">
                     <a href="{{ route('home')  }}" class="group flex items-center gap-3">
                         <img src="{{ asset('images/Logo-Crown.svg') }}" alt="Logo" class="w-12 h-12">
                     </a>
+                    <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
                 </div>
-
-                <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
 
                 <form class="flex flex-col gap-6" wire:submit="submit">
                     @csrf
@@ -87,7 +86,7 @@
                 </div>
 
                 <flux:subheading class="text-center">
-                    Already have an account? <flux:link href=" {{ route('login') }}">Log in</flux:link>
+                    Already have an account? <flux:link href=" {{ route('login') }}" wire:navigate>Log in</flux:link>
                 </flux:subheading>
             </div>
         </div>

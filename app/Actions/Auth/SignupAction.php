@@ -2,14 +2,13 @@
 namespace App\Actions\Auth;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 use App\DTOs\Auth\SignupDTO;
 use App\Models\User;
-use App\Models\VerificationCode;
-use App\Mail\VerificationMail;
+use App\DTOs\Auth\SendVerificationCodeDTO;
+use Illuminate\Support\Facades\Auth;
 
 class SignupAction
 {
@@ -18,48 +17,36 @@ class SignupAction
         DB::beginTransaction();
 
         try {
-            // Create user
             $user = User::create([
                 'email' => $dto->email,
                 'password' => Hash::make($dto->password),
                 'name' => $dto->name,
+                'onboarding_step' => 'email_verification',
             ]);
 
-            // Delete existing verification code if any
-            VerificationCode::where('user_id', $user->id)->delete();
-
-            // Create new verification code
-            $verificationCode = VerificationCode::create([
-                'user_id' => $user->id,
-                'code' => rand(100000, 999999),
-            ]);
-
-            Log::info('Verification code generated', [
-                'user_id' => $user->id,
-            ]);
-
-            // Send verification email
-            $emailData = [
-                'name' => firstName($user->name),
-                'code' => $verificationCode->code,
+            $buildDto = [
+                'id' => $user->id,
+                'email' => $dto->email,
+                'name' => $user->name,
             ];
 
-            Mail::to($user->email)->send(new VerificationMail($emailData));
+            $dto = SendVerificationCodeDTO::fromArray($buildDto);
+            SendVerificationCodeAction::execute($dto);
 
             DB::commit();
 
+//            Log user in
+            Auth::login($user);
+
             return $user;
 
-        } catch (Throwable $e) {
-
+        } catch(\Throwable $e) {
             DB::rollBack();
-
             Log::error('Signup failed', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
-            throw $e; // Let caller decide how to handle
+            throw $e;
         }
     }
 }
