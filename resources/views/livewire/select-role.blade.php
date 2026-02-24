@@ -15,7 +15,7 @@
                     <flux:text class="mt-2 mb-4">
                         Create, manage and grow your business with powerful tools built for scaling.
                     </flux:text>
-                    <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('brand')">Continue as Brand</flux:button>
+                    <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('{{App\Enums\UserType::BRAND}}')">Continue as Brand</flux:button>
                 </flux:card>
 
                 <flux:card>
@@ -25,7 +25,7 @@
                         Sell products without holding inventory. Partner with brands and simply focus
                         on marketing.
                     </flux:text>
-                    <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('dropshipper')">Continue as Dropshipper</flux:button>
+                    <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('{{App\Enums\UserType::DROPSHIPPER}}')">Continue as Dropshipper</flux:button>
                 </flux:card>
 
                 <flux:card>
@@ -34,7 +34,7 @@
                     <flux:text class="mt-2 mb-4">
                         Browse products, shop from trusted brands, and connect with sellers effortlessly.
                     </flux:text>
-                    <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('client')">Continue as Client</flux:button>
+                    <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('{{App\Enums\UserType::CLIENT}}')">Continue as Client</flux:button>
                 </flux:card>
 
             </div>

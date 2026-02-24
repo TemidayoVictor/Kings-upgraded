@@ -3,20 +3,29 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\DTOs\SelectRoleDTO;
+use App\Actions\SelectRoleAction;
+use App\Traits\Toastable;
 
 class SelectRole extends Component
 {
-    public $preferences;
-    public string $role;
-
+    use Toastable;
     public function submit($role) {
-        auth()->user()->update([
-            'role' => $role,
-            'onboarding_step' => 'profile_setup'
-        ]);
+        $dto = SelectRoleDTO::fromArray(['role' => $role]);
+        try {
+            SelectRoleAction::execute($dto);
 
-//        Create role table
-        return redirect()->route("dashboard");
+            session()->flash('toast', [
+                'type' => 'success',
+                'message' => 'Account updated successfully',
+                'title' => 'Success',
+                'duration' => 5000,
+            ]);
+
+            return redirect()->route("settings.profile");
+        } catch(\Exception $e) {
+            $this->toast('error', $e->getMessage());
+        }
     }
 
     public function render()

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -28,6 +29,8 @@ class User extends Authenticatable
         'phone',
         'role',
         'onboarding_step',
+        'uuid',
+        'status',
     ];
 
     /**
@@ -53,9 +56,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the user's initials
-     */
     public function initials(): string
     {
         return Str::of($this->name)
@@ -68,5 +68,20 @@ class User extends Authenticatable
     public function preferences(): BelongsToMany
     {
         return $this->belongsToMany(Preference::class);
+    }
+
+    public function hasPreference($preferenceId): bool
+    {
+        return $this->preferences()->where('preference_id', $preferenceId)->exists();
+    }
+
+    public function dropshipper(): HasOne
+    {
+        return $this->hasOne(Dropshipper::class);
+    }
+
+    public function brand(): HasOne
+    {
+        return $this->hasOne(Brand::class);
     }
 }

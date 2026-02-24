@@ -9,7 +9,7 @@ class DropshipperDashboard extends Component
     public function render()
     {
         return view('livewire.dropshipper.dropshipper-dashboard')
-            ->layout('layouts.app')
+            ->layout('layouts.auth')
             ->title('Dropshipper Dashboard');
     }
 }

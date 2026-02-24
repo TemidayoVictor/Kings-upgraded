@@ -9,7 +9,7 @@ class ClientDashboard extends Component
     public function render()
     {
         return view('livewire.client.client-dashboard')
-            ->layout('layouts.app')
+            ->layout('layouts.auth')
             ->title('Client Dashboard');
     }
 }

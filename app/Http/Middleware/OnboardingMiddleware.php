@@ -42,9 +42,27 @@ class OnboardingMiddleware
                 ? redirect()->route('select-role')
                 : $next($request),
 
+            // User must have completed profile
+            'profile_setup' =>
+            $currentRoute !== 'settings.profile'
+                ? redirect()->route('settings.profile')
+                : $next($request),
+
+            // Brands must have completed profile
+            'brand-setup' =>
+            $currentRoute !== 'brand-details'
+                ? redirect()->route('brand-details')
+                : $next($request),
+
+            // Brands must have completed profile
+            'dropshipper-setup' =>
+            $currentRoute !== 'dropshipper-details'
+                ? redirect()->route('dropshipper-details')
+                : $next($request),
+
             // Onboarding complete
             default =>
-            in_array($currentRoute, ['verify-email', 'select-role'])
+            in_array($currentRoute, ['verify-email', 'select-role',])
                 ? redirect()->route('dashboard')
                 : $next($request),
         };

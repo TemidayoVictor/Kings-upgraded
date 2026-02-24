@@ -13,6 +13,9 @@ use App\Livewire\Brand\BrandDashboard;
 use App\Livewire\Client\ClientDashboard;
 use App\Livewire\Dropshipper\DropshipperDashboard;
 use App\Livewire\Settings\ProfileSettings;
+use App\Livewire\Brand\Settings\BrandSettings;
+use App\Livewire\Brand\Settings\AdditionalDetails;
+use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 
 // General Routes
 Route::get('/', [NavigationController::class, 'home'])->name('home');
@@ -25,14 +28,13 @@ Route::middleware(['guest'])->group(function () {
 
 //Protected Routes
 Route::middleware(['auth'])->group(function () {
-        Route::livewire('/settings/profile', ProfileSettings::class)->name('settings.profile');
-
         Route::middleware(['onboarding'])->group(function () {
                 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
                 Route::livewire('/verify-email', VerifyEmail::class)->name('verify-email');
                 Route::livewire('/select-role', SelectRole::class)->name('select-role');
             }
         );
+        Route::livewire('/settings/profile', ProfileSettings::class)->name('settings.profile');
 
         Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
     }
@@ -46,22 +48,25 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
 );
 
 // Brand Routes
-Route::middleware(['auth', 'role:brand'])->prefix('brand')->name('brand-')
+Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('brand-')
     ->group(function () {
         Route::livewire('/dashboard', BrandDashboard::class)->name('dashboard');
+        Route::livewire('/settings/brand-details', BrandSettings::class)->name('details');
+        Route::livewire('/settings/additional-details', AdditionalDetails::class)->name('additional-details');
     }
 );
 
 // Client Routes
-Route::middleware(['auth', 'role:client'])->prefix('client')->name('client-')
+Route::middleware(['auth', 'role:client', 'onboarding'])->prefix('client')->name('client-')
     ->group(function () {
         Route::livewire('/dashboard', ClientDashboard::class)->name('dashboard');
     }
 );
 
 // Dropshipper Routes
-Route::middleware(['auth', 'role:dropshipper'])->prefix('dropshipper')->name('dropshipper-')
+Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipper')->name('dropshipper-')
     ->group(function () {
         Route::livewire('/dashboard', DropshipperDashboard::class)->name('dashboard');
+        Route::livewire('/settings/dropshipper-details', DropshipperDetails::class)->name('details');
     }
 );

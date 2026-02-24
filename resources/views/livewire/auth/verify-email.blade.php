@@ -43,100 +43,102 @@
                 <span id="countdown">02:00</span>
                 <flux:link id="resend-btn" wire:click="resend" href="javascript:void(0)" style="display:none;">Resend</flux:link>
             </flux:subheading>
-
-            <div class="flex justify-center">
-                @include('partials.logout')
-            </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const inputs = document.querySelectorAll('#otp-container input');
-        const hiddenInput = document.getElementById('otp-hidden');
-        const submitBtn = document.getElementById('otp-submit');
+{{-- Script --}}
+@push('scripts')
 
-        const countdownEl = document.getElementById('countdown');
-        const resendBtn = document.getElementById('resend-btn');
-        let totalSeconds = 120; // 2 minutes
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('#otp-container input');
+            const hiddenInput = document.getElementById('otp-hidden');
+            const submitBtn = document.getElementById('otp-submit');
 
-        // Auto-advance and backspace handling
-        inputs.forEach((input, index) => {
-            input.addEventListener('input', e => {
-                input.value = input.value.replace(/[^0-9]/g, ''); // Only digits
-                updateHidden();
-                updateSubmitState();
+            const countdownEl = document.getElementById('countdown');
+            const resendBtn = document.getElementById('resend-btn');
+            let totalSeconds = 120; // 2 minutes
 
-                if (input.value && index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                }
+            // Auto-advance and backspace handling
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', e => {
+                    input.value = input.value.replace(/[^0-9]/g, ''); // Only digits
+                    updateHidden();
+                    updateSubmitState();
+
+                    if (input.value && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', e => {
+                    if (e.key === 'Backspace' && !input.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+
+                input.addEventListener('paste', e => {
+                    e.preventDefault();
+                    const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+                    for (let i = 0; i < inputs.length; i++) {
+                        inputs[i].value = paste[i] || '';
+                    }
+                    updateHidden();
+                    updateSubmitState();
+
+                    // Focus the first empty input
+                    const firstEmpty = Array.from(inputs).findIndex(i => i.value === '');
+                    if (firstEmpty !== -1) inputs[firstEmpty].focus();
+                });
             });
 
-            input.addEventListener('keydown', e => {
-                if (e.key === 'Backspace' && !input.value && index > 0) {
-                    inputs[index - 1].focus();
-                }
+            function updateHidden() {
+                const code = Array.from(inputs).map(i => i.value).join('');
+                hiddenInput.value = code;
+
+                // Dispatch input event so Livewire updates property
+                hiddenInput.dispatchEvent(new Event('input'));
+            }
+
+            function updateSubmitState() {
+                submitBtn.disabled = Array.from(inputs).some(i => i.value === '');
+            }
+
+            // Auto-focus first input on load
+            inputs[0].focus();
+
+            function startCountdown(seconds) {
+                totalSeconds = seconds;
+                resendBtn.style.display = 'none'; // hide resend button
+
+                const interval = setInterval(() => {
+                    const min = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+                    const sec = (totalSeconds % 60).toString().padStart(2, '0');
+                    countdownEl.textContent = `${min}:${sec}`;
+
+                    if (totalSeconds <= 0) {
+                        clearInterval(interval);
+                        countdownEl.style.display = 'none';
+                        resendBtn.style.display = 'inline'; // show resend
+                    }
+
+                    totalSeconds--;
+                }, 1000);
+            }
+
+            resendBtn.addEventListener('click', () => {
+                // Reload the page after 4 seconds
+                setTimeout(() => {
+                    window.location.reload();
+                }, 4000); // 4000 milliseconds = 4 seconds
             });
 
-            input.addEventListener('paste', e => {
-                e.preventDefault();
-                const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
-                for (let i = 0; i < inputs.length; i++) {
-                    inputs[i].value = paste[i] || '';
-                }
-                updateHidden();
-                updateSubmitState();
 
-                // Focus the first empty input
-                const firstEmpty = Array.from(inputs).findIndex(i => i.value === '');
-                if (firstEmpty !== -1) inputs[firstEmpty].focus();
-            });
+            // Start countdown on page load
+            startCountdown(totalSeconds);
         });
 
-        function updateHidden() {
-            const code = Array.from(inputs).map(i => i.value).join('');
-            hiddenInput.value = code;
+    </script>
 
-            // Dispatch input event so Livewire updates property
-            hiddenInput.dispatchEvent(new Event('input'));
-        }
-
-        function updateSubmitState() {
-            submitBtn.disabled = Array.from(inputs).some(i => i.value === '');
-        }
-
-        // Auto-focus first input on load
-        inputs[0].focus();
-
-        function startCountdown(seconds) {
-            totalSeconds = seconds;
-            resendBtn.style.display = 'none'; // hide resend button
-
-            const interval = setInterval(() => {
-                const min = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-                const sec = (totalSeconds % 60).toString().padStart(2, '0');
-                countdownEl.textContent = `${min}:${sec}`;
-
-                if (totalSeconds <= 0) {
-                    clearInterval(interval);
-                    countdownEl.style.display = 'none';
-                    resendBtn.style.display = 'inline'; // show resend
-                }
-
-                totalSeconds--;
-            }, 1000);
-        }
-
-        resendBtn.addEventListener('click', () => {
-            // Reload the page after 4 seconds
-            setTimeout(() => {
-                window.location.reload();
-            }, 4000); // 4000 milliseconds = 4 seconds
-        });
-
-
-        // Start countdown on page load
-        startCountdown(totalSeconds);
-    });
-</script>
+@endpush

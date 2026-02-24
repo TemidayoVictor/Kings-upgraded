@@ -24,4 +24,5 @@
     {{--  Flux  --}}
     @fluxScripts
     @livewireScripts
+    @stack('scripts')
 </html>
