@@ -7,31 +7,31 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\VerificationCode;
 use App\Mail\VerificationMail;
-use App\DTOs\Auth\SendVerificationCodeDTO;
 
 class SendVerificationCodeAction
 {
-    public static function execute(SendVerificationCodeDTO $dto): void
+    public static function execute(): void
     {
+        $user = auth()->user();
 //        Delete existing one if there is
-        VerificationCode::where('user_id', $dto->id)->delete();
+        VerificationCode::where('user_id', $user->id)->delete();
 
 //        Create new code
         $verificationCode = VerificationCode::create([
-            'user_id' => $dto->id,
+            'user_id' => $user->id,
             'code' => rand(100000, 999999),
         ]);
 
-        Log::info('Verification code generated', [
-            'user_id' => $dto->id,
+        Log::info('Verification code regenerated', [
+            'user_id' => $user->id,
         ]);
 
 //        Send verification code
         $emailData = [
-            'name' => firstName($dto->name),
+            'name' => firstName($user->name),
             'code' => $verificationCode->code,
         ];
 
-        Mail::to($dto->email)->send(new VerificationMail($emailData));
+        Mail::to($user->email)->send(new VerificationMail($emailData));
     }
 }

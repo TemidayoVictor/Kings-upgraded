@@ -14,17 +14,14 @@ class VerifyEmail extends Component
     use Toastable;
 
     public string $code = '';
-    protected int $user_id;
     protected array $rules = [
         'code' => 'required|string|size:6',
     ];
 
     public function submit() {
         $this->validate();
-        $this->user_id = auth()->id();
 
         $buildDto = [
-            'user_id' => $this->user_id,
             'code' => $this->code,
         ];
 
@@ -49,22 +46,13 @@ class VerifyEmail extends Component
     }
 
     public function resend(){
-//        if (!$this->canResend) return; // checking if user can click resend button
-        $user = auth()->user();
-
-//        Build user data
-        $buildDto = [
-          'id' => $user->id,
-          'name' => $user->name,
-          'email' => $user->email,
-        ];
-
-        $dto = SendVerificationCodeDTO::fromArray($buildDto);
-
-//      Send verification code
-        SendVerificationCodeAction::execute($dto);
-
-        $this->toast('success', 'Verification code resent');
+        try{
+            SendVerificationCodeAction::execute();
+            $this->toast('success', 'Verification code resent');
+        } catch (\Exception $e) {
+            // Send error toast if error occurs
+            $this->toast('error', $e->getMessage());
+        }
     }
 
     public function render()

@@ -9,15 +9,16 @@ class VerificationCodeAction
 {
     public static function execute(VerificationCodeDTO $dto): bool
     {
+        $user = auth()->user();
         $verification = VerificationCode::where('code', $dto->code)
-            ->where('user_id', $dto->userId)
+            ->where('user_id', $user->id)
             ->first();
 
         if (!$verification) {
             throw new \Exception('Invalid verification code.');
         }
 
-        $user = User::findOrFail($dto->userId);
+        $user = User::findOrFail($user->id);
         $user->update([
             'email_verified_at' => now(),
             'onboarding_step' => 'role_selection',

@@ -20,9 +20,11 @@
             <x-toast position="top-right" duration="5000" />
             {{ $slot }}
         </div>
+
+        {{--  Flux  --}}
+        @fluxScripts
+        @livewireScripts
+        @stack('scripts')
+
     </body>
-    {{--  Flux  --}}
-    @fluxScripts
-    @livewireScripts
-    @stack('scripts')
 </html>
