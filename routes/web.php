@@ -18,6 +18,9 @@ use App\Livewire\Brand\Settings\AdditionalDetails;
 use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 use App\Livewire\Brand\Product\AddProduct;
 use App\Livewire\Brand\Product\ManageSection;
+use App\Livewire\Brand\Product\ProductList;
+use App\Livewire\Brand\Product\EditProduct;
+use App\Livewire\Brand\Product\ManageDeliveryLocations;
 
 // General Routes
 Route::get('/', [NavigationController::class, 'home'])->name('home');
@@ -58,6 +61,9 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
 
         Route::livewire('/product/add-product', AddProduct::class)->name('add-product');
         Route::livewire('/section', ManageSection::class)->name('section');
+        Route::livewire('/product-list', ProductList::class)->name('product-list');
+        Route::livewire('/product/edit-product/{product}', EditProduct::class)->name('edit-product');
+        Route::livewire('/product/manage-delivery-locations', ManageDeliveryLocations::class)->name('manage-delivery-locations');
     }
 );
 

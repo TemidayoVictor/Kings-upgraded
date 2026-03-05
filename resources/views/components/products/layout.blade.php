@@ -4,7 +4,7 @@
             <flux:navlist.item :href="route('brand-add-product')">{{ __('Add Product') }}</flux:navlist.item>
         </flux:navlist>
         <flux:navlist aria-label="{{ __('Products') }}">
-            <flux:navlist.item :href="route('brand-details')">{{ __('Products List') }}</flux:navlist.item>
+            <flux:navlist.item :href="route('brand-product-list')">{{ __('Products List') }}</flux:navlist.item>
         </flux:navlist>
         <flux:navlist aria-label="{{ __('Products') }}">
             <flux:navlist.item :href="route('brand-section')">{{ __('Manage Sections') }}</flux:navlist.item>

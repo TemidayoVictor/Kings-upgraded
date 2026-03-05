@@ -4,7 +4,7 @@ namespace App\Actions\Brand;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use App\DTOs\Brand\AddProductDTO;
+use App\DTOs\Brand\ProductDTO;
 
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class AddProductAction
 {
-    public static function execute(AddProductDTO $dto): Product
+    public static function execute(ProductDTO $dto): Product
     {
         $user = auth()->user();
 

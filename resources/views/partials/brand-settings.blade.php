@@ -4,10 +4,10 @@
     </flux:sidebar.item>
 
     <flux:sidebar.group :heading="__('Products')" class="grid">
-        <flux:sidebar.item icon="plus-circle" :href="route('brand-add-product')" :current="request()->routeIs('brand-add-product', 'brand-section')" wire:navigate>
+        <flux:sidebar.item icon="plus-circle" :href="route('brand-add-product')" :current="request()->routeIs('brand-add-product', 'brand-section', 'brand-product-list', 'brand-edit-product')" wire:navigate>
             {{ __('Manage Products') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="adjustments-horizontal" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="adjustments-horizontal" :href="route('brand-manage-delivery-locations')" :current="request()->routeIs('brand-manage-delivery-locations')" wire:navigate>
             {{ __('Product Settings') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

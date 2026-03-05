@@ -6,7 +6,7 @@ use App\Traits\Toastable;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Actions\Brand\AddProductAction;
-use App\DTOs\Brand\AddProductDTO;
+use App\DTOs\Brand\ProductDTO;
 use App\Models\Section;
 use Illuminate\Support\Collection;
 
@@ -57,7 +57,7 @@ class AddProduct extends Component
 
     public function submit() {
         $validated = $this->validate();
-        $dto = AddProductDTO::fromArray($validated);
+        $dto = ProductDTO::fromArray($validated);
         try {
             AddProductAction::execute($dto);
             // CLEAR FORM

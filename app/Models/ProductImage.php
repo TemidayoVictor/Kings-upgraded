@@ -49,14 +49,6 @@ class ProductImage extends Model
     ];
 
     /**
-     * Get the product that owns the image.
-     */
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    /**
      * Get the full image URL.
      */
     public function getImageUrlAttribute(): string
@@ -86,6 +78,14 @@ class ProductImage extends Model
     public function scopeForProduct($query, int $productId)
     {
         return $query->where('product_id', $productId);
+    }
+
+    /**
+     * Get the product that owns the image.
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     /**

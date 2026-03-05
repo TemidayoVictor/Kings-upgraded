@@ -50,25 +50,6 @@ class Product extends Model
         'publish' => false,
     ];
 
-    /**
-     * Get the brand that owns the product.
-     */
-    public function brand(): BelongsTo
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    /**
-     * Get the images for the product.
-     */
-    public function images(): HasMany
-    {
-        return $this->hasMany(ProductImage::class);
-    }
-
-    /**
-     * Get the primary/first image for the product.
-     */
     public function primaryImage(): HasMany
     {
         return $this->hasMany(ProductImage::class)->oldest();
@@ -211,6 +192,26 @@ class Product extends Model
 
         return false;
     }
+
+    /**
+     * Get the brand that owns the product.
+     */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Get the images for the product.
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    /**
+     * Get the primary/first image for the product.
+     */
 
     public function section(): BelongsTo
     {

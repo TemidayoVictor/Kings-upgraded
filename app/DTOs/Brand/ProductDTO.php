@@ -2,13 +2,13 @@
 namespace App\DTOs\Brand;
 
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-class AddProductDTO
+class ProductDTO
 {
     /**
      * @param array<TemporaryUploadedFile> $images
      */
     public function __construct(
-        public readonly array $images,
+        public readonly ?array $images,
         public readonly string $name,
         public readonly string $description,
         public readonly int $price,
@@ -17,12 +17,13 @@ class AddProductDTO
         public readonly int|null $sectionId,
         public readonly string|null $link,
         public readonly int|null $stock,
+        public readonly ?int $productId,
     ) {}
 
     public static function fromArray(array $data): self
     {
         return new self(
-            images: $data['images'],
+            images: $data['images'] ?? [],
             name: $data['name'],
             description: $data['description'],
             price: $data['price'],
@@ -31,6 +32,7 @@ class AddProductDTO
             sectionId: $data['sectionId'],
             link: $data['link'],
             stock: $data['stock'],
+            productId: $data['productId'] ?? 0,
         );
     }
 }

@@ -3,26 +3,20 @@
 
     <flux:heading class="sr-only">{{ __('Manage Sections') }}</flux:heading>
     <x-products.layout :heading="__('Manage Sections')" :subheading="__('Create sections for your products')">
-        <form wire:submit="submit">
-            <flux:fieldset>
-                <div class="space-y-4">
-                    <flux:input label="Add Section" wire:model="name" placeholder="Section Name" class="max-full" />
-                    <div class="flex justify-end">
-                        <flux:button type="submit" variant="primary">
-                            <flux:icon.loading wire:loading wire:target="submit" />
-                            <span wire:loading.remove wire:target="submit">{{ __('Add Section') }}</span>
-                        </flux:button>
-                    </div>
-                    <flux:separator />
-                </div>
-            </flux:fieldset>
-        </form>
+
+        <div class="flex justify-end mb-4">
+            <flux:button wire:click="openCreateModal" size="sm" variant="primary">
+                Add Section
+            </flux:button>
+        </div>
+
+        <flux:separator/>
 
         <div class="min-h-screen">
             <div class="max-w-7xl mx-auto">
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-3">
-                    <flux:subheading size="xl" level="1" class="text-gray-100">Section List</flux:subheading>
+                    <flux:heading class="sr-only">{{ __('Section List') }}</flux:heading>
                 </div>
 
                 <!-- Sections List -->
@@ -102,7 +96,7 @@
                         </div>
 
                         <!-- Mobile Card View (visible only on mobile) -->
-                        <div class="sm:hidden divide-y divide-gray-200">
+                        <div class="sm:hidden divide-y divide-gray-500">
                             @foreach($sections as $section)
                                 <div class="p-4 hover:bg-gray-750 transition-colors">
                                     <div class="flex items-start justify-between mb-2">
@@ -156,6 +150,37 @@
                     @endif
                 </div>
 
+                @if($sections->hasPages())
+                    <div class="mt-6">
+                        <flux:pagination :paginator="$sections" />
+                    </div>
+                @endif
+
+                <!-- Create Location Modal -->
+                @if($showCreateModal)
+                    <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4" style="z-index: 50;">
+                        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                            <h3 class="text-lg font-medium text-white mb-4">Add New Section</h3>
+                            <form wire:submit="submit">
+                                <flux:fieldset>
+                                    <div class="space-y-4">
+                                        <flux:input label="Add Section" wire:model="name" placeholder="E.g Male | Female | Unisex. . ." class="max-full" />
+                                        <div class="flex justify-end space-x-2">
+                                            <flux:button type="button" variant="subtle" wire:click="closeModal">
+                                                Cancel
+                                            </flux:button>
+                                            <flux:button type="submit" size="sm" variant="primary">
+                                                <flux:icon.loading wire:loading wire:target="submit" />
+                                                <span wire:loading.remove wire:target="submit">{{ __('Add Section') }}</span>
+                                            </flux:button>
+                                        </div>
+                                    </div>
+                                </flux:fieldset>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+
                 @if($showEditModal)
                     <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
                         <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
@@ -169,7 +194,7 @@
                                             </flux:button>
                                             <flux:button type="submit" size="sm" variant="primary" class="ml-2">
                                                 <flux:icon.loading wire:loading wire:target="save" />
-                                                <span wire:loading.remove wire:target="save">{{ __('Edit Section') }}</span>
+                                                <span wire:loading.remove wire:target="save">{{ __('Edit') }}</span>
                                             </flux:button>
                                         </div>
                                         <flux:separator />
@@ -189,7 +214,12 @@
                                     <div class="space-y-4">
                                         <p class="text-white mb-4"> Are you sure you want to delete "{{ $name }}"? </p>
                                         <div class="flex justify-end items-center">
-                                            <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
+                                            <flux:button
+                                                type="button"
+                                                variant="ghost"
+                                                wire:click="closeModal"
+                                                size="sm"
+                                            >
                                                 Cancel
                                             </flux:button>
                                             <flux:button type="submit" size="sm" variant="danger" class="ml-2">
@@ -197,7 +227,6 @@
                                                 <span wire:loading.remove wire:target="save">{{ __('Delete') }}</span>
                                             </flux:button>
                                         </div>
-                                        <flux:separator />
                                     </div>
                                 </flux:fieldset>
                             </form>

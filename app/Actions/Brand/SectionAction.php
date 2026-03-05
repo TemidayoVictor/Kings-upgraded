@@ -53,10 +53,10 @@ class SectionAction
         $section = Section::findOrFail($dto->sectionId);
 
 //        edit all products using the section
-        $products = Product::where('section', $section->id)->where('brand_id', auth()->user()->brand->id)->get();
+        $products = Product::where('section_id', $section->id)->where('brand_id', auth()->user()->brand->id)->get();
         foreach ($products as $product) {
             $product->update([
-                'section' => null,
+                'section_id' => null,
             ]);
         }
 //        delete section

@@ -7,26 +7,39 @@ use App\Models\Section;
 use App\Actions\Brand\SectionAction;
 use App\DTOs\Brand\SectionDTO;
 use App\Traits\Toastable;
+use Livewire\WithPagination;
 
 class ManageSection extends Component
 {
     use Toastable;
+    use WithPagination;
+
     public string $name;
     public int $sectionId;
-    public $showEditModal = false;
-    public $showDeleteModal = false;
+    public bool $showEditModal = false;
+    public bool $showDeleteModal = false;
+    public bool $showCreateModal = false;
+    public int $perPage = 4;
 
     protected array $rules = [
         'name' => 'required|string|max:255',
         'sectionId' => 'nullable|integer|exists:sections,id',
     ];
 
+    public function openCreateModal(): void
+    {
+        $this->resetValidation();
+        $this->reset(['name', 'sectionId']);
+        $this->showCreateModal = true;
+    }
+
     public function submit(): void {
         $validated = $this->validate();
         $dto = SectionDTO::fromArray($validated);
         try {
             SectionAction::execute($dto);
-            $this->name = '';
+            $this->reset(['name', 'sectionId']);
+            $this->showCreateModal = false;
             $this->toast('success','Section added successfully.');
         } catch(\Exception $e) {
             $this->toast('error',$e->getMessage());
@@ -72,13 +85,14 @@ class ManageSection extends Component
     public function closeModal():void {
         $this->showEditModal = false;
         $this->showDeleteModal = false;
+        $this->showCreateModal = false;
     }
 
     public function render()
     {
         $sections = Section::with('products')->where('brand_id', auth()->user()->brand->id)
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate($this->perPage);
         return view('livewire.brand.product.manage-section', [
                 'sections' => $sections,
             ])
