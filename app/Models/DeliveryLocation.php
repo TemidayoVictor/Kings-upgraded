@@ -91,4 +91,10 @@ class DeliveryLocation extends Model
 
         return $this->parent ? $this->parent->effective_price : null;
     }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }

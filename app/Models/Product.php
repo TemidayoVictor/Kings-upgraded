@@ -22,6 +22,7 @@ class Product extends Model
         'sale_status',
         'publish',
         'visible',
+        'is_active',
     ];
 
     protected $casts = [
@@ -216,5 +217,15 @@ class Product extends Model
     public function section(): BelongsTo
     {
         return $this->belongsTo(Section::class);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

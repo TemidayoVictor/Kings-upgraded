@@ -2,25 +2,33 @@
 
 namespace App\Actions\Brand;
 
-use Illuminate\Support\Facades\Log;
-
-use App\Models\User;
-use App\Models\Brand;
 use App\DTOs\Brand\BrandSettingsDTO;
 use App\Enums\Status;
+use App\Models\Brand;
+use App\Models\User;
+use Exception;
 
 class BrandSettingsAction
 {
+    /**
+     * @throws Exception
+     */
     public static function execute(BrandSettingsDTO $dto): User
     {
         $user = auth()->user();
-        if (!$user) {
-            throw new \Exception('User not found.');
+        if (! $user) {
+            throw new Exception('User not found.');
         }
 
         $brand = Brand::where('user_id', $user->id)->first();
-        if(!$brand) {
-            throw new \Exception('Brand not found.');
+        if (! $brand) {
+            throw new Exception('Brand not found.');
+        }
+
+        // Check if slug already exists for another user
+        $check = Brand::where('slug', $dto->slug)->first();
+        if ($check && $check->id != $brand->id) {
+            throw new Exception('Please use another slug.');
         }
 
         $brand->update([
@@ -28,6 +36,7 @@ class BrandSettingsAction
             'category' => $dto->selectedCategory,
             'sub_category' => $dto->selectedSubcategory,
             'brand_type' => $dto->type,
+            'slug' => $dto->slug,
             'description' => $dto->description,
             'position' => $dto->position,
             'state' => $dto->selectedState,
@@ -41,7 +50,7 @@ class BrandSettingsAction
         ]);
 
         $user->update([
-            'onboarding_step' => Status::COMPLETED
+            'onboarding_step' => Status::COMPLETED,
         ]);
 
         return $user;

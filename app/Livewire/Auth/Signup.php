@@ -2,17 +2,20 @@
 
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
-use App\DTOs\Auth\SignupDTO;
 use App\Actions\Auth\SignupAction;
-use Illuminate\Support\Facades\Auth;
+use App\DTOs\Auth\SignupDTO;
+use Livewire\Component;
 
 class Signup extends Component
 {
     public string $email = '';
+
     public string $password = '';
+
     public string $name = '';
+
     public string $password_confirmation = '';
+
     protected array $rules = [
         'email' => 'required|email|unique:users,email',
         'name' => 'required|string|max:255',
@@ -30,15 +33,16 @@ class Signup extends Component
         'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
     ];
 
-    public function submit() {
+    public function submit()
+    {
         $validated = $this->validate();
         $dto = SignupDTO::fromArray($validated);
 
         try {
-//          Create User
+            // Create User
             $user = SignupAction::execute($dto);
 
-//          Send success toast if successful. Using session to retain toast when redirect happens
+            // Send success toast if successful. Using session to retain toast when redirect happens
             session()->flash('toast', [
                 'type' => 'success',
                 'message' => 'Verification mail sent',
@@ -46,11 +50,11 @@ class Signup extends Component
                 'duration' => 5000,
             ]);
 
-//          redirect to email verification page
+            //          redirect to email verification page
             return redirect()->route('verify-email');
 
         } catch (\Exception $e) {
-//          Send error toast if error occurs
+            //          Send error toast if error occurs
             session()->flash('toast', [
                 'type' => 'error',
                 'message' => $e->getMessage(),
@@ -66,6 +70,6 @@ class Signup extends Component
     {
         return view('livewire.auth.signup')
             ->layout('layouts.app')
-            ->title('Signup');
+            ->title('Sign up');
     }
 }

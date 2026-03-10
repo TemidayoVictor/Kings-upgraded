@@ -53,6 +53,18 @@
                             <option value="Manager">Manager</option>
                             <!-- ... -->
                         </flux:select>
+                    </div>
+
+                    <div>
+                        <flux:label class="mb-2">Slug</flux:label>
+                        <flux:input.group>
+                            <flux:input.group.prefix>knkings.com/</flux:input.group.prefix>
+                            <flux:input wire:model.live="slug" placeholder="example.com" />
+                        </flux:input.group>
+                        <small>This is the name for accessing your store</small>
+                    </div>
+
+                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:select label="State" wire:model.live="selectedState">
                             <option>Select State</option>
                             @foreach($states as $state)

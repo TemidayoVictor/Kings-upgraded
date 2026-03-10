@@ -2,44 +2,66 @@
 
 namespace App\Livewire\Brand\Settings;
 
-use Livewire\Component;
-use App\DTOs\Brand\BrandSettingsDTO;
 use App\Actions\Brand\BrandSettingsAction;
-Use App\Traits\Toastable;
-
-use App\Models\User;
+use App\DTOs\Brand\BrandSettingsDTO;
 use App\Models\Category;
-use App\Models\Subcategory;
-use App\Models\State;
 use App\Models\LocalGovernment;
+use App\Models\State;
+use App\Models\Subcategory;
+use App\Models\User;
+use App\Traits\Toastable;
+use Livewire\Component;
 
 class BrandSettings extends Component
 {
     use Toastable;
 
     public User $user;
+
     public array $categories = [];
+
     public array $subcategories = [];
+
     public array $states = [];
+
     public array $localGovernments = [];
-    public string|null $brandName;
-    public string|null $selectedCategory = '';
-    public string|null $selectedSubcategory = '';
-    public string|null $type = '';
-    public string|null $description = '';
-    public string|null $position = '';
-    public string|null $selectedState = '';
-    public string|null $selectedLocalGovernment = '';
-    public string|null $address = '';
-    public string|null $bankName = '';
-    public string|null $accountNumber = '';
-    public string|null $accountName = '';
+
+    public ?string $brandName;
+
+    public ?string $selectedCategory = '';
+
+    public ?string $selectedSubcategory = '';
+
+    public ?string $type = '';
+
+    public ?string $slug = '';
+
+    public ?string $description = '';
+
+    public ?string $position = '';
+
+    public ?string $selectedState = '';
+
+    public ?string $selectedLocalGovernment = '';
+
+    public ?string $address = '';
+
+    public ?string $bankName = '';
+
+    public ?string $accountNumber = '';
+
+    public ?string $accountName = '';
 
     protected array $rules = [
         'brandName' => 'required',
         'selectedCategory' => 'required',
         'selectedSubcategory' => 'required',
         'type' => 'required',
+        'slug' => [
+            'required',
+            'max:255',
+            'regex:/^[A-Za-z0-9_]+$/',
+        ],
         'description' => 'required|max:50',
         'position' => 'required',
         'selectedState' => 'required',
@@ -67,7 +89,7 @@ class BrandSettings extends Component
         }
         $this->selectedState = $user->brand->state;
         $this->selectedLocalGovernment = $user->brand->city;
-//        populate city field if it exists
+        //        populate city field if it exists
         if ($this->selectedLocalGovernment) {
             $this->localGovernments = LocalGovernment::where('state_id', $this->selectedState)
                 ->pluck('name', 'id')
@@ -76,6 +98,7 @@ class BrandSettings extends Component
         $this->position = $user->brand->position;
         $this->description = $user->brand->description;
         $this->type = $user->brand->brand_type;
+        $this->slug = $user->brand->slug;
         $this->address = $user->brand->address;
         $this->bankName = $user->brand->bank_name;
         $this->accountName = $user->brand->account_name;
@@ -89,6 +112,13 @@ class BrandSettings extends Component
             ->pluck('subcategory', 'id')->toArray();
 
         $this->selectedSubcategory = '';
+    }
+
+    public function updatedSlug($value): void
+    {
+        $value = strtolower($value);          // convert to lowercase
+        $value = str_replace(' ', '_', $value); // replace spaces with underscore
+        $this->slug = $value;
     }
 
     // Runs automatically when state changes
@@ -107,7 +137,7 @@ class BrandSettings extends Component
 
         try {
             $update = BrandSettingsAction::execute($dto);
-//            Trigger success toast if successful. Using session to retain toast when redirect happens
+            // Trigger success toast if successful. Using session to retain toast when redirect happens
             session()->flash('toast', [
                 'type' => 'success',
                 'message' => 'Account updated successfully',
@@ -115,7 +145,7 @@ class BrandSettings extends Component
                 'duration' => 5000,
             ]);
 
-//          redirect to additional details page
+            // redirect to additional details page
             return redirect()->route('brand-additional-details');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());

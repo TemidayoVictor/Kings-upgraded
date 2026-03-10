@@ -2,28 +2,34 @@
 
 namespace App\Livewire\Dropshipper\Settings;
 
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule;
-
-use App\Traits\Toastable;
-use App\Models\User;
 use App\Actions\Dropshipper\DropshipperDetailAction;
 use App\DTOs\Dropshipper\DropshipperDetailsDTO;
+use App\Models\User;
+use App\Traits\Toastable;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Http\RedirectResponse;
 
 class DropshipperDetails extends Component
 {
-    use WithFileUploads;
     use Toastable;
+    use WithFileUploads;
 
     public $logo;
+
     public User $user;
+
     public ?int $dropshipperId = null;
-    public string|null $currentLogo = '';
-    public string|null $username = '';
-    public string|null $bankName = '';
-    public string|null $accountNumber = '';
-    public string|null $accountName = '';
+
+    public ?string $currentLogo = '';
+
+    public ?string $username = '';
+
+    public ?string $bankName = '';
+
+    public ?string $accountNumber = '';
+
+    public ?string $accountName = '';
 
     protected function rules(): array
     {
@@ -33,8 +39,6 @@ class DropshipperDetails extends Component
                 'required',
                 'max:255',
                 'regex:/^[A-Za-z0-9_]+$/',
-                Rule::unique('dropshippers', 'username')
-                    ->ignore($this->dropshipperId),
             ],
             'bankName' => 'required',
             'accountNumber' => 'required',
@@ -64,14 +68,14 @@ class DropshipperDetails extends Component
         $this->currentLogo = '';
     }
 
-    public function updatedUsername($value)
+    public function updatedUsername($value): void
     {
         $value = strtolower($value);          // convert to lowercase
         $value = str_replace(' ', '_', $value); // replace spaces with underscore
         $this->username = $value;
     }
 
-    public function submit()
+    public function submit(): RedirectResponse
     {
         $validated = $this->validate();
         $dto = DropshipperDetailsDTO::fromArray($validated);
@@ -83,7 +87,8 @@ class DropshipperDetails extends Component
                 'title' => 'Success',
                 'duration' => 5000,
             ]);
-//          redirect to dashboard
+
+            //          redirect to dashboard
             return redirect()->route('dropshipper-dashboard');
         } catch (\Exception $e) {
             session()->flash('toast', [
@@ -92,6 +97,7 @@ class DropshipperDetails extends Component
                 'title' => 'Success',
                 'duration' => 5000,
             ]);
+
             return back();
         }
     }

@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'uuid',
@@ -24,6 +23,8 @@ class Brand extends Model
         'about',
         'motto',
         'image',
+        'no_of_products',
+        'subscription_amount',
         'instagram',
         'facebook',
         'twitter',
@@ -37,6 +38,7 @@ class Brand extends Model
         'status',
         'mode',
         'brand_type',
+        'slug',
         'account_name',
         'account_number',
         'bank_name',
@@ -53,4 +55,35 @@ class Brand extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function coupons(): HasMany
+    {
+        return $this->hasMany(Coupon::class);
+    }
+
+    public function deliveryLocations(): HasMany
+    {
+        return $this->hasMany(DeliveryLocation::class);
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class);
+    }
+
 }
