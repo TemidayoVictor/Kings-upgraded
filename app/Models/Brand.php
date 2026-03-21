@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Brand extends Model
 {
@@ -84,6 +85,28 @@ class Brand extends Model
     public function sections(): HasMany
     {
         return $this->hasMany(Section::class);
+    }
+
+    public function dropshipperApplications(): HasMany
+    {
+        return $this->hasMany(DropshipperApplication::class);
+    }
+
+    public function approvedDropshippers(): BelongsToMany
+    {
+        return $this->belongsToMany(Dropshipper::class, 'dropshipper_applications')
+            ->wherePivot('status', 'approved')
+            ->withTimestamps();
+    }
+
+    public function dropshipperStores(): HasMany
+    {
+        return $this->hasMany(DropshipperStore::class);
+    }
+
+    public function pendingDropshipperApplications(): HasMany
+    {
+        return $this->dropshipperApplications()->where('status', 'pending');
     }
 
 }

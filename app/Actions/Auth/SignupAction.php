@@ -1,14 +1,14 @@
 <?php
+
 namespace App\Actions\Auth;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-
+use App\DTOs\Auth\SendVerificationCodeDTO;
 use App\DTOs\Auth\SignupDTO;
 use App\Models\User;
-use App\DTOs\Auth\SendVerificationCodeDTO;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class SignupAction
 {
@@ -24,6 +24,9 @@ class SignupAction
                 'onboarding_step' => 'email_verification',
             ]);
 
+            // Log user in
+            Auth::login($user);
+
             $buildDto = [
                 'id' => $user->id,
                 'email' => $dto->email,
@@ -35,18 +38,15 @@ class SignupAction
 
             DB::commit();
 
-//            Log user in
-            Auth::login($user);
-
             return $user;
 
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Signup failed', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-            throw $e;
+            throw new \Exception('Signup failed '.$e->getMessage());
         }
     }
 }

@@ -4,10 +4,13 @@ namespace App\Livewire\Auth;
 
 use App\Actions\Auth\SignupAction;
 use App\DTOs\Auth\SignupDTO;
+use App\Traits\Toastable;
 use Livewire\Component;
 
 class Signup extends Component
 {
+    use Toastable;
+
     public string $email = '';
 
     public string $password = '';
@@ -50,17 +53,12 @@ class Signup extends Component
                 'duration' => 5000,
             ]);
 
-            //          redirect to email verification page
+            //  redirect to email verification page
             return redirect()->route('verify-email');
 
         } catch (\Exception $e) {
-            //          Send error toast if error occurs
-            session()->flash('toast', [
-                'type' => 'error',
-                'message' => $e->getMessage(),
-                'title' => 'Something went wrong!',
-                'duration' => 5000,
-            ]);
+            // Send error toast if error occurs
+            $this->toast('error', $e->getMessage());
 
             return back();
         }

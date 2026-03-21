@@ -7,13 +7,16 @@ use App\Models\Product;
 use App\Models\Section;
 use App\Services\CartService;
 use App\Traits\Toastable;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Products extends Component
 {
-    use WithPagination;
     use Toastable;
+    use WithPagination;
 
     public Brand $brand;
 
@@ -46,7 +49,7 @@ class Products extends Component
         'priceRange' => ['except' => [0, 100000]],
     ];
 
-    public function mount(Brand $brand)
+    public function mount(Brand $brand): void
     {
         $this->brand = $brand;
 
@@ -131,7 +134,7 @@ class Products extends Component
         $this->quickViewProduct = null;
     }
 
-    public function getProductsProperty()
+    public function getProductsProperty(): LengthAwarePaginator
     {
         $query = Product::query()
             ->where('brand_id', $this->brand->id)
@@ -177,7 +180,7 @@ class Products extends Component
         return $query->paginate($this->perPage);
     }
 
-    public function getSectionsProperty()
+    public function getSectionsProperty(): Collection
     {
         return Section::where('brand_id', $this->brand->id)
             ->whereHas('products', function ($query) {
@@ -190,7 +193,7 @@ class Products extends Component
             ->get();
     }
 
-    public function getFeaturedProductsProperty()
+    public function getFeaturedProductsProperty(): Collection
     {
         return Product::where('brand_id', $this->brand->id)
             ->where('is_active', true)
@@ -199,7 +202,7 @@ class Products extends Component
             ->get();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.shop.products', [
             'products' => $this->products,

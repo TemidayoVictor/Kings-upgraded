@@ -17,9 +17,12 @@ class CartService
 
     protected int $brandId;
 
-    public function __construct(int $brandId)
+    protected bool $stockAlert = false;
+
+    public function __construct(int $brandId, bool $stockAlert = false)
     {
-        $this->brandId = $brandId; // Implement this based on your logic
+        $this->brandId = $brandId;
+        $this->stockAlert = $stockAlert;
     }
 
     public function getCart(): Cart
@@ -117,10 +120,11 @@ class CartService
             throw new \Exception('Product does not belong to this brand');
         }
 
-        // Check stock
-//        if ($product->stock_quantity < $quantity) {
-//            throw new \Exception("Only {$product->stock_quantity} items available in stock");
-//        }
+        if ($this->stockAlert) {
+            if ($product->stock_quantity < $quantity) {
+                throw new \Exception("Only {$product->stock_quantity} items available in stock");
+            }
+        }
 
         // Check if item exists with same options
         $existingItem = $cart->items()
@@ -133,9 +137,11 @@ class CartService
         if ($existingItem) {
             $newQuantity = $existingItem->quantity + $quantity;
 
-            // Check stock for new total
-            if ($product->stock_quantity < $newQuantity) {
-                throw new \Exception("Cannot add more. Only {$product->stock_quantity} available");
+            if ($this->stockAlert) {
+                // Check stock for new total
+                if ($product->stock_quantity < $newQuantity) {
+                    throw new \Exception("Cannot add more. Only {$product->stock_quantity} available");
+                }
             }
 
             $existingItem->quantity = $newQuantity;
@@ -143,7 +149,6 @@ class CartService
             $item = $existingItem;
         } else {
             $price = $product->discount_price ?? $product->price;
-
             $item = $cart->items()->create([
                 'product_id' => $productId,
                 'product_name' => $product->name,
@@ -157,7 +162,7 @@ class CartService
             ]);
         }
 
-        $cart->recalculateTotals();
+        $this->updateCartTotals();
 
         return $item;
     }
@@ -167,23 +172,22 @@ class CartService
      */
     public function updateItem(int $itemId, int $quantity): ?CartItem
     {
+        $this->cart = $this->getCart();
         $item = CartItem::with('product')->findOrFail($itemId);
-
         if ($quantity <= 0) {
             $this->removeItem($itemId);
 
             return null;
         }
-
-        // Check stock
-        if ($item->product->stock_quantity < $quantity) {
-            throw new Exception("Only {$item->product->stock_quantity} items available");
+        if ($this->stockAlert) {
+            // Check stock
+            if ($item->product->stock_quantity < $quantity) {
+                throw new Exception("Only {$item->product->stock_quantity} items available");
+            }
         }
-
         $item->quantity = $quantity;
-        $item->recalculate()->save();
-
-        $this->cart->recalculateTotals();
+        $item->recalculate();
+        $this->updateCartTotals();
 
         return $item;
     }
@@ -194,7 +198,7 @@ class CartService
         $item->delete();
 
         $this->getCart();
-        $this->cart->recalculateTotals();
+        $this->updateCartTotals();
 
         if ($this->cart->items()->count() === 0) {
             $this->clearCart();
@@ -324,6 +328,32 @@ class CartService
         $cart->update([
             'shipping' => $shippingCost,
             'total' => $cart->subtotal + $cart->tax + $shippingCost - $cart->discount,
+        ]);
+    }
+
+    private function updateCartTotals(): void
+    {
+        // Use database aggregation to get totals
+        $totals = CartItem::where('cart_id', $this->cart->id)
+            ->selectRaw('
+            SUM(
+                CASE
+                    WHEN discount_price IS NOT NULL
+                    THEN discount_price * quantity
+                    ELSE unit_price * quantity
+                END
+            ) as subtotal
+        ')
+            ->first();
+
+        $subtotal = $totals->subtotal ?? 0;
+        $tax = round($subtotal * 0.075, 2);
+        $total = $subtotal + $tax + $this->cart->shipping - $this->cart->discount;
+
+        $this->cart->update([
+            'subtotal' => $subtotal,
+            'tax' => $tax,
+            'total' => max(0, $total),
         ]);
     }
 

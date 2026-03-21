@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Actions\Auth;
 
 use App\DTOs\Auth\VerificationCodeDTO;
@@ -14,7 +15,7 @@ class VerificationCodeAction
             ->where('user_id', $user->id)
             ->first();
 
-        if (!$verification) {
+        if (! $verification) {
             throw new \Exception('Invalid verification code.');
         }
 

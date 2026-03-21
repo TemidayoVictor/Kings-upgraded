@@ -44,7 +44,6 @@
 
                     <div>
                         <flux:input label="Username" wire:model.live="username" placeholder="Username" class="max-full" />
-                        <small>This will be the name seen by users who visit your stores</small>
                     </div>
 
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">

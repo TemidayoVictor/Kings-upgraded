@@ -15,7 +15,7 @@
                 </flux:callout.text>
             </flux:callout>
         @endif
-        <form wire:submit="submit"  class="my-6 w-full space-y-6">
+        <form wire:submit="submit" class="my-6 w-full space-y-6">
             <div>
                 <flux:input wire:model="phone" :label="__('Phone number (preferably whatsapp)')" type="text" required autocomplete="phone" />
                 <small>This will be your primary source of contact</small>

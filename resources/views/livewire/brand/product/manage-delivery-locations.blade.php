@@ -91,10 +91,10 @@
                             </div>
 
                             <div class="flex justify-end space-x-2">
-                                <flux:button type="button" variant="subtle" wire:click="closeModal">
+                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
                                     Cancel
                                 </flux:button>
-                                <flux:button type="submit" variant="primary">
+                                <flux:button type="submit" variant="primary" size="sm">
                                     <flux:icon.loading wire:loading wire:target="create" />
                                     <span wire:loading.remove wire:target="create">Add Location</span>
                                 </flux:button>
@@ -130,7 +130,7 @@
                                     wire:model="delivery_price"
                                     type="number"
                                     step="0.01"
-                                    placeholder="₦2500"
+                                    placeholder="2500"
                                     class="max-full"
                                 />
                                 <p class="text-xs text-gray-400 mt-1">
@@ -140,10 +140,10 @@
                             </div>
 
                             <div class="flex justify-end space-x-2">
-                                <flux:button type="button" variant="subtle" wire:click="closeModal">
+                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
                                     Cancel
                                 </flux:button>
-                                <flux:button type="submit" variant="primary">
+                                <flux:button type="submit" size="sm" variant="primary">
                                     <flux:icon.loading wire:loading wire:target="create" />
                                     <span wire:loading.remove wire:target="create">Add Sub-location</span>
                                 </flux:button>
@@ -182,10 +182,10 @@
                             </div>
 
                             <div class="flex justify-end space-x-2">
-                                <flux:button type="button" variant="subtle" wire:click="closeModal">
+                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
                                     Cancel
                                 </flux:button>
-                                <flux:button type="submit" variant="primary">
+                                <flux:button type="submit" variant="primary" size="sm">
                                     <flux:icon.loading wire:loading wire:target="update" />
                                     <span wire:loading.remove wire:target="update">Update</span>
                                 </flux:button>
@@ -205,10 +205,10 @@
                         Are you sure you want to delete "{{ $name }}"? This action cannot be undone.
                     </p>
                     <div class="flex justify-end space-x-2">
-                        <flux:button type="button" variant="subtle" wire:click="closeModal">
+                        <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
                             Cancel
                         </flux:button>
-                        <flux:button type="button" variant="danger" wire:click="delete">
+                        <flux:button type="button" variant="danger" size="sm" wire:click="delete">
                             <flux:icon.loading wire:loading wire:target="delete" />
                             <span wire:loading.remove wire:target="delete">Delete</span>
                         </flux:button>

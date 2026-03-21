@@ -12,13 +12,13 @@
             </flux:sidebar.header>
 
             @if(auth()->user()->role == App\Enums\UserType::BRAND)
-                @include('partials.brand-settings')
+                @include('partials.brand-menu')
             @elseif(auth()->user()->role == App\Enums\UserType::CLIENT)
-                @include('partials.client-settings')
+                @include('partials.client-menu')
             @elseif(auth()->user()->role == App\Enums\UserType::DROPSHIPPER)
-                @include('partials.dropshipper-settings')
+                @include('partials.dropshipper-menu')
             @elseif(auth()->user()->role == App\Enums\UserType::ADMIN)
-                @include('partials.admin-settings')
+                @include('partials.admin-menu')
             @endif
 
             <flux:spacer />

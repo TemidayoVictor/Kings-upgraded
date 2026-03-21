@@ -25,7 +25,7 @@
         <flux:sidebar.item icon="tag" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
             {{ __('Run Sales') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="user-group" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="user-group" :href="route('brand-approved-dropshippers')" :current="request()->routeIs('brand-pending-applications', 'brand-approved-dropshippers')" wire:navigate>
             {{ __('Manage Dropshippers') }}
         </flux:sidebar.item>
         <flux:sidebar.item icon="arrow-trending-up" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>

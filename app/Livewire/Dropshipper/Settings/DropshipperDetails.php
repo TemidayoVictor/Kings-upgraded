@@ -75,7 +75,7 @@ class DropshipperDetails extends Component
         $this->username = $value;
     }
 
-    public function submit(): RedirectResponse
+    public function submit(): mixed
     {
         $validated = $this->validate();
         $dto = DropshipperDetailsDTO::fromArray($validated);

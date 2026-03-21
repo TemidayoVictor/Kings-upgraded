@@ -16,6 +16,9 @@
     <!-- Styles -->
     @vite(['resources/css/app.css'])
 
+    @fluxAppearance
+    @livewireStyles
+
     <style>
         /* Custom styles for the warm aesthetic */
         .bg-warm {

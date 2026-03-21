@@ -1,9 +1,9 @@
 <?php
 namespace App\DTOs;
-class SelectRoleDTO
+readonly class SelectRoleDTO
 {
     public function __construct(
-        public readonly string $role,
+        public string $role,
     ) {}
 
     public static function fromArray(array $data): self

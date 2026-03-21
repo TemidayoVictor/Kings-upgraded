@@ -23,11 +23,11 @@ class DropshipperDetailAction
 
         $dropshipper = Dropshipper::where('user_id', $user->id)->first();
         if (! $dropshipper) {
-            throw new Exception('Brand not found.');
+            throw new Exception('Dropshipper not found.');
         }
 
         // Check if slug already exists for another user
-        $check = Dropshipper::where('username', $dto->useranme)->first();
+        $check = Dropshipper::where('username', $dto->username)->first();
         if ($check && $check->id != $dropshipper->id) {
             throw new Exception('Please choose another username.');
         }

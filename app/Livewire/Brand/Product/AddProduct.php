@@ -2,29 +2,38 @@
 
 namespace App\Livewire\Brand\Product;
 
-use App\Traits\Toastable;
-use Livewire\Component;
-use Livewire\WithFileUploads;
 use App\Actions\Brand\AddProductAction;
 use App\DTOs\Brand\ProductDTO;
 use App\Models\Section;
+use App\Traits\Toastable;
 use Illuminate\Support\Collection;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AddProduct extends Component
 {
-    use WithFileUploads;
     use Toastable;
+    use WithFileUploads;
 
     public array $images = [];
+
     public Collection $sections;
-    public string|null $name;
-    public string|null $description;
-    public int|null $price;
-    public int|null $salesPrice;
-    public int|null $dropshippingPrice;
-    public int|null $sectionId;
-    public string|null $link;
-    public int|null $stock;
+
+    public ?string $name;
+
+    public ?string $description;
+
+    public ?int $price;
+
+    public ?int $salesPrice;
+
+    public ?int $dropshippingPrice;
+
+    public ?int $sectionId;
+
+    public ?string $link;
+
+    public ?int $stock;
 
     protected $rules = [
         'images' => 'required|array|min:1|max:5',
@@ -43,6 +52,7 @@ class AddProduct extends Component
     {
         $this->sections = Section::where('brand_id', auth()->user()->brand->id)->get();
     }
+
     public function removePhoto($index): void
     {
         // Remove photo from the array
@@ -55,7 +65,8 @@ class AddProduct extends Component
         $this->toast('success', 'Image removed');
     }
 
-    public function submit() {
+    public function submit()
+    {
         $validated = $this->validate();
         $dto = ProductDTO::fromArray($validated);
         try {

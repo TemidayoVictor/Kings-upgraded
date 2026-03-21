@@ -4,23 +4,37 @@ namespace App\Livewire\Cart;
 
 use App\Models\Brand;
 use App\Services\CartService;
+use App\Traits\Toastable;
+use Illuminate\View\View;
 use Livewire\Component;
-
+use Illuminate\Support\Facades\Log;
 class Index extends Component
 {
+    use Toastable;
+
     // Let Laravel automatically resolve the brand via route model binding
     public Brand $brand;
 
     public $cart;
+
     public $cartItems = [];
+
     public $subtotal = 0;
+
     public $tax = 0;
+
     public $shipping = 0;
+
     public $discount = 0;
+
     public $total = 0;
+
     public $itemCount = 0;
+
     public $couponCode = '';
+
     public $couponMessage = '';
+
     public $couponError = '';
 
     protected $listeners = [
@@ -29,13 +43,13 @@ class Index extends Component
     ];
 
     // No need for mount() with slug parameter - Laravel handles it
-    public function mount()
+    public function mount(): void
     {
         // If we get here, the brand exists (Laravel would have thrown 404 if not)
         $this->loadCart();
     }
 
-    public function loadCart()
+    public function loadCart(): void
     {
         // Create CartService with the brand ID from the resolved model
         $cartService = new CartService($this->brand->id);
@@ -53,28 +67,39 @@ class Index extends Component
         $this->couponCode = $this->cart->coupon_code ?? '';
     }
 
+    public function increment($itemId): void
+    {
+        $item = $this->cartItems->firstWhere('id', $itemId);
+        Log::info($item->quantity);
+        $this->updateQuantity($itemId, $item->quantity + 1);
+        Log::info($item->quantity);
+    }
+
+    public function decrement($itemId): void
+    {
+        $item = $this->cartItems->firstWhere('id', $itemId);
+        if ($item->quantity <= 1) {
+            $this->removeItem($itemId);
+            return;
+        }
+        $this->updateQuantity($itemId, $item->quantity - 1);
+    }
+
     // Update all methods to use the brand from the component
     public function updateQuantity($itemId, $quantity): void
     {
         if ($quantity < 1) {
             $this->removeItem($itemId);
+
             return;
         }
-
         try {
             $cartService = new CartService($this->brand->id);
             $cartService->updateItem($itemId, $quantity);
-
-            $this->dispatch('cartUpdated');
-            $this->dispatch('notify', [
-                'type' => 'success',
-                'message' => 'Cart updated successfully',
-            ]);
+            $this->loadCart();
+            $this->toast('success', 'Cart updated successfully');
         } catch (\Exception $e) {
-            $this->dispatch('notify', [
-                'type' => 'error',
-                'message' => $e->getMessage(),
-            ]);
+            $this->toast('error', $e->getMessage());
         }
     }
 
@@ -83,17 +108,10 @@ class Index extends Component
         try {
             $cartService = new CartService($this->brand->id);
             $cartService->removeItem($itemId);
-
-            $this->dispatch('cartUpdated');
-            $this->dispatch('notify', [
-                'type' => 'success',
-                'message' => 'Item removed from cart',
-            ]);
+            $this->loadCart();
+            $this->toast('success', 'Item removed from cart');
         } catch (\Exception $e) {
-            $this->dispatch('notify', [
-                'type' => 'error',
-                'message' => $e->getMessage(),
-            ]);
+            $this->toast('error', $e->getMessage());
         }
     }
 
@@ -101,6 +119,7 @@ class Index extends Component
     {
         if (! $this->couponCode) {
             $this->couponError = 'Please enter a coupon code';
+
             return;
         }
 
@@ -111,11 +130,8 @@ class Index extends Component
             if ($result['success']) {
                 $this->couponMessage = $result['message'];
                 $this->couponError = '';
-                $this->dispatch('cartUpdated');
-                $this->dispatch('notify', [
-                    'type' => 'success',
-                    'message' => $result['message'],
-                ]);
+                $this->loadCart();
+                $this->toast('success', 'Coupon applied successfully');
             } else {
                 $this->couponError = $result['message'];
                 $this->couponMessage = '';
@@ -125,7 +141,7 @@ class Index extends Component
         }
     }
 
-    public function removeCoupon()
+    public function removeCoupon(): void
     {
         $cartService = new CartService($this->brand->id);
         $cartService->removeCoupon();
@@ -133,28 +149,26 @@ class Index extends Component
         $this->couponCode = '';
         $this->couponMessage = '';
         $this->couponError = '';
-        $this->dispatch('cartUpdated');
-        $this->dispatch('notify', [
-            'type' => 'success',
-            'message' => 'Coupon removed',
-        ]);
+        $this->loadCart();
+        $this->toast('success', 'Coupon removed');
     }
 
-    public function proceedToCheckout()
+    public function proceedToCheckout(): mixed
     {
         if ($this->itemCount === 0) {
             $this->dispatch('notify', [
                 'type' => 'error',
                 'message' => 'Your cart is empty',
             ]);
-            return;
+
+            return back();
         }
 
-        // Pass brand to checkout
+        // Pass brand to check out
         return redirect()->route('checkout', ['brand' => $this->brand->slug]);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.cart.index')->layout('layouts.shop', [
             'brand' => $this->brand,

@@ -4,7 +4,7 @@
     </flux:sidebar.item>
 
     <flux:sidebar.group :heading="__('Partners')" class="grid">
-        <flux:sidebar.item icon="user-group" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="user-group" :href="route('dropshipper-partnered-brands')" :current="request()->routeIs('dropshipper-partnered-brands', 'dropshipper-applications', 'dropshipper-browse-brands', 'dropshipper-create-store', 'dropshipper-clone-progress')" wire:navigate>
             {{ __('Partnered Brands') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

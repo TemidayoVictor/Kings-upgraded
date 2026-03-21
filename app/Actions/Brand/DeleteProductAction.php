@@ -4,11 +4,8 @@ namespace App\Actions\Brand;
 
 use App\DTOs\Brand\DeleteImageDTO;
 use App\DTOs\GeneralDTO;
-use App\Actions\Brand\DeleteImageAction;
-
-use App\Models\Product;
 use App\Enums\UserType;
-
+use App\Models\Product;
 
 class DeleteProductAction
 {
@@ -16,16 +13,16 @@ class DeleteProductAction
     {
         $user = auth()->user();
 
-        if (!$user || ($user && $user->role != UserType::BRAND)) {
+        if (! $user || ($user && $user->role != UserType::BRAND)) {
             throw new \Exception('User not found.');
         }
-//        get the product
+        //        get the product
         $product = Product::where('id', $dto->id)->with('images')->first();
-        if (!$product) {
+        if (! $product) {
             throw new \Exception('Product not found.');
         }
 
-//        delete images
+        //        delete images
         $images = $product->images;
         foreach ($images as $image) {
             $buildDto = [
@@ -36,13 +33,12 @@ class DeleteProductAction
             try {
                 $dto = DeleteImageDTO::fromArray($buildDto);
                 DeleteImageAction::execute($dto);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Exception($e->getMessage());
             }
         }
 
-//        delete product
+        //        delete product
         $product->delete();
     }
 }

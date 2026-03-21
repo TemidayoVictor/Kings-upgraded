@@ -16,10 +16,13 @@ class CartItem extends Model
     protected $fillable = [
         'cart_id',
         'product_id',
+        'dropshipper_product_id',
         'product_name',
         'sku',
         'unit_price',
         'discount_price',
+        'dropship_price', // Add this
+        'custom_price',
         'quantity',
         'subtotal',
         'total',
@@ -30,6 +33,8 @@ class CartItem extends Model
     protected $casts = [
         'options' => 'array',
         'metadata' => 'array',
+        'dropship_price' => 'decimal:2',
+        'custom_price' => 'decimal:2',
     ];
 
     public function cart(): BelongsTo
@@ -40,6 +45,11 @@ class CartItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function dropshipperProduct(): BelongsTo
+    {
+        return $this->belongsTo(DropshipperProduct::class, 'dropshipper_product_id');
     }
 
     /**
@@ -67,6 +77,14 @@ class CartItem extends Model
     public function getEffectivePriceAttribute(): float
     {
         return $this->discount_price ?? $this->unit_price;
+    }
+
+    /**
+     * Check if this is a dropshipper store item
+     */
+    public function getIsDropshipperItemAttribute(): bool
+    {
+        return ! is_null($this->dropshipper_product_id);
     }
 
     /**

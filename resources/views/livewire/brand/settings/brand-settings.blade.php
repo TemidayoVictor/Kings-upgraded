@@ -59,9 +59,12 @@
                         <flux:label class="mb-2">Slug</flux:label>
                         <flux:input.group>
                             <flux:input.group.prefix>knkings.com/</flux:input.group.prefix>
-                            <flux:input wire:model.live="slug" placeholder="example.com" />
+                            <flux:input wire:model.live="slug" placeholder="your-store-name" />
                         </flux:input.group>
-                        <small>This is the name for accessing your store</small>
+                        <small>This is the name for accessing your store. Only lowercase letters, numbers, and hyphens are allowed.</small>
+
+                        <!-- Add the name attribute to flux:error -->
+                        <flux:error name="slug" />
                     </div>
 
                      <div class="grid grid-cols-2 gap-x-4 gap-y-6">

@@ -68,7 +68,7 @@
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-2">
                                                 <button
-                                                    wire:click="updateQuantity({{ $item->id }}, {{ $item->quantity - 1 }})"
+                                                    wire:click="decrement({{ $item->id }})"
                                                     class="w-8 h-8 rounded-full bg-[#1a1a1c] hover:bg-[#3a3a3d] text-gray-400 hover:text-white flex items-center justify-center transition-colors"
                                                     {{ $item->quantity <= 1 ? 'disabled' : '' }}
                                                 >
@@ -78,7 +78,7 @@
                                                 </button>
                                                 <span class="w-12 text-center text-white">{{ $item->quantity }}</span>
                                                 <button
-                                                    wire:click="updateQuantity({{ $item->id }}, {{ $item->quantity + 1 }})"
+                                                    wire:click="increment({{ $item->id }})"
                                                     class="w-8 h-8 rounded-full bg-[#1a1a1c] hover:bg-[#3a3a3d] text-gray-400 hover:text-white flex items-center justify-center transition-colors"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,18 +204,10 @@
                                 </div>
                             @else
                                 <div class="flex gap-2">
-                                    <input
-                                        type="text"
-                                        wire:model="couponCode"
-                                        placeholder="Coupon code"
-                                        class="flex-1 bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3 text-sm"
-                                    >
-                                    <button
-                                        wire:click="applyCoupon"
-                                        class="px-4 py-3 bg-white text-black rounded-xl hover:bg-gray-200 transition-colors text-sm font-medium"
-                                    >
-                                        Apply
-                                    </button>
+                                    <flux:input wire:model="couponCode" placeholder="Coupon code" size="sm" />
+                                    <flux:button type="submit" variant="primary" size="sm" wire:click="applyCoupon">
+                                        <span>Apply</span>
+                                    </flux:button>
                                 </div>
                                 @if($couponError)
                                     <p class="text-red-400 text-xs mt-2">{{ $couponError }}</p>
@@ -255,12 +247,9 @@
                         </div>
 
                         <!-- Checkout Button -->
-                        <button
-                            wire:click="proceedToCheckout"
-                            class="w-full bg-white text-black py-4 rounded-xl hover:bg-gray-200 transition-colors font-medium"
-                        >
-                            Proceed to Checkout
-                        </button>
+                        <flux:button type="submit" variant="primary" size="sm" wire:click="proceedToCheckout" class="w-full">
+                            <span>Proceed to Checkout</span>
+                        </flux:button>
 
                         <!-- Continue Shopping -->
                         <a href="{{ route('shop', ['brand' => $brand->slug]) }}" class="block text-center text-sm text-gray-400 hover:text-white mt-4 transition-colors">
@@ -279,9 +268,9 @@
                 </div>
                 <h2 class="text-2xl font-light text-white mb-2">Your cart is empty</h2>
                 <p class="text-gray-400 mb-6">Looks like you haven't added anything yet</p>
-                <a href="{{ route('shop', ['brand' => $brand->slug]) }}" class="inline-block bg-white text-black px-8 py-3 rounded-xl hover:bg-gray-200 transition-colors">
-                    Start Shopping
-                </a>
+                <flux:button type="button" variant="primary" size="sm" href="{{ route('shop', ['brand' => $brand->slug]) }}">
+                    <span>Start Shopping</span>
+                </flux:button>
             </div>
         @endif
     </div>

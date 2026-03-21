@@ -272,7 +272,7 @@
 
                         <!-- Stock Status -->
                         <div class="mb-6">
-                            @if($quickViewProduct->isInStock())
+                            @if($quickViewProduct)
                                 <span class="text-green-600 text-sm flex items-center gap-2">
                                     <span class="w-2 h-2 bg-green-600 rounded-full"></span>
                                     In Stock ({{ $quickViewProduct->stock_quantity }} available)

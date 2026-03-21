@@ -20,6 +20,7 @@ class Cart extends Model
         'discount_price',
         'quantity',
         'options',
+        'dropshipper_store_id',
     ];
 
     protected $casts = [
@@ -41,30 +42,9 @@ class Cart extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function recalculateTotals(): self
+    public function dropshipperStore(): BelongsTo
     {
-        // Load items if not already loaded
-        if (! $this->relationLoaded('items')) {
-            $this->load('items');
-        }
-
-        // Calculate subtotal from items
-        $this->subtotal = $this->items->sum('total');
-
-        // Calculate tax (7.5% example)
-        $this->tax = round($this->subtotal * 0.075, 2);
-
-        // Calculate final total
-        $this->total = $this->subtotal + $this->tax + $this->shipping - $this->discount;
-
-        // Ensure total is not negative
-        if ($this->total < 0) {
-            $this->total = 0;
-        }
-
-        $this->save();
-
-        return $this;
+        return $this->belongsTo(DropshipperStore::class, 'dropshipper_store_id');
     }
 
     /**
@@ -96,5 +76,23 @@ class Cart extends Model
         $this->coupon_code = null;
         $this->coupon_data = null;
         $this->save();
+    }
+
+    /**
+     * Scope for brand carts
+     */
+    public function scopeForBrand($query, int $brandId)
+    {
+        return $query->where('brand_id', $brandId)
+            ->whereNull('dropshipper_store_id');
+    }
+
+    /**
+     * Scope for dropshipper store carts
+     */
+    public function scopeForDropshipperStore($query, int $storeId)
+    {
+        return $query->where('dropshipper_store_id', $storeId)
+            ->whereNull('brand_id');
     }
 }

@@ -7,7 +7,9 @@ use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Signup;
 use App\Livewire\Auth\VerifyEmail;
+use App\Livewire\Brand\ApprovedDropshippers;
 use App\Livewire\Brand\BrandDashboard;
+use App\Livewire\Brand\PendingApplications;
 use App\Livewire\Brand\Product\AddProduct;
 use App\Livewire\Brand\Product\EditProduct;
 use App\Livewire\Brand\Product\ManageDeliveryLocations;
@@ -15,15 +17,21 @@ use App\Livewire\Brand\Product\ManageSection;
 use App\Livewire\Brand\Product\ProductList;
 use App\Livewire\Brand\Settings\AdditionalDetails;
 use App\Livewire\Brand\Settings\BrandSettings;
-use App\Livewire\Client\ClientDashboard;
-use App\Livewire\Dropshipper\DropshipperDashboard;
-use App\Livewire\Dropshipper\Settings\DropshipperDetails;
-use App\Livewire\SelectRole;
-use App\Livewire\Settings\ProfileSettings;
-use App\Livewire\Shop\Products;
 use App\Livewire\Cart\Index as CartIndex;
 use App\Livewire\Checkout\Index as CheckoutIndex;
 use App\Livewire\Checkout\Success as CheckoutSuccess;
+use App\Livewire\Client\ClientDashboard;
+use App\Livewire\Dropshipper\Applications;
+use App\Livewire\Dropshipper\BrowseBrands;
+use App\Livewire\Dropshipper\CloneProgress;
+use App\Livewire\Dropshipper\CreateStore;
+use App\Livewire\Dropshipper\DropshipperDashboard;
+use App\Livewire\Dropshipper\PartneredBrands;
+use App\Livewire\Dropshipper\Settings\DropshipperDetails;
+use App\Livewire\Dropshipper\Store;
+use App\Livewire\SelectRole;
+use App\Livewire\Settings\ProfileSettings;
+use App\Livewire\Shop\Products;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -32,7 +40,6 @@ Route::get('/brands/{brand:slug}', Products::class)->name('shop');
 Route::get('/cart/{brand:slug}', CartIndex::class)->name('cart');
 Route::get('/checkout/{brand:slug}', CheckoutIndex::class)->name('checkout');
 Route::get('/checkout/success/{order}', CheckoutSuccess::class)->name('checkout.success');
-
 
 // Guest only routes
 Route::middleware(['guest'])->group(function () {
@@ -73,6 +80,9 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/product-list', ProductList::class)->name('product-list');
         Route::get('/product/edit-product/{product}', EditProduct::class)->name('edit-product');
         Route::get('/product/manage-delivery-locations', ManageDeliveryLocations::class)->name('manage-delivery-locations');
+
+        Route::get('/pending-applications', PendingApplications::class)->name('pending-applications');
+        Route::get('/approved-dropshipper', ApprovedDropshippers::class)->name('approved-dropshippers');
     }
     );
 
@@ -88,5 +98,15 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
     ->group(function () {
         Route::get('/dashboard', DropshipperDashboard::class)->name('dashboard');
         Route::get('/settings/dropshipper-details', DropshipperDetails::class)->name('details');
+
+        Route::get('/partnered-brands', PartneredBrands::class)->name('partnered-brands');
+        Route::get('/applications', Applications::class)->name('applications');
+        Route::get('/browse-brands', BrowseBrands::class)->name('browse-brands');
+
+        Route::get('/create-store/{brand}', CreateStore::class)->name('create-store');
+        Route::get('/clone-progress/{store}', CloneProgress::class)->name('clone-progress');
+
+        Route::get('/{store:slug}', Store::class)->name('store');
+
     }
     );

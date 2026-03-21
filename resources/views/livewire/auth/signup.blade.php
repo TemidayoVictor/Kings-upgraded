@@ -1,7 +1,8 @@
 
     <div class="flex min-h-screen">
+        <x-toast position="top-right" duration="5000" />
         <div class="flex-1 flex justify-center items-center">
-            <div class="space-y-6 mx-auto min-w-[85%] md:min-w-90">
+            <div class="space-y-6 mx-auto max-w-[80%] md:min-w-[25%] md:max-w-[25%]">
                 <div class="flex flex-col items-center justify-center">
                     <a href="{{ route('home')  }}" class="group flex items-center gap-3">
                         <img src="{{ asset('images/Logo-Crown.svg') }}" alt="Logo" class="w-12 h-12">

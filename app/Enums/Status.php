@@ -10,6 +10,10 @@ class Status
     const BASIC = 'basic';
     const PREMIUM = 'premium';
     const PLATINUM = 'platinum';
+    const APPROVED = 'approved';
+    const PENDING = 'pending';
+    const REJECTED = 'rejected';
+    const CLONED = 'cloned';
 
     // Optional: get all types
     public static function all(): array

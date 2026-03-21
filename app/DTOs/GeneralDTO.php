@@ -1,9 +1,9 @@
 <?php
 namespace App\DTOs;
-class GeneralDTO
+readonly class GeneralDTO
 {
     public function __construct(
-        public readonly int $id,
+        public int $id,
     ) {}
 
     public static function fromArray(array $data): self

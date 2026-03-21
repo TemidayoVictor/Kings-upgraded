@@ -2,38 +2,52 @@
 
 namespace App\Livewire\Brand\Product;
 
-use Illuminate\View\View;
-use Livewire\Component;
-use App\Traits\Toastable;
-use Livewire\WithFileUploads;
+use App\Actions\Brand\DeleteImageAction;
+use App\Actions\Brand\EditProductAction;
+use App\DTOs\Brand\DeleteImageDTO;
+use App\DTOs\Brand\ProductDTO;
 use App\Models\Product;
 use App\Models\Section;
+use App\Traits\Toastable;
 use Illuminate\Support\Collection;
-use App\DTOs\Brand\DeleteImageDTO;
-use App\Actions\Brand\DeleteImageAction;
-use App\DTOs\Brand\ProductDTO;
-use App\Actions\Brand\EditProductAction;
+use Illuminate\View\View;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditProduct extends Component
 {
-    use WithFileUploads;
     use Toastable;
+    use WithFileUploads;
 
     // Product
     public Product $product;
+
     public array $images = [];
+
     public array $existingImages = [];
+
     public Collection $sections;
-    public string|null $name;
-    public string|null $description;
-    public int|null $price;
-    public int|null $salesPrice;
-    public int|null $dropshippingPrice;
-    public int|null $sectionId;
-    public string|null $link;
-    public int|null $stock;
+
+    public ?string $name;
+
+    public ?string $description;
+
+    public ?int $price;
+
+    public ?int $salesPrice;
+
+    public ?int $dropshippingPrice;
+
+    public ?int $sectionId;
+
+    public ?string $link;
+
+    public ?int $stock;
+
     public bool $showDeleteModal = false;
+
     public ?int $imageId = null;
+
     public ?string $imageName = null;
 
     protected $rules = [
@@ -84,7 +98,8 @@ class EditProduct extends Component
         $this->showDeleteModal = true;
     }
 
-    public function deleteImage(): void {
+    public function deleteImage(): void
+    {
         $buildDto = [
             'productId' => $this->product->id,
             'imageId' => $this->imageId,
@@ -93,10 +108,10 @@ class EditProduct extends Component
         try {
             DeleteImageAction::execute($dto);
             $this->closeModal();
-            $this->toast('success','Image deleted successfully.');
-        } catch(\Exception $e) {
+            $this->toast('success', 'Image deleted successfully.');
+        } catch (\Exception $e) {
             $this->closeModal();
-            $this->toast('error',$e->getMessage());
+            $this->toast('error', $e->getMessage());
         }
     }
 
@@ -113,15 +128,16 @@ class EditProduct extends Component
         try {
             EditProductAction::execute($dto);
             $this->images = [];
-            $this->toast('success','Product updated successfully.');
-        } catch(\Exception $e) {
-            $this->toast('error',$e->getMessage());
+            $this->toast('success', 'Product updated successfully.');
+        } catch (\Exception $e) {
+            $this->toast('error', $e->getMessage());
         }
     }
 
     public function render(): View
     {
         $this->loadProductData();
+
         return view('livewire.brand.product.edit-product')
             ->layout('layouts.auth')
             ->title('Edit Product');
