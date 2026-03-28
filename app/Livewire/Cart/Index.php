@@ -2,9 +2,12 @@
 
 namespace App\Livewire\Cart;
 
+use App\Actions\CartAction;
+use App\DTOs\CartDTO;
 use App\Models\Brand;
 use App\Services\CartService;
 use App\Traits\Toastable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
@@ -14,27 +17,16 @@ class Index extends Component
 
     // Let Laravel automatically resolve the brand via route model binding
     public Brand $brand;
-
     public $cart;
-
     public $cartItems = [];
-
     public $subtotal = 0;
-
     public $tax = 0;
-
     public $shipping = 0;
-
     public $discount = 0;
-
     public $total = 0;
-
     public $itemCount = 0;
-
     public $couponCode = '';
-
     public $couponMessage = '';
-
     public $couponError = '';
 
     protected $listeners = [
@@ -52,7 +44,7 @@ class Index extends Component
     public function loadCart(): void
     {
         // Create CartService with the brand ID from the resolved model
-        $cartService = new CartService($this->brand->id);
+        $cartService = new CartService($this->brand->id, $this->brand->stock_alert);
 
         $this->cart = $cartService->getCart();
         $this->cart->load('items.product');
@@ -88,14 +80,19 @@ class Index extends Component
     // Update all methods to use the brand from the component
     public function updateQuantity($itemId, $quantity): void
     {
+        $buildDto = [
+            'productId' => $itemId,
+            'brandId' => $this->brand->id,
+            'quantity' => $quantity,
+            'stockAlert' => $this->brand->stock_alert,
+        ];
+        $dto = CartDTO::fromArray($buildDto);
         if ($quantity < 1) {
             $this->removeItem($itemId);
-
             return;
         }
         try {
-            $cartService = new CartService($this->brand->id);
-            $cartService->updateItem($itemId, $quantity);
+            CartAction::updateQuantity($dto);
             $this->loadCart();
             $this->toast('success', 'Cart updated successfully');
         } catch (\Exception $e) {
@@ -105,9 +102,14 @@ class Index extends Component
 
     public function removeItem($itemId): void
     {
+        $buildDto = [
+            'productId' => $itemId,
+            'brandId' => $this->brand->id,
+            'stockAlert' => $this->brand->stock_alert,
+        ];
+        $dto = CartDTO::fromArray($buildDto);
         try {
-            $cartService = new CartService($this->brand->id);
-            $cartService->removeItem($itemId);
+            CartAction::removeItem($dto);
             $this->loadCart();
             $this->toast('success', 'Item removed from cart');
         } catch (\Exception $e) {
@@ -119,14 +121,16 @@ class Index extends Component
     {
         if (! $this->couponCode) {
             $this->couponError = 'Please enter a coupon code';
-
             return;
         }
-
+        $buildDto = [
+            'brandId' => $this->brand->id,
+            'stockAlert' => $this->brand->stock_alert,
+            'couponCode' => $this->couponCode,
+        ];
+        $dto = CartDTO::fromArray($buildDto);
         try {
-            $cartService = new CartService($this->brand->id);
-            $result = $cartService->applyCoupon($this->couponCode);
-
+            $result = cartAction::applyCoupon($dto);
             if ($result['success']) {
                 $this->couponMessage = $result['message'];
                 $this->couponError = '';
@@ -143,14 +147,21 @@ class Index extends Component
 
     public function removeCoupon(): void
     {
-        $cartService = new CartService($this->brand->id);
-        $cartService->removeCoupon();
-
-        $this->couponCode = '';
-        $this->couponMessage = '';
-        $this->couponError = '';
-        $this->loadCart();
-        $this->toast('success', 'Coupon removed');
+        $buildDto = [
+            'brandId' => $this->brand->id,
+            'stockAlert' => $this->brand->stock_alert,
+        ];
+        $dto = CartDTO::fromArray($buildDto);
+        try {
+            cartAction::removeCoupon($dto);
+            $this->couponCode = '';
+            $this->couponMessage = '';
+            $this->couponError = '';
+            $this->loadCart();
+            $this->toast('success', 'Coupon removed');
+        } catch (\Exception $e) {
+            $this->toast('error', $e->getMessage());
+        }
     }
 
     public function proceedToCheckout(): mixed

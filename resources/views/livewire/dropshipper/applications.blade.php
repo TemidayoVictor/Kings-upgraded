@@ -194,15 +194,15 @@
                                             </div>
                                         </div>
 
-                                        @if($application->status === 'pending')
+                                        @if($application->status === App\Enums\Status::PENDING)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
                                                 Pending
                                             </span>
-                                        @elseif($application->status === 'approved')
+                                        @elseif($application->status === App\Enums\Status::APPROVED)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
                                                 Approved
                                             </span>
-                                        @elseif($application->status === 'rejected')
+                                        @elseif($application->status === App\Enums\Status::REJECTED)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
                                                 Rejected
                                             </span>

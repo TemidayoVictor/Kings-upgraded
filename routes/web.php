@@ -29,6 +29,7 @@ use App\Livewire\Dropshipper\DropshipperDashboard;
 use App\Livewire\Dropshipper\PartneredBrands;
 use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 use App\Livewire\Dropshipper\Store;
+use App\Livewire\Brand\Product\Coupons;
 use App\Livewire\SelectRole;
 use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\Products;
@@ -75,11 +76,12 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/settings/brand-details', BrandSettings::class)->name('details');
         Route::get('/settings/additional-details', AdditionalDetails::class)->name('additional-details');
 
-        Route::get('/product/add-product', AddProduct::class)->name('add-product');
         Route::get('/section', ManageSection::class)->name('section');
+        Route::get('/product/add-product', AddProduct::class)->name('add-product');
         Route::get('/product-list', ProductList::class)->name('product-list');
         Route::get('/product/edit-product/{product}', EditProduct::class)->name('edit-product');
         Route::get('/product/manage-delivery-locations', ManageDeliveryLocations::class)->name('manage-delivery-locations');
+        Route::get('/product/coupons', Coupons::class)->name('product-coupon');
 
         Route::get('/pending-applications', PendingApplications::class)->name('pending-applications');
         Route::get('/approved-dropshipper', ApprovedDropshippers::class)->name('approved-dropshippers');

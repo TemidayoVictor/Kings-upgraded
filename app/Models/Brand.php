@@ -44,6 +44,7 @@ class Brand extends Model
         'account_number',
         'bank_name',
         'revenue',
+        'stock_alert',
     ];
 
     protected $casts = [

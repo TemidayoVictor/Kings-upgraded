@@ -122,35 +122,6 @@ return new class extends Migration
             $table->foreignId('changed_by')->nullable()->constrained('users');
             $table->timestamps();
         });
-
-        Schema::create('coupons', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->constrained()->onDelete('cascade');
-            $table->string('code')->unique();
-            $table->string('type'); // fixed, percentage
-            $table->decimal('value', 10, 2);
-            $table->decimal('min_order_amount', 10, 2)->nullable();
-            $table->decimal('max_discount_amount', 10, 2)->nullable();
-            $table->timestamp('starts_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
-            $table->integer('usage_limit')->nullable();
-            $table->integer('usage_per_user')->nullable();
-            $table->integer('used_count')->default(0);
-            $table->json('applicable_products')->nullable(); // product IDs
-            $table->json('excluded_products')->nullable();
-            $table->json('applicable_categories')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
-
-        Schema::create('coupon_usage', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('coupon_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->decimal('discount_amount', 10, 2);
-            $table->timestamps();
-        });
     }
 
     /**

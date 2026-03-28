@@ -2,17 +2,19 @@
 
 namespace App\Livewire\Checkout;
 
+use App\Actions\OrderAction;
+use App\DTOs\OrderDTO;
 use App\Models\Brand;
-use App\Models\CouponUsage;
 use App\Models\DeliveryLocation;
-use App\Models\Order;
+use App\Models\State;
 use App\Services\CartService;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Traits\Toastable;
 use Livewire\Component;
 
 class Index extends Component
 {
+    use Toastable;
+
     public $cart;
 
     public Brand $brand;
@@ -69,6 +71,10 @@ class Index extends Component
 
     public $processing = false;
 
+    public $selected_child_parent_id = null;
+
+    public array $states = [];
+
     protected $rules = [
         // Step 1: Customer Information
         'customer_name' => 'required|string|min:3|max:255',
@@ -94,7 +100,7 @@ class Index extends Component
 
     public function mount()
     {
-        $cartService = new CartService($this->brand->id);
+        $cartService = new CartService($this->brand->id, $this->brand->stock_alert);
         $this->cart = $cartService->getCart();
         $this->cart->load('items.product');
 
@@ -106,11 +112,13 @@ class Index extends Component
         $this->subtotal = $this->cart->subtotal;
         $this->tax = $this->cart->tax;
         $this->shipping = $this->cart->shipping;
+        $this->delivery_location_id = $this->cart->delivery_location_id;
         $this->discount = $this->cart->discount;
         $this->total = $this->cart->total;
 
         // Load delivery locations
         $this->loadDeliveryLocations();
+        $this->states = State::pluck('name', 'id')->toArray();
 
         // Pre-fill if user is logged in
         if (auth()->check()) {
@@ -140,13 +148,20 @@ class Index extends Component
             return;
         }
 
+        $selectedLocation = DeliveryLocation::find($locationId);
+        if ($selectedLocation && $selectedLocation->parent_id) {
+            $this->selected_child_parent_id = $selectedLocation->parent_id;
+        } else {
+            $this->selected_child_parent_id = null;
+        }
+
         $this->delivery_location_id = $locationId;
         $this->selected_location = $location;
         $this->delivery_price = $location->effective_price;
 
         // Update cart shipping
-        $cartService = new CartService($this->brand->id);
-        $setShipping = $cartService->setShipping($this->delivery_price);
+        $cartService = new CartService($this->brand->id, $this->brand->stock_alert);
+        $cartService->setShipping($this->delivery_price, $locationId);
 
         // Refresh totals
         $this->cart = $cartService->getCart();
@@ -179,122 +194,49 @@ class Index extends Component
         $this->currentStep--;
     }
 
-    public function placeOrder()
+    public function isParentOfSelectedChild($parentId): bool
+    {
+        return $this->selected_child_parent_id == $parentId;
+    }
+
+    public function placeOrder(): mixed
     {
         $this->validate();
-
         $this->processing = true;
 
+        $buildDto = [
+            'cart' => $this->cart,
+            'customerName' => $this->customer_name,
+            'customerPhone' => $this->customer_phone,
+            'customerEmail' => $this->customer_email,
+            'deliveryAddress' => $this->delivery_address,
+            'deliveryCity' => $this->delivery_city,
+            'deliveryState' => $this->delivery_state,
+            'deliveryZipCode' => $this->delivery_zip,
+            'deliveryInstructions' => $this->delivery_instructions,
+            'paymentMethod' => $this->payment_method,
+            'notes' => $this->customer_notes,
+        ];
+
+        $dto = OrderDTO::fromArray($buildDto);
         try {
-            DB::beginTransaction();
+            $order = OrderAction::execute($dto);
 
-            // Get cart
-            $cart = app(CartService::class)->getCart();
-
-            // Check stock again
-            foreach ($cart->items as $item) {
-                if ($item->product->stock_quantity < $item->quantity) {
-                    throw new \Exception("Insufficient stock for {$item->product_name}");
-                }
-            }
-
-            // Generate unique order number
-            $orderNumber = 'ORD-'.strtoupper(uniqid());
-
-            // Create order
-            $order = Order::create([
-                'order_number' => $orderNumber,
-                'user_id' => auth()->id(),
-                'brand_id' => $cart->brand_id,
-                'delivery_location_id' => $this->delivery_location_id,
-
-                // Customer Information
-                'customer_name' => $this->customer_name,
-                'customer_email' => $this->customer_email,
-                'customer_phone' => $this->customer_phone,
-
-                // Delivery Information
-                'delivery_address' => $this->delivery_address,
-                'delivery_city' => $this->delivery_city,
-                'delivery_state' => $this->delivery_state,
-                'delivery_zip' => $this->delivery_zip,
-                'delivery_instructions' => $this->delivery_instructions,
-
-                // Pricing
-                'subtotal' => $cart->subtotal,
-                'tax' => $cart->tax,
-                'shipping' => $cart->shipping,
-                'discount' => $cart->discount,
-                'total' => $cart->total,
-
-                // Payment
-                'payment_method' => $this->payment_method,
-                'payment_status' => 'pending',
-                'status' => 'pending',
-                'customer_notes' => $this->customer_notes,
-
-                // Coupon
-                'coupon_code' => $cart->coupon_code,
-                'coupon_data' => $cart->coupon_data,
+            // Trigger success toast if successful. Using session to retain toast when redirect happens
+            session()->flash('toast', [
+                'type' => 'success',
+                'message' => 'Account updated successfully',
+                'title' => 'Success',
+                'duration' => 5000,
             ]);
 
-            // Create order items
-            foreach ($cart->items as $item) {
-                $order->items()->create([
-                    'product_id' => $item->product_id,
-                    'product_name' => $item->product_name,
-                    'sku' => $item->sku,
-                    'unit_price' => $item->unit_price,
-                    'discount_price' => $item->discount_price,
-                    'quantity' => $item->quantity,
-                    'subtotal' => $item->subtotal,
-                    'total' => $item->total,
-                    'options' => $item->options,
-                ]);
-
-                // Reduce stock
-                $item->product->decrement('stock_quantity', $item->quantity);
-            }
-
-            // Record coupon usage if applied
-            if ($cart->coupon_code && $cart->coupon_data) {
-                CouponUsage::create([
-                    'coupon_id' => $cart->coupon_data['id'],
-                    'user_id' => auth()->id(),
-                    'order_id' => $order->id,
-                    'discount_amount' => $cart->discount,
-                ]);
-
-                // Increment coupon usage count
-                \App\Models\Coupon::where('id', $cart->coupon_data['id'])
-                    ->increment('used_count');
-            }
-
-            // Create status history
-            $order->statusHistory()->create([
-                'old_status' => null,
-                'new_status' => 'pending',
-                'changed_by' => auth()->id(),
-            ]);
-
-            // Clear the cart
-            app(CartService::class)->clearCart();
-
-            DB::commit();
-
-            // Redirect to success page
-            return redirect()->route('checkout.success', ['order' => $order->id]);
-
+            // redirect to success page
+            return redirect()->route('checkout.success', ['order' => $order]);
         } catch (\Exception $e) {
-            DB::rollBack();
             $this->processing = false;
+            $this->toast('error', $e->getMessage());
 
-            Log::error('Order placement failed: '.$e->getMessage());
-
-            $this->dispatch('notify', [
-                'type' => 'error',
-                'message' => 'Failed to place order: '.$e->getMessage(),
-            ]);
+            return back();
         }
     }
 

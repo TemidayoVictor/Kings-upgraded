@@ -10,7 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CouponUsage extends Model
 {
     protected $fillable = [
-        'coupon_id', 'user_id', 'order_id', 'discount_amount',
+        'coupon_id',
+        'user_id',
+        'order_id',
+        'discount_amount',
     ];
 
     public function coupon(): BelongsTo
@@ -21,10 +24,5 @@ class CouponUsage extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function order(): BelongsTo
-    {
-        return $this->belongsTo(Order::class);
     }
 }

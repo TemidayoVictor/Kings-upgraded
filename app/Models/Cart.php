@@ -1,7 +1,4 @@
 <?php
-
-// app/Models/Cart.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +9,7 @@ class Cart extends Model
 {
     protected $fillable = [
         'user_id', 'session_id', 'brand_id', 'subtotal', 'tax',
-        'shipping', 'discount', 'total', 'coupon_code', 'coupon_data',
+        'shipping', 'delivery_location_id',  'discount', 'total', 'coupon_code', 'coupon_data',
         'product_id',
         'product_name',
         'sku',
@@ -45,6 +42,11 @@ class Cart extends Model
     public function dropshipperStore(): BelongsTo
     {
         return $this->belongsTo(DropshipperStore::class, 'dropshipper_store_id');
+    }
+
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(DeliveryLocation::class, 'delivery_location_id');
     }
 
     /**

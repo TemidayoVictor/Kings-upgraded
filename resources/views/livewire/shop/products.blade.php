@@ -275,7 +275,7 @@
                             @if($quickViewProduct)
                                 <span class="text-green-600 text-sm flex items-center gap-2">
                                     <span class="w-2 h-2 bg-green-600 rounded-full"></span>
-                                    In Stock ({{ $quickViewProduct->stock_quantity }} available)
+                                    In Stock ({{ $quickViewProduct->stock }} available)
                                 </span>
                             @else
                                 <span class="text-red-500 text-sm flex items-center gap-2">

@@ -13,7 +13,7 @@
             <!-- Thank You Message -->
             <h1 class="text-3xl font-light text-white mb-2">Thank You for Your Order!</h1>
             <p class="text-gray-400 mb-8">
-                Your order has been placed successfully. We'll send you a confirmation email shortly.
+                Your order has been placed successfully.
             </p>
 
             <!-- Order Number -->
@@ -27,17 +27,40 @@
                 <h2 class="text-lg font-medium text-white mb-4">Order Details</h2>
 
                 <!-- Items -->
-                <div class="space-y-3 mb-6">
+                <div class="space-y-3 mb-6 max-h-60 overflow-y-auto">
                     @foreach($order->items as $item)
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-white">{{ $item->product_name }}</span>
-                                <span class="text-sm text-gray-400 ml-2">x{{ $item->quantity }}</span>
+                        <div class="flex items-start gap-3 mt-2">
+                            <div class="w-12 h-12 bg-[#1a1a1c] rounded-lg overflow-hidden flex-shrink-0">
+                                @if($item->product && $item->product->images->count() > 0)
+                                    <img src="{{ $item->product->primary_image_url }}"
+                                         alt="{{ $item->product->name }}"
+                                         class="w-20 h-20 object-cover rounded-lg">
+                                @else
+                                    <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                        <span class="text-gray-300 font-medium">{{ substr($item->product->name, 0, 1) }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-white">{{ $item->product_name }}</p>
+                                <p class="text-sm text-gray-400">Qty: {{ $item->quantity }}</p>
                             </div>
                             <span class="text-white">₦{{ number_format($item->total) }}</span>
                         </div>
                     @endforeach
                 </div>
+
+{{--                <div class="space-y-3 mb-6">--}}
+{{--                    @foreach($order->items as $item)--}}
+{{--                        <div class="flex justify-between items-center">--}}
+{{--                            <div>--}}
+{{--                                <span class="text-white">{{ $item->product_name }}</span>--}}
+{{--                                <span class="text-sm text-gray-400 ml-2">x{{ $item->quantity }}</span>--}}
+{{--                            </div>--}}
+{{--                            <span class="text-white">₦{{ number_format($item->total) }}</span>--}}
+{{--                        </div>--}}
+{{--                    @endforeach--}}
+{{--                </div>--}}
 
                 <!-- Totals -->
                 <div class="space-y-2 pt-4 border-t border-gray-700">
@@ -102,14 +125,9 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                <a href="{{ route('shop.products') }}"
-                   class="px-8 py-3 bg-white text-black rounded-xl hover:bg-gray-200 transition-colors">
-                    Continue Shopping
-                </a>
-                <a href="#"
-                   class="px-8 py-3 bg-[#1a1a1c] text-gray-300 rounded-xl hover:bg-[#2a2a2d] transition-colors">
-                    View Order History
-                </a>
+                <flux:button type="button" href="{{ route('shop', ['brand' => $brand->slug]) }}" variant="primary" class="w-full">
+                    <span>Continue Shopping</span>
+                </flux:button>
             </div>
         </div>
     </div>

@@ -1,23 +1,25 @@
 <?php
+
 namespace App\DTOs\Brand;
 
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-class ProductDTO
+
+readonly class ProductDTO
 {
     /**
-     * @param array<TemporaryUploadedFile> $images
+     * @param  array<TemporaryUploadedFile>  $images
      */
     public function __construct(
-        public readonly ?array $images,
-        public readonly string $name,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int|null $salesPrice,
-        public readonly int|null $dropshippingPrice,
-        public readonly int|null $sectionId,
-        public readonly string|null $link,
-        public readonly int|null $stock,
-        public readonly ?int $productId,
+        public ?array $images,
+        public string $name,
+        public string $description,
+        public int $price,
+        public ?int $salesPrice,
+        public ?int $dropshippingPrice,
+        public ?int $sectionId,
+        public ?string $link,
+        public ?int $stock,
+        public ?int $productId,
     ) {}
 
     public static function fromArray(array $data): self

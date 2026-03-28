@@ -9,6 +9,9 @@ use App\Models\User;
 
 class SelectRoleAction
 {
+    /**
+     * @throws \Exception
+     */
     public static function execute(SelectRoleDTO $dto): User
     {
         $user = auth()->user();

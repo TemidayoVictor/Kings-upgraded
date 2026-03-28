@@ -134,7 +134,7 @@ class BrandSettings extends Component
         $this->selectedLocalGovernment = '';
     }
 
-    public function submit()
+    public function submit(): mixed
     {
         $validated = $this->validate();
         $dto = BrandSettingsDTO::fromArray($validated);
@@ -153,6 +153,7 @@ class BrandSettings extends Component
             return redirect()->route('brand-additional-details');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
+            return back();
         }
     }
 

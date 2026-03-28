@@ -121,8 +121,8 @@ class CartService
         }
 
         if ($this->stockAlert) {
-            if ($product->stock_quantity < $quantity) {
-                throw new \Exception("Only {$product->stock_quantity} items available in stock");
+            if ($product->stock < $quantity) {
+                throw new \Exception("Only {$product->stock} items available in stock");
             }
         }
 
@@ -139,8 +139,8 @@ class CartService
 
             if ($this->stockAlert) {
                 // Check stock for new total
-                if ($product->stock_quantity < $newQuantity) {
-                    throw new \Exception("Cannot add more. Only {$product->stock_quantity} available");
+                if ($product->stock < $newQuantity) {
+                    throw new \Exception("Cannot add more. Only {$product->stock} available");
                 }
             }
 
@@ -181,8 +181,8 @@ class CartService
         }
         if ($this->stockAlert) {
             // Check stock
-            if ($item->product->stock_quantity < $quantity) {
-                throw new Exception("Only {$item->product->stock_quantity} items available");
+            if ($item->product->stock < $quantity) {
+                throw new Exception("Only {$item->product->stock} items available");
             }
         }
         $item->quantity = $quantity;
@@ -227,50 +227,12 @@ class CartService
         $coupon = Coupon::where('code', $couponCode)
             ->where('brand_id', $this->brandId)
             ->where('is_active', true)
-            ->where(function ($query) {
-                $query->whereNull('starts_at')
-                    ->orWhere('starts_at', '<=', now());
-            })
-            ->where(function ($query) {
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>=', now());
-            })
             ->first();
 
-        if (! $coupon) {
+        if (! $coupon || ! $coupon->isValid()) {
             return [
                 'success' => false,
                 'message' => 'Invalid or expired coupon code',
-            ];
-        }
-
-        // Check usage limits
-        if ($coupon->usage_limit && $coupon->used_count >= $coupon->usage_limit) {
-            return [
-                'success' => false,
-                'message' => 'This coupon has reached its usage limit',
-            ];
-        }
-
-        // Check per-user limit
-        if (auth()->check() && $coupon->usage_per_user) {
-            $userUsage = $coupon->usages()
-                ->where('user_id', auth()->id())
-                ->count();
-
-            if ($userUsage >= $coupon->usage_per_user) {
-                return [
-                    'success' => false,
-                    'message' => 'You have already used this coupon',
-                ];
-            }
-        }
-
-        // Check minimum order amount
-        if ($coupon->min_order_amount && $cart->subtotal < $coupon->min_order_amount) {
-            return [
-                'success' => false,
-                'message' => 'Minimum order amount of ₦'.number_format($coupon->min_order_amount).' required',
             ];
         }
 
@@ -280,9 +242,6 @@ class CartService
             $discount = $coupon->value;
         } else {
             $discount = ($cart->subtotal * $coupon->value) / 100;
-            if ($coupon->max_discount_amount && $discount > $coupon->max_discount_amount) {
-                $discount = $coupon->max_discount_amount;
-            }
         }
 
         // Ensure discount doesn't exceed subtotal
@@ -296,7 +255,6 @@ class CartService
                 'code' => $coupon->code,
                 'type' => $coupon->type,
                 'value' => $coupon->value,
-                'discount' => $discount,
             ],
             'discount' => $discount,
             'total' => $cart->subtotal + $cart->tax + $cart->shipping - $discount,
@@ -312,7 +270,6 @@ class CartService
     public function removeCoupon(): void
     {
         $cart = $this->getCart();
-
         $cart->update([
             'coupon_code' => null,
             'coupon_data' => null,
@@ -321,12 +278,13 @@ class CartService
         ]);
     }
 
-    public function setShipping(float $shippingCost): void
+    public function setShipping(float $shippingCost, int $locationId): void
     {
         $cart = $this->getCart();
 
         $cart->update([
             'shipping' => $shippingCost,
+            'delivery_location_id' => $locationId,
             'total' => $cart->subtotal + $cart->tax + $shippingCost - $cart->discount,
         ]);
     }
@@ -348,12 +306,44 @@ class CartService
 
         $subtotal = $totals->subtotal ?? 0;
         $tax = round($subtotal * 0.075, 2);
-        $total = $subtotal + $tax + $this->cart->shipping - $this->cart->discount;
+        $discount = 0.00;
+        $couponData = null;
+        $couponCheck = $this->cart->coupon_code;
+        if (! $couponCheck) {
+            $total = $subtotal + $tax + $this->cart->shipping;
+        } else {
+            $coupon = Coupon::where('code', $this->cart->coupon_code)
+                ->where('brand_id', $this->brandId)
+                ->where('is_active', true)
+                ->first();
+
+            if (! $coupon || ! $coupon->isValid()) {
+                $total = $subtotal + $tax + $this->cart->shipping;
+            } else {
+                if ($coupon->type === 'fixed') {
+                    $discount = $coupon->value;
+                } else {
+                    $discount = ($subtotal * $coupon->value) / 100;
+                }
+                // Ensure discount doesn't exceed subtotal
+                $discount = min($discount, $subtotal);
+                $total = $subtotal + $tax + $this->cart->shipping - $discount;
+
+                $couponData = [
+                    'id' => $coupon->id,
+                    'code' => $coupon->code,
+                    'type' => $coupon->type,
+                    'value' => $coupon->value,
+                ];
+            }
+        }
 
         $this->cart->update([
             'subtotal' => $subtotal,
             'tax' => $tax,
             'total' => max(0, $total),
+            'discount' => $discount,
+            'coupon_data' => $couponData,
         ]);
     }
 

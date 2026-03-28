@@ -1,5 +1,9 @@
 <?php
-if (!function_exists('firstName')) {
+
+use App\Models\Coupon;
+use Carbon\Carbon;
+
+if (! function_exists('firstName')) {
     function firstName(?string $fullName): string
     {
         if (empty($fullName)) {
@@ -10,7 +14,7 @@ if (!function_exists('firstName')) {
     }
 }
 
-if (!function_exists('lastName')) {
+if (! function_exists('lastName')) {
     function lastName(?string $fullName): ?string
     {
         if (empty($fullName)) {
@@ -18,6 +22,51 @@ if (!function_exists('lastName')) {
         }
 
         $parts = explode(' ', trim($fullName));
+
         return count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : null;
+    }
+}
+
+if (! function_exists('isCodeUniqueForBrand')) {
+    function isCodeUniqueForBrand(string $code, int $brandId, int $editId = 0): bool
+    {
+        if ($editId == 0) {
+            return ! Coupon::where('brand_id', $brandId)
+                ->where('code', $code)
+                ->exists();
+        } else {
+            return ! Coupon::where('brand_id', $brandId)
+                ->where('code', $code)
+                ->where('id', '!=', $editId)
+                ->exists();
+        }
+    }
+}
+
+if (! function_exists('validateDateRange')) {
+    function validateDateRange($start, $end): array
+    {
+        $errors = [];
+
+        $startDate = $start ? Carbon::parse($start)->startOfDay() : null;
+        $endDate = $end ? Carbon::parse($end)->endOfDay() : null;
+
+        // Compare with today's start (not current time)
+        $today = now()->startOfDay();
+
+        // Rule 1: Start date should not be in the past
+        if ($startDate && $startDate->lt($today)) {
+            $errors[] = 'Start date cannot be in the past';
+        }
+
+        // Rule 2: End date should not be before start date
+        if ($startDate && $endDate && $endDate->lt($startDate)) {
+            $errors[] = 'End date cannot be before start date';
+        }
+
+        return [
+            'valid' => empty($errors),
+            'errors' => $errors,
+        ];
     }
 }

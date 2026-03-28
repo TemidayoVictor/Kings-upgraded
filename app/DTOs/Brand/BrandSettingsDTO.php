@@ -1,21 +1,21 @@
 <?php
 namespace App\DTOs\Brand;
-class BrandSettingsDTO
+readonly class BrandSettingsDTO
 {
     public function __construct(
-        public readonly string $brandName,
-        public readonly string $selectedCategory,
-        public readonly string $selectedSubcategory,
-        public readonly string $description,
-        public readonly string $type,
-        public readonly string $slug,
-        public readonly string $position,
-        public readonly string $selectedState,
-        public readonly string $selectedLocalGovernment,
-        public readonly string $address,
-        public readonly string $bankName,
-        public readonly string $accountNumber,
-        public readonly string $accountName,
+        public string $brandName,
+        public string $selectedCategory,
+        public string $selectedSubcategory,
+        public string $description,
+        public string $type,
+        public string $slug,
+        public string $position,
+        public string $selectedState,
+        public string $selectedLocalGovernment,
+        public string $address,
+        public string $bankName,
+        public string $accountNumber,
+        public string $accountName,
     ) {}
 
     public static function fromArray(array $data): self

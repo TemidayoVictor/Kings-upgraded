@@ -6,20 +6,24 @@ use App\DTOs\Brand\DeleteImageDTO;
 use App\DTOs\GeneralDTO;
 use App\Enums\UserType;
 use App\Models\Product;
+use Exception;
 
 class DeleteProductAction
 {
+    /**
+     * @throws Exception
+     */
     public static function execute(GeneralDTO $dto): void
     {
         $user = auth()->user();
 
-        if (! $user || ($user && $user->role != UserType::BRAND)) {
-            throw new \Exception('User not found.');
+        if (! $user || ($user->role != UserType::BRAND)) {
+            throw new Exception('User not found.');
         }
         //        get the product
         $product = Product::where('id', $dto->id)->with('images')->first();
         if (! $product) {
-            throw new \Exception('Product not found.');
+            throw new Exception('Product not found.');
         }
 
         //        delete images
@@ -33,8 +37,8 @@ class DeleteProductAction
             try {
                 $dto = DeleteImageDTO::fromArray($buildDto);
                 DeleteImageAction::execute($dto);
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage());
             }
         }
 

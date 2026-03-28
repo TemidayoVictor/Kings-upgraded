@@ -14,13 +14,13 @@ class DeliveryLocation extends Model
         'delivery_price',
         'parent_id',
         'level',
-        'is_active'
+        'is_active',
     ];
 
     protected $casts = [
         'delivery_price' => 'decimal:2',
         'is_active' => 'boolean',
-        'level' => 'integer'
+        'level' => 'integer',
     ];
 
     public function brand(): BelongsTo
@@ -96,5 +96,4 @@ class DeliveryLocation extends Model
     {
         return $this->hasMany(Order::class);
     }
-
 }

@@ -7,7 +7,7 @@
         <flux:sidebar.item icon="plus-circle" :href="route('brand-add-product')" :current="request()->routeIs('brand-add-product', 'brand-section', 'brand-product-list', 'brand-edit-product')" wire:navigate>
             {{ __('Manage Products') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="adjustments-horizontal" :href="route('brand-manage-delivery-locations')" :current="request()->routeIs('brand-manage-delivery-locations')" wire:navigate>
+        <flux:sidebar.item icon="adjustments-horizontal" :href="route('brand-manage-delivery-locations')" :current="request()->routeIs('brand-manage-delivery-locations', 'brand-product-coupon')" wire:navigate>
             {{ __('Product Settings') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

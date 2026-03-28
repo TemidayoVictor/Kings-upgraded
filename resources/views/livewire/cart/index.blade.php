@@ -29,15 +29,13 @@
                                     <tr class="hover:bg-[#2a2a2d] transition-colors" wire:key="item-{{ $item->id }}">
                                         <td class="px-6 py-4">
                                             <div class="flex items-center">
-                                                @if($item->product && $item->product->cover_image)
-                                                    <img src="{{ $item->product->thumbnail }}"
-                                                         alt="{{ $item->product_name }}"
+                                                @if($item->product && $item->product->images->count() > 0)
+                                                    <img src="{{ $item->product->primary_image_url }}"
+                                                         alt="{{ $item->product->name }}"
                                                          class="w-20 h-20 object-cover rounded-lg">
                                                 @else
-                                                    <div class="w-20 h-20 bg-[#1a1a1c] rounded-lg flex items-center justify-center">
-                                                        <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                        </svg>
+                                                    <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                                        <span class="text-gray-300 font-medium">{{ substr($item->product->name, 0, 1) }}</span>
                                                     </div>
                                                 @endif
                                                 <div class="ml-4">
@@ -112,15 +110,13 @@
                             @foreach($cartItems as $item)
                                 <div class="p-4 space-y-3" wire:key="mobile-item-{{ $item->id }}">
                                     <div class="flex items-start space-x-3">
-                                        @if($item->product && $item->product->cover_image)
-                                            <img src="{{ $item->product->thumbnail }}"
-                                                 alt="{{ $item->product_name }}"
+                                        @if($item->product && $item->product->images->count() > 0)
+                                            <img src="{{ $item->product->primary_image_url }}"
+                                                 alt="{{ $item->product->name }}"
                                                  class="w-20 h-20 object-cover rounded-lg">
                                         @else
-                                            <div class="w-20 h-20 bg-[#1a1a1c] rounded-lg flex items-center justify-center">
-                                                <svg class="w-10 h-10 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                </svg>
+                                            <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                                <span class="text-gray-300 font-medium">{{ substr($item->product->name, 0, 1) }}</span>
                                             </div>
                                         @endif
                                         <div class="flex-1">
@@ -196,7 +192,7 @@
                                         <span class="text-sm text-green-400 block">Coupon applied</span>
                                         <span class="text-sm text-white">{{ $couponCode }}</span>
                                     </div>
-                                    <button wire:click="removeCoupon" class="text-gray-400 hover:text-white">
+                                    <button wire:click="removeCoupon" class="text-gray-400 hover:text-white" wire:key="remove-coupon">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                         </svg>
@@ -205,8 +201,9 @@
                             @else
                                 <div class="flex gap-2">
                                     <flux:input wire:model="couponCode" placeholder="Coupon code" size="sm" />
-                                    <flux:button type="submit" variant="primary" size="sm" wire:click="applyCoupon">
-                                        <span>Apply</span>
+                                    <flux:button type="submit" variant="primary" size="sm" wire:click="applyCoupon" wire:key="apply-coupon">
+                                        <flux:icon.loading wire:loading wire:target="applyCoupon" />
+                                        <span wire:loading.remove wire:target="applyCoupon">Apply</span>
                                     </flux:button>
                                 </div>
                                 @if($couponError)

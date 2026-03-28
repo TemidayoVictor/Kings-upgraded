@@ -3,6 +3,9 @@
         <flux:navlist aria-label="{{ __('Products Settings') }}">
             <flux:navlist.item :href="route('brand-manage-delivery-locations')">{{ __('Delivery Locations') }}</flux:navlist.item>
         </flux:navlist>
+        <flux:navlist aria-label="{{ __('Products Settings') }}">
+            <flux:navlist.item :href="route('brand-product-coupon')">{{ __('Coupon codes') }}</flux:navlist.item>
+        </flux:navlist>
     </div>
 
     <flux:separator class="md:hidden" />

@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Shop;
 
+use App\Actions\CartAction;
+use App\DTOs\CartDTO;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Section;
@@ -91,29 +93,20 @@ class Products extends Component
 
     public function addToCart($productId, $quantity = 1): void
     {
+        $buildDto = [
+            'productId' => $productId,
+            'brandId' => $this->brand->id,
+            'quantity' => $quantity,
+            'stockAlert' => $this->brand->stock_alert,
+        ];
+
+        $dto = CartDTO::fromArray($buildDto);
         try {
-            // Verify product belongs to this brand
-            $product = Product::where('id', $productId)
-                ->where('brand_id', $this->brand->id)
-                ->firstOrFail();
-
-            $cartBag = new CartService($this->brand->id);
-            $cartBag->addItem($productId, $quantity);
-
+            $cartBag = CartAction::execute($dto);
             $this->addedToCart = $productId;
-
             // Get updated cart count
-            $cart = $cartBag->getCart();
-
-            // Dispatch events
-            $this->dispatch('cartUpdated', count: $cart->item_count);
-            $this->dispatch('added-to-cart', productId: $productId);
-
-            $this->dispatch('notify', [
-                'type' => 'success',
-                'message' => $product->name.' added to cart!',
-            ]);
-
+            $cart = $cartBag['cartBag']->getCart();
+            $this->toast('success', $cartBag['productName'].' added to cart!');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }

@@ -11,38 +11,54 @@
         <div class="mb-8">
             <div class="flex items-center justify-between max-w-2xl mx-auto">
                 <!-- Step 1 -->
-                <div class="flex items-center">
-                    <div class="flex items-center justify-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $currentStep >= 1 ? 'bg-white text-black' : 'bg-[#252528] text-gray-500' }}">
-                            <span class="text-sm font-medium">1</span>
+                <div class="w-full">
+                    <div class="flex items-center justify-between">
+
+                        {{-- Step 1 --}}
+                        <div class="flex items-center">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full
+                                {{ $currentStep >= 1 ? 'bg-white text-black' : 'bg-gray-700 text-gray-400' }}">
+                                1
+                            </div>
+                            <span class="ml-2 text-sm hidden sm:inline
+                                {{ $currentStep >= 1 ? 'text-white' : 'text-gray-400' }}">
+                                Information
+                            </span>
                         </div>
-                        <span class="ml-3 text-sm {{ $currentStep >= 1 ? 'text-white' : 'text-gray-500' }}">Information</span>
-                    </div>
-                </div>
 
-                <!-- Line -->
-                <div class="flex-1 mx-4 h-px {{ $currentStep >= 2 ? 'bg-white' : 'bg-gray-700' }}"></div>
-
-                <!-- Step 2 -->
-                <div class="flex items-center">
-                    <div class="flex items-center justify-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $currentStep >= 2 ? 'bg-white text-black' : 'bg-[#252528] text-gray-500' }}">
-                            <span class="text-sm font-medium">2</span>
+                        {{-- Line --}}
+                        <div class="flex-1 h-px mx-2
+                            {{ $currentStep >= 2 ? 'bg-white' : 'bg-gray-700' }}">
                         </div>
-                        <span class="ml-3 text-sm {{ $currentStep >= 2 ? 'text-white' : 'text-gray-500' }}">Delivery</span>
-                    </div>
-                </div>
 
-                <!-- Line -->
-                <div class="flex-1 mx-4 h-px {{ $currentStep >= 3 ? 'bg-white' : 'bg-gray-700' }}"></div>
-
-                <!-- Step 3 -->
-                <div class="flex items-center">
-                    <div class="flex items-center justify-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $currentStep >= 3 ? 'bg-white text-black' : 'bg-[#252528] text-gray-500' }}">
-                            <span class="text-sm font-medium">3</span>
+                        {{-- Step 2 --}}
+                        <div class="flex items-center">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full
+                                {{ $currentStep >= 2 ? 'bg-white text-black' : 'bg-gray-700 text-gray-400' }}">
+                                2
+                            </div>
+                            <span class="ml-2 text-sm hidden sm:inline
+                                {{ $currentStep >= 2 ? 'text-white' : 'text-gray-400' }}">
+                                Delivery
+                            </span>
                         </div>
-                        <span class="ml-3 text-sm {{ $currentStep >= 3 ? 'text-white' : 'text-gray-500' }}">Payment</span>
+
+                        {{-- Line --}}
+                        <div class="flex-1 h-px mx-2
+                            {{ $currentStep >= 3 ? 'bg-white' : 'bg-gray-700' }}">
+                        </div>
+
+                        {{-- Step 3 --}}
+                        <div class="flex items-center">
+                            <div class="flex items-center justify-center w-10 h-10 rounded-full
+                                {{ $currentStep >= 3 ? 'bg-white text-black' : 'bg-gray-700 text-gray-400' }}">
+                                3
+                            </div>
+                            <span class="ml-2 text-sm hidden sm:inline
+                                {{ $currentStep >= 3 ? 'text-white' : 'text-gray-400' }}">
+                                Payment
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,40 +75,12 @@
 
                             <div class="space-y-4">
                                 <!-- Name -->
-                                <div>
-                                    <label class="block text-sm text-gray-400 mb-2">Full Name</label>
-                                    <input
-                                        type="text"
-                                        wire:model="customer_name"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="John Doe"
-                                    >
-                                    @error('customer_name') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
-
+                                <flux:input label="Full Name" wire:model="customer_name" placeholder="Adekunle Haruna Ciroma" class="max-full" />
                                 <!-- Email -->
-                                <div>
-                                    <label class="block text-sm text-gray-400 mb-2">Email Address</label>
-                                    <input
-                                        type="email"
-                                        wire:model="customer_email"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="john@example.com"
-                                    >
-                                    @error('customer_email') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
-
+                                <flux:input label="Email Address" wire:model="customer_email" type="email" placeholder="ade@example.com" class="max-full" />
                                 <!-- Phone -->
-                                <div>
-                                    <label class="block text-sm text-gray-400 mb-2">Phone Number</label>
-                                    <input
-                                        type="tel"
-                                        wire:model="customer_phone"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="+234 800 000 0000"
-                                    >
-                                    @error('customer_phone') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
+                                <flux:input label="Phone Number" wire:model="customer_phone" placeholder="+234 800 000 0000" class="max-full" />
+
                             </div>
                         </div>
                     @endif
@@ -124,8 +112,8 @@
                                                     </label>
                                                 </div>
 
-                                                <!-- Child Locations -->
-                                                @if($location->children->count() > 0 && $delivery_location_id == $location->id)
+                                                <!-- Child Locations - Show if parent is selected OR if any child is selected -->
+                                                @if($location->children->count() > 0 && ($delivery_location_id == $location->id || $this->isParentOfSelectedChild($location->id)))
                                                     <div class="pl-12 pr-4 pb-4 space-y-2 bg-[#1a1a1c] border-t border-gray-700">
                                                         @foreach($location->children as $child)
                                                             <div class="flex items-center py-2">
@@ -155,64 +143,25 @@
                                     </div>
                                     @error('delivery_location_id') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
                                 </div>
-
                                 <!-- Address -->
-                                <div>
-                                    <label class="block text-sm text-gray-400 mb-2">Street Address</label>
-                                    <input
-                                        type="text"
-                                        wire:model="delivery_address"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="123 Main Street"
-                                    >
-                                    @error('delivery_address') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
-                                </div>
+                                <flux:input label="Street Address" wire:model="delivery_address" placeholder="123 Main Street" class="max-full" />
 
                                 <!-- City and State -->
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm text-gray-400 mb-2">City</label>
-                                        <input
-                                            type="text"
-                                            wire:model="delivery_city"
-                                            class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                            placeholder="Lagos"
-                                        >
-                                        @error('delivery_city') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm text-gray-400 mb-2">State</label>
-                                        <input
-                                            type="text"
-                                            wire:model="delivery_state"
-                                            class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                            placeholder="Lagos State"
-                                        >
-                                        @error('delivery_state') <span class="text-red-400 text-xs mt-1">{{ $message }}</span> @enderror
-                                    </div>
+                                    <flux:select label="State" wire:model="delivery_state">
+                                        <option>Select State</option>
+                                        @foreach($states as $state)
+                                            <option value="{{ $state }}">{{ $state }}</option>
+                                        @endforeach
+                                    </flux:select>
+                                    <flux:input label="City" wire:model="delivery_city" placeholder="Ikeja" class="max-full" />
                                 </div>
 
                                 <!-- Zip Code -->
-                                <div>
-                                    <label class="block text-sm text-gray-400 mb-2">Zip/Postal Code (Optional)</label>
-                                    <input
-                                        type="text"
-                                        wire:model="delivery_zip"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="100001"
-                                    >
-                                </div>
+                                <flux:input label="Zip/Postal Code (Optional)" wire:model="delivery_zip" placeholder="100001" class="max-full" />
 
                                 <!-- Delivery Instructions -->
-                                <div>
-                                    <label class="block text-sm text-gray-400 mb-2">Delivery Instructions (Optional)</label>
-                                    <textarea
-                                        wire:model="delivery_instructions"
-                                        rows="3"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="Gate code, landmark, etc."
-                                    ></textarea>
-                                </div>
+                                <flux:textarea label="Delivery Instructions (Optional)" wire:model="delivery_instructions" placeholder="Gate code, landmark, etc." class="max-full" />
                             </div>
                         </div>
                     @endif
@@ -272,15 +221,7 @@
                                 </div>
 
                                 <!-- Customer Notes -->
-                                <div class="mt-6">
-                                    <label class="block text-sm text-gray-400 mb-2">Order Notes (Optional)</label>
-                                    <textarea
-                                        wire:model="customer_notes"
-                                        rows="3"
-                                        class="w-full bg-[#1a1a1c] text-white rounded-xl border border-gray-700 focus:border-gray-500 focus:ring-0 px-4 py-3"
-                                        placeholder="Any special instructions for your order?"
-                                    ></textarea>
-                                </div>
+                                <flux:textarea label="Order Notes (Optional)" wire:model="customer_notes" placeholder="Any special instructions for your order?" class="max-full" />
 
                                 <!-- Terms and Conditions -->
                                 <div class="mt-6">
@@ -303,36 +244,24 @@
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-8 pt-6 border-t border-gray-700">
                         @if($currentStep > 1)
-                            <button
-                                wire:click="previousStep"
-                                class="px-6 py-3 bg-[#1a1a1c] text-gray-300 rounded-xl hover:bg-[#2a2a2d] transition-colors"
-                            >
-                                Back
-                            </button>
+                            <flux:button type="submit" variant="subtle" size="sm" wire:click="previousStep" wire:key="back-btn">
+                                <flux:icon.loading wire:loading wire:target="previousStep" />
+                                <span wire:loading.remove wire:target="previousStep">Back</span>
+                            </flux:button>
                         @else
                             <div></div>
                         @endif
 
                         @if($currentStep < 3)
-                            <button
-                                wire:click="nextStep"
-                                class="px-6 py-3 bg-white text-black rounded-xl hover:bg-gray-200 transition-colors"
-                            >
-                                Continue
-                            </button>
+                            <flux:button type="submit" variant="primary" size="sm" wire:click="nextStep" wire:key="{{$currentStep}}">
+                                <flux:icon.loading wire:loading wire:target="nextStep" />
+                                <span wire:loading.remove wire:target="nextStep">Continue</span>
+                            </flux:button>
                         @else
-                            <button
-                                wire:click="placeOrder"
-                                wire:loading.attr="disabled"
-                                class="px-8 py-3 bg-white text-black rounded-xl hover:bg-gray-200 transition-colors flex items-center gap-2"
-                            >
-                                <span wire:loading.remove wire:target="placeOrder">Place Order</span>
-                                <span wire:loading wire:target="placeOrder">Processing...</span>
-                                <svg wire:loading wire:target="placeOrder" class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                            </button>
+                            <flux:button type="submit" variant="primary" size="sm" wire:click="placeOrder" wire:key="place-order">
+                                <flux:icon.loading wire:loading wire:target="placeOrder" />
+                                <span wire:loading.remove wire:target="placeOrder">{{ __('Place Order') }}</span>
+                            </flux:button>
                         @endif
                     </div>
                 </div>
@@ -348,13 +277,13 @@
                         @foreach($cartItems as $item)
                             <div class="flex items-start gap-3">
                                 <div class="w-12 h-12 bg-[#1a1a1c] rounded-lg overflow-hidden flex-shrink-0">
-                                    @if($item->product && $item->product->cover_image)
-                                        <img src="{{ $item->product->thumbnail }}" class="w-full h-full object-cover">
+                                    @if($item->product && $item->product->images->count() > 0)
+                                        <img src="{{ $item->product->primary_image_url }}"
+                                             alt="{{ $item->product->name }}"
+                                             class="w-20 h-20 object-cover rounded-lg">
                                     @else
-                                        <div class="w-full h-full flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
+                                        <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                            <span class="text-gray-300 font-medium">{{ substr($item->product->name, 0, 1) }}</span>
                                         </div>
                                     @endif
                                 </div>
@@ -378,9 +307,15 @@
                             <span class="text-white">₦{{ number_format($tax) }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Shipping</span>
+                            <span class="text-gray-400">Shipping cost</span>
                             <span class="text-white">₦{{ number_format($shipping) }}</span>
                         </div>
+                        @if($delivery_location_id)
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Shipping location</span>
+                                <span class="text-white">{{ $cart->location ? $cart->location->name : '--' }}</span>
+                            </div>
+                        @endif
                         @if($discount > 0)
                             <div class="flex justify-between text-sm text-green-400">
                                 <span>Discount</span>
