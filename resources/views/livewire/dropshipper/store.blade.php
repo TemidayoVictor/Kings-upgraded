@@ -31,7 +31,7 @@
                 >
                     <i class="fa-regular fa-tag text-[#b55a3b] mr-2"></i>
                     {{ $section->name }}
-                    <span class="ml-2 text-xs text-[#94897f]">({{ $section->products_count }})</span>
+{{--                    <span class="ml-2 text-xs text-[#94897f]">({{ $section->products_count }})</span>--}}
                 </button>
             @endforeach
         </div>
@@ -154,12 +154,7 @@
 
                         <!-- Price -->
                         <div class="flex items-center gap-2 mb-4">
-                            @if($originalProduct->sales_price)
-                                <span class="text-2xl font-light text-[#2e251f]">₦{{ number_format($originalProduct->sales_price) }}</span>
-                                <span class="text-sm text-[#94897f] line-through">₦{{ number_format($originalProduct->price) }}</span>
-                            @else
-                                <span class="text-2xl font-light text-[#2e251f]">₦{{ number_format($product->effective_price) }}</span>
-                            @endif
+                            <span class="text-2xl font-light text-[#2e251f]">₦{{ number_format($product->effective_price) }}</span>
                         </div>
 
                         <!-- Add to Cart Button -->

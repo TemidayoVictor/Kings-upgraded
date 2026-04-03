@@ -9,7 +9,7 @@ class Cart extends Model
 {
     protected $fillable = [
         'user_id', 'session_id', 'brand_id', 'subtotal', 'tax',
-        'shipping', 'delivery_location_id',  'discount', 'total', 'coupon_code', 'coupon_data',
+        'shipping', 'delivery_location_id', 'discount', 'total', 'coupon_code', 'coupon_data',
         'product_id',
         'product_name',
         'sku',
@@ -18,6 +18,9 @@ class Cart extends Model
         'quantity',
         'options',
         'dropshipper_store_id',
+        'dropshipper_product_id',
+        'dropship_price',
+        'custom_price',
     ];
 
     protected $casts = [

@@ -11,7 +11,7 @@ class OrderItem extends Model
 {
     protected $fillable = [
         'order_id', 'product_id', 'product_name', 'sku', 'unit_price',
-        'discount_price', 'quantity', 'subtotal', 'total', 'options', 'metadata',
+        'discount_price', 'quantity', 'subtotal', 'total', 'options', 'metadata', 'dropshipper_product_id',
     ];
 
     protected $casts = [
@@ -27,5 +27,10 @@ class OrderItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function dropshipperProduct(): BelongsTo
+    {
+        return $this->belongsTo(DropshipperProduct::class, 'dropshipper_product_id');
     }
 }

@@ -31,23 +31,25 @@ class CartService
             return $this->cart;
         }
 
-        // Proceeds here if cart was not found
-        $sessionId = Session::get('cart_session_id');
+        $sessionKey = 'cart_session_id_'.$this->brandId;
+        $sessionId = Session::get($sessionKey);
 
-        // If user is logged in, get their cart
+        // Logged-in user cart
         if (auth()->check()) {
-            $this->cart = Cart::with('items.product')
+            $userCart = Cart::with('items.product')
                 ->where('user_id', auth()->id())
                 ->where('brand_id', $this->brandId)
                 ->first();
 
-            // If there's a session cart, merge it
-            if ($sessionId && ! $this->cart) {
-                $this->cart = $this->mergeSessionCart($sessionId);
+            // If session cart exists → merge ALWAYS
+            if ($sessionId) {
+                $this->cart = $this->mergeSessionCart($sessionId, $userCart);
+            } else {
+                $this->cart = $userCart;
             }
         }
 
-        // If still no cart, get by session
+        // Guest cart
         if (! $this->cart && $sessionId) {
             $this->cart = Cart::with('items.product')
                 ->where('session_id', $sessionId)
@@ -55,7 +57,7 @@ class CartService
                 ->first();
         }
 
-        // Create new cart if none exists
+        // Create if none exists
         if (! $this->cart) {
             $this->cart = $this->createCart();
         }
@@ -65,11 +67,12 @@ class CartService
 
     protected function createCart(): Cart
     {
-        $sessionId = Session::get('cart_session_id');
+        $sessionKey = 'cart_session_id_'.$this->brandId;
+        $sessionId = Session::get($sessionKey);
 
         if (! $sessionId) {
-            $sessionId = Str::uuid()->toString();
-            Session::put('cart_session_id', $sessionId);
+            $sessionId = (string) Str::uuid();
+            Session::put($sessionKey, $sessionId);
         }
 
         return Cart::create([
@@ -84,27 +87,63 @@ class CartService
         ]);
     }
 
-    protected function mergeSessionCart(string $sessionId): ?Cart
+    protected function mergeSessionCart(string $sessionId, ?Cart $userCart = null): Cart
     {
-        $sessionCart = Cart::where('session_id', $sessionId)->first();
+        $sessionCart = Cart::with('items')
+            ->where('session_id', $sessionId)
+            ->where('brand_id', $this->brandId)
+            ->first();
 
         if (! $sessionCart) {
-            return null;
+            return $userCart ?? $this->createCart();
         }
 
-        DB::transaction(function () use ($sessionCart) {
+        // ✅ If user has no cart → just assign session cart
+        if (! $userCart) {
+            $sessionCart->update([
+                'user_id' => auth()->id(),
+            ]);
+
+            Session::forget('cart_session_id_'.$this->brandId);
+
+            return $sessionCart;
+        }
+
+        // ✅ Merge carts
+        DB::transaction(function () use ($sessionCart, $userCart) {
             foreach ($sessionCart->items as $item) {
-                $this->addItem(
-                    $item->product_id,
-                    $item->quantity,
-                    $item->options ?? []
-                );
+
+                $existing = $userCart->items()
+                    ->where('product_id', $item->product_id)
+                    ->get()
+                    ->first(function ($i) use ($item) {
+                        return json_encode($i->options) === json_encode($item->options);
+                    });
+
+                if ($existing) {
+                    $existing->increment('quantity', $item->quantity);
+                    $existing->recalculate();
+                } else {
+                    $userCart->items()->create([
+                        'product_id' => $item->product_id,
+                        'product_name' => $item->product_name,
+                        'sku' => $item->sku,
+                        'unit_price' => $item->unit_price,
+                        'discount_price' => $item->discount_price,
+                        'quantity' => $item->quantity,
+                        'subtotal' => $item->subtotal,
+                        'total' => $item->total,
+                        'options' => $item->options,
+                    ]);
+                }
             }
 
             $sessionCart->delete();
         });
 
-        return $this->cart;
+        Session::forget('cart_session_id_'.$this->brandId);
+
+        return $userCart;
     }
 
     /**
@@ -115,18 +154,14 @@ class CartService
         $product = Product::findOrFail($productId);
         $cart = $this->getCart();
 
-        // Check if product belongs to same brand
         if ($product->brand_id !== $this->brandId) {
             throw new \Exception('Product does not belong to this brand');
         }
 
-        if ($this->stockAlert) {
-            if ($product->stock < $quantity) {
-                throw new \Exception("Only {$product->stock} items available in stock");
-            }
+        if ($this->stockAlert && $product->stock < $quantity) {
+            throw new \Exception("Only {$product->stock} items available in stock");
         }
 
-        // Check if item exists with same options
         $existingItem = $cart->items()
             ->where('product_id', $productId)
             ->get()
@@ -137,23 +172,25 @@ class CartService
         if ($existingItem) {
             $newQuantity = $existingItem->quantity + $quantity;
 
-            if ($this->stockAlert) {
-                // Check stock for new total
-                if ($product->stock < $newQuantity) {
-                    throw new \Exception("Cannot add more. Only {$product->stock} available");
-                }
+            if ($this->stockAlert && $product->stock < $newQuantity) {
+                throw new \Exception("Cannot add more. Only {$product->stock} available");
             }
 
-            $existingItem->quantity = $newQuantity;
+            $existingItem->update([
+                'quantity' => $newQuantity,
+            ]);
+
             $existingItem->recalculate();
+
             $item = $existingItem;
         } else {
             $price = $product->discount_price ?? $product->price;
+
             $item = $cart->items()->create([
                 'product_id' => $productId,
                 'product_name' => $product->name,
                 'sku' => $product->sku,
-                'unit_price' => $product->price,
+                'unit_price' => $price,
                 'discount_price' => $product->discount_price,
                 'quantity' => $quantity,
                 'subtotal' => $price * $quantity,
@@ -179,12 +216,11 @@ class CartService
 
             return null;
         }
-        if ($this->stockAlert) {
-            // Check stock
-            if ($item->product->stock < $quantity) {
-                throw new Exception("Only {$item->product->stock} items available");
-            }
+        // Check stock
+        if ($this->stockAlert && $item->product->stock < $quantity) {
+            throw new Exception("Only {$item->product->stock} items available");
         }
+
         $item->quantity = $quantity;
         $item->recalculate();
         $this->updateCartTotals();
@@ -345,20 +381,5 @@ class CartService
             'discount' => $discount,
             'coupon_data' => $couponData,
         ]);
-    }
-
-    protected function getBrandId(): int
-    {
-        // Option 2: From session (if brand is selected)
-        if (Session::has('current_brand_id')) {
-            return Session::get('current_brand_id');
-        }
-
-        // Option 3: From request/route parameter
-        if (request()->has('brand_id')) {
-            return (int) request()->input('brand_id');
-        }
-
-        return 1;
     }
 }

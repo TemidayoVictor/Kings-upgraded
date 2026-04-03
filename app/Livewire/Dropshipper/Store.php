@@ -2,11 +2,15 @@
 
 namespace App\Livewire\Dropshipper;
 
+use App\Actions\CartAction;
+use App\DTOs\CartDTO;
+use App\Enums\UserType;
 use App\Models\DropshipperProduct;
 use App\Models\DropshipperStore;
 use App\Models\Section;
-use App\Services\DropshipperCartService;
 use App\Traits\Toastable;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,6 +20,8 @@ class Store extends Component
     use WithPagination;
 
     public DropshipperStore $store;
+
+    public int $brandId;
 
     // Filters
     public $selectedSection = 'all';
@@ -39,6 +45,8 @@ class Store extends Component
 
     public $perPage = 12;
 
+    public bool $stockAlert = false;
+
     protected $queryString = [
         'selectedSection' => ['except' => 'all'],
         'sortBy' => ['except' => 'newest'],
@@ -46,13 +54,10 @@ class Store extends Component
         'priceRange' => ['except' => [0, 100000]],
     ];
 
-    public function mount(DropshipperStore $store)
+    public function mount(DropshipperStore $store): void
     {
         $this->store = $store->load(['brand', 'dropshipper.user']);
-
-        // Set store in session for CartService
-        session(['current_store_id' => $store->id]);
-        session(['current_store_slug' => $store->slug]);
+        $this->brandId = $store->brand_id;
 
         // Get min and max prices for this store only (from dropshipper products)
         $this->minPrice = DropshipperProduct::where('dropshipper_store_id', $store->id)
@@ -60,18 +65,17 @@ class Store extends Component
                 $q->where('is_active', true)
                     ->where('publish', true);
             })
-            ->join('products', 'dropshipper_products.original_product_id', '=', 'products.id')
-            ->min('products.price') ?? 0;
+            ->min('custom_price') ?? 0;
 
         $this->maxPrice = DropshipperProduct::where('dropshipper_store_id', $store->id)
             ->whereHas('originalProduct', function ($q) {
                 $q->where('is_active', true)
                     ->where('publish', true);
             })
-            ->join('products', 'dropshipper_products.original_product_id', '=', 'products.id')
-            ->max('products.price') ?? 100000;
+            ->max('custom_price') ?? 100000;
 
         $this->priceRange = [$this->minPrice, $this->maxPrice];
+        $this->stockAlert = $this->store->brand->stock_alert;
     }
 
     public function updatedSelectedSection(): void
@@ -96,34 +100,21 @@ class Store extends Component
 
     public function addToCart($productId, $quantity = 1): void
     {
+        $buildDto = [
+            'productId' => $productId,
+            'storeId' => $this->store->id,
+            'quantity' => $quantity,
+            'stockAlert' => $this->store->brand->stock_alert,
+            'type' => UserType::DROPSHIPPER,
+        ];
+
+        $dto = CartDTO::fromArray($buildDto);
         try {
-            // Verify product belongs to this store and original product is active
-            $product = DropshipperProduct::with('originalProduct')
-                ->where('id', $productId)
-                ->where('dropshipper_store_id', $this->store->id)
-                ->whereHas('originalProduct', function ($q) {
-                    $q->where('is_active', true)
-                        ->where('publish', true);
-                })
-                ->firstOrFail();
-
-            $cartBag = new DropshipperCartService($this->store->id);
-            $cartBag->addItem($productId, $quantity);
-
+            $cartBag = CartAction::execute($dto);
             $this->addedToCart = $productId;
-
             // Get updated cart count
-            $cart = $cartBag->getCart();
-
-            // Dispatch events
-            $this->dispatch('cartUpdated', count: $cart->item_count);
-            $this->dispatch('added-to-cart', productId: $productId);
-
-            $this->dispatch('notify', [
-                'type' => 'success',
-                'message' => $product->originalProduct->name.' added to cart!',
-            ]);
-
+            $cart = $cartBag['cartBag']->getCart();
+            $this->toast('success', $cartBag['productName'].' added to cart!');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }
@@ -148,7 +139,7 @@ class Store extends Component
         $this->quickViewProduct = null;
     }
 
-    public function getProductsProperty()
+    public function getProductsProperty(): LengthAwarePaginator
     {
         $query = DropshipperProduct::with(['originalProduct.section'])
             ->where('dropshipper_store_id', $this->store->id)
@@ -206,32 +197,20 @@ class Store extends Component
         return $query->paginate($this->perPage);
     }
 
-    public function getSectionsProperty()
+    public function getSectionsProperty(): Collection
     {
-        // Get sections from original products through the dropshipper products
-        return Section::whereHas('products', function ($query) {
-            $query->whereIn('id', function ($subQuery) {
-                $subQuery->select('original_product_id')
-                    ->from('dropshipper_products')
-                    ->where('dropshipper_store_id', $this->store->id);
+        return Section::where('brand_id', $this->brandId)
+            ->whereHas('products', function ($query) {
+                $query->where('is_active', true);
             })
-                ->where('is_active', true)
-                ->where('publish', true);
-        })
             ->withCount(['products' => function ($query) {
-                $query->whereIn('id', function ($subQuery) {
-                    $subQuery->select('original_product_id')
-                        ->from('dropshipper_products')
-                        ->where('dropshipper_store_id', $this->store->id);
-                })
-                    ->where('is_active', true)
-                    ->where('publish', true);
+                $query->where('is_active', true);
             }])
             ->orderBy('name')
             ->get();
     }
 
-    public function getFeaturedProductsProperty()
+    public function getFeaturedProductsProperty(): Collection
     {
         return DropshipperProduct::with('originalProduct')
             ->where('dropshipper_store_id', $this->store->id)
@@ -240,7 +219,6 @@ class Store extends Component
                     ->where('publish', true)
                     ->where('is_featured', true);
             })
-            ->limit(4)
             ->get();
     }
 

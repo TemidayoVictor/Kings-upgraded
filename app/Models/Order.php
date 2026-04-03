@@ -13,6 +13,7 @@ class Order extends Model
         'user_id',
         'brand_id',
         'dropshipper_id',
+        'dropshipper_store_id',
         'delivery_location_id',
         'customer_name',
         'customer_email',
@@ -74,6 +75,11 @@ class Order extends Model
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(DropshipperStore::class, 'dropshipper_store_id');
     }
 
     public function deliveryLocation(): BelongsTo

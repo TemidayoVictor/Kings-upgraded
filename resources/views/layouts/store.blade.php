@@ -19,6 +19,7 @@
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    @fluxAppearance
     @stack('styles')
 </head>
 <body class="font-sans antialiased bg-[#f7f5f2]">
@@ -65,6 +66,19 @@
                             </span>
                     @endif
                 </a>
+
+                <a href="{{ route('dropshipper-cart', ['store' => $store]) }}" class="relative">
+                    <i class="fa-regular fa-bag-shopping text-2xl text-[#2c2420] hover:text-[#b55a3b] transition-colors"></i>
+                    <span
+                        x-data="{ count: 0 }"
+                        x-on:cart-updated.window="count = $event.detail.count"
+                        x-show="count > 0"
+                        x-transition
+                        class="absolute -top-2 -right-2 bg-[#b55a3b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                    >
+                            <span x-text="count"></span>
+                        </span>
+                </a>
             </div>
         </div>
     </div>
@@ -72,6 +86,7 @@
 
 <!-- Main Content -->
 <main>
+    <x-toast position="top-right" duration="5000" />
     {{ $slot }}
 </main>
 

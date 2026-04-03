@@ -4,19 +4,20 @@ namespace App\Livewire\Cart;
 
 use App\Actions\CartAction;
 use App\DTOs\CartDTO;
-use App\Models\Brand;
-use App\Services\CartService;
+use App\Enums\UserType;
+use App\Models\DropshipperStore;
+use App\Services\DropshipperCartService;
 use App\Traits\Toastable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class Index extends Component
+class DropshipperCart extends Component
 {
     use Toastable;
 
     // Let Laravel automatically resolve the brand via route model binding
-    public Brand $brand;
+    public DropshipperStore $store;
 
     public $cart;
 
@@ -55,10 +56,10 @@ class Index extends Component
     public function loadCart(): void
     {
         // Create CartService with the brand ID from the resolved model
-        $cartService = new CartService($this->brand->id, $this->brand->stock_alert);
+        $cartService = new DropshipperCartService($this->store->id, $this->store->brand->stock_alert);
 
         $this->cart = $cartService->getCart();
-        $this->cart->load('items.product');
+        $this->cart->load('items.dropshipperProduct.originalProduct');
 
         $this->cartItems = $this->cart->items;
         $this->subtotal = $this->cart->subtotal;
@@ -67,7 +68,6 @@ class Index extends Component
         $this->discount = $this->cart->discount;
         $this->total = $this->cart->total;
         $this->itemCount = $this->cart->items->sum('quantity');
-        $this->couponCode = $this->cart->coupon_code ?? '';
     }
 
     public function increment($itemId): void
@@ -94,10 +94,12 @@ class Index extends Component
     {
         $buildDto = [
             'productId' => $itemId,
-            'brandId' => $this->brand->id,
+            'storeId' => $this->store->id,
             'quantity' => $quantity,
-            'stockAlert' => $this->brand->stock_alert,
+            'stockAlert' => $this->store->brand->stock_alert,
+            'type' => UserType::DROPSHIPPER,
         ];
+
         $dto = CartDTO::fromArray($buildDto);
         if ($quantity < 1) {
             $this->removeItem($itemId);
@@ -117,8 +119,9 @@ class Index extends Component
     {
         $buildDto = [
             'productId' => $itemId,
-            'brandId' => $this->brand->id,
-            'stockAlert' => $this->brand->stock_alert,
+            'storeId' => $this->store->id,
+            'stockAlert' => $this->store->brand->stock_alert,
+            'type' => UserType::DROPSHIPPER,
         ];
         $dto = CartDTO::fromArray($buildDto);
         try {
@@ -129,55 +132,6 @@ class Index extends Component
             $this->toast('error', $e->getMessage());
         }
     }
-
-    public function applyCoupon(): void
-    {
-        if (! $this->couponCode) {
-            $this->couponError = 'Please enter a coupon code';
-
-            return;
-        }
-        $buildDto = [
-            'brandId' => $this->brand->id,
-            'stockAlert' => $this->brand->stock_alert,
-            'couponCode' => $this->couponCode,
-        ];
-        $dto = CartDTO::fromArray($buildDto);
-        try {
-            $result = CartAction::applyCoupon($dto);
-            if ($result['success']) {
-                $this->couponMessage = $result['message'];
-                $this->couponError = '';
-                $this->loadCart();
-                $this->toast('success', 'Coupon applied successfully');
-            } else {
-                $this->couponError = $result['message'];
-                $this->couponMessage = '';
-            }
-        } catch (\Exception $e) {
-            $this->couponError = $e->getMessage();
-        }
-    }
-
-    public function removeCoupon(): void
-    {
-        $buildDto = [
-            'brandId' => $this->brand->id,
-            'stockAlert' => $this->brand->stock_alert,
-        ];
-        $dto = CartDTO::fromArray($buildDto);
-        try {
-            CartAction::removeCoupon($dto);
-            $this->couponCode = '';
-            $this->couponMessage = '';
-            $this->couponError = '';
-            $this->loadCart();
-            $this->toast('success', 'Coupon removed');
-        } catch (\Exception $e) {
-            $this->toast('error', $e->getMessage());
-        }
-    }
-
     public function proceedToCheckout(): mixed
     {
         if ($this->itemCount === 0) {
@@ -185,14 +139,14 @@ class Index extends Component
             return back();
         }
 
-        // Pass brand to check out
-        return redirect()->route('checkout', ['brand' => $this->brand]);
+        // Pass to check out
+        return redirect()->route('dropshipper-checkout', ['store' => $this->store]);
     }
 
     public function render(): View
     {
-        return view('livewire.cart.index')->layout('layouts.shop', [
-            'brand' => $this->brand,
-        ]);
+        return view('livewire.cart.dropshipper-cart')->layout('layouts.store', [
+            'store' => $this->store,
+        ])->title('Cart');
     }
 }

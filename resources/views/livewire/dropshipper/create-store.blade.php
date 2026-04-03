@@ -149,7 +149,6 @@
                                     type="submit"
                                     variant="primary"
                                     class="min-w-[120px]"
-                                    :disabled="!$agreedToTerms"
                                     size="sm"
                                 >
                                     <flux:icon.loading wire:loading wire:target="createStore" />

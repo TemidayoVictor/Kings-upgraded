@@ -11,13 +11,16 @@ use App\Livewire\Brand\ApprovedDropshippers;
 use App\Livewire\Brand\BrandDashboard;
 use App\Livewire\Brand\PendingApplications;
 use App\Livewire\Brand\Product\AddProduct;
+use App\Livewire\Brand\Product\Coupons;
 use App\Livewire\Brand\Product\EditProduct;
 use App\Livewire\Brand\Product\ManageDeliveryLocations;
 use App\Livewire\Brand\Product\ManageSection;
 use App\Livewire\Brand\Product\ProductList;
 use App\Livewire\Brand\Settings\AdditionalDetails;
 use App\Livewire\Brand\Settings\BrandSettings;
+use App\Livewire\Cart\DropshipperCart;
 use App\Livewire\Cart\Index as CartIndex;
+use App\Livewire\Checkout\DropshipperCheckout;
 use App\Livewire\Checkout\Index as CheckoutIndex;
 use App\Livewire\Checkout\Success as CheckoutSuccess;
 use App\Livewire\Client\ClientDashboard;
@@ -29,7 +32,7 @@ use App\Livewire\Dropshipper\DropshipperDashboard;
 use App\Livewire\Dropshipper\PartneredBrands;
 use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 use App\Livewire\Dropshipper\Store;
-use App\Livewire\Brand\Product\Coupons;
+use App\Livewire\Brand\Orders\Index as BrandOrdersList;
 use App\Livewire\SelectRole;
 use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\Products;
@@ -37,9 +40,18 @@ use Illuminate\Support\Facades\Route;
 
 // General Routes
 Route::get('/', [NavigationController::class, 'home'])->name('home');
+
+// Brand Shops
 Route::get('/brands/{brand:slug}', Products::class)->name('shop');
 Route::get('/cart/{brand:slug}', CartIndex::class)->name('cart');
 Route::get('/checkout/{brand:slug}', CheckoutIndex::class)->name('checkout');
+
+// Dropshipper Stores
+Route::get('dropshippers/{store:slug}', Store::class)->name('dropshipper-store');
+Route::get('/dropshippers-cart/{store:slug}', DropshipperCart::class)->name('dropshipper-cart');
+Route::get('/dropshippers-checkout/{store:slug}', DropshipperCheckout::class)->name('dropshipper-checkout');
+
+// Checkout success page
 Route::get('/checkout/success/{order}', CheckoutSuccess::class)->name('checkout.success');
 
 // Guest only routes
@@ -85,6 +97,8 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
 
         Route::get('/pending-applications', PendingApplications::class)->name('pending-applications');
         Route::get('/approved-dropshipper', ApprovedDropshippers::class)->name('approved-dropshippers');
+
+        Route::get('/orders', BrandOrdersList::class)->name('orders');
     }
     );
 
@@ -107,8 +121,5 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
 
         Route::get('/create-store/{brand}', CreateStore::class)->name('create-store');
         Route::get('/clone-progress/{store}', CloneProgress::class)->name('clone-progress');
-
-        Route::get('/{store:slug}', Store::class)->name('store');
-
     }
     );

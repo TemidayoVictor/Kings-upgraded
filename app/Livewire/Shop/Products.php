@@ -7,7 +7,6 @@ use App\DTOs\CartDTO;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Section;
-use App\Services\CartService;
 use App\Traits\Toastable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -54,10 +53,6 @@ class Products extends Component
     public function mount(Brand $brand): void
     {
         $this->brand = $brand;
-
-        // Set brand in session for CartService
-        session(['current_brand_id' => $brand->id]);
-        session(['current_brand_slug' => $brand->slug]);
 
         // Get min and max prices for this brand only
         $this->minPrice = Product::where('brand_id', $brand->id)

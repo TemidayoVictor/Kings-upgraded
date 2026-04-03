@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\DTOs\OrderDTO;
 use App\Enums\Status;
+use App\Enums\UserType;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Order;
@@ -23,10 +24,20 @@ class OrderAction
             // Get cart
             $cart = $dto->cart;
             // Check stock again
-            if ($cart->brand->stock_alert) {
-                foreach ($cart->items as $item) {
-                    if ($item->product->stock < $item->quantity) {
-                        throw new \Exception("Insufficient stock for {$item->product_name}");
+            if ($dto->type == UserType::DROPSHIPPER) {
+                if ($cart->dropshipperStore->brand->stock_alert) {
+                    foreach ($cart->items as $item) {
+                        if ($item->product->stock < $item->quantity) {
+                            throw new \Exception("Insufficient stock for {$item->product_name}");
+                        }
+                    }
+                }
+            } else {
+                if ($cart->brand->stock_alert) {
+                    foreach ($cart->items as $item) {
+                        if ($item->product->stock < $item->quantity) {
+                            throw new \Exception("Insufficient stock for {$item->product_name}");
+                        }
                     }
                 }
             }
@@ -38,7 +49,8 @@ class OrderAction
             $order = Order::create([
                 'order_number' => $orderNumber,
                 'user_id' => auth()->id() ?? null,
-                'brand_id' => $cart->brand_id,
+                'brand_id' => $cart->brand_id ?? null,
+                'dropshipper_store_id' => $cart->dropshipper_store_id ?? null,
                 'delivery_location_id' => $cart->delivery_location_id,
 
                 // Customer Information
@@ -69,12 +81,16 @@ class OrderAction
                 // Coupon
                 'coupon_code' => $cart->coupon_code,
                 'coupon_data' => $cart->coupon_data,
+
+                // Dropshipper (if applicable)
+                'dropshipper_id' => $dto->dropshipperId,
             ]);
 
             // Create order items
             foreach ($cart->items as $item) {
                 $order->items()->create([
                     'product_id' => $item->product_id,
+                    'dropshipper_product_id' => $item->dropshipper_product_id,
                     'product_name' => $item->product_name,
                     'sku' => $item->sku,
                     'unit_price' => $item->unit_price,
@@ -86,7 +102,11 @@ class OrderAction
                 ]);
 
                 // Reduce stock
-                $item->product->decrement('stock', $item->quantity);
+                if ($dto->type == UserType::DROPSHIPPER) {
+                    $item->dropshipperProduct->originalProduct->decrement('stock', $item->quantity);
+                } else {
+                    $item->product->decrement('stock', $item->quantity);
+                }
             }
 
             // Record coupon usage if applied

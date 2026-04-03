@@ -30,17 +30,31 @@
                 <div class="space-y-3 mb-6 max-h-60 overflow-y-auto">
                     @foreach($order->items as $item)
                         <div class="flex items-start gap-3 mt-2">
-                            <div class="w-12 h-12 bg-[#1a1a1c] rounded-lg overflow-hidden flex-shrink-0">
-                                @if($item->product && $item->product->images->count() > 0)
-                                    <img src="{{ $item->product->primary_image_url }}"
-                                         alt="{{ $item->product->name }}"
-                                         class="w-20 h-20 object-cover rounded-lg">
-                                @else
-                                    <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
-                                        <span class="text-gray-300 font-medium">{{ substr($item->product->name, 0, 1) }}</span>
-                                    </div>
-                                @endif
-                            </div>
+                            @if($order->dropshipper_store_id)
+                                <div class="w-12 h-12 bg-[#1a1a1c] rounded-lg overflow-hidden flex-shrink-0">
+                                    @if($item->dropshipperProduct->originalProduct && $item->dropshipperProduct->originalProduct->images->count() > 0)
+                                        <img src="{{ $item->dropshipperProduct->originalProduct->primary_image_url }}"
+                                             alt="{{ $item->product_name }}"
+                                             class="w-20 h-20 object-cover rounded-lg">
+                                    @else
+                                        <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                            <span class="text-gray-300 font-medium">{{ substr($item->product_name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            @else
+                                <div class="w-12 h-12 bg-[#1a1a1c] rounded-lg overflow-hidden flex-shrink-0">
+                                    @if($item->product && $item->product->images->count() > 0)
+                                        <img src="{{ $item->product->primary_image_url }}"
+                                             alt="{{ $item->product->name }}"
+                                             class="w-20 h-20 object-cover rounded-lg">
+                                    @else
+                                        <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                            <span class="text-gray-300 font-medium">{{ substr($item->product_name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
                             <div class="flex-1">
                                 <p class="text-white">{{ $item->product_name }}</p>
                                 <p class="text-sm text-gray-400">Qty: {{ $item->quantity }}</p>
@@ -125,9 +139,15 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                <flux:button type="button" href="{{ route('shop', ['brand' => $brand->slug]) }}" variant="primary" class="w-full">
-                    <span>Continue Shopping</span>
-                </flux:button>
+                @if($order->dropshipper_store_id)
+                    <flux:button type="button" href="{{ route('dropshipper-store', ['store' => $store->slug]) }}" variant="primary" class="w-full">
+                        <span>Continue Shopping</span>
+                    </flux:button>
+                @else
+                    <flux:button type="button" href="{{ route('shop', ['brand' => $brand->slug]) }}" variant="primary" class="w-full">
+                        <span>Continue Shopping</span>
+                    </flux:button>
+                @endif
             </div>
         </div>
     </div>

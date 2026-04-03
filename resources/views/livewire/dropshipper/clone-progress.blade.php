@@ -4,8 +4,8 @@
 
     <flux:heading class="sr-only">{{ __('Cloning Store') }}</flux:heading>
 
-    <x-dropshippers.layout :heading="__('Cloning Store')" :subheading="__('Please wait . . .')">
-        <div class="min-h-screen">
+    <x-dropshippers.layout :heading="__('Cloning Store')" :subheading="$progress['is_complete'] ? __('Store cloned successfully') : __('Please wait . . .')">
+        <div class="min-h-screen" wire:poll.3s="checkProgress" @if($progress['is_complete']) wire:poll.stop @endif>
             <div class="max-w-2xl mx-auto py-12">
                 <div class="bg-[#3d3d40] rounded-lg shadow-lg p-8">
                     <!-- Header -->
@@ -104,7 +104,7 @@
                     @if($progress['is_complete'])
                         <div class="mt-8 text-center">
                             <flux:button href=" {{ route('dropshipper-store', $store)  }} "  variant="primary">
-                                Go To Dashboard
+                                Visit Store
                             </flux:button>
                         </div>
                     @endif
@@ -112,12 +112,4 @@
             </div>
         </div>
     </x-dropshippers.layout>
-
-    @if(!$progress['is_complete'])
-        <script>
-            setInterval(() => {
-                Livewire.emit('checkProgress');
-            }, {{ $pollingInterval }});
-        </script>
-    @endif
 </section>

@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\CartItem;
-use App\Models\Coupon;
 use App\Models\DropshipperProduct;
-use App\Models\DropshipperStore;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -18,9 +16,12 @@ class DropshipperCartService
 
     protected int $storeId;
 
-    public function __construct(int $storeId)
+    protected int $stockAlert;
+
+    public function __construct(int $storeId, bool $stockAlert = false)
     {
         $this->storeId = $storeId;
+        $this->stockAlert = $stockAlert;
     }
 
     public function getCart(): Cart
@@ -29,30 +30,33 @@ class DropshipperCartService
             return $this->cart;
         }
 
-        $sessionId = Session::get('dropshipper_cart_session_'.$this->storeId);
+        $sessionKey = 'dropshipper_cart_session_'.$this->storeId;
+        $sessionId = Session::get($sessionKey);
 
-        // If user is logged in, get their cart
+        // Logged-in user cart
         if (auth()->check()) {
-            $this->cart = Cart::with(['items.dropshipperProduct.originalProduct'])
+            $userCart = Cart::with('items.dropshipperProduct.originalProduct')
                 ->where('user_id', auth()->id())
                 ->where('dropshipper_store_id', $this->storeId)
                 ->first();
 
-            // If there's a session cart, merge it
-            if ($sessionId && ! $this->cart) {
-                $this->cart = $this->mergeSessionCart($sessionId);
+            // If session cart exists → merge ALWAYS
+            if ($sessionId) {
+                $this->cart = $this->mergeSessionCart($sessionId, $userCart);
+            } else {
+                $this->cart = $userCart;
             }
         }
 
-        // If still no cart, get by session
+        // Guest cart
         if (! $this->cart && $sessionId) {
-            $this->cart = Cart::with(['items.dropshipperProduct.originalProduct'])
+            $this->cart = Cart::with('items.dropshipperProduct.originalProduct')
                 ->where('session_id', $sessionId)
                 ->where('dropshipper_store_id', $this->storeId)
                 ->first();
         }
 
-        // Create new cart if none exists
+        // Create if none exists
         if (! $this->cart) {
             $this->cart = $this->createCart();
         }
@@ -65,18 +69,19 @@ class DropshipperCartService
      */
     protected function createCart(): Cart
     {
-        $sessionId = Session::get('dropshipper_cart_session_'.$this->storeId);
+        $sessionKey = 'dropshipper_cart_session_'.$this->storeId;
+        $sessionId = Session::get($sessionKey);
 
         if (! $sessionId) {
-            $sessionId = Str::uuid()->toString();
-            Session::put('dropshipper_cart_session_'.$this->storeId, $sessionId);
+            $sessionId = (string) Str::uuid();
+            Session::put($sessionKey, $sessionId);
         }
 
         return Cart::create([
             'user_id' => auth()->id(),
             'session_id' => $sessionId,
+            'brand_id' => null,
             'dropshipper_store_id' => $this->storeId,
-            'brand_id' => null, // Ensure brand_id is null for dropshipper carts
             'subtotal' => 0,
             'tax' => 0,
             'shipping' => 0,
@@ -88,34 +93,64 @@ class DropshipperCartService
     /**
      * Merge session cart with user cart after login
      */
-    protected function mergeSessionCart(string $sessionId): ?Cart
+    protected function mergeSessionCart(string $sessionId, ?Cart $userCart = null): Cart
     {
-        $sessionCart = Cart::where('session_id', $sessionId)
+        $sessionCart = Cart::with('items')
+            ->where('session_id', $sessionId)
             ->where('dropshipper_store_id', $this->storeId)
             ->first();
 
         if (! $sessionCart) {
-            return null;
+            return $userCart ?? $this->createCart();
         }
 
-        DB::transaction(function () use ($sessionCart) {
+        // ✅ If user has no cart → just assign session cart
+        if (! $userCart) {
+            $sessionCart->update([
+                'user_id' => auth()->id(),
+            ]);
+
+            Session::forget('dropshipper_cart_session_'.$this->storeId);
+
+            return $sessionCart;
+        }
+
+        // ✅ Merge carts
+        DB::transaction(function () use ($sessionCart, $userCart) {
             foreach ($sessionCart->items as $item) {
-                try {
-                    $this->addItem(
-                        $item->dropshipper_product_id,
-                        $item->quantity,
-                        $item->options ?? []
-                    );
-                } catch (Exception $e) {
-                    // Skip items that can't be added
-                    continue;
+
+                $existing = $userCart->items()
+                    ->where('product_id', $item->product_id)
+                    ->get()
+                    ->first(function ($i) use ($item) {
+                        return json_encode($i->options) === json_encode($item->options);
+                    });
+
+                if ($existing) {
+                    $existing->increment('quantity', $item->quantity);
+                    $existing->recalculate();
+                } else {
+                    $userCart->items()->create([
+                        'product_id' => 0,
+                        'dropshipper_product_id' => $item->dropshipper_product_id,
+                        'product_name' => $item->product_name,
+                        'sku' => $item->sku,
+                        'unit_price' => $item->unit_price,
+                        'discount_price' => $item->discount_price,
+                        'quantity' => $item->quantity,
+                        'subtotal' => $item->subtotal,
+                        'total' => $item->total,
+                        'options' => $item->options,
+                    ]);
                 }
             }
 
             $sessionCart->delete();
         });
 
-        return $this->cart;
+        Session::forget('dropshipper_cart_session_'.$this->storeId);
+
+        return $userCart;
     }
 
     /**
@@ -131,17 +166,17 @@ class DropshipperCartService
             ->where('dropshipper_store_id', $this->storeId)
             ->firstOrFail();
 
+        $cart = $this->getCart();
+
         // Check if original product is active and published
         if (! $product->originalProduct || ! $product->originalProduct->is_active || ! $product->originalProduct->publish) {
             throw new Exception('This product is no longer available');
         }
 
         // Check stock
-        if ($product->effective_stock < $quantity) {
-            throw new Exception("Only {$product->effective_stock} items available in stock");
+        if ($this->stockAlert && $product->originalProduct->stock < $quantity) {
+            throw new \Exception("Only {$product->originalProduct->stock} items available in stock");
         }
-
-        $cart = $this->getCart();
 
         // Check if item exists with same options
         $existingItem = $cart->items()
@@ -155,29 +190,33 @@ class DropshipperCartService
             $newQuantity = $existingItem->quantity + $quantity;
 
             // Check stock for new total
-            if ($product->effective_stock < $newQuantity) {
-                throw new Exception("Cannot add more. Only {$product->effective_stock} available");
+            if ($this->stockAlert && $product->stock < $newQuantity) {
+                throw new \Exception("Cannot add more. Only {$product->stock} available");
             }
 
-            $existingItem->quantity = $newQuantity;
+            $existingItem->update([
+                'quantity' => $newQuantity,
+            ]);
             $existingItem->recalculate();
             $item = $existingItem;
+
         } else {
+            $price = $product->discount_price ?? $product->custom_price;
             $item = $cart->items()->create([
+                'product_id' => null,
                 'dropshipper_product_id' => $dropshipperProductId,
                 'product_name' => $product->originalProduct->name,
-                'sku' => $product->originalProduct->sku ?? 'N/A',
-                'unit_price' => $product->originalProduct->price,
-                'dropship_price' => $product->originalProduct->dropship_price,
-                'custom_price' => $product->custom_price,
+                'sku' => $product->originalProduct->sku,
+                'unit_price' => $price,
+                'discount_price' => $product->discount_price,
                 'quantity' => $quantity,
-                'subtotal' => $product->effective_price * $quantity,
-                'total' => $product->effective_price * $quantity,
+                'subtotal' => $price * $quantity,
+                'total' => $price * $quantity,
                 'options' => $options,
             ]);
         }
 
-        $cart->recalculateTotals();
+        $this->updateCartTotals();
 
         return $item;
     }
@@ -189,7 +228,8 @@ class DropshipperCartService
      */
     public function updateItem(int $itemId, int $quantity): ?CartItem
     {
-        $item = CartItem::with('product.originalProduct')
+        $this->cart = $this->getCart();
+        $item = CartItem::with('dropshipperProduct.originalProduct')
             ->where('id', $itemId)
             ->whereHas('cart', function ($q) {
                 $q->where('dropshipper_store_id', $this->storeId);
@@ -203,20 +243,18 @@ class DropshipperCartService
         }
 
         // Check if original product is still active
-        if (! $item->product->originalProduct || ! $item->product->originalProduct->is_active || ! $item->product->originalProduct->publish) {
+        if (! $item->dropshipperProduct->originalProduct || ! $item->dropshipperProduct->originalProduct->is_active || ! $item->dropshipperProduct->originalProduct->publish) {
             throw new Exception('This product is no longer available');
         }
 
         // Check stock
-        if ($item->product->effective_stock < $quantity) {
-            throw new Exception("Only {$item->product->effective_stock} items available");
+        if ($this->stockAlert && $item->dropshipperProduct->originalProduct->stock < $quantity) {
+            throw new Exception("Only {$item->dropshipperProduct->originalProduct->stock} items available");
         }
 
         $item->quantity = $quantity;
-        $item->recalculate()->save();
-
-        $this->cart = $item->cart;
-        $this->cart->recalculateTotals();
+        $item->recalculate();
+        $this->updateCartTotals();
 
         return $item;
     }
@@ -235,7 +273,7 @@ class DropshipperCartService
         $item->delete();
 
         $this->getCart();
-        $this->cart->recalculateTotals();
+        $this->updateCartTotals();
 
         if ($this->cart->items()->count() === 0) {
             $this->clearCart();
@@ -259,125 +297,44 @@ class DropshipperCartService
         ]);
     }
 
-    /**
-     * Apply coupon to cart
-     */
-    public function applyCoupon(string $couponCode): array
+    private function updateCartTotals(): void
     {
-        $cart = $this->getCart();
-        $store = DropshipperStore::findOrFail($this->storeId);
-
-        // Find valid coupon (using brand's coupons since dropshippers use brand coupons)
-        $coupon = Coupon::where('code', $couponCode)
-            ->where('brand_id', $store->brand_id) // Coupons belong to the original brand
-            ->where('is_active', true)
-            ->where(function ($query) {
-                $query->whereNull('starts_at')
-                    ->orWhere('starts_at', '<=', now());
-            })
-            ->where(function ($query) {
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>=', now());
-            })
+        // Use database aggregation to get totals
+        $totals = CartItem::where('cart_id', $this->cart->id)
+            ->selectRaw('
+            SUM(
+                CASE
+                    WHEN discount_price IS NOT NULL
+                    THEN discount_price * quantity
+                    ELSE unit_price * quantity
+                END
+            ) as subtotal
+        ')
             ->first();
 
-        if (! $coupon) {
-            return [
-                'success' => false,
-                'message' => 'Invalid or expired coupon code',
-            ];
-        }
+        $subtotal = $totals->subtotal ?? 0;
+        $tax = round($subtotal * 0.075, 2);
+        $discount = 0.00;
+        $total = $subtotal + $tax + $this->cart->shipping;
 
-        // Check usage limits
-        if ($coupon->usage_limit && $coupon->used_count >= $coupon->usage_limit) {
-            return [
-                'success' => false,
-                'message' => 'This coupon has reached its usage limit',
-            ];
-        }
-
-        // Check per-user limit
-        if (auth()->check() && $coupon->usage_per_user) {
-            $userUsage = $coupon->usages()
-                ->where('user_id', auth()->id())
-                ->count();
-
-            if ($userUsage >= $coupon->usage_per_user) {
-                return [
-                    'success' => false,
-                    'message' => 'You have already used this coupon',
-                ];
-            }
-        }
-
-        // Check minimum order amount
-        if ($coupon->min_order_amount && $cart->subtotal < $coupon->min_order_amount) {
-            return [
-                'success' => false,
-                'message' => 'Minimum order amount of ₦'.number_format($coupon->min_order_amount).' required',
-            ];
-        }
-
-        // Calculate discount
-        $discount = 0;
-        if ($coupon->type === 'fixed') {
-            $discount = $coupon->value;
-        } else {
-            $discount = ($cart->subtotal * $coupon->value) / 100;
-            if ($coupon->max_discount_amount && $discount > $coupon->max_discount_amount) {
-                $discount = $coupon->max_discount_amount;
-            }
-        }
-
-        // Ensure discount doesn't exceed subtotal
-        $discount = min($discount, $cart->subtotal);
-
-        // Update cart
-        $cart->update([
-            'coupon_code' => $coupon->code,
-            'coupon_data' => [
-                'id' => $coupon->id,
-                'code' => $coupon->code,
-                'type' => $coupon->type,
-                'value' => $coupon->value,
-                'discount' => $discount,
-                'brand_id' => $coupon->brand_id,
-            ],
+        $this->cart->update([
+            'subtotal' => $subtotal,
+            'tax' => $tax,
+            'total' => max(0, $total),
             'discount' => $discount,
-            'total' => $cart->subtotal + $cart->tax + $cart->shipping - $discount,
-        ]);
-
-        return [
-            'success' => true,
-            'message' => 'Coupon applied successfully!',
-            'discount' => $discount,
-        ];
-    }
-
-    /**
-     * Remove coupon from cart
-     */
-    public function removeCoupon(): void
-    {
-        $cart = $this->getCart();
-
-        $cart->update([
-            'coupon_code' => null,
-            'coupon_data' => null,
-            'discount' => 0,
-            'total' => $cart->subtotal + $cart->tax + $cart->shipping,
         ]);
     }
 
     /**
      * Set shipping cost
      */
-    public function setShipping(float $shippingCost): void
+    public function setShipping(float $shippingCost, int $locationId): void
     {
         $cart = $this->getCart();
 
         $cart->update([
             'shipping' => $shippingCost,
+            'delivery_location_id' => $locationId,
             'total' => $cart->subtotal + $cart->tax + $shippingCost - $cart->discount,
         ]);
     }

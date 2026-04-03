@@ -4,18 +4,19 @@
 
 namespace App\Livewire\Dropshipper;
 
-use App\Jobs\CloneBrandJob;
+use App\Actions\Dropshipper\CloneStoreAction;
+use App\DTOs\Dropshipper\CloneStoreDTO;
 use App\Models\Brand;
 use App\Models\DropshipperApplication;
 use App\Models\DropshipperStore;
-use App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Traits\Toastable;
 use Illuminate\View\View;
 use Livewire\Component;
 
 class CreateStore extends Component
 {
+    use Toastable;
+
     public Brand $brand;
 
     public $storeName;
@@ -56,69 +57,42 @@ class CreateStore extends Component
 
         if ($existingStore) {
             redirect()->route('dropshipper-store', $existingStore);
+
             return;
         }
-
     }
 
     public function updatedStoreName(): void
     {
-        $this->generateSlug();
-    }
-
-    public function generateSlug(): void
-    {
         $this->resetErrorBag();
         $this->isCheckingSlug = true;
-        $this->storeSlug = Str::slug($this->storeName);
-
-        // Check if slug exists
-        $exists = DropshipperStore::where('slug', $this->storeSlug)->exists();
-        if ($exists) {
+        $check = generateStoreSlug($this->storeName);
+        $this->storeSlug = $check['storeSlug'];
+        if ($check['exists']) {
             $this->slugAvailable = false;
-            $this->isCheckingSlug = false;
         } else {
             $this->slugAvailable = true;
-            $this->isCheckingSlug = false;
         }
-
+        $this->isCheckingSlug = false;
     }
 
     public function createStore()
     {
         $this->validate();
+        $buildDto = [
+            'storeName' => $this->storeName,
+            'storeSlug' => $this->storeSlug,
+            'brandId' => $this->brand->id,
+            'brandName' => $this->brand->brand_name,
+            'settings' => [
+                'theme' => 'default',
+                'layout' => 'standard',
+            ],
+        ];
 
-        DB::beginTransaction();
+        $dto = CloneStoreDTO::fromArray($buildDto);
         try {
-            // Get total products for initial stats
-            $totalProducts = Product::where('brand_id', $this->brand->id)->count();
-
-            $store = DropshipperStore::create([
-                'dropshipper_id' => auth()->user()->dropshipper->id,
-                'brand_id' => $this->brand->id,
-                'store_name' => $this->storeName,
-                'slug' => $this->storeSlug,
-                'settings' => [
-                    'theme' => 'default',
-                    'layout' => 'standard',
-                    'created_from_brand' => $this->brand->brand_name,
-                    'created_at' => now()->toDateTimeString(),
-                    'clone_stats' => [
-                        'total_products' => $totalProducts,
-                        'cloned_products' => 0,
-                        'percentage' => 0,
-                        'status' => 'pending',
-                        'updated_at' => now()->toDateTimeString(),
-                    ],
-                ],
-                'status' => 'active',
-            ]);
-
-            DB::commit();
-
-            // Dispatch cloning job
-            CloneBrandJob::dispatch($store);
-
+            $store = CloneStoreAction::execute($dto);
             session()->flash('toast', [
                 'type' => 'success',
                 'message' => 'Store created successfully! Cloning has started.',
@@ -126,18 +100,11 @@ class CreateStore extends Component
                 'duration' => 5000,
             ]);
 
-            return redirect()->route('dropshipper-clone-progress', $store->id);
-
+            return redirect()->route('dropshipper-clone-progress', $store);
         } catch (\Exception $e) {
-            DB::rollBack();
-            session()->flash('toast', [
-                'type' => 'error',
-                'message' => 'Failed to create store: '.$e->getMessage(),
-                'title' => 'Failed',
-                'duration' => 5000,
-            ]);
+            $this->toast('error', $e->getMessage());
 
-            return redirect()->back();
+            return back();
         }
     }
 

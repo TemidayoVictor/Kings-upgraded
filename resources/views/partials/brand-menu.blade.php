@@ -13,7 +13,7 @@
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Orders')" class="grid">
-        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="clipboard-document-list" :href="route('brand-orders')" :current="request()->routeIs('brand-orders')" wire:navigate>
             {{ __('Store Orders') }}
         </flux:sidebar.item>
         <flux:sidebar.item icon="truck" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>

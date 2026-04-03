@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Coupon;
+use App\Models\DropshipperStore;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 if (! function_exists('firstName')) {
     function firstName(?string $fullName): string
@@ -68,5 +70,18 @@ if (! function_exists('validateDateRange')) {
             'valid' => empty($errors),
             'errors' => $errors,
         ];
+    }
+
+    if (! function_exists('generateStoreSlug')) {
+        function generateStoreSlug($storeName): array
+        {
+            $storeSlug = Str::slug($storeName);
+            // Check if slug exists
+            $exists = DropshipperStore::where('slug', $storeSlug)->exists();
+            return [
+                'storeSlug' => $storeSlug,
+                'exists' => $exists,
+            ];
+        }
     }
 }

@@ -21,7 +21,7 @@ class CartItem extends Model
         'sku',
         'unit_price',
         'discount_price',
-        'dropship_price', // Add this
+        'dropship_price',
         'custom_price',
         'quantity',
         'subtotal',

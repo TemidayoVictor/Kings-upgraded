@@ -120,7 +120,7 @@ class Product extends Model
      */
     public function getHasSaleAttribute(): bool
     {
-        return !is_null($this->sales_price) && $this->sales_price < $this->price;
+        return ! is_null($this->sales_price) && $this->sales_price < $this->price;
     }
 
     /**
@@ -128,7 +128,7 @@ class Product extends Model
      */
     public function getDiscountPercentageAttribute(): ?int
     {
-        if (!$this->has_sale) {
+        if (! $this->has_sale) {
             return null;
         }
 
@@ -140,7 +140,7 @@ class Product extends Model
      */
     public function getFormattedPriceAttribute(): string
     {
-        return '₱' . number_format($this->price, 2);
+        return '₱'.number_format($this->price, 2);
     }
 
     /**
@@ -148,7 +148,7 @@ class Product extends Model
      */
     public function getFormattedSalesPriceAttribute(): ?string
     {
-        return $this->sales_price ? '₱' . number_format($this->sales_price, 2) : null;
+        return $this->sales_price ? '₱'.number_format($this->sales_price, 2) : null;
     }
 
     /**
@@ -157,7 +157,7 @@ class Product extends Model
     public function getImageUrlsAttribute(): array
     {
         return $this->images->map(function ($image) {
-            return asset('storage/' . $image->image_path);
+            return asset('storage/'.$image->image_path);
         })->toArray();
     }
 
@@ -169,7 +169,7 @@ class Product extends Model
         $primaryImage = $this->images->first();
 
         return $primaryImage
-            ? asset('storage/' . $primaryImage->image_path)
+            ? asset('storage/'.$primaryImage->image_path)
             : asset('images/placeholder.jpg'); // Fallback image
     }
 
@@ -188,6 +188,7 @@ class Product extends Model
     {
         if ($this->stock >= $quantity) {
             $this->decrement('stock', $quantity);
+
             return true;
         }
 
@@ -213,7 +214,6 @@ class Product extends Model
     /**
      * Get the primary/first image for the product.
      */
-
     public function section(): BelongsTo
     {
         return $this->belongsTo(Section::class);

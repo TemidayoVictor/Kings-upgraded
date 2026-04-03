@@ -4,49 +4,78 @@ namespace App\Livewire\Checkout;
 
 use App\Actions\OrderAction;
 use App\DTOs\OrderDTO;
-use App\Models\Brand;
+use App\Enums\UserType;
 use App\Models\DeliveryLocation;
+use App\Models\DropshipperStore;
 use App\Models\State;
-use App\Services\CartService;
+use App\Services\DropshipperCartService;
 use App\Traits\Toastable;
 use Livewire\Component;
 
-class Index extends Component
+class DropshipperCheckout extends Component
 {
     use Toastable;
 
     public $cart;
-    public Brand $brand;
-    public CartService $cartService;
+
+    public DropshipperStore $store;
+
+    public DropshipperCartService $cartService;
+
     public $cartItems = [];
+
     public $subtotal = 0;
+
     public $tax = 0;
+
     public $shipping = 0;
+
     public $discount = 0;
+
     public $total = 0;
+
     // Customer Information
     public $customer_name = '';
+
     public $customer_email = '';
+
     public $customer_phone = '';
+
     // Delivery Information
     public $delivery_address = '';
+
     public $delivery_city = '';
+
     public $delivery_state = '';
+
     public $delivery_zip = '';
+
     public $delivery_instructions = '';
+
     public $delivery_location_id = null;
+
     public $delivery_locations = [];
+
     public $selected_location = null;
+
     public $delivery_price = 0;
+
     // Payment
     public $payment_method = 'card';
+
     public $customer_notes = '';
+
     // UI State
     public $currentStep = 1;
+
     public $termsAccepted = false;
+
     public $processing = false;
+
     public $selected_child_parent_id = null;
+
     public array $states = [];
+
     protected $rules = [
         // Step 1: Customer Information
         'customer_name' => 'required|string|min:3|max:255',
@@ -72,12 +101,12 @@ class Index extends Component
 
     public function mount()
     {
-        $cartService = new CartService($this->brand->id, $this->brand->stock_alert);
+        $cartService = new DropshipperCartService($this->store->id, $this->store->brand->stock_alert);
         $this->cart = $cartService->getCart();
-        $this->cart->load('items.product');
+        $this->cart->load('items.dropshipperProduct.originalProduct');
 
         if ($this->cart->items->count() === 0) {
-            return redirect()->route('cart', ['brand' => $this->brand->slug]);
+            return redirect()->route('dropshipper-cart', ['store' => $this->store->slug]);
         }
 
         $this->cartItems = $this->cart->items;
@@ -105,7 +134,7 @@ class Index extends Component
     public function loadDeliveryLocations(): void
     {
         $this->delivery_locations = DeliveryLocation::with('children')
-            ->where('brand_id', $this->cart->brand_id)
+            ->where('brand_id', $this->store->brand->id)
             ->whereNull('parent_id')
             ->where('is_active', true)
             ->orderBy('name')
@@ -132,7 +161,7 @@ class Index extends Component
         $this->delivery_price = $location->effective_price;
 
         // Update cart shipping
-        $cartService = new CartService($this->brand->id, $this->brand->stock_alert);
+        $cartService = new DropshipperCartService($this->store->id, $this->store->brand->stock_alert);
         $cartService->setShipping($this->delivery_price, $locationId);
 
         // Refresh totals
@@ -188,6 +217,8 @@ class Index extends Component
             'deliveryInstructions' => $this->delivery_instructions,
             'paymentMethod' => $this->payment_method,
             'notes' => $this->customer_notes,
+            'type' => UserType::DROPSHIPPER,
+            'dropshipperId' => $this->store->dropshipper_id,
         ];
 
         $dto = OrderDTO::fromArray($buildDto);
@@ -207,14 +238,15 @@ class Index extends Component
         } catch (\Exception $e) {
             $this->processing = false;
             $this->toast('error', $e->getMessage());
+
             return back();
         }
     }
 
     public function render()
     {
-        return view('livewire.checkout.index')->layout('layouts.shop', [
-            'brand' => $this->brand,
-        ]);
+        return view('livewire.checkout.dropshipper-checkout')->layout('layouts.store', [
+            'store' => $this->store,
+        ])->title('Checkout');
     }
 }

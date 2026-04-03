@@ -18,6 +18,8 @@ readonly class OrderDTO
         public ?string $deliveryInstructions,
         public ?string $paymentMethod,
         public ?string $notes,
+        public ?int $dropshipperId,
+        public ?string $type,
     ) {}
 
     public static function fromArray(array $data): self
@@ -34,6 +36,8 @@ readonly class OrderDTO
             deliveryInstructions: $data['deliveryInstructions'] ?? null,
             paymentMethod: $data['paymentMethod'] ?? null,
             notes: $data['notes'] ?? null,
+            dropshipperId: $data['dropshipperId'] ?? null,
+            type: $data['type'] ?? null,
         );
     }
 }
