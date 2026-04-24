@@ -24,7 +24,7 @@ class ManageSection extends Component
 
     public bool $showCreateModal = false;
 
-    public int $perPage = 4;
+    public int $perPage = 10;
 
     protected array $rules = [
         'name' => 'required|string|max:255',

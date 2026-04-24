@@ -2,12 +2,15 @@
 
 namespace App\Actions;
 
+use App\DTOs\GeneralDTO;
 use App\DTOs\OrderDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
+use App\Models\DropshipperEarning;
 use App\Models\Order;
+use App\Models\OrderBatch;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -84,6 +87,7 @@ class OrderAction
 
                 // Dropshipper (if applicable)
                 'dropshipper_id' => $dto->dropshipperId,
+                'dropshipper_profit' => $cart->dropshipper_profit,
             ]);
 
             // Create order items
@@ -149,6 +153,61 @@ class OrderAction
         } catch (\Exception $e) {
             DB::rollBack();
             throw new Exception('Order placement failed: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public static function batch(GeneralDTO $dto): void
+    {
+        $user = auth()->user();
+        if (! $user) {
+            throw new Exception('User not found.');
+        }
+
+        $dropshipper = $user->dropshipper;
+        if (! $dropshipper) {
+            throw new Exception('Dropshipper not found.');
+        }
+
+        try {
+            DB::beginTransaction();
+            $unbatchedOrders = $dto->items;
+
+            if ($unbatchedOrders->count() != 0) {
+                $batch = OrderBatch::create([
+                    'dropshipper_store_id' => $dto->id,
+                    'orders' => $unbatchedOrders->count(),
+                    'amount' => $unbatchedOrders->sum('total'),
+                    'dropshipper_amount' => $unbatchedOrders->sum('total') - $unbatchedOrders->sum('dropshipper_profit'),
+                ]);
+
+                foreach ($unbatchedOrders as $order) {
+                    $order->update(
+                        [
+                            'dropshipper_status' => Status::APPROVED,
+                            'order_batch_id' => $batch->id,
+                        ]
+                    );
+
+                    // record earning
+                    DropshipperEarning::create([
+                        'dropshipper_store_id' => $dto->id,
+                        'order_id' => $order->id,
+                        'amount' => $order->dropshipper_profit,
+                    ]);
+                }
+
+            } else {
+                throw new Exception('No orders are ready to be batched.');
+            }
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new Exception('Orders batching failed: '.$e->getMessage());
         }
     }
 }

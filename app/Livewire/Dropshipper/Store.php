@@ -216,8 +216,7 @@ class Store extends Component
             ->where('dropshipper_store_id', $this->store->id)
             ->whereHas('originalProduct', function ($q) {
                 $q->where('is_active', true)
-                    ->where('publish', true)
-                    ->where('is_featured', true);
+                    ->where('publish', true);
             })
             ->get();
     }

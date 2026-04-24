@@ -6,7 +6,7 @@
 
     <x-dropshippers.layout :heading="__('Cloning Store')" :subheading="$progress['is_complete'] ? __('Store cloned successfully') : __('Please wait . . .')">
         <div class="min-h-screen" wire:poll.3s="checkProgress" @if($progress['is_complete']) wire:poll.stop @endif>
-            <div class="max-w-2xl mx-auto py-12">
+            <div class="max-w-2xl mx-auto">
                 <div class="bg-[#3d3d40] rounded-lg shadow-lg p-8">
                     <!-- Header -->
                     <div class="text-center mb-8">
@@ -102,10 +102,12 @@
 
                     <!-- Complete Button -->
                     @if($progress['is_complete'])
-                        <div class="mt-8 text-center">
-                            <flux:button href=" {{ route('dropshipper-store', $store)  }} "  variant="primary">
-                                Visit Store
-                            </flux:button>
+                        <div class="flex items-center gap-3 justify-center">
+                            <div class="mt-8 text-center">
+                                <flux:button href=" {{ route('dropshipper-manage-store', $store)}}" size="sm"  variant="primary">
+                                    Manage Store
+                                </flux:button>
+                            </div>
                         </div>
                     @endif
                 </div>

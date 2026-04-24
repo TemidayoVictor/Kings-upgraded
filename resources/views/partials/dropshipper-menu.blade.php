@@ -4,13 +4,13 @@
     </flux:sidebar.item>
 
     <flux:sidebar.group :heading="__('Partners')" class="grid">
-        <flux:sidebar.item icon="user-group" :href="route('dropshipper-partnered-brands')" :current="request()->routeIs('dropshipper-partnered-brands', 'dropshipper-applications', 'dropshipper-browse-brands', 'dropshipper-create-store', 'dropshipper-clone-progress')" wire:navigate>
+        <flux:sidebar.item icon="user-group" :href="route('dropshipper-partnered-brands')" :current="request()->routeIs('dropshipper-partnered-brands', 'dropshipper-applications', 'dropshipper-browse-brands', 'dropshipper-create-store', 'dropshipper-clone-progress', 'dropshipper-manage-store')" wire:navigate>
             {{ __('Partnered Brands') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Orders')" class="grid">
-        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dropshipper-orders')" wire:navigate>
             {{ __('Orders') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

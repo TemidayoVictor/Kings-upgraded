@@ -2,24 +2,27 @@
 
 namespace App\Livewire\Brand\Product;
 
-use Illuminate\View\View;
-use Livewire\WithPagination;
-use App\Traits\Toastable;
-
-use Livewire\Component;
-use App\Models\Product;
-use App\DTOs\GeneralDTO;
 use App\Actions\Brand\DeleteProductAction;
+use App\DTOs\GeneralDTO;
+use App\Models\Product;
+use App\Traits\Toastable;
+use Illuminate\View\View;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ProductList extends Component
 {
-    use WithPagination;
     use Toastable;
+    use WithPagination;
 
     public Product $selectedProduct;
+
     public string $search = '';
-    public int $perPage = 2;
+
+    public int $perPage = 15;
+
     public bool $showDeleteModal = false;
+
     public int $productId;
 
     public function updatedSearch(): void
@@ -42,10 +45,10 @@ class ProductList extends Component
         try {
             DeleteProductAction::execute($dto);
             $this->closeModal();
-            $this->toast('success','Product deleted successfully.');
-        } catch(\Exception $e) {
+            $this->toast('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
             $this->closeModal();
-            $this->toast('error',$e->getMessage());
+            $this->toast('error', $e->getMessage());
         }
     }
 
@@ -56,19 +59,21 @@ class ProductList extends Component
 
     public function render(): View
     {
+        $brandId = auth()->user()->brand->id;
         $products = Product::query()
             ->with('images')
+            ->where('id', $brandId)
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%');
             })
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
 
         return view('livewire.brand.product.product-list', [
-            'products' => $products
+            'products' => $products,
         ])
-        ->layout('layouts.auth')
-        ->title('Products');
+            ->layout('layouts.auth')
+            ->title('Products');
     }
 }

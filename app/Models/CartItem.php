@@ -26,6 +26,7 @@ class CartItem extends Model
         'quantity',
         'subtotal',
         'total',
+        'dropshipper_profit',
         'options',
         'metadata',
     ];

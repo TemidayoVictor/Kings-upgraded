@@ -3,7 +3,9 @@
 namespace App\Actions\Dropshipper;
 
 use App\DTOs\Dropshipper\CloneStoreDTO;
+use App\DTOs\GeneralDTO;
 use App\Enums\Status;
+use App\Enums\UserType;
 use App\Jobs\CloneBrandJob;
 use App\Models\Dropshipper;
 use App\Models\DropshipperStore;
@@ -64,5 +66,29 @@ class CloneStoreAction
             DB::rollBack();
             throw new Exception("Failed to create store: {$e->getMessage()}");
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function editStore(GeneralDTO $dto): DropshipperStore
+    {
+        $user = auth()->user();
+
+        if (! $user || $user->role != UserType::DROPSHIPPER) {
+            throw new Exception('User not found.');
+        }
+
+        $store = DropshipperStore::find($dto->id);
+        if (! $store) {
+            throw new Exception('Store not found.');
+        }
+
+        $store->update([
+            'store_name' => $dto->value['store_name'],
+            'slug' => $dto->value['slug'],
+        ]);
+
+        return $store;
     }
 }

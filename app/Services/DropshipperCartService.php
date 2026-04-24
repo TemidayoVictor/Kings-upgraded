@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\DropshipperProduct;
+use App\Models\DropshipperStore;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -40,11 +40,8 @@ class DropshipperCartService
                 ->where('dropshipper_store_id', $this->storeId)
                 ->first();
 
-            // If session cart exists → merge ALWAYS
-            if ($sessionId) {
-                $this->cart = $this->mergeSessionCart($sessionId, $userCart);
-            } else {
-                $this->cart = $userCart;
+            if (! $userCart) {
+                $this->createCart();
             }
         }
 
@@ -77,10 +74,17 @@ class DropshipperCartService
             Session::put($sessionKey, $sessionId);
         }
 
-        return Cart::create([
+        $store = DropshipperStore::where('id', $this->storeId)->first();
+        if ($store) {
+            $brandId = $store->brand_id;
+        } else {
+            $brandId = null;
+        }
+
+        $cart = Cart::create([
             'user_id' => auth()->id(),
             'session_id' => $sessionId,
-            'brand_id' => null,
+            'brand_id' => $brandId,
             'dropshipper_store_id' => $this->storeId,
             'subtotal' => 0,
             'tax' => 0,
@@ -88,69 +92,8 @@ class DropshipperCartService
             'discount' => 0,
             'total' => 0,
         ]);
-    }
 
-    /**
-     * Merge session cart with user cart after login
-     */
-    protected function mergeSessionCart(string $sessionId, ?Cart $userCart = null): Cart
-    {
-        $sessionCart = Cart::with('items')
-            ->where('session_id', $sessionId)
-            ->where('dropshipper_store_id', $this->storeId)
-            ->first();
-
-        if (! $sessionCart) {
-            return $userCart ?? $this->createCart();
-        }
-
-        // ✅ If user has no cart → just assign session cart
-        if (! $userCart) {
-            $sessionCart->update([
-                'user_id' => auth()->id(),
-            ]);
-
-            Session::forget('dropshipper_cart_session_'.$this->storeId);
-
-            return $sessionCart;
-        }
-
-        // ✅ Merge carts
-        DB::transaction(function () use ($sessionCart, $userCart) {
-            foreach ($sessionCart->items as $item) {
-
-                $existing = $userCart->items()
-                    ->where('product_id', $item->product_id)
-                    ->get()
-                    ->first(function ($i) use ($item) {
-                        return json_encode($i->options) === json_encode($item->options);
-                    });
-
-                if ($existing) {
-                    $existing->increment('quantity', $item->quantity);
-                    $existing->recalculate();
-                } else {
-                    $userCart->items()->create([
-                        'product_id' => 0,
-                        'dropshipper_product_id' => $item->dropshipper_product_id,
-                        'product_name' => $item->product_name,
-                        'sku' => $item->sku,
-                        'unit_price' => $item->unit_price,
-                        'discount_price' => $item->discount_price,
-                        'quantity' => $item->quantity,
-                        'subtotal' => $item->subtotal,
-                        'total' => $item->total,
-                        'options' => $item->options,
-                    ]);
-                }
-            }
-
-            $sessionCart->delete();
-        });
-
-        Session::forget('dropshipper_cart_session_'.$this->storeId);
-
-        return $userCart;
+        return $cart;
     }
 
     /**
@@ -203,7 +146,7 @@ class DropshipperCartService
         } else {
             $price = $product->discount_price ?? $product->custom_price;
             $item = $cart->items()->create([
-                'product_id' => null,
+                'product_id' => $product->original_product_id,
                 'dropshipper_product_id' => $dropshipperProductId,
                 'product_name' => $product->originalProduct->name,
                 'sku' => $product->originalProduct->sku,
@@ -213,6 +156,7 @@ class DropshipperCartService
                 'subtotal' => $price * $quantity,
                 'total' => $price * $quantity,
                 'options' => $options,
+                'dropshipper_profit' => $product->profit,
             ]);
         }
 
@@ -308,7 +252,9 @@ class DropshipperCartService
                     THEN discount_price * quantity
                     ELSE unit_price * quantity
                 END
-            ) as subtotal
+            ) as subtotal,
+
+            SUM(dropshipper_profit * quantity) as total_profit
         ')
             ->first();
 
@@ -322,6 +268,7 @@ class DropshipperCartService
             'tax' => $tax,
             'total' => max(0, $total),
             'discount' => $discount,
+            'dropshipper_profit' => $totals->total_profit,
         ]);
     }
 

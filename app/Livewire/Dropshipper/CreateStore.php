@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\DropshipperApplication;
 use App\Models\DropshipperStore;
 use App\Traits\Toastable;
+use App\Enums\Status;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -19,15 +20,15 @@ class CreateStore extends Component
 
     public Brand $brand;
 
-    public $storeName;
+    public string $storeName;
 
-    public $storeSlug;
+    public string $storeSlug;
 
-    public $isCheckingSlug = false;
+    public bool $isCheckingSlug = false;
 
-    public $slugAvailable = false;
+    public bool $slugAvailable = false;
 
-    public $agreedToTerms = false;
+    public bool $agreedToTerms = false;
 
     protected $rules = [
         'storeName' => 'required|string|min:3|max:100',
@@ -43,7 +44,8 @@ class CreateStore extends Component
         $dropshipper = auth()->user()->dropshipper;
         $hasApproved = DropshipperApplication::where('dropshipper_id', $dropshipper->id)
             ->where('brand_id', $brand->id)
-            ->where('status', 'approved')
+            ->where('status', Status::APPROVED)
+            ->orWhere('status', Status::CLONED)
             ->exists();
 
         if (! $hasApproved) {

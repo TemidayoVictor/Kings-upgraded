@@ -21,10 +21,19 @@ class Cart extends Model
         'dropshipper_product_id',
         'dropship_price',
         'custom_price',
+        'dropshipper_profit',
     ];
 
     protected $casts = [
         'coupon_data' => 'array',
+        'subtotal' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'shipping' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'total' => 'decimal:2',
+        'user_id' => 'integer',
+        'brand_id' => 'integer',
+        'dropshipper_store_id' => 'integer',
     ];
 
     public function items(): HasMany

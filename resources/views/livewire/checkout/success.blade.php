@@ -132,7 +132,21 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-400">Payment Status</span>
-                        <span class="text-yellow-400 capitalize">{{ $order->payment_status }}</span>
+                        @if($order->payment_status == App\Enums\Status::PAID)
+                            <span class="text-green-400 capitalize">{{ $order->payment_status }}</span>
+                        @else
+                            <span class="text-yellow-400 capitalize">{{ $order->payment_status }}</span>
+                        @endif
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Order Status</span>
+                        @if($order->status == App\Enums\Status::DELIVERED)
+                            <span class="text-green-400 capitalize">{{ $order->status }}</span>
+                        @elseif($order->status == App\Enums\Status::CANCELLED)
+                            <span class="text-red-400 capitalize">{{ $order->status }}</span>
+                        @else
+                            <span class="text-yellow-400 capitalize">{{ $order->status }}</span>
+                        @endif
                     </div>
                 </div>
             </div>

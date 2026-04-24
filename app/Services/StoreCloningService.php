@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Enums\Status;
 use App\Models\Brand;
+use App\Models\DropshipperApplication;
 use App\Models\DropshipperProduct;
 use App\Models\DropshipperStore;
 use App\Models\Product;
@@ -93,6 +94,15 @@ class StoreCloningService
                 'status' => Status::CLONED,
             ]);
 
+            $application = DropshipperApplication::where('dropshipper_id', $store->dropshipper_id)
+                ->where('brand_id', $store->brand_id)->first();
+
+            if ($application) {
+                $application->update([
+                    'status' => Status::CLONED,
+                ]);
+            }
+
             DB::commit();
 
             return [
@@ -147,13 +157,14 @@ class StoreCloningService
             }
 
             // Determine the price to use
-            $price = $product->dropship_price ?? $product->price;
+            $price = $product->price;
 
             // Create the dropshipper product
             DropshipperProduct::create([
                 'dropshipper_store_id' => $store->id,
                 'original_product_id' => $product->id,
                 'custom_price' => $price,
+                'profit' => $price - $product->dropship_price,
                 'stock_override' => null,
                 'custom_settings' => json_encode([
                     'cloned_at' => now()->toDateTimeString(),

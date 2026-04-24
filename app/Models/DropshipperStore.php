@@ -17,6 +17,9 @@ class DropshipperStore extends Model
         'image',
         'settings',
         'status',
+        'cloned_at',
+        'clone_stats',
+        'cloned_from_brand',
     ];
 
     protected $casts = [

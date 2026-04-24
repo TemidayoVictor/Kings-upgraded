@@ -17,9 +17,9 @@ class CloneBrandJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 600;
+    public int $timeout = 600;
 
-    public $tries = 3;
+    public int $tries = 3;
 
     protected DropshipperStore $store;
 

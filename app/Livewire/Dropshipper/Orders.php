@@ -1,21 +1,29 @@
 <?php
 
-namespace App\Livewire\Brand\Orders;
+namespace App\Livewire\Dropshipper;
 
-use App\Enums\Status;
+use App\Actions\OrderAction;
+use App\DTOs\GeneralDTO;
+use App\Models\DropshipperStore;
 use App\Models\Order;
+use App\Models\OrderBatch;
 use App\Models\OrderStatusHistory;
 use App\Traits\Toastable;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Index extends Component
+class Orders extends Component
 {
     use Toastable;
 
     // Filters
     use WithPagination;
+
+    public ?DropshipperStore $store = null;
+
+    public ?OrderBatch $batch = null;
 
     public string $search = '';
 
@@ -30,6 +38,8 @@ class Index extends Component
 
     // Modal states
     public bool $showOrderModal = false;
+
+    public bool $showBatchedOrdersModal = false;
 
     public ?Order $selectedOrder = null;
 
@@ -46,10 +56,19 @@ class Index extends Component
 
     public ?int $revenueTrend = null;
 
-    protected array $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
+    public ?int $batchedOrderCount = 0;
 
-    public function mount(): void
+    public ?string $batchedOrderSum = '0';
+
+    protected $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
+
+    public function mount($store = null, $batch = null): void
     {
+        if ($store) {
+            $this->store = $store;
+        } elseif ($batch) {
+            $this->batch = $batch;
+        }
         $this->calculateStats();
     }
 
@@ -112,9 +131,13 @@ class Index extends Component
 
     private function getBaseQuery(): mixed
     {
-        $user = auth()->user();
-
-        return Order::where('brand_id', $user->brand->id);
+        if ($this->store) {
+            return Order::where('dropshipper_store_id', $this->store->id);
+        } elseif ($this->batch) {
+            return Order::where('order_batch_id', $this->batch->id);
+        } else {
+            return null;
+        }
     }
 
     private function calculateStats(): void
@@ -171,60 +194,36 @@ class Index extends Component
     public function viewOrder($orderId): void
     {
         $this->selectedOrder = Order::with('items')->findOrFail($orderId);
-        if ($this->selectedOrder->dropshipper_store_id !== null && $this->selectedOrder->dropshipper_status != Status::APPROVED) {
-            $this->showOrderModal = false;
-        } else {
-            $this->showOrderModal = true;
-        }
+        $this->showOrderModal = true;
     }
 
     public function closeOrderModal(): void
     {
         $this->showOrderModal = false;
         $this->selectedOrder = null;
+        $this->showBatchedOrdersModal = false;
     }
 
-    public function updateStatus($orderId, $status, $type = 'status'): void
+    public function updateStatus($orderId, $status): void
     {
         $order = Order::findOrFail($orderId);
         $this->authorizeOrderAccess($order);
 
-        if ($type === 'status') {
-            $order->update(['status' => $status]);
-        } else {
-            $order->update(['payment_status' => $status]);
+        if ($status === '') {
+            $status = null;
         }
+
+        $order->update(['dropshipper_status' => $status]);
 
         // Add to status history
         OrderStatusHistory::create([
             'order_id' => $order->id,
-            'new_status' => $status,
+            'new_status' => $status ?? 'Ready',
             'changed_by' => auth()->id(),
             'notes' => 'Order status updated to '.ucfirst($status),
         ]);
 
         $this->toast('success', 'Order status updated successfully.');
-        $this->calculateStats();
-    }
-
-    public function bulkUpdateStatus($status)
-    {
-        foreach ($this->selectedOrders as $orderId) {
-            $order = Order::find($orderId);
-            if ($order && $this->canAccessOrder($order)) {
-                $order->update(['status' => $status]);
-
-                OrderStatusHistory::create([
-                    'order_id' => $order->id,
-                    'new_status' => $status,
-                    'changed_by' => auth()->id(),
-                    'notes' => 'Bulk update: Status changed to '.ucfirst($status),
-                ]);
-            }
-        }
-
-        $this->selectedOrders = [];
-        session()->flash('message', count($this->selectedOrders).' orders updated successfully.');
         $this->calculateStats();
     }
 
@@ -243,22 +242,52 @@ class Index extends Component
         $this->calculateStats();
     }
 
-    public function exportOrders(): void
+    public function showBatchOrders(): void
     {
-        $orders = $this->getBaseQuery()
-            ->when($this->statusFilter !== 'all', fn ($q) => $q->where('status', $this->statusFilter))
-            ->when($this->paymentFilter !== 'all', fn ($q) => $q->where('payment_status', $this->paymentFilter))
-            ->when($this->dateRange !== 'all', fn ($q) => $q->where('created_at', '>=', now()->subDays((int) $this->dateRange)))
-            ->get();
-
-        // Export logic here
-        session()->flash('message', 'Export started. You will be notified when ready.');
+        $this->getUnbatchedOrders();
+        $this->showBatchedOrdersModal = true;
     }
 
-    private function authorizeOrderAccess($order)
+    public function batchOrders(): void
+    {
+        $unbatchedOrders = $this->getUnbatchedOrders();
+        $buildDto = [
+            'id' => $this->store->id,
+            'items' => $unbatchedOrders,
+        ];
+        $dto = GeneralDTO::fromArray($buildDto);
+        try {
+            OrderAction::batch($dto);
+            $this->toast('success', 'Order batched successfully.');
+        } catch (\Throwable $e) {
+            $this->toast('error', $e->getMessage());
+        }
+
+        $this->showBatchedOrdersModal = false;
+    }
+
+    private function getUnbatchedOrders(): Collection
+    {
+        $unbatchedOrders = Order::where('dropshipper_store_id', $this->store->id)
+            ->where('dropshipper_status', null)
+            ->where('order_batch_id', null)
+            ->get();
+
+        if ($unbatchedOrders->count() > 0) {
+            $this->batchedOrderCount = $unbatchedOrders->count();
+            $this->batchedOrderSum = number_format($unbatchedOrders->sum('total') - $unbatchedOrders->sum('dropshipper_profit'), 2);
+        } else {
+            $this->batchedOrderCount = 0;
+            $this->batchedOrderSum = '0';
+        }
+
+        return $unbatchedOrders;
+    }
+
+    private function authorizeOrderAccess($order): void
     {
         $user = auth()->user();
-        if (! $user->brand && $order->brand_id !== $user->brand->id) {
+        if (! $user->dropshipper && $order->dropshipper_store_id !== $this->store->id) {
             abort(403);
         }
     }
@@ -276,7 +305,10 @@ class Index extends Component
 
     public function render(): View
     {
-        return view('livewire.brand.orders.index', [
+        if($this->store) {
+            $this->getUnbatchedOrders();
+        }
+        return view('livewire.dropshipper.orders', [
             'orders' => $this->orders,
         ])->layout('layouts.auth')
             ->title('Orders');

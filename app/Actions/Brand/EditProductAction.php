@@ -2,14 +2,13 @@
 
 namespace App\Actions\Brand;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use App\DTOs\Brand\ProductDTO;
-
+use App\DTOs\GeneralDTO;
+use App\Enums\UserType;
+use App\Models\DropshipperProduct;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Enums\UserType;
-use Carbon\Carbon;
+use Exception;
 
 class EditProductAction
 {
@@ -17,32 +16,32 @@ class EditProductAction
     {
         $user = auth()->user();
 
-        if (!$user || $user->role != UserType::BRAND) {
-            throw new \Exception('User not found.');
+        if (! $user || $user->role != UserType::BRAND) {
+            throw new Exception('User not found.');
         }
         $brandId = auth()->user()->brand->id;
-//        create product
-        if (!$dto->description) {
+        // create product
+        if (! $dto->description) {
             $description = $dto->name;
         } else {
             $description = $dto->description;
         }
 
         $product = Product::where('id', $dto->productId)->with('images')->first();
-        if (!$product) {
-            throw new \Exception('Product not found.');
+        if (! $product) {
+            throw new Exception('Product not found.');
         }
 
         $previousImagesCount = $product->images->count();
         $newImagesCount = 0;
         $images = [];
-        if(!empty($dto->images)) {
+        if (! empty($dto->images)) {
             $images = $dto->images;
             $newImagesCount = count($images);
         }
 
-        if($previousImagesCount + $newImagesCount > 5) {
-            throw new \Exception('You can only add a total of 5 images.');
+        if ($previousImagesCount + $newImagesCount > 5) {
+            throw new Exception('You can only add a total of 5 images.');
         }
 
         $product->update([
@@ -56,8 +55,8 @@ class EditProductAction
             'stock' => $dto->stock,
         ]);
 
-//        Upload images
-        if($newImagesCount > 0) {
+        //        Upload images
+        if ($newImagesCount > 0) {
             foreach ($images as $image) {
                 $path = $image->store('products', 'public');
                 ProductImage::create([
@@ -66,6 +65,30 @@ class EditProductAction
                 ]);
             }
         }
+
+        return $product;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function editPrice(GeneralDTO $dto): DropshipperProduct
+    {
+        $user = auth()->user();
+
+        if (! $user || $user->role != UserType::DROPSHIPPER) {
+            throw new Exception('User not found.');
+        }
+
+        $product = DropshipperProduct::find($dto->id);
+        if (! $product) {
+            throw new Exception('Product not found.');
+        }
+
+        $product->update([
+            'custom_price' => $dto->value['custom_price'],
+            'profit' => $dto->value['profit'],
+        ]);
 
         return $product;
     }

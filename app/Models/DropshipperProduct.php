@@ -11,8 +11,12 @@ class DropshipperProduct extends Model
         'dropshipper_store_id',
         'original_product_id',
         'custom_price',
+        'profit',
         'stock_override',
         'custom_settings',
+        'cloned_at',
+        'original_created_at',
+        'original_updated_at',
     ];
 
     protected $casts = [

@@ -14,6 +14,12 @@ class Status
     const PENDING = 'pending';
     const REJECTED = 'rejected';
     const CLONED = 'cloned';
+    const FAILED = 'failed';
+    const PAID = 'paid';
+    const PROCESSING = 'processing';
+    const SHIPPED = 'shipped';
+    const DELIVERED = 'delivered';
+    const CANCELLED = 'cancelled';
 
     // Optional: get all types
     public static function all(): array

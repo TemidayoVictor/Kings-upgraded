@@ -149,18 +149,35 @@
                 </div>
             </div>
 
-            @if($orders->count() > 0 && ($search || $statusFilter !== 'all' || $paymentFilter !== 'all' || $dateRange !== '30'))
-                <flux:button wire:click="resetFilters" size="sm" variant="primary" class="mb-3">
-                    Clear Filters
-                </flux:button>
+            <div class="flex items-center justify-between mb-3">
+                @if($orders->count() > 0 && ($search || $statusFilter !== 'all' || $paymentFilter !== 'all' || $dateRange !== '30'))
+                    <flux:button wire:click="resetFilters" size="sm" variant="primary">
+                        Clear Filters
+                    </flux:button>
+                @endif
+                @if($store)
+                    <flux:button href="{{route('dropshipper-batched-orders', ['store' => $store])}}" size="sm" variant="primary">
+                        View Batched Orders
+                    </flux:button>
+                @endif
+            </div>
+
+            @if($batchedOrderCount != 0)
+                <flux:callout icon="clock" class="mb-5" color="yellow">
+                    <flux:callout.heading><strong class="text-[1rem]">You have unbatched orders</strong></flux:callout.heading>
+                    <flux:callout.text>
+                        You have some unbatched orders. Click the button below, to batch this orders and send to the brand.
+                    </flux:callout.text>
+                    <flux:button size="sm" variant="primary" class="mt-2" wire:click="showBatchOrders">Batch Orders</flux:button>
+                </flux:callout>
             @endif
 
             <!-- Orders List -->
             <div class="bg-[#3d3d40] rounded-lg shadow-lg overflow-hidden">
                 @if($orders->count() > 0)
-                    <div class="divide-y divide-gray-500 relative">
+                    <div class="divide-y divide-gray-500">
                         @foreach($orders as $order)
-                            <div class="p-4 hover:bg-gray-750 transition-colors cursor-pointer relative" wire:click="viewOrder({{ $order->id }})">
+                            <div class="p-4 hover:bg-gray-750 transition-colors cursor-pointer" wire:click="viewOrder({{ $order->id }})">
                                 <div class="flex items-start justify-between mb-3">
                                     <div class="flex items-center space-x-3">
                                         <!-- Order Icon/Avatar -->
@@ -170,11 +187,6 @@
                                             </span>
                                         </div>
                                         <div>
-                                            @if($order->dropshipper_store_id)
-                                                <div class="text-sm text-gray-500 bg-white px-[.7em] inline rounded-sm">
-                                                    From: {{$order->store->store_name}}
-                                                </div>
-                                            @endif
                                             <div class="font-medium text-gray-200">
                                                 Order #{{ $order->order_number }}
                                             </div>
@@ -186,21 +198,17 @@
 
                                     <div class="items-center space-x-2 hidden sm:block">
                                         <!-- Payment Status Badge -->
-                                        @if($order->payment_status === App\Enums\Status::PAID)
+                                        @if($order->dropshipper_status === App\Enums\Status::APPROVED)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
-                                                Paid
+                                                Batched
                                             </span>
-                                        @elseif($order->payment_status === App\Enums\Status::PENDING)
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                                Pending Payment
-                                            </span>
-                                        @elseif($order->payment_status === App\Enums\Status::FAILED)
+                                        @elseif($order->dropshipper_status === App\Enums\Status::PENDING)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
-                                                Payment Failed
+                                                Not Ready
                                             </span>
                                         @else
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-500/20 text-gray-400 border border-gray-500/30">
-                                                {{ ucfirst($order->payment_status) }}
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                                                Pending Approval
                                             </span>
                                         @endif
 
@@ -257,7 +265,7 @@
 
                                     <div class="flex items-center space-x-3">
                                         <div class="text-lg font-semibold text-white">
-                                            ₦{{ number_format($order->total) }}
+                                            ₦{{ number_format($order->total, 2) }}
                                         </div>
 
                                         <!-- Action Buttons -->
@@ -267,16 +275,10 @@
 
                                                 <flux:menu>
                                                     <flux:menu.item wire:click="viewOrder({{ $order->id }})">View Details</flux:menu.item>
-                                                    @if($order->payment_status == App\Enums\Status::PENDING)
-                                                        <flux:menu.item wire:click="updateStatus({{ $order->id }}, 'paid', 'payment')" wire:key="payment_paid">Mark as paid</flux:menu.item>
-                                                    @else
-                                                        <flux:menu.item wire:click="updateStatus({{ $order->id }}, 'pending', 'payment')" wire:key="payment_pending">Mark as pending</flux:menu.item>
-                                                    @endif
-
-                                                    @if($order->status == App\Enums\Status::PENDING)
-                                                        <flux:menu.item wire:click="updateStatus({{ $order->id }}, 'delivered')" wire:key="ship_paid">Mark as delivered</flux:menu.item>
-                                                    @else
-                                                        <flux:menu.item wire:click="updateStatus({{ $order->id }}, 'pending')" wire:key="ship_pending">Mark as not delivered</flux:menu.item>
+                                                    @if(!$order->dropshipper_status)
+                                                        <flux:menu.item wire:click="updateStatus({{ $order->id }}, 'pending')" wire:key="not-ready">Mark as not ready</flux:menu.item>
+                                                    @elseif($order->dropshipper_status ===  App\Enums\Status::PENDING)
+                                                        <flux:menu.item wire:click="updateStatus({{ $order->id }}, '')" wire:key="ready">Mark as ready</flux:menu.item>
                                                     @endif
 
                                                     @if(!in_array($order->status, ['delivered', 'cancelled']))
@@ -308,22 +310,18 @@
 
                                 <div class="items-center space-x-2 block sm:hidden border-t border-gray-600 mt-3 pt-3">
                                     <!-- Payment Status Badge -->
-                                    @if($order->payment_status === App\Enums\Status::PAID)
+                                    @if($order->dropshipper_status === App\Enums\Status::APPROVED)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
-                                                Paid
-                                            </span>
-                                    @elseif($order->payment_status === App\Enums\Status::PENDING)
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                                Pending Payment
-                                            </span>
-                                    @elseif($order->payment_status === App\Enums\Status::FAILED)
+                                            Approved
+                                        </span>
+                                    @elseif($order->dropshipper_status === App\Enums\Status::PENDING)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
-                                                Payment Failed
-                                            </span>
+                                            Not Ready
+                                        </span>
                                     @else
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-500/20 text-gray-400 border border-gray-500/30">
-                                                {{ ucfirst($order->payment_status) }}
-                                            </span>
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                                            Pending Approval
+                                        </span>
                                     @endif
 
                                     <!-- Order Status Badge -->
@@ -353,15 +351,7 @@
                                             </span>
                                     @endif
                                 </div>
-                                @if($order->dropshipper_store_id && $order->dropshipper_status !== App\Enums\Status::APPROVED)
-                                    <div class="w-full flex items-center justify-center bg-black/95 bg-opacity-20 absolute left-0 top-0 bottom-0">
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                            Awaiting Dropshipper Approval
-                                        </span>
-                                    </div>
-                                @endif
                             </div>
-
                         @endforeach
                     </div>
                 @else
@@ -532,14 +522,64 @@
                                                 </div>
                                             @endif
                                             <div class="flex justify-between pt-2 border-t border-gray-600">
-                                                <span class="text-white font-medium">Total</span>
-                                                <span class="text-white font-bold text-lg">₦{{ number_format($selectedOrder->total) }}</span>
+                                                <span class="text-white font-medium">Total:</span>
+                                                <span class="text-white font-bold text-[1rem]">₦{{ number_format($selectedOrder->total) }}</span>
+                                            </div>
+                                            <div class="flex justify-between pt-2 border-t border-gray-600">
+                                                <span class="text-white font-medium">Your Profit:</span>
+                                                <span class="text-white font-bold text-[1rem]">₦{{ number_format($selectedOrder->dropshipper_profit) }}</span>
+                                            </div>
+                                            <div class="flex justify-between pt-2 border-t border-gray-600">
+                                                <span class="text-white font-medium">Amount to send:</span>
+                                                <span class="text-white font-bold text-[1rem]">₦{{ number_format($selectedOrder->total - $selectedOrder->dropshipper_profit) }}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endif
+                    </div>
+                </div>
+            @endif
+
+            {{-- Modals --}}
+
+            @if($showBatchedOrdersModal)
+                <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
+                    <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                        <div class="mb-2">
+                            <h3 class="text-[1.2rem]">Batch Orders</h3>
+                            <flux:text class="m">To exclude any order, click on 'Mark as not ready' for that order </flux:text>
+                        </div>
+                        <flux:separator />
+                        <div class="mt-2 flex flex-col gap-y-3 mb-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-medium">Total Orders: </p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">{{number_format($batchedOrderCount)}}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-medium">Amount to send:</p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">₦ {{$batchedOrderSum}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <flux:separator />
+                        <div class="flex justify-end items-center my-3">
+                            <flux:button type="button" variant="subtle" size="sm" wire:click="closeOrderModal">
+                                Cancel
+                            </flux:button>
+                            <flux:button type="submit" size="sm" variant="primary" class="ml-2" wire:click="batchOrders">
+                                <flux:icon.loading wire:loading wire:target="batchOrders" />
+                                <span wire:loading.remove wire:target="batchOrders">Send Orders</span>
+                            </flux:button>
+                        </div>
                     </div>
                 </div>
             @endif
