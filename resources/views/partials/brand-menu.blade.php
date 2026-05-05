@@ -1,5 +1,5 @@
 <flux:sidebar.nav>
-    <flux:sidebar.item icon="chart-bar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+    <flux:sidebar.item icon="chart-bar" :href="route('dashboard')" :current="request()->routeIs('brand-dashboard')" wire:navigate>
         {{ __('Dashboard') }}
     </flux:sidebar.item>
 
@@ -16,7 +16,7 @@
         <flux:sidebar.item icon="clipboard-document-list" :href="route('brand-orders')" :current="request()->routeIs('brand-orders')" wire:navigate>
             {{ __('Store Orders') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="truck" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="truck" :href="route('brand-dropshippers-orders')" :current="request()->routeIs('brand-dropshippers-orders')" wire:navigate>
             {{ __('Dropshipper Orders') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

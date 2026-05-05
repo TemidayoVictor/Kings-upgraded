@@ -6,6 +6,9 @@
         <flux:navlist aria-label="{{ __('Brand Dropshippers') }}">
             <flux:navlist.item :href="route('brand-pending-applications')">{{ __('Pending Applications') }}</flux:navlist.item>
         </flux:navlist>
+        <flux:navlist aria-label="{{ __('Dropshippers Orders') }}">
+            <flux:navlist.item :href="route('brand-dropshippers-orders')">{{ __('Dropshippers Orders') }}</flux:navlist.item>
+        </flux:navlist>
     </div>
 
     <flux:separator class="md:hidden" />

@@ -1,6 +1,6 @@
 
 <section class="w-full">
-    @include('partials.products-settings-heading')
+    @include('partials.dropshippers-heading')
     <x-brands.dropshippers :heading="__('Dropshippers')" :subheading="__('Manage your dropshippers')">
         <flux:heading class="sr-only">{{ __('Manage Dropshippers') }}</flux:heading>
 
@@ -30,13 +30,7 @@
                     @forelse($approvedDropshippers as $item)
                         <div class="bg-[#3d3d40] rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full">
                             <!-- Header with gradient -->
-                            <div class="h-24 bg-gradient-to-r from-green-900/40 to-[#3d3d40] relative flex-shrink-0">
-                                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-green-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-
+                            <div class="h-16 relative flex-shrink-0">
                                 <!-- Dropshipper Avatar -->
                                 <div class="absolute -bottom-8 left-4">
                                     <div class="h-16 w-16 bg-[#27272a] rounded-full border-4 border-[#3d3d40] overflow-hidden">
@@ -52,7 +46,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Content -->
                             <div class="pt-10 p-4 flex flex-col flex-grow">
                                 <!-- Top section -->
@@ -66,42 +59,6 @@
                                         Approved
                                     </span>
                                 </div>
-
-                                <!-- Stats -->
-                                <div class="grid grid-cols-2 gap-2 mb-4">
-                                    <div class="bg-[#27272a] rounded-lg p-2 text-center">
-                                        <div class="text-xl font-bold text-white">{{ $item['stores_count'] }}</div>
-                                        <div class="text-xs text-gray-500">Stores</div>
-                                    </div>
-                                    <div class="bg-[#27272a] rounded-lg p-2 text-center">
-                                        <div class="text-xl font-bold text-white">{{ $item['total_products'] }}</div>
-                                        <div class="text-xs text-gray-500">Products</div>
-                                    </div>
-                                </div>
-
-                                <!-- Stores List -->
-                                @if(count($item['stores']) > 0)
-                                    <div class="mb-4 flex-grow">
-                                        <h4 class="text-xs font-medium text-gray-500 mb-2">ACTIVE STORES</h4>
-                                        <div class="space-y-2">
-                                            @foreach($item['stores'] as $store)
-                                                <div class="flex items-center justify-between bg-[#27272a] rounded-lg p-2">
-                                                    <div class="flex items-center space-x-2">
-                                                        <div class="w-6 h-6 bg-[#3d3d40] rounded flex items-center justify-center">
-                                                            <svg class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <span class="text-xs text-gray-300 truncate max-w-[120px]">{{ $store->store_name }}</span>
-                                                    </div>
-                                                    <span class="text-xs {{ $store->status === 'active' ? 'text-green-400' : 'text-gray-500' }}">
-                                                        {{ ucfirst($store->status) }}
-                                                    </span>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
 
                                 <!-- Action Buttons -->
                                 <div class="mt-auto pt-4 flex space-x-2">
@@ -178,23 +135,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Stats Grid -->
-                                    <div class="grid grid-cols-3 gap-4">
-                                        <div class="bg-[#3d3d40] rounded-lg p-4 text-center">
-                                            <div class="text-2xl font-bold text-white">{{ $dropshipperStats['total_stores'] }}</div>
-                                            <div class="text-xs text-gray-400">Total Stores</div>
-                                        </div>
-                                        <div class="bg-[#3d3d40] rounded-lg p-4 text-center">
-                                            <div class="text-2xl font-bold text-white">{{ $dropshipperStats['active_stores'] }}</div>
-                                            <div class="text-xs text-gray-400">Active Stores</div>
-                                        </div>
-                                        <div class="bg-[#3d3d40] rounded-lg p-4 text-center">
-                                            <div class="text-2xl font-bold text-white">{{ $dropshipperStats['total_products'] }}</div>
-                                            <div class="text-xs text-gray-400">Products</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Bank Details -->
                                     @if($selectedDropshipper->account_name)
                                         <div class="bg-[#3d3d40] rounded-lg p-4">
                                             <h5 class="text-sm font-medium text-gray-400 mb-2">Payment Details</h5>
@@ -211,32 +151,31 @@
                                                     <div class="text-xs text-gray-500">Bank Name</div>
                                                     <div class="text-sm text-white">{{ $selectedDropshipper->bank_name }}</div>
                                                 </div>
-                                                <div>
-                                                    <div class="text-xs text-gray-500">Total Revenue</div>
-                                                    <div class="text-sm text-white">${{ number_format($selectedDropshipper->revenue ?? 0, 2) }}</div>
-                                                </div>
                                             </div>
                                         </div>
                                     @endif
 
                                     <!-- Stores List -->
                                     <div>
-                                        <h5 class="text-sm font-medium text-gray-400 mb-3">Stores ({{ count($dropshipperStores) }})</h5>
+                                        <h5 class="text-sm font-medium text-gray-400 mb-3">Store</h5>
                                         <div class="space-y-3">
                                             @foreach($dropshipperStores as $store)
                                                 <div class="bg-[#3d3d40] rounded-lg p-4">
                                                     <div class="flex items-center justify-between">
                                                         <div>
-                                                            <h6 class="text-white font-medium">{{ $store->store_name }}</h6>
                                                             <p class="text-xs text-gray-500">Created {{ $store->created_at->format('M d, Y') }}</p>
+                                                            <h6 class="text-white font-medium">{{ $store->store_name }}</h6>
                                                         </div>
                                                         <span class="px-2 py-1 text-xs rounded-full {{ $store->status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400' }}">
                                                             {{ ucfirst($store->status) }}
                                                         </span>
                                                     </div>
                                                     <div class="mt-2 flex items-center justify-between text-sm">
-                                                        <span class="text-gray-400">{{ $store->products_count ?? 0 }} products</span>
-                                                        <a href="#" class="text-blue-400 hover:text-blue-300 text-xs">View Store →</a>
+                                                        <div>
+                                                            <div class="text-xs text-gray-500">Total Revenue</div>
+                                                            <div class="font-medium text-white">₦{{ number_format($selectedDropshipper->revenue ?? 0, 2) }}</div>
+                                                        </div>
+                                                        <a href="{{route('dropshipper-store', $store)}}" class="text-blue-400 hover:text-blue-300 text-xs">View Store →</a>
                                                     </div>
                                                 </div>
                                             @endforeach

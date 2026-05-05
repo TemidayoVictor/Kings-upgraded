@@ -1,13 +1,13 @@
 <section class="w-full">
     @include('partials.orders-heading')
 
-    <flux:heading class="sr-only">{{ __('Batched Orders') }}</flux:heading>
-    <x-dropshippers.layout :heading="__('Batched Orders')" :subheading="__('Manage your orders')">
+    <flux:heading class="sr-only">{{ __('Dropshipper Orders') }}</flux:heading>
+    <x-brands.dropshippers :heading="__('Dropshipper Orders')" :subheading="__('Manage your dropshippers orders')">
         <div class="min-h-screen">
             <div class="max-w-7xl mx-auto">
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-3">
-                    <flux:heading class="sr-only">{{ __('Section List') }}</flux:heading>
+                    <flux:heading class="sr-only">{{ __('Dropshipper Orders') }}</flux:heading>
                 </div>
 
                 <!-- Sections List -->
@@ -19,7 +19,7 @@
                                 <thead class="bg-[#3d3d40]">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                                        <span>Batch</span>
+                                        <span>Dropshipper</span>
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                                         <span>Amount</span>
@@ -35,11 +35,19 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0 h-8 w-8 bg-[#27272a] rounded-full flex items-center justify-center">
-                                                    <span class="text-gray-300 font-medium">{{ $index + 1 }}</span>
+                                                    @if($batch->dropshipperStore->image)
+                                                        <img src="{{ Storage::url($batch->dropshipperStore->image) }}"
+                                                             alt="{{ $batch->dropshipperStore->store_name }}"
+                                                             class="h-full w-full object-cover">
+                                                    @else
+                                                        <div class="h-full w-full flex items-center justify-center text-lg font-bold">
+                                                            {{ substr($batch->dropshipperStore->store_name, 0, 1) }}
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-200">
-                                                        {{ $batch->created_at->format('M d, Y') }}{{ '_'.$index+1 }}
+                                                        {{ $batch->dropshipperStore->store_name }}
                                                     </div>
                                                     <div class="text-xs text-gray-400">
                                                         {{ $batch->orders ?? 0 }} Order{{ $batch->orders == 1 ? '' : 's' }}
@@ -53,7 +61,7 @@
                                             </span>
                                         </td>
                                         <td class="">
-                                            <flux:button size="sm" href="{{ route('dropshipper-orders-batched', $batch) }}" variant="primary">
+                                            <flux:button size="sm" href="{{ route('brand-batched-orders', $batch) }}" variant="primary">
                                                 View Orders
                                             </flux:button>
                                         </td>
@@ -69,12 +77,20 @@
                                 <div class="p-4 hover:bg-gray-750 transition-colors">
                                     <div class="flex items-center justify-between mb-2">
                                         <div class="flex items-center space-x-3">
-                                            <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
-                                                <span class="text-gray-300 font-medium text-sm">{{ $index + 1 }}</span>
+                                            <div class="flex-shrink-0 h-8 w-8 bg-[#27272a] rounded-full flex items-center justify-center">
+                                                @if($batch->dropshipperStore->image)
+                                                    <img src="{{ Storage::url($batch->dropshipperStore->image) }}"
+                                                         alt="{{ $batch->dropshipperStore->store_name }}"
+                                                         class="h-full w-full object-cover">
+                                                @else
+                                                    <div class="h-full w-full flex items-center justify-center text-lg font-bold">
+                                                        {{ substr($batch->dropshipperStore->store_name, 0, 1) }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div>
                                                 <div>
-                                                    <div class="font-medium text-gray-200 text-sm">{{ $batch->created_at->format('M d, Y') }}{{'_'.$index+1}}</div>
+                                                    <div class="font-medium text-gray-200 text-sm">{{ $batch->dropshipperStore->store_name }}</div>
                                                 </div>
                                                 <div class="text-xs text-gray-400">
                                                     {{ $batch->orders ?? 0 }} Order{{ $batch->orders == 1 ? '' : 's' }}
@@ -90,7 +106,7 @@
 
                                     <div class="mt-3 pt-2 border-t border-dashed border-gray-500">
                                         <div class="mt-2">
-                                            <flux:button size="sm" href="{{ route('dropshipper-orders-batched', $batch) }}" variant="primary" class="w-full">
+                                            <flux:button size="sm" href="{{ route('brand-batched-orders', $batch) }}" variant="primary" class="w-full">
                                                 View Orders
                                             </flux:button>
                                         </div>
@@ -103,8 +119,8 @@
                             <svg class="mx-auto h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-300">No sections</h3>
-                            <p class="mt-1 text-sm text-gray-500">Get started by creating a new section.</p>
+                            <h3 class="mt-2 text-sm font-medium text-gray-300">No Dropshipper Orders</h3>
+                            <p class="mt-1 text-sm text-gray-500">You currently have no dropshipper orders</p>
                         </div>
                     @endif
                 </div>
@@ -116,5 +132,5 @@
                 @endif
             </div>
         </div>
-    </x-dropshippers.layout>
+    </x-brands.dropshippers>
 </section>

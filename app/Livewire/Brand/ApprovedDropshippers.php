@@ -9,7 +9,7 @@ use App\DTOs\ApplicationDTO;
 use App\Actions\ApplicationAction;
 use App\Models\DropshipperStore;
 use App\Traits\Toastable;
-use Illuminate\Support\Facades\DB;
+use App\Enums\Status;
 use Illuminate\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -116,12 +116,10 @@ class ApprovedDropshippers extends Component
         $this->brand = auth()->user()->brand;
 
         // Get all approved applications
-        $applications = DropshipperApplication::with(['dropshipper.user', 'brand'])
+        $applications = DropshipperApplication::with(['dropshipper.user'])
             ->where('brand_id', $this->brand->id)
-            ->where('status', 'approved')
-            ->when($this->brandFilter !== 'all', function ($query) {
-                return $query->where('brand_id', $this->brandFilter);
-            })
+            ->where('status', Status::APPROVED)
+            ->orWhere('status', Status::CLONED)
             ->when($this->search, function ($query) {
                 return $query->whereHas('dropshipper.user', function ($q) {
                     $q->where('name', 'like', '%'.$this->search.'%')
@@ -130,41 +128,8 @@ class ApprovedDropshippers extends Component
             })
             ->get();
 
-        // Group by dropshipper
-        $grouped = $applications->groupBy('dropshipper_id');
-
-        $approvedDropshippers = $grouped->map(function ($apps, $dropshipperId) {
-            $firstApp = $apps->first();
-            $brands = $apps->pluck('brand');
-
-            // Get stores for this dropshipper across all approved brands
-            $stores = DropshipperStore::where('dropshipper_id', $dropshipperId)
-                ->whereIn('brand_id', $apps->pluck('brand_id'))
-                ->get();
-
-            return [
-                'dropshipper' => $firstApp->dropshipper,
-                'brands' => $brands,
-                'brand' => $firstApp->brand, // For backward compatibility
-                'stores' => $stores,
-                'stores_count' => $stores->count(),
-                'total_products' => $stores->sum(function ($store) {
-                    return $store->dropshipperProducts()->count();
-                }),
-                'approved_at' => $apps->min('reviewed_at'),
-            ];
-        })->sortByDesc('approved_at');
-
-        // Apply sorting
-        $approvedDropshippers = match ($this->sortBy) {
-            'name_asc' => $approvedDropshippers->sortBy('dropshipper.user.name'),
-            'name_desc' => $approvedDropshippers->sortByDesc('dropshipper.user.name'),
-            'stores' => $approvedDropshippers->sortByDesc('stores_count'),
-            default => $approvedDropshippers, // 'recent' is default
-        };
-
         return view('livewire.brand.approved-dropshippers', [
-            'approvedDropshippers' => $approvedDropshippers,
+            'approvedDropshippers' => $applications,
         ])->layout('layouts.auth')
             ->title('Dropshippers');
     }

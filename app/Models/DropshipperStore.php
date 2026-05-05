@@ -121,4 +121,9 @@ class DropshipperStore extends Model
     {
         return $this->settings['payment_settings'] ?? [];
     }
+
+    public function orderBatches(): HasMany
+    {
+        return $this->hasMany(OrderBatch::class);
+    }
 }

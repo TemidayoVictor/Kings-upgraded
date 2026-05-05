@@ -4,6 +4,7 @@ namespace App\Livewire\Brand\Orders;
 
 use App\Enums\Status;
 use App\Models\Order;
+use App\Models\OrderBatch;
 use App\Models\OrderStatusHistory;
 use App\Traits\Toastable;
 use Illuminate\View\View;
@@ -16,6 +17,8 @@ class Index extends Component
 
     // Filters
     use WithPagination;
+
+    public ?OrderBatch $batch = null;
 
     public string $search = '';
 
@@ -48,8 +51,11 @@ class Index extends Component
 
     protected array $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
 
-    public function mount(): void
+    public function mount($batch = null): void
     {
+        if ($batch) {
+            $this->batch = $batch;
+        }
         $this->calculateStats();
     }
 
@@ -113,8 +119,12 @@ class Index extends Component
     private function getBaseQuery(): mixed
     {
         $user = auth()->user();
-
-        return Order::where('brand_id', $user->brand->id);
+        if ($this->batch != null) {
+            return Order::where('brand_id', $user->brand->id)
+                ->where('order_batch_id', $this->batch->id);
+        } else {
+            return Order::where('brand_id', $user->brand->id);
+        }
     }
 
     private function calculateStats(): void
@@ -135,9 +145,12 @@ class Index extends Component
             $currentQuery->where('created_at', '>=', now()->subDays((int) $this->dateRange));
         }
 
-        $this->totalOrders = $currentQuery->count();
-        $this->totalRevenue = $currentQuery->sum('total');
-        $this->pendingOrders = $currentQuery->clone()->where('status', 'pending')->count();
+        $this->totalOrders = $this->applyValidOrders(clone $currentQuery)->count();
+        $this->totalRevenue = $this->getRevenue($this->applyValidOrders($currentQuery));
+        $this->pendingOrders = $this->applyValidOrders(clone $currentQuery)
+            ->where('status', 'pending')
+            ->count();
+
         $this->avgOrderValue = $this->totalOrders > 0 ? $this->totalRevenue / $this->totalOrders : 0;
 
         // Previous period for trends
@@ -166,6 +179,32 @@ class Index extends Component
                 ? round((($this->totalRevenue - $previousRevenue) / $previousRevenue) * 100, 1)
                 : ($this->totalRevenue > 0 ? 100 : 0);
         }
+    }
+
+    private function applyValidOrders($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereNull('dropshipper_store_id')
+                ->orWhere(function ($q2) {
+                    $q2->whereNotNull('dropshipper_store_id')
+                        ->where('dropshipper_status', 'approved');
+                });
+        });
+    }
+
+    private function getRevenue($query): float
+    {
+        return (clone $query)
+            ->selectRaw('
+            SUM(
+                CASE
+                    WHEN dropshipper_store_id IS NULL THEN total
+                    WHEN dropshipper_store_id IS NOT NULL AND dropshipper_status = "approved" THEN total - dropshipper_profit
+                    ELSE 0
+                END
+            ) as revenue
+        ')
+            ->value('revenue') ?? 0;
     }
 
     public function viewOrder($orderId): void

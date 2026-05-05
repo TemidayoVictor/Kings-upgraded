@@ -25,6 +25,8 @@ class Orders extends Component
 
     public ?OrderBatch $batch = null;
 
+    public ?int $dropshipperId = null;
+
     public string $search = '';
 
     public string $statusFilter = 'all';
@@ -62,12 +64,14 @@ class Orders extends Component
 
     protected $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
 
-    public function mount($store = null, $batch = null): void
+    public function mount($store = null, $batch = null, $dropshipperId = null): void
     {
         if ($store) {
             $this->store = $store;
         } elseif ($batch) {
             $this->batch = $batch;
+        } elseif ($dropshipperId) {
+            $this->dropshipperId = $dropshipperId;
         }
         $this->calculateStats();
     }
@@ -135,6 +139,8 @@ class Orders extends Component
             return Order::where('dropshipper_store_id', $this->store->id);
         } elseif ($this->batch) {
             return Order::where('order_batch_id', $this->batch->id);
+        } elseif ($this->dropshipperId) {
+            return Order::where('dropshipper_id', $this->dropshipperId);
         } else {
             return null;
         }
@@ -305,9 +311,10 @@ class Orders extends Component
 
     public function render(): View
     {
-        if($this->store) {
+        if ($this->store) {
             $this->getUnbatchedOrders();
         }
+
         return view('livewire.dropshipper.orders', [
             'orders' => $this->orders,
         ])->layout('layouts.auth')

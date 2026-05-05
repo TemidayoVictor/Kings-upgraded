@@ -7,7 +7,6 @@ use App\DTOs\ApplicationDTO;
 use App\Models\Brand;
 use App\Models\DropshipperApplication;
 use App\Traits\Toastable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;

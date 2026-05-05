@@ -207,7 +207,7 @@
                                         <!-- Order Status Badge -->
                                         @if($order->status === App\Enums\Status::PENDING)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                                Pending
+                                                Pending Delivery
                                             </span>
                                         @elseif($order->status === App\Enums\Status::PROCESSING)
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
@@ -257,7 +257,11 @@
 
                                     <div class="flex items-center space-x-3">
                                         <div class="text-lg font-semibold text-white">
-                                            ₦{{ number_format($order->total) }}
+                                            @if($order->dropshipper_store_id)
+                                                ₦{{ number_format($order->total - $order->dropshipper_profit) }}
+                                            @else
+                                                ₦{{ number_format($order->total) }}
+                                            @endif
                                         </div>
 
                                         <!-- Action Buttons -->
@@ -329,7 +333,7 @@
                                     <!-- Order Status Badge -->
                                     @if($order->status === App\Enums\Status::PENDING)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                                Pending
+                                                Pending Delivery
                                             </span>
                                     @elseif($order->status === App\Enums\Status::PROCESSING)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
@@ -501,10 +505,17 @@
                                                                 <p class="text-white font-medium">{{ $item->product_name }}</p>
                                                                 <p class="text-xs text-gray-400">Qty: {{ $item->quantity }}</p>
                                                             </div>
-                                                            <div class="sm:text-right">
-                                                                <p class="text-white font-medium">₦{{ number_format($item->total) }}</p>
-                                                                <p class="text-xs text-gray-400">₦{{ number_format($item->unit_price) }} each</p>
-                                                            </div>
+                                                            @if($selectedOrder->dropshipper_store_id)
+                                                                <div class="sm:text-right">
+                                                                    <p class="text-white font-medium">₦{{ number_format($item->dropshipperProduct->originalProduct->dropship_price * $item->quantity) }}</p>
+                                                                    <p class="text-xs text-gray-400">₦{{ number_format($item->dropshipperProduct->originalProduct->dropship_price) }} each</p>
+                                                                </div>
+                                                            @else
+                                                                <div class="sm:text-right">
+                                                                    <p class="text-white font-medium">₦{{ number_format($item->total) }}</p>
+                                                                    <p class="text-xs text-gray-400">₦{{ number_format($item->unit_price) }} each</p>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -513,10 +524,17 @@
 
                                         <!-- Order Summary -->
                                         <div class="bg-[#27272a] px-4 py-3 space-y-2">
-                                            <div class="flex justify-between text-sm">
-                                                <span class="text-gray-400">Subtotal</span>
-                                                <span class="text-white">₦{{ number_format($selectedOrder->subtotal) }}</span>
-                                            </div>
+                                            @if($selectedOrder->dropshipper_store_id)
+                                                <div class="flex justify-between text-sm">
+                                                    <span class="text-gray-400">Subtotal</span>
+                                                    <span class="text-white">₦{{ number_format($selectedOrder->subtotal - $selectedOrder->dropshipper_profit) }}</span>
+                                                </div>
+                                            @else
+                                                <div class="flex justify-between text-sm">
+                                                    <span class="text-gray-400">Subtotal</span>
+                                                    <span class="text-white">₦{{ number_format($selectedOrder->subtotal) }}</span>
+                                                </div>
+                                            @endif
                                             <div class="flex justify-between text-sm">
                                                 <span class="text-gray-400">Shipping</span>
                                                 <span class="text-white">₦{{ number_format($selectedOrder->shipping) }}</span>
@@ -533,7 +551,11 @@
                                             @endif
                                             <div class="flex justify-between pt-2 border-t border-gray-600">
                                                 <span class="text-white font-medium">Total</span>
-                                                <span class="text-white font-bold text-lg">₦{{ number_format($selectedOrder->total) }}</span>
+                                                @if($selectedOrder->dropshipper_store_id)
+                                                    <span class="text-white font-bold text-lg">₦{{ number_format($selectedOrder->total - $selectedOrder->dropshipper_profit) }}</span>
+                                                @else
+                                                    <span class="text-white font-bold text-lg">₦{{ number_format($selectedOrder->total) }}</span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,8 +9,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Cart extends Model
 {
     protected $fillable = [
-        'user_id', 'session_id', 'brand_id', 'subtotal', 'tax',
-        'shipping', 'delivery_location_id', 'discount', 'total', 'coupon_code', 'coupon_data',
+        'user_id',
+        'session_id',
+        'brand_id',
+        'subtotal',
+        'dropshipper_subtotal',
+        'tax',
+        'shipping',
+        'delivery_location_id',
+        'discount',
+        'total',
+        'coupon_code',
+        'coupon_data',
         'product_id',
         'product_name',
         'sku',

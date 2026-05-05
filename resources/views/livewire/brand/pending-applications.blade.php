@@ -1,6 +1,6 @@
 
 <section class="w-full">
-    @include('partials.products-settings-heading')
+    @include('partials.dropshippers-heading')
     <x-brands.dropshippers :heading="__('Pending Applications')" :subheading="__('Manage Dropshippers Applications')">
         <flux:heading class="sr-only">{{ __('Pending Applications') }}</flux:heading>
         <div class="flex justify-end mb-4">

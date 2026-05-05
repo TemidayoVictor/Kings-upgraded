@@ -90,6 +90,13 @@ class OrderAction
                 'dropshipper_profit' => $cart->dropshipper_profit,
             ]);
 
+            $dropshipperSubtotal = 0;
+
+            if($dto->type == UserType::DROPSHIPPER) {
+                $dropshipperTotal = $order->total - $order->dropshipper_profit;
+            }
+
+
             // Create order items
             foreach ($cart->items as $item) {
                 $order->items()->create([
@@ -101,7 +108,9 @@ class OrderAction
                     'discount_price' => $item->discount_price,
                     'quantity' => $item->quantity,
                     'subtotal' => $item->subtotal,
+                    'dropshipper_subtotal' => $dropshipperSubtotal,
                     'total' => $item->total,
+                    'dropshipper_total' => $dropshipperTotal,
                     'options' => $item->options,
                 ]);
 

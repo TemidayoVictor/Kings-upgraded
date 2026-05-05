@@ -39,6 +39,7 @@ use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\Products;
 use App\Livewire\Dropshipper\BatchedOrder;
 use App\Livewire\Dropshipper\ManageStore;
+use App\Livewire\Brand\Orders\DropshipperOrders;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -102,6 +103,8 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/approved-dropshipper', ApprovedDropshippers::class)->name('approved-dropshippers');
 
         Route::get('/orders', BrandOrdersList::class)->name('orders');
+        Route::get('/dropshippers-orders', DropshipperOrders::class)->name('dropshippers-orders');
+        Route::get('/batched-orders/{batch}', BrandOrdersList::class)->name('batched-orders');
     }
     );
 
@@ -126,8 +129,9 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
         Route::get('/clone-progress/{store}', CloneProgress::class)->name('clone-progress');
 
         Route::get('/manage-store/{store}', ManageStore::class)->name('manage-store');
-        Route::get('/orders/{store}', DropshipperOrdersList::class)->name('orders');
+        Route::get('/store-orders/{store}', DropshipperOrdersList::class)->name('orders');
         Route::get('/orders-batched/{batch}', DropshipperOrdersList::class)->name('orders-batched');
+        Route::get('/all-orders/{dropshipperId}', DropshipperOrdersList::class)->name('all-orders');
 
         Route::get('/batched-orders/{store}', BatchedOrder::class)->name('batched-orders');
     }

@@ -24,6 +24,7 @@ class Order extends Model
         'delivery_zip',
         'delivery_instructions',
         'subtotal',
+        'dropshipper_subtotal',
         'tax',
         'shipping',
         'discount',

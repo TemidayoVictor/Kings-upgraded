@@ -10,8 +10,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class OrderItem extends Model
 {
     protected $fillable = [
-        'order_id', 'product_id', 'product_name', 'sku', 'unit_price',
-        'discount_price', 'quantity', 'subtotal', 'total', 'options', 'metadata', 'dropshipper_product_id',
+        'order_id',
+        'product_id',
+        'product_name',
+        'sku',
+        'unit_price',
+        'discount_price',
+        'quantity',
+        'subtotal',
+        'total',
+        'options',
+        'metadata',
+        'dropshipper_product_id',
     ];
 
     protected $casts = [

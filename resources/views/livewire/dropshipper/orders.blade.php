@@ -159,6 +159,10 @@
                     <flux:button href="{{route('dropshipper-batched-orders', ['store' => $store])}}" size="sm" variant="primary">
                         View Batched Orders
                     </flux:button>
+                @elseif($dropshipperId)
+                    <flux:button href="{{route('dropshipper-partnered-brands')}}" size="sm" variant="primary">
+                        Visit Stores to Batch Orders
+                    </flux:button>
                 @endif
             </div>
 
@@ -166,7 +170,7 @@
                 <flux:callout icon="clock" class="mb-5" color="yellow">
                     <flux:callout.heading><strong class="text-[1rem]">You have unbatched orders</strong></flux:callout.heading>
                     <flux:callout.text>
-                        You have some unbatched orders. Click the button below, to batch this orders and send to the brand.
+                        You have {{$batchedOrderCount}} unbatched order {{ $batchedOrderCount > 1 ? 's' : ''  }}. Click the button below, to batch this orders and send to the brand.
                     </flux:callout.text>
                     <flux:button size="sm" variant="primary" class="mt-2" wire:click="showBatchOrders">Batch Orders</flux:button>
                 </flux:callout>
@@ -187,6 +191,9 @@
                                             </span>
                                         </div>
                                         <div>
+                                            <div class="text-sm text-gray-500 bg-white px-[.7em] inline rounded-sm">
+                                                {{$order->store->brand->brand_name}}
+                                            </div>
                                             <div class="font-medium text-gray-200">
                                                 Order #{{ $order->order_number }}
                                             </div>

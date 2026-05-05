@@ -10,7 +10,7 @@
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Orders')" class="grid">
-        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dropshipper-orders')" wire:navigate>
+        <flux:sidebar.item icon="clipboard-document-list" :href="route('dropshipper-all-orders', auth()->user()->dropshipper->id)" :current="request()->routeIs('dropshipper-orders', 'dropshipper-all-orders')" wire:navigate>
             {{ __('Orders') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
