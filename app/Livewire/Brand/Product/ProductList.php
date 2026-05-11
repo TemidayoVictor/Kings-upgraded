@@ -62,7 +62,7 @@ class ProductList extends Component
         $brandId = auth()->user()->brand->id;
         $products = Product::query()
             ->with('images')
-            ->where('id', $brandId)
+            ->where('brand_id', $brandId)
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%'.$this->search.'%')
                     ->orWhere('description', 'like', '%'.$this->search.'%');

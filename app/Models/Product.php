@@ -20,6 +20,7 @@ class Product extends Model
         'section_id',
         'stock',
         'sale_status',
+        'sale_id',
         'publish',
         'visible',
         'is_active',
@@ -227,5 +228,10 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function sale(): BelongsTo
+    {
+        return $this->belongsTo(Sale::class);
     }
 }

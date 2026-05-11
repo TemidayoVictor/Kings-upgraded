@@ -1,11 +1,13 @@
 <?php
+
 namespace App\DTOs\Brand;
 
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+
 class AdditionalDetailsDTO
 {
     public function __construct(
-        public TemporaryUploadedFile|null $logo,
+        public ?TemporaryUploadedFile $logo,
         public readonly string $about,
         public readonly string $motto,
         public readonly string $instagram,

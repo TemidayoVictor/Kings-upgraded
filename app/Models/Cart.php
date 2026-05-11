@@ -33,6 +33,7 @@ class Cart extends Model
         'dropship_price',
         'custom_price',
         'dropshipper_profit',
+        'sale_id',
     ];
 
     protected $casts = [

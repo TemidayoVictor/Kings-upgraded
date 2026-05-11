@@ -45,7 +45,7 @@
                                 @foreach($products as $product)
                                     <tr class="hover:bg-gray-750 transition-colors">
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
+                                            <div class="flex items-start">
                                                 @if($product->images->count() > 0)
                                                     <img src="{{ $product->primary_image_url }}"
                                                          alt="{{ $product->name }}"
@@ -58,6 +58,9 @@
                                                 <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-200">
                                                         {{ $product->name }}
+                                                    </div>
+                                                    <div class="text-[.9rem] font-medium text-gray-200">
+                                                        ₦{{ number_format($product->price, 0, 2) }}
                                                     </div>
                                                     <div class="text-xs text-gray-500">
                                                         {{ $product->created_at->format('M d, Y') }}
@@ -111,7 +114,7 @@
                             @foreach($products as $product)
                                 <div class="p-4 hover:bg-gray-750 transition-colors">
                                     <div class="flex items-start justify-between mb-2">
-                                        <div class="flex items-center space-x-3">
+                                        <div class="flex items-start space-x-3">
 
                                             @if($product->images->count() > 0)
                                                 <img src="{{ $product->primary_image_url }}"
@@ -125,6 +128,9 @@
 
                                             <div>
                                                 <div class="font-medium text-gray-200">{{ Str::limit($product->name, 20) }}</div>
+                                                <div class="text-[.9rem] font-medium text-gray-200">
+                                                    ₦{{ number_format($product->price, 0, 2) }}
+                                                </div>
                                                 <div class="text-xs text-gray-500">{{ $product->created_at->format('M d, Y') }}</div>
                                             </div>
                                         </div>

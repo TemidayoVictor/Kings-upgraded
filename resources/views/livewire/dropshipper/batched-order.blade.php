@@ -7,7 +7,7 @@
             <div class="max-w-7xl mx-auto">
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-3">
-                    <flux:heading class="sr-only">{{ __('Section List') }}</flux:heading>
+                    <flux:heading class="sr-only">{{ __('Batched Orders') }}</flux:heading>
                 </div>
 
                 <!-- Sections List -->

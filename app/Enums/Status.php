@@ -20,6 +20,8 @@ class Status
     const SHIPPED = 'shipped';
     const DELIVERED = 'delivered';
     const CANCELLED = 'cancelled';
+    const GENERIC = 'generic';
+    const DYNAMIC = 'dynamic';
 
     // Optional: get all types
     public static function all(): array
@@ -32,6 +34,19 @@ class Status
             self::BASIC,
             self::PREMIUM,
             self::PLATINUM,
+            self::APPROVED,
+            self::PENDING,
+            self::REJECTED,
+            self::CLONED,
+            self::FAILED,
+            self::PAID,
+            self::PROCESSING,
+            self::SHIPPED,
+            self::DELIVERED,
+            self::CANCELLED,
+            self::GENERIC,
+            self::DYNAMIC,
+
         ];
     }
 }

@@ -3,7 +3,7 @@
 namespace App\DTOs;
 
 use App\Models\Cart;
-use App\Models\CartItem;
+
 readonly class OrderDTO
 {
     public function __construct(

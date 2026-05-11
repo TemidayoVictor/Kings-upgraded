@@ -55,12 +55,7 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="text-sm">
-                                                @if($item->discount_price)
-                                                    <span class="text-gray-400 line-through">₦{{ number_format($item->unit_price) }}</span>
-                                                    <span class="text-green-400 ml-2">₦{{ number_format($item->discount_price) }}</span>
-                                                @else
-                                                    <span class="text-white">₦{{ number_format($item->unit_price) }}</span>
-                                                @endif
+                                                <span class="text-white">₦{{ number_format($item->unit_price) }}</span>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">

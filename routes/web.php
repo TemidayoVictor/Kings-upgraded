@@ -40,6 +40,10 @@ use App\Livewire\Shop\Products;
 use App\Livewire\Dropshipper\BatchedOrder;
 use App\Livewire\Dropshipper\ManageStore;
 use App\Livewire\Brand\Orders\DropshipperOrders;
+use App\Livewire\Brand\RunSales;
+use App\Livewire\Brand\ManageSales;
+use App\Livewire\Brand\RevenueDashboard;
+use App\Livewire\Dropshipper\RevenueGenerated;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -104,7 +108,17 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
 
         Route::get('/orders', BrandOrdersList::class)->name('orders');
         Route::get('/dropshippers-orders', DropshipperOrders::class)->name('dropshippers-orders');
+        Route::get('/view-store-orders/{store}', BrandOrdersList::class)->name('view-store-orders');
         Route::get('/batched-orders/{batch}', BrandOrdersList::class)->name('batched-orders');
+        Route::get('/view-sales-orders/{sale}', BrandOrdersList::class)->name('view-sales-orders');
+        Route::get('/order-status/{status}', BrandOrdersList::class)->name('order-status');
+
+
+        Route::get('/run-sales', RunSales::class)->name('run-sales');
+        Route::get('/update-sales/{sale}', RunSales::class)->name('update-sales');
+        Route::get('/manage-sales', ManageSales::class)->name('manage-sales');
+
+        Route::get('/revenue-analytics', RevenueDashboard::class)->name('revenue-analytics');
     }
     );
 
@@ -132,6 +146,8 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
         Route::get('/store-orders/{store}', DropshipperOrdersList::class)->name('orders');
         Route::get('/orders-batched/{batch}', DropshipperOrdersList::class)->name('orders-batched');
         Route::get('/all-orders/{dropshipperId}', DropshipperOrdersList::class)->name('all-orders');
+
+        Route::get('/revenue-generated', RevenueGenerated::class)->name('revenue-generated');
 
         Route::get('/batched-orders/{store}', BatchedOrder::class)->name('batched-orders');
     }

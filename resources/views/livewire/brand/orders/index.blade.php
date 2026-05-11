@@ -299,6 +299,9 @@
                                             @foreach($order->items->take(3) as $item)
                                                 <span class="text-xs text-gray-400 bg-[#27272a] px-2 py-1 rounded">
                                                     {{ $item->quantity }}x {{ Str::limit($item->product_name, 30) }}
+                                                    @if($item->sale_id)
+                                                        <span class="text-sm text-green-400">[sale]</span>
+                                                    @endif
                                                 </span>
                                             @endforeach
                                             @if($order->items->count() > 3)
@@ -513,7 +516,11 @@
                                                             @else
                                                                 <div class="sm:text-right">
                                                                     <p class="text-white font-medium">₦{{ number_format($item->total) }}</p>
-                                                                    <p class="text-xs text-gray-400">₦{{ number_format($item->unit_price) }} each</p>
+                                                                    <p class="text-xs text-gray-400">₦{{ number_format($item->unit_price) }} each
+                                                                        @if($item->sale_id)
+                                                                            <span class="text-sm text-green-400">[sale]</span>
+                                                                        @endif
+                                                                    </p>
                                                                 </div>
                                                             @endif
                                                         </div>

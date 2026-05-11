@@ -16,20 +16,20 @@
         <flux:sidebar.item icon="clipboard-document-list" :href="route('brand-orders')" :current="request()->routeIs('brand-orders')" wire:navigate>
             {{ __('Store Orders') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="truck" :href="route('brand-dropshippers-orders')" :current="request()->routeIs('brand-dropshippers-orders')" wire:navigate>
+        <flux:sidebar.item icon="truck" :href="route('brand-dropshippers-orders')" :current="request()->routeIs('brand-dropshippers-orders', 'brand-view-store-orders')" wire:navigate>
             {{ __('Dropshipper Orders') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Features')" class="grid">
-        <flux:sidebar.item icon="tag" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="tag" :href="route('brand-run-sales')" :current="request()->routeIs('brand-run-sales', 'brand-manage-sales', 'brand-view-sales-orders', 'brand-update-sales')" wire:navigate>
             {{ __('Run Sales') }}
         </flux:sidebar.item>
         <flux:sidebar.item icon="user-group" :href="route('brand-approved-dropshippers')" :current="request()->routeIs('brand-pending-applications', 'brand-approved-dropshippers')" wire:navigate>
             {{ __('Manage Dropshippers') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="arrow-trending-up" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Revenue Generated') }}
+        <flux:sidebar.item icon="arrow-trending-up" :href="route('brand-revenue-analytics')" :current="request()->routeIs('brand-revenue-analytics')" wire:navigate>
+            {{ __('Revenue Analytics') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 

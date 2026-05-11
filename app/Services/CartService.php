@@ -184,17 +184,19 @@ class CartService
 
             $item = $existingItem;
         } else {
-            $price = $product->discount_price ?? $product->price;
+            $price = $product->sale_status ? $product->sales_price : $product->price;
+            $saleId = $product->sale_status ? $product->sale_id : null;
 
             $item = $cart->items()->create([
                 'product_id' => $productId,
                 'product_name' => $product->name,
                 'sku' => $product->sku,
                 'unit_price' => $price,
-                'discount_price' => $product->discount_price,
+                'discount_price' => $product->sale_status ? $product->sales_price : null,
                 'quantity' => $quantity,
                 'subtotal' => $price * $quantity,
                 'total' => $price * $quantity,
+                'sale_id' => $saleId,
                 'options' => $options,
             ]);
         }

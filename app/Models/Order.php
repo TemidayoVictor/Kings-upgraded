@@ -45,6 +45,7 @@ class Order extends Model
         'dropshipper_status',
         'order_batch_id',
         'dropshipper_profit',
+        'sale_id',
     ];
 
     protected $casts = [

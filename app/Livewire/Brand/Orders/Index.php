@@ -3,9 +3,11 @@
 namespace App\Livewire\Brand\Orders;
 
 use App\Enums\Status;
+use App\Models\DropshipperStore;
 use App\Models\Order;
 use App\Models\OrderBatch;
 use App\Models\OrderStatusHistory;
+use App\Models\Sale;
 use App\Traits\Toastable;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -19,6 +21,8 @@ class Index extends Component
     use WithPagination;
 
     public ?OrderBatch $batch = null;
+
+    public ?Sale $sale = null;
 
     public string $search = '';
 
@@ -49,12 +53,22 @@ class Index extends Component
 
     public ?int $revenueTrend = null;
 
+    public ?string $status = null;
+
+    public ?DropshipperStore $store = null;
+
     protected array $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
 
-    public function mount($batch = null): void
+    public function mount($batch = null, $sale = null, $status = null, $store = null): void
     {
         if ($batch) {
             $this->batch = $batch;
+        } elseif ($sale) {
+            $this->sale = $sale;
+        } elseif ($status) {
+            $this->status = $status;
+        } elseif ($store) {
+            $this->store = $store;
         }
         $this->calculateStats();
     }
@@ -122,6 +136,17 @@ class Index extends Component
         if ($this->batch != null) {
             return Order::where('brand_id', $user->brand->id)
                 ->where('order_batch_id', $this->batch->id);
+        } elseif ($this->sale != null) {
+            return Order::where('brand_id', $user->brand->id)
+                ->whereHas('items', function ($query) {
+                    $query->where('sale_id', $this->sale->id);
+                });
+        } elseif ($this->status != null) {
+            return Order::where('brand_id', $user->brand->id)
+                ->where('status', $this->status);
+        } elseif ($this->store != null) {
+            return Order::where('brand_id', $user->brand->id)
+                ->where('dropshipper_store_id', $this->store->id);
         } else {
             return Order::where('brand_id', $user->brand->id);
         }

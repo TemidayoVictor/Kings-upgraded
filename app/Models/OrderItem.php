@@ -19,6 +19,7 @@ class OrderItem extends Model
         'quantity',
         'subtotal',
         'total',
+        'sale_id',
         'options',
         'metadata',
         'dropshipper_product_id',
@@ -37,6 +38,11 @@ class OrderItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function sale(): BelongsTo
+    {
+        return $this->belongsTo(Sale::class);
     }
 
     public function dropshipperProduct(): BelongsTo

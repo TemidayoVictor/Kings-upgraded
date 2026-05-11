@@ -120,7 +120,7 @@ class EditProduct extends Component
         $this->reset(['showDeleteModal', 'imageId', 'imageName']);
     }
 
-    public function submit(): void
+    public function submit(): mixed
     {
         $validated = $this->validate();
         $validated['productId'] = $this->product->id;
@@ -128,9 +128,16 @@ class EditProduct extends Component
         try {
             EditProductAction::execute($dto);
             $this->images = [];
-            $this->toast('success', 'Product updated successfully.');
+            session()->flash('toast', [
+                'type' => 'success',
+                'message' => 'Product updated successfully',
+                'title' => 'Success',
+                'duration' => 5000,
+            ]);
+            return redirect()->route('brand-product-list');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
+            return back();
         }
     }
 

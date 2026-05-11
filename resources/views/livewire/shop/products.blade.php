@@ -147,8 +147,9 @@
 
                         <!-- Price -->
                         <div class="flex items-center gap-2 mb-4">
-                            @if($product->discount_price)
-                                <span class="text-2xl font-light text-[#2e251f]">₦{{ number_format($product->discount_price) }}</span>
+
+                            @if($product->sale_status)
+                                <span class="text-2xl font-light text-[#2e251f]">₦{{ number_format($product->sales_price) }}</span>
                                 <span class="text-sm text-[#94897f] line-through">₦{{ number_format($product->price) }}</span>
                             @else
                                 <span class="text-2xl font-light text-[#2e251f]">₦{{ number_format($product->price) }}</span>

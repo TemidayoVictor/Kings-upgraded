@@ -88,14 +88,18 @@ class OrderAction
                 // Dropshipper (if applicable)
                 'dropshipper_id' => $dto->dropshipperId,
                 'dropshipper_profit' => $cart->dropshipper_profit,
+
+                // sales id if currently on sale
+                'sale_id' => $cart->sale_id ?? null,
             ]);
 
             $dropshipperSubtotal = 0;
 
-            if($dto->type == UserType::DROPSHIPPER) {
+            if ($dto->type == UserType::DROPSHIPPER) {
                 $dropshipperTotal = $order->total - $order->dropshipper_profit;
+            } else {
+                $dropshipperTotal = $order->total;
             }
-
 
             // Create order items
             foreach ($cart->items as $item) {
@@ -110,6 +114,7 @@ class OrderAction
                     'subtotal' => $item->subtotal,
                     'dropshipper_subtotal' => $dropshipperSubtotal,
                     'total' => $item->total,
+                    'sale_id' => $item->sale_id,
                     'dropshipper_total' => $dropshipperTotal,
                     'options' => $item->options,
                 ]);
@@ -119,6 +124,17 @@ class OrderAction
                     $item->dropshipperProduct->originalProduct->decrement('stock', $item->quantity);
                 } else {
                     $item->product->decrement('stock', $item->quantity);
+                }
+
+                // if its is a product on sale, update the sale (only for brand owners)
+                if ($dto->type != UserType::DROPSHIPPER) {
+                    if ($item->sale_id) {
+                        $sale = $item->sale;
+                        $sale->update([
+                            'total_amount' => $sale->total_amount + $item->subtotal,
+                            'total_orders' => $sale->total_orders + $item->quantity,
+                        ]);
+                    }
                 }
             }
 

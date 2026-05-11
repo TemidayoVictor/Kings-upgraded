@@ -175,7 +175,16 @@
                                                             <div class="text-xs text-gray-500">Total Revenue</div>
                                                             <div class="font-medium text-white">₦{{ number_format($selectedDropshipper->revenue ?? 0, 2) }}</div>
                                                         </div>
-                                                        <a href="{{route('dropshipper-store', $store)}}" class="text-blue-400 hover:text-blue-300 text-xs">View Store →</a>
+                                                        @if($store)
+                                                            <div>
+                                                                <div>
+                                                                    <a href="{{route('dropshipper-store', $store)}}" class="text-blue-400 hover:text-blue-300 text-xs">View Store →</a>
+                                                                </div>
+                                                                <div>
+                                                                    <a href="{{route('brand-view-store-orders', $store)}}" class="text-blue-400 hover:text-blue-300 text-xs">View Store Orders →</a>
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -201,7 +210,7 @@
 
                             <p class="text-gray-300 mb-4">
                                 Are you sure you want to revoke access for this dropshipper?
-                                This will deactivate all their stores for your brand.
+                                This will deactivate their store for your brand.
                             </p>
 
                             <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 mb-4">
@@ -219,7 +228,7 @@
                             <form wire:submit="confirmRevoke">
                                 <div class="space-y-4">
                                     <div>
-                                        <flux:label>Reason for revoking <span class="text-red-400">*</span></flux:label>
+                                        <flux:label>Reason for revoking <span class="text-red-400 ml-1">*</span></flux:label>
                                         <textarea
                                             wire:model.defer="revokeReason"
                                             rows="3"

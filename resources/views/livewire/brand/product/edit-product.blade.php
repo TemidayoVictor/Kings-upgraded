@@ -227,7 +227,7 @@
                     <flux:separator />
 
                     <div class="flex justify-end space-x-4">
-                        <flux:button type="submit" variant="primary">
+                        <flux:button type="submit" size="sm" variant="primary">
                             <flux:icon.loading wire:loading wire:target="submit" />
                             <span wire:loading.remove wire:target="submit">{{ __('Update Product') }}</span>
                         </flux:button>
