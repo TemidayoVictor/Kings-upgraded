@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class DashboardController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $user = auth()->user();
-        if(!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
         $role = $user->role;
+
         return redirect()->route("$role-dashboard");
     }
 }

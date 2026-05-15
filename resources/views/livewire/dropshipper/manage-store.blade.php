@@ -8,6 +8,9 @@
             <flux:button size="sm" variant="primary" wire:click="editStore">
                 Edit Store Details
             </flux:button>
+            <flux:button size="sm" variant="primary" href="{{route('dropshipper-revenue-generated', ['storeId' => $store->id])}}">
+                Store Revenue
+            </flux:button>
             <flux:button href="{{route('dropshipper-store', $store)}}" size="sm" variant="primary">
                 Visit Store
             </flux:button>

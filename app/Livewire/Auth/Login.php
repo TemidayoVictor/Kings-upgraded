@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Livewire\Component;
 use Illuminate\Validation\ValidationException;
 
@@ -35,11 +36,14 @@ class Login extends Component
         }
 
         request()->session()->regenerate();
+        $user = auth()->user();
+        $user->last_login_at = now();
+        $user->save();
 
         return redirect()->intended('/dashboard');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.auth.login')
             ->layout('layouts.app')

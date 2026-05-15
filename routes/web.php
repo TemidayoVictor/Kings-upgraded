@@ -44,6 +44,9 @@ use App\Livewire\Brand\RunSales;
 use App\Livewire\Brand\ManageSales;
 use App\Livewire\Brand\RevenueDashboard;
 use App\Livewire\Dropshipper\RevenueGenerated;
+use App\Livewire\Admin\RoleManager;
+use App\Livewire\Admin\PermissionManager;
+use App\Livewire\Admin\UserManager;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -86,6 +89,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
     ->group(function () {
         Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+        // Role Management Routes
+        Route::get('/roles', RoleManager::class)->middleware('permission:roles.view')->name('roles');
+        // Permission Management Routes
+        Route::get('/permissions', PermissionManager::class)->middleware('permission:roles.view')->name('permissions');
+        Route::get('/manage-users', UserManager::class)->middleware('permission:roles.view')->name('manage-users');
     }
     );
 
@@ -147,7 +155,7 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
         Route::get('/orders-batched/{batch}', DropshipperOrdersList::class)->name('orders-batched');
         Route::get('/all-orders/{dropshipperId}', DropshipperOrdersList::class)->name('all-orders');
 
-        Route::get('/revenue-generated', RevenueGenerated::class)->name('revenue-generated');
+        Route::get('/revenue-generated/{storeId}', RevenueGenerated::class)->name('revenue-generated');
 
         Route::get('/batched-orders/{store}', BatchedOrder::class)->name('batched-orders');
     }

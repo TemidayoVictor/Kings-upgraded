@@ -2,18 +2,9 @@
     <flux:sidebar.item icon="chart-bar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
         {{ __('Dashboard') }}
     </flux:sidebar.item>
-
-    <flux:sidebar.group :heading="__('Products')" class="grid">
-        <flux:sidebar.item icon="plus-circle" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Add Products') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="cube" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Manage Products') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="adjustments-horizontal" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Product Settings') }}
-        </flux:sidebar.item>
-    </flux:sidebar.group>
+    <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-manage-users')" :current="request()->routeIs('admin-manage-users')" wire:navigate>
+        {{ __('Manage Users') }}
+    </flux:sidebar.item>
 
     <flux:sidebar.group :heading="__('Orders')" class="grid">
         <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
@@ -46,14 +37,8 @@
         <flux:sidebar.item icon="cog-6-tooth" :href="route('settings.profile')" :current="request()->routeIs('dashboard')" wire:navigate>
             {{ __('General Settings') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="swatch" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Brand Mode') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="building-storefront" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Add Another Brand') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="arrows-right-left" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Switch Accounts') }}
+        <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-roles')" :current="request()->routeIs('admin-roles', 'admin-permissions')" wire:navigate>
+            {{ __('Roles and Permissions') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 </flux:sidebar.nav>

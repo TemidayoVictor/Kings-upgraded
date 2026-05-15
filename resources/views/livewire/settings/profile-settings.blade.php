@@ -95,7 +95,7 @@
             <flux:separator />
 
             <div class="flex justify-end">
-                <flux:button type="submit" variant="primary">
+                <flux:button type="submit" variant="primary" size="sm">
                     <flux:icon.loading wire:loading wire:target="submit" />
                     <span wire:loading.remove wire:target="submit">{{ __('Update Profile') }}</span>
                 </flux:button>
