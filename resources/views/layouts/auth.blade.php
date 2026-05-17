@@ -78,6 +78,25 @@
 
         <flux:main>
             <x-toast position="top-right" duration="5000" />
+            @if(session('impersonator_id'))
+                <div class="w-full bg-gradient-to-r from-yellow-500/20 via-yellow-400/10 to-yellow-500/20 border-b border-yellow-500/30 mb-4">
+                    <div class="max-w-7xl mx-auto px-4 py-3 block sm:flex items-center justify-between">
+
+                        <div class="flex items-center gap-3 text-yellow-200">
+                            <div class="text-sm">
+                                You are currently impersonating another user
+                                <span class="text-yellow-300 font-semibold">— actions are being performed on their behalf</span>
+                            </div>
+                        </div>
+
+                        <a href="{{ route('stop-impersonator') }}"
+                           class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mt-4 sm:mt-0 bg-yellow-400 text-black text-sm font-semibold hover:bg-yellow-300 transition">
+                            Exit impersonation
+                        </a>
+
+                    </div>
+                </div>
+            @endif
             {{ $slot }}
         </flux:main>
 

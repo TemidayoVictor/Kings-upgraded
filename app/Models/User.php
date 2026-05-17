@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -29,6 +30,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        'current_brand_id',
         'is_admin',
         'status',
         'onboarding_step',
@@ -82,9 +84,14 @@ class User extends Authenticatable
         return $this->hasOne(Dropshipper::class);
     }
 
-    public function brand(): HasOne
+    public function brand(): BelongsTo
     {
-        return $this->hasOne(Brand::class);
+        return $this->belongsTo(Brand::class, 'current_brand_id');
+    }
+
+    public function brands(): HasMany
+    {
+        return $this->hasMany(Brand::class);
     }
 
     public function carts(): HasMany

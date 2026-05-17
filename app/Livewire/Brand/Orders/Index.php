@@ -9,6 +9,8 @@ use App\Models\OrderBatch;
 use App\Models\OrderStatusHistory;
 use App\Models\Sale;
 use App\Traits\Toastable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -55,11 +57,13 @@ class Index extends Component
 
     public ?string $status = null;
 
+    public ?bool $admin = false;
+
     public ?DropshipperStore $store = null;
 
     protected array $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
 
-    public function mount($batch = null, $sale = null, $status = null, $store = null): void
+    public function mount($batch = null, $sale = null, $status = null, $store = null, $admin = null): void
     {
         if ($batch) {
             $this->batch = $batch;
@@ -69,6 +73,8 @@ class Index extends Component
             $this->status = $status;
         } elseif ($store) {
             $this->store = $store;
+        } elseif ($admin) {
+            $this->admin = true;
         }
         $this->calculateStats();
     }
@@ -96,7 +102,7 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function getOrdersProperty(): mixed
+    public function getOrdersProperty(): LengthAwarePaginator
     {
         $query = $this->getBaseQuery();
 
@@ -130,7 +136,7 @@ class Index extends Component
             ->paginate(15);
     }
 
-    private function getBaseQuery(): mixed
+    private function getBaseQuery(): Builder
     {
         $user = auth()->user();
         if ($this->batch != null) {
@@ -147,6 +153,9 @@ class Index extends Component
         } elseif ($this->store != null) {
             return Order::where('brand_id', $user->brand->id)
                 ->where('dropshipper_store_id', $this->store->id);
+        } elseif ($this->admin) {
+            return Order::query();
+
         } else {
             return Order::where('brand_id', $user->brand->id);
         }
@@ -271,27 +280,6 @@ class Index extends Component
         $this->calculateStats();
     }
 
-    public function bulkUpdateStatus($status)
-    {
-        foreach ($this->selectedOrders as $orderId) {
-            $order = Order::find($orderId);
-            if ($order && $this->canAccessOrder($order)) {
-                $order->update(['status' => $status]);
-
-                OrderStatusHistory::create([
-                    'order_id' => $order->id,
-                    'new_status' => $status,
-                    'changed_by' => auth()->id(),
-                    'notes' => 'Bulk update: Status changed to '.ucfirst($status),
-                ]);
-            }
-        }
-
-        $this->selectedOrders = [];
-        session()->flash('message', count($this->selectedOrders).' orders updated successfully.');
-        $this->calculateStats();
-    }
-
     public function clearSelected(): void
     {
         $this->selectedOrders = [];
@@ -319,10 +307,10 @@ class Index extends Component
         session()->flash('message', 'Export started. You will be notified when ready.');
     }
 
-    private function authorizeOrderAccess($order)
+    private function authorizeOrderAccess($order): void
     {
         $user = auth()->user();
-        if (! $user->brand && $order->brand_id !== $user->brand->id) {
+        if ((! $user->brand && $order->brand_id !== $user->brand->id) || (! $this->admin)) {
             abort(403);
         }
     }

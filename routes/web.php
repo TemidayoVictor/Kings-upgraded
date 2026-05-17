@@ -2,13 +2,21 @@
 
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ImpersonateController;
 use App\Http\Controllers\NavigationController;
 use App\Livewire\Admin\AdminDashboard;
+use App\Livewire\Admin\GeneralSettings;
+use App\Livewire\Admin\PermissionManager;
+use App\Livewire\Admin\RoleManager;
+use App\Livewire\Admin\UserManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Signup;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Brand\ApprovedDropshippers;
 use App\Livewire\Brand\BrandDashboard;
+use App\Livewire\Brand\ManageSales;
+use App\Livewire\Brand\Orders\DropshipperOrders;
+use App\Livewire\Brand\Orders\Index as BrandOrdersList;
 use App\Livewire\Brand\PendingApplications;
 use App\Livewire\Brand\Product\AddProduct;
 use App\Livewire\Brand\Product\Coupons;
@@ -16,6 +24,8 @@ use App\Livewire\Brand\Product\EditProduct;
 use App\Livewire\Brand\Product\ManageDeliveryLocations;
 use App\Livewire\Brand\Product\ManageSection;
 use App\Livewire\Brand\Product\ProductList;
+use App\Livewire\Brand\RevenueDashboard;
+use App\Livewire\Brand\RunSales;
 use App\Livewire\Brand\Settings\AdditionalDetails;
 use App\Livewire\Brand\Settings\BrandSettings;
 use App\Livewire\Cart\DropshipperCart;
@@ -25,28 +35,22 @@ use App\Livewire\Checkout\Index as CheckoutIndex;
 use App\Livewire\Checkout\Success as CheckoutSuccess;
 use App\Livewire\Client\ClientDashboard;
 use App\Livewire\Dropshipper\Applications;
+use App\Livewire\Dropshipper\BatchedOrder;
 use App\Livewire\Dropshipper\BrowseBrands;
 use App\Livewire\Dropshipper\CloneProgress;
 use App\Livewire\Dropshipper\CreateStore;
 use App\Livewire\Dropshipper\DropshipperDashboard;
+use App\Livewire\Dropshipper\ManageStore;
+use App\Livewire\Dropshipper\Orders as DropshipperOrdersList;
 use App\Livewire\Dropshipper\PartneredBrands;
+use App\Livewire\Dropshipper\RevenueGenerated;
 use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 use App\Livewire\Dropshipper\Store;
-use App\Livewire\Brand\Orders\Index as BrandOrdersList;
-use App\Livewire\Dropshipper\Orders as DropshipperOrdersList;
 use App\Livewire\SelectRole;
 use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\Products;
-use App\Livewire\Dropshipper\BatchedOrder;
-use App\Livewire\Dropshipper\ManageStore;
-use App\Livewire\Brand\Orders\DropshipperOrders;
-use App\Livewire\Brand\RunSales;
-use App\Livewire\Brand\ManageSales;
-use App\Livewire\Brand\RevenueDashboard;
-use App\Livewire\Dropshipper\RevenueGenerated;
-use App\Livewire\Admin\RoleManager;
-use App\Livewire\Admin\PermissionManager;
-use App\Livewire\Admin\UserManager;
+use App\Livewire\Brand\AddBrand;
+use App\Livewire\Brand\SwitchAccounts;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -64,6 +68,12 @@ Route::get('/dropshippers-checkout/{store:slug}', DropshipperCheckout::class)->n
 
 // Checkout success page
 Route::get('/checkout/success/{order}', CheckoutSuccess::class)->name('checkout.success');
+
+// Stop impersonation
+Route::get('/stop-impersonator', [ImpersonateController::class, 'stopImpersonate'])->name('stop-impersonator');
+
+// Add Brand
+Route::get('/add-brand', AddBrand::class)->name('add-brand');
 
 // Guest only routes
 Route::middleware(['guest'])->group(function () {
@@ -94,6 +104,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
         // Permission Management Routes
         Route::get('/permissions', PermissionManager::class)->middleware('permission:roles.view')->name('permissions');
         Route::get('/manage-users', UserManager::class)->middleware('permission:roles.view')->name('manage-users');
+
+        Route::get('/orders/{admin}', BrandOrdersList::class)->name('orders');
+
+        Route::get('/general-settings', GeneralSettings::class)->middleware('permission:roles.view')->name('general-settings');
+
+        Route::get('/start-impersonator/{user}', [ImpersonateController::class, 'startImpersonate'])->middleware('permission:users.impersonate')->name('start-impersonator');
     }
     );
 
@@ -121,12 +137,13 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/view-sales-orders/{sale}', BrandOrdersList::class)->name('view-sales-orders');
         Route::get('/order-status/{status}', BrandOrdersList::class)->name('order-status');
 
-
         Route::get('/run-sales', RunSales::class)->name('run-sales');
         Route::get('/update-sales/{sale}', RunSales::class)->name('update-sales');
         Route::get('/manage-sales', ManageSales::class)->name('manage-sales');
 
         Route::get('/revenue-analytics', RevenueDashboard::class)->name('revenue-analytics');
+
+        Route::get('/switch-account', SwitchAccounts::class)->name('switch-account');
     }
     );
 

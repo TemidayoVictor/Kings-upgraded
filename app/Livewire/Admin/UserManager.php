@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin;
 
 use App\Enums\UserType;
+use App\Models\Brand;
+use App\Models\Dropshipper;
 use App\Models\User;
 use App\Traits\Toastable;
 use Illuminate\Support\Collection;
@@ -18,6 +20,8 @@ class UserManager extends Component
 {
     use Toastable;
     use WithPagination;
+
+    public string $filter = 'all';
 
     public bool $showCreateModal = false;
 
@@ -67,6 +71,8 @@ class UserManager extends Component
 
     public int $totalClients = 0;
 
+    public int $newUsers = 0;
+
     protected $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
@@ -112,6 +118,14 @@ class UserManager extends Component
         $this->showPermissionsModal = false;
         $this->reset(['name', 'email', 'password', 'userType', 'isAdmin', 'selectedRoles', 'selectedPermissions', 'userId']);
         $this->resetValidation();
+    }
+
+    public function setFilter(string $filter): void
+    {
+        $this->filter = $filter;
+
+        // reset pagination
+        $this->resetPage();
     }
 
     public function createUser(): void
@@ -275,9 +289,10 @@ class UserManager extends Component
     {
         $this->totalUsers = User::count();
         $this->totalAdmins = User::where('role', UserType::ADMIN)->count();
-        $this->totalBrands = User::where('role', UserType::BRAND)->count();
-        $this->totalDropshippers = User::where('role', UserType::DROPSHIPPER)->count();
+        $this->totalBrands = Brand::count();
+        $this->totalDropshippers = Dropshipper::count();
         $this->totalClients = User::where('role', UserType::CLIENT)->count();
+        $this->newUsers = User::where('created_at', '>=', now()->subDays(7))->count();
     }
 
     public function render(): View
@@ -285,8 +300,33 @@ class UserManager extends Component
         $users = User::where(function ($query) {
             $query->where('name', 'like', '%'.$this->search.'%')
                 ->orWhere('email', 'like', '%'.$this->search.'%');
-        })
-            ->orderBy('created_at', 'desc')
+        });
+        // Filters
+        switch ($this->filter) {
+
+            case 'new-users':
+                $users->where('created_at', '>=', now()->subDays(7));
+                break;
+
+            case 'brands':
+                $users->where('role', UserType::BRAND);
+                break;
+
+            case 'dropshippers':
+                $users->where('role', UserType::DROPSHIPPER);
+                break;
+
+            case 'clients':
+                $users->where('role', UserType::CLIENT);
+                break;
+
+            case 'admins':
+                $users->where('role', UserType::ADMIN);
+                break;
+        }
+
+        $users = $users
+            ->orderByDesc('created_at')
             ->paginate(10);
 
         $roles = Role::get();

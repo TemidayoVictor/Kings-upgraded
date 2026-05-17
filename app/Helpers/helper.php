@@ -2,7 +2,9 @@
 
 use App\Models\Coupon;
 use App\Models\DropshipperStore;
+use App\Models\GeneralSetting;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 if (! function_exists('firstName')) {
@@ -78,10 +80,18 @@ if (! function_exists('validateDateRange')) {
             $storeSlug = Str::slug($storeName);
             // Check if slug exists
             $exists = DropshipperStore::where('slug', $storeSlug)->exists();
+
             return [
                 'storeSlug' => $storeSlug,
                 'exists' => $exists,
             ];
+        }
+    }
+
+    if (! function_exists('generalSetting')) {
+        function generalSetting(): ?GeneralSetting
+        {
+            return GeneralSetting::first();
         }
     }
 }

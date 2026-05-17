@@ -24,7 +24,7 @@
         <div class="max-w-7xl mx-auto">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-                <div class="bg-[#3d3d40] rounded-lg p-4">
+                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('all')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Total Users</p>
@@ -38,11 +38,11 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4">
+                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('new-users')">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-400 mb-1">Admins</p>
-                            <p class="text-2xl font-bold text-purple-400">{{ $totalAdmins }}</p>
+                            <p class="text-sm text-gray-400 mb-1">New Users</p>
+                            <p class="text-2xl font-bold text-purple-400">{{ $newUsers }}</p>
                         </div>
                         <div class="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">
                             <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4">
+                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('brands')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Brands</p>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4">
+                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('dropshippers')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Dropshippers</p>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4">
+                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('clients')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Clients</p>
@@ -107,6 +107,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">USER</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">TYPE</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">STATUS</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">JOINED AT</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">LAST LOGIN AT</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ADMIN ROLES</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">ACTIONS</th>
@@ -145,9 +146,14 @@
                                             {{ $user->onboarding_step ? ucfirst($user->onboarding_step) : 'Unassigned' }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="px-2 py-1 text-xs rounded-full">
-                                            {{ $user->last_login_at ?? 'Never logged in' }}
+                                            {{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('F d, Y H:i:s') : 'Never logged in' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs rounded-full">
+                                            {{ $user->last_login_at ? \Carbon\Carbon::parse($user->last_login_at)->format('F d, Y H:i:s') : 'Never logged in' }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
@@ -173,7 +179,7 @@
                                                     </svg>
                                                 </button>
                                             @else
-                                                <flux:button type="submit" size="sm" variant="primary">
+                                                <flux:button href="{{ route('admin-start-impersonator', ['user' => $user])  }}" size="sm" variant="primary" wire:key="impersonate">
                                                     Impersonate
                                                 </flux:button>
                                                 <flux:button type="submit" size="sm" variant="primary" color="yellow">

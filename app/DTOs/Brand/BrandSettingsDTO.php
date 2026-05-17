@@ -4,6 +4,7 @@ readonly class BrandSettingsDTO
 {
     public function __construct(
         public string $brandName,
+        public string $brandEmail,
         public string $selectedCategory,
         public string $selectedSubcategory,
         public string $description,
@@ -22,6 +23,7 @@ readonly class BrandSettingsDTO
     {
         return new self(
             brandName: $data['brandName'],
+            brandEmail: $data['brandEmail'],
             selectedCategory: $data['selectedCategory'],
             selectedSubcategory: $data['selectedSubcategory'],
             description: $data['description'],

@@ -23,7 +23,7 @@
 
     <flux:sidebar.group :heading="__('Features')" class="grid">
         <flux:sidebar.item icon="tag" :href="route('brand-run-sales')" :current="request()->routeIs('brand-run-sales', 'brand-manage-sales', 'brand-view-sales-orders', 'brand-update-sales')" wire:navigate>
-            {{ __('Run Sales') }}
+            {{ __('Sales') }}
         </flux:sidebar.item>
         <flux:sidebar.item icon="user-group" :href="route('brand-approved-dropshippers')" :current="request()->routeIs('brand-pending-applications', 'brand-approved-dropshippers')" wire:navigate>
             {{ __('Manage Dropshippers') }}
@@ -43,13 +43,10 @@
         <flux:sidebar.item icon="cog-6-tooth" :href="route('settings.profile')" :current="request()->routeIs('settings.profile', 'brand-details')" wire:navigate>
             {{ __('General Settings') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="swatch" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Brand Mode') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="building-storefront" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="building-storefront" :href="route('add-brand')" :current="request()->routeIs('add-brand')" wire:navigate>
             {{ __('Add Another Brand') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="arrows-right-left" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="arrows-right-left" :href="route('brand-switch-account')" :current="request()->routeIs('brand-switch-account')" wire:navigate>
             {{ __('Switch Accounts') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

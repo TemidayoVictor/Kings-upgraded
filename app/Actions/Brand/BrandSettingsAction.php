@@ -33,6 +33,7 @@ class BrandSettingsAction
 
         $brand->update([
             'brand_name' => $dto->brandName,
+            'brand_email' => $dto->brandEmail,
             'category' => $dto->selectedCategory,
             'sub_category' => $dto->selectedSubcategory,
             'brand_type' => $dto->type,

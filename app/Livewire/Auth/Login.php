@@ -2,16 +2,19 @@
 
 namespace App\Livewire\Auth;
 
+use App\Enums\UserType;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Component;
-use Illuminate\Validation\ValidationException;
 
 class Login extends Component
 {
-
     public string $email = '';
+
     public string $password = '';
+
     public bool $remember = false;
 
     protected function rules(): array
@@ -36,8 +39,15 @@ class Login extends Component
         }
 
         request()->session()->regenerate();
+
         $user = auth()->user();
         $user->last_login_at = now();
+
+        if ($user->role == UserType::BRAND && ! $user->current_brand_id) {
+            $brand = Brand::where('user_id', $user->id)->first();
+            $user->current_brand_id = $brand->id;
+        }
+
         $user->save();
 
         return redirect()->intended('/dashboard');

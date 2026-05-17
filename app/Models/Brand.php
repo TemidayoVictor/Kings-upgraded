@@ -14,6 +14,7 @@ class Brand extends Model
         'user_id',
         'uuid',
         'brand_name',
+        'brand_email',
         'category',
         'sub_category',
         'description',

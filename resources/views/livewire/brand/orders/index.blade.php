@@ -360,7 +360,7 @@
                                             </span>
                                     @endif
                                 </div>
-                                @if($order->dropshipper_store_id && $order->dropshipper_status !== App\Enums\Status::APPROVED)
+                                @if($order->dropshipper_store_id && $order->dropshipper_status !== App\Enums\Status::APPROVED && !$admin)
                                     <div class="w-full flex items-center justify-center bg-black/95 bg-opacity-20 absolute left-0 top-0 bottom-0">
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
                                             Awaiting Dropshipper Approval

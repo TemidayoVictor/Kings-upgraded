@@ -19,6 +19,12 @@
                         </flux:callout>
                     @endif
                     <flux:input label="Brand Name" wire:model="brandName" placeholder="Brand Name" class="max-full" />
+                    <div>
+                        <flux:input label="Brand Email (Optional)" wire:model="brandEmail" placeholder="Brand Email" class="max-full" />
+                        <small class="mt-2">
+                            Optional — defaults to <span class="text-green-300">{{ $user->email }}</span> if left empty.
+                        </small>
+                    </div>
 
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:select label="Category" wire:model.live="selectedCategory">
@@ -95,7 +101,7 @@
                     <flux:separator />
 
                     <div class="flex justify-end">
-                        <flux:button type="submit" variant="primary">
+                        <flux:button type="submit" variant="primary" size="sm">
                             <flux:icon.loading wire:loading wire:target="submit" />
                             <span wire:loading.remove wire:target="submit">{{ __('Update Profile') }}</span>
                         </flux:button>

@@ -28,6 +28,8 @@ class BrandSettings extends Component
 
     public ?string $brandName;
 
+    public ?string $brandEmail;
+
     public ?string $selectedCategory = '';
 
     public ?string $selectedSubcategory = '';
@@ -54,6 +56,7 @@ class BrandSettings extends Component
 
     protected array $rules = [
         'brandName' => 'required',
+        'brandEmail' => 'nullable|email',
         'selectedCategory' => 'required',
         'selectedSubcategory' => 'required',
         'type' => 'required',
@@ -83,6 +86,7 @@ class BrandSettings extends Component
         $this->categories = Category::pluck('category', 'id')->toArray();
         $this->states = State::pluck('name', 'id')->toArray();
         $this->brandName = $user->brand->brand_name;
+        $this->brandEmail = $user->brand->brand_email;
         $this->selectedCategory = $user->brand->category;
         $this->selectedSubcategory = $user->brand->sub_category;
         // populate subcategory field if it exists
@@ -153,6 +157,7 @@ class BrandSettings extends Component
             return redirect()->route('brand-additional-details');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
+
             return back();
         }
     }

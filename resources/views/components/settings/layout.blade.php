@@ -14,6 +14,10 @@
             <flux:navlist aria-label="{{ __('Settings') }}">
                 <flux:navlist.item :href="route('dropshipper-details')">{{ __('Dropshipper Details') }}</flux:navlist.item>
             </flux:navlist>
+        @elseif(auth()->user()->role == App\Enums\UserType::ADMIN)
+            <flux:navlist aria-label="{{ __('General Settings') }}">
+                <flux:navlist.item :href="route('admin-general-settings')">{{ __('General Settings') }}</flux:navlist.item>
+            </flux:navlist>
         @endif
     </div>
 

@@ -7,11 +7,8 @@
     </flux:sidebar.item>
 
     <flux:sidebar.group :heading="__('Orders')" class="grid">
-        <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="clipboard-document-list" :href="route('admin-orders', ['admin' => 'admin-view'])" :current="request()->routeIs('admin-orders')" wire:navigate>
             {{ __('Store Orders') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="truck" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Dropshipper Orders') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 
@@ -34,7 +31,7 @@
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Settings')" class="grid">
-        <flux:sidebar.item icon="cog-6-tooth" :href="route('settings.profile')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-general-settings')" :current="request()->routeIs('admin-general-settings', 'settings.profile')" wire:navigate>
             {{ __('General Settings') }}
         </flux:sidebar.item>
         <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-roles')" :current="request()->routeIs('admin-roles', 'admin-permissions')" wire:navigate>
