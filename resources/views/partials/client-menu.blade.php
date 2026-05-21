@@ -10,7 +10,7 @@
         <flux:sidebar.item icon="clipboard-document-list" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
             {{ __('Orders') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="plus-circle" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="plus-circle" :href="route('add-brand')" :current="request()->routeIs('add-brand')" wire:navigate>
             {{ __('Add your business') }}
         </flux:sidebar.item>
         <flux:sidebar.item icon="truck" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>

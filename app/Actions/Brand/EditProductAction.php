@@ -40,8 +40,8 @@ class EditProductAction
             $newImagesCount = count($images);
         }
 
-        if ($previousImagesCount + $newImagesCount > 5) {
-            throw new Exception('You can only add a total of 5 images.');
+        if ($previousImagesCount + $newImagesCount > maxImages()) {
+            throw new Exception('You can only add a total of '.maxImages().' images.');
         }
 
         $product->update([

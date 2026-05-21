@@ -2,11 +2,13 @@
 
 namespace App\Actions;
 
+use App\DTOs\GeneralDTO;
 use App\DTOs\SelectRoleDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\Brand;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 
 class SelectRoleAction
@@ -35,13 +37,17 @@ class SelectRoleAction
 
         //        Create role table
         if ($role === UserType::BRAND) {
-            // Create a brand table
-            $user->brand()->create([
+            // Create brand
+            $brand = Brand::create([
                 'uuid' => rand(100000, 999999),
                 'status' => Status::UNLISTED,
+                'subscription_status' => Status::PREMIUM,
+                'no_of_products' => generalSetting()->premium_products_number,
+                'subscription_amount' => generalSetting()->premium_fee,
+                'exp_date' => Carbon::now()->addMonth(),
             ]);
             $user->update([
-                'current_brand_id' => $user->brand()->id,
+                'current_brand_id' => $brand->id,
             ]);
         } elseif ($role === UserType::DROPSHIPPER) {
             // Create a dropshipper table
@@ -56,7 +62,7 @@ class SelectRoleAction
     /**
      * @throws Exception
      */
-    public static function addBrand(string $plan): User
+    public static function addBrand(GeneralDTO $dto): User
     {
         $user = auth()->user();
 
@@ -66,19 +72,27 @@ class SelectRoleAction
 
         $role = $user->role;
 
-        if ($role === UserType::BRAND && $plan == Status::BASIC) {
+        if ($role === UserType::BRAND && $dto->value['plan'] == Status::BASIC) {
             throw new Exception('You need to subscribe to a paid plan to add multiple brands.');
         }
+
+        $planDetails = planDetails($dto->value['plan']);
+        $no_of_products = $planDetails['number'];
+        $subscription_amount = $planDetails['fee'];
 
         // Create a brand table
         $brand = Brand::create([
             'user_id' => $user->id,
             'uuid' => rand(100000, 999999),
             'status' => Status::UNLISTED,
-            'subscription_status' => $plan,
+            'subscription_status' => $dto->value['plan'],
+            'no_of_products' => $no_of_products,
+            'subscription_amount' => $subscription_amount,
+            'exp_date' => Carbon::now()->addMonth($dto->value['month']),
         ]);
         $user->update([
             'current_brand_id' => $brand->id,
+            'role' => UserType::BRAND, // for times when clients or non brand owners add accounts
         ]);
 
         return $user;

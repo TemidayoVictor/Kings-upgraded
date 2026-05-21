@@ -51,7 +51,7 @@ class EditProduct extends Component
     public ?string $imageName = null;
 
     protected $rules = [
-        'images' => 'array|max:5',
+        'images' => 'array',
         'images.*' => 'required|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
         'name' => 'string|required',
         'description' => 'nullable|string|required',

@@ -51,6 +51,7 @@ use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\Products;
 use App\Livewire\Brand\AddBrand;
 use App\Livewire\Brand\SwitchAccounts;
+use App\Livewire\Brand\SubscriptionStatus;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -144,6 +145,8 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/revenue-analytics', RevenueDashboard::class)->name('revenue-analytics');
 
         Route::get('/switch-account', SwitchAccounts::class)->name('switch-account');
+
+        Route::get('/subscription-status', SubscriptionStatus::class)->name('subscription-status');
     }
     );
 

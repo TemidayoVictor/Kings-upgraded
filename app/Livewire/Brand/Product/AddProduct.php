@@ -7,6 +7,7 @@ use App\DTOs\Brand\ProductDTO;
 use App\Models\Section;
 use App\Traits\Toastable;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -35,8 +36,12 @@ class AddProduct extends Component
 
     public ?int $stock;
 
+    public ?int $additionalProductNumber = 1;
+
+    public bool $showModal = false;
+
     protected $rules = [
-        'images' => 'required|array|min:1|max:5',
+        'images' => 'required|array|min:1',
         'images.*' => 'required|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
         'name' => 'string|required',
         'description' => 'nullable|string|required',
@@ -85,7 +90,38 @@ class AddProduct extends Component
             return redirect()->route('brand-add-product');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
+
+            return back();
         }
+    }
+
+    public function increaseProducts(): mixed
+    {
+        $this->validate([
+            'additionalProductNumber' => 'integer|required',
+        ]);
+
+        try {
+            AddProductAction::increaseProduct($this->additionalProductNumber);
+
+            $this->toast('success', 'Products capacity increased successfully');
+            $this->closeModal();
+        } catch (\Exception $e) {
+            $this->toast('error', $e->getMessage());
+            $this->closeModal();
+        }
+
+        return back();
+    }
+
+    public function buySlots(): void
+    {
+        $this->showModal = true;
+    }
+
+    public function closeModal(): void
+    {
+        $this->showModal = false;
     }
 
     private function resetForm(): void
@@ -101,7 +137,7 @@ class AddProduct extends Component
         $this->stock = null;
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.brand.product.add-product')
             ->layout('layouts.auth')

@@ -14,6 +14,7 @@ class Product extends Model
         'description',
         'link',
         'price',
+        'status',
         'sales_price',
         'dropship_price',
         'date',

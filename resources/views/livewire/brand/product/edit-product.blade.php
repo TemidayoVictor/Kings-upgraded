@@ -10,7 +10,7 @@
                     <!-- Images Section -->
                     <div>
                         <div class="mb-4">
-                            <flux:label>Product Images (max 5 total)</flux:label>
+                            <flux:label>Product Images (max {{maxImages()}} total)</flux:label>
 
                             <!-- Existing Images -->
                             @if(count($existingImages) > 0)
@@ -157,9 +157,9 @@
 
                             <!-- Image count summary -->
                             <div class="mt-2 text-sm text-gray-600">
-                                Total images: {{ count($existingImages) + count($images) }} / 5
-                                @if(count($existingImages) + count($images) > 5)
-                                    <span class="text-red-600 ml-2">Maximum 5 images allowed</span>
+                                Total images: {{ count($existingImages) + count($images) }} / {{maxImages()}}
+                                @if(count($existingImages) + count($images) > maxImages())
+                                    <span class="text-red-600 ml-2">Maximum {{maxImages()}} images allowed</span>
                                 @endif
                             </div>
                         </div>

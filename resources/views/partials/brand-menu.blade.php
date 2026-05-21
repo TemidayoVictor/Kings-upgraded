@@ -34,7 +34,7 @@
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Subscription')" class="grid">
-        <flux:sidebar.item icon="arrow-path" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="arrow-path" :href="route('brand-subscription-status')" :current="request()->routeIs('brand-subscription-status')" wire:navigate>
             {{ __('Subscription Status') }}
         </flux:sidebar.item>
     </flux:sidebar.group>

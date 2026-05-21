@@ -66,9 +66,9 @@
                             </div>
                         </div>
 
-                        <flux:button size="sm" variant="primary" wire:click="addBrand('{{App\Enums\Status::BASIC}}')" wire:key="basic" class="w-full">
-                            Get Started Free
-                        </flux:button>
+{{--                        <flux:button size="sm" variant="primary" wire:click="selectPlan('{{App\Enums\Status::BASIC}}')" wire:key="basic" class="w-full">--}}
+{{--                            Get Started--}}
+{{--                        </flux:button>--}}
                     </div>
                 </div>
 
@@ -145,9 +145,15 @@
                             </div>
                         </div>
 
-                        <flux:button size="sm" variant="primary" wire:click="addBrand('{{App\Enums\Status::PREMIUM}}')" wire:key="premium" class="w-full   ">
-                            Get Started
-                        </flux:button>
+                        @if(auth()->user()->role == App\Enums\UserType::CLIENT)
+                            <flux:button size="sm" variant="primary" wire:click="freePlan()" wire:key="free" class="w-full   ">
+                                Get Started  for Free
+                            </flux:button>
+                        @else
+                            <flux:button size="sm" variant="primary" wire:click="selectPlan('{{App\Enums\Status::PREMIUM}}')" wire:key="premium" class="w-full   ">
+                                Get Started
+                            </flux:button>
+                        @endif
                     </div>
                 </div>
 
@@ -194,7 +200,7 @@
                             </div>
                         </div>
 
-                        <flux:button size="sm" variant="primary" wire:click="addBrand('{{App\Enums\Status::PLATINUM}}')" wire:key="platinum" class="w-full   ">
+                        <flux:button size="sm" variant="primary" wire:click="selectPlan('{{App\Enums\Status::PLATINUM}}')" wire:key="platinum" class="w-full   ">
                             Get Started
                         </flux:button>
                     </div>
@@ -412,4 +418,63 @@
 
         </div>
     </div>
+
+    @if($showModal)
+        <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4" style="z-index: 50;">
+            <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                <h3 class="text-lg font-medium text-white mb-4">Add Brand</h3>
+                @if($isFree)
+                    <form wire:submit="addBrandFree">
+                        <div class="space-y-4">
+
+                            <flux:callout color="green" icon="sparkles" class="rounded-2xl border border-green-500/20 bg-green-500/5">
+                                <flux:callout.heading>
+                                    🎉 Welcome Bonus — Premium Access Included
+                                </flux:callout.heading>
+
+                                <flux:callout.text>
+                                    Since this is your first month, you’ll enjoy full access to all our premium features at no extra cost.
+                                    Explore advanced tools, enhanced visibility, messaging features, and more for the next 30 days.
+                                </flux:callout.text>
+                            </flux:callout>
+
+                            <div class="flex justify-end space-x-2">
+                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
+                                    Cancel
+                                </flux:button>
+                                <flux:button type="submit" size="sm" variant="primary">
+                                    <flux:icon.loading wire:loading wire:target="addBrandFree" />
+                                    <span wire:loading.remove wire:target="confirmRevoke">Proceed</span>
+                                </flux:button>
+                            </div>
+                        </div>
+                    </form>
+                @else
+                    <form wire:submit="addBrand">
+                        <div class="space-y-4">
+                            <div>
+                                <flux:select label="Subscription Period" wire:model="month">
+                                    <option value="">Select Duration</option>
+                                    <option value="1"> 1 month </option>
+                                    <option value="3"> 3 months </option>
+                                    <option value="6"> 6 months </option>
+                                    <option value="12">12 months </option>
+                                </flux:select>
+                            </div>
+
+                            <div class="flex justify-end space-x-2">
+                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
+                                    Cancel
+                                </flux:button>
+                                <flux:button type="submit" size="sm" variant="primary">
+                                    <flux:icon.loading wire:loading wire:target="addBrand" />
+                                    <span wire:loading.remove wire:target="confirmRevoke">Proceed</span>
+                                </flux:button>
+                            </div>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
+    @endif
 </section>
