@@ -333,7 +333,7 @@
                                 </div>
                             @else
                                 <div class="mt-6">
-                                    <a href="{{ route('brand-owner.run-sales') }}">
+                                    <a href="{{ route('brand-run-sales') }}">
                                         <flux:button size="sm" variant="primary">
                                             Create Your First Sale
                                         </flux:button>

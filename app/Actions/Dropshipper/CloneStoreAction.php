@@ -8,6 +8,7 @@ use App\Enums\Status;
 use App\Enums\UserType;
 use App\Jobs\CloneBrandJob;
 use App\Models\Dropshipper;
+use App\Models\DropshipperProduct;
 use App\Models\DropshipperStore;
 use App\Models\Product;
 use Exception;
@@ -88,6 +89,54 @@ class CloneStoreAction
             'store_name' => $dto->value['store_name'],
             'slug' => $dto->value['slug'],
         ]);
+
+        return $store;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function updateNewProducts(int $id): DropshipperStore
+    {
+        $user = auth()->user();
+
+        if (! $user || $user->role != UserType::DROPSHIPPER) {
+            throw new Exception('User not found.');
+        }
+
+        $store = DropshipperStore::find($id);
+        if (! $store) {
+            throw new Exception('Store not found.');
+        }
+
+        $newProducts = Product::query()
+            ->where('brand_id', $store->brand_id)
+            ->where('status', Status::ACTIVE)
+            ->whereDoesntHave('dropshipperProducts', function ($query) use ($store) {
+                $query->where('dropshipper_store_id', $store->id);
+            })
+            ->get();
+
+        foreach ($newProducts as $product) {
+            $exists = DropshipperProduct::where('dropshipper_store_id', $store->id)
+                ->where('original_product_id', $product->id)
+                ->exists();
+
+            if (! $exists) {
+                DropshipperProduct::create([
+                    'dropshipper_store_id' => $store->id,
+                    'original_product_id' => $product->id,
+                    'custom_price' => $product->price,
+                    'profit' => $product->price - $product->dropship_price,
+                    'stock_override' => null,
+                    'custom_settings' => json_encode([
+                        'cloned_at' => now()->toDateTimeString(),
+                        'original_created_at' => $product->created_at,
+                        'original_updated_at' => $product->updated_at,
+                    ]),
+                ]);
+            }
+        }
 
         return $store;
     }

@@ -16,6 +16,27 @@
             </flux:button>
         </div>
 
+        @if($newProducts->count() > 0)
+            <div class="w-full bg-gradient-to-r from-yellow-500/20 via-yellow-400/10 to-yellow-500/20 border-b border-yellow-500/30 mb-4">
+                <div class="mx-auto px-4 py-3 block">
+
+                    <div class="flex items-center gap-3 text-yellow-200">
+                        <div class="text-sm">
+                            New products are available from your supplier
+                            <span class="text-yellow-300 font-semibold">
+                            — add them to your store to start selling
+                        </span>
+                        </div>
+                    </div>
+
+                    <flux:button color="yellow" size="sm" variant="primary" class="mt-3" wire:click="newProductsModal">
+                        View Products
+                    </flux:button>
+
+                </div>
+            </div>
+        @endif
+
         <flux:separator/>
 
         <form wire:submit="submit" class="mt-2">
@@ -298,6 +319,56 @@
                                     </div>
                                 </flux:fieldset>
                             </form>
+                        </div>
+                    </div>
+                @endif
+
+                @if($showNewProducts)
+                    <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
+                        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                            <h2 class="mb-2">Update New Products</h2>
+                            <div class="bg-[#3d3d40] rounded-lg shadow-lg overflow-hidden mb-2">
+                                <div class="divide-y divide-gray-500">
+                                    @foreach($newProducts as $product)
+                                        <div class="p-4 hover:bg-gray-750 transition-colors">
+                                            <div class="flex items-start justify-between mb-2">
+                                                <div class="flex items-start space-x-3">
+
+                                                    @if($product->count() > 0)
+                                                        <img src="{{ $product->primary_image_url }}"
+                                                             alt="{{ $product->name }}"
+                                                             class="object-cover h-10 w-10 rounded-full">
+                                                    @else
+                                                        <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                                            <span class="text-gray-300 font-medium">{{ substr($product->name, 0, 1) }}</span>
+                                                        </div>
+                                                    @endif
+
+                                                    <div class="flex flex-col gap-1">
+                                                        <div class="font-medium text-gray-200">{{ Str::limit($product->name, 20) }}</div>
+                                                        <div class="text-xs text-gray-200">Selling Price: ₦ {{ number_format($product->price) }}</div>
+                                                        <div class="text-xs text-gray-200">Dropship Price: ₦ {{ number_format($product->dropship_price) }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <flux:separator/>
+
+                            <div class="space-y-4 mt-2">
+                                <div class="flex justify-end items-center">
+                                    <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
+                                        Cancel
+                                    </flux:button>
+                                    <flux:button type="button" size="sm" variant="primary" class="ml-2" wire:click="updateNewProducts">
+                                        <flux:icon.loading wire:loading wire:target="updateNewProducts" />
+                                        <span wire:loading.remove wire:target="updateNewProducts">Update Products</span>
+                                    </flux:button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endif

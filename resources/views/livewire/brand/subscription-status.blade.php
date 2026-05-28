@@ -672,6 +672,7 @@
                                         </p>
                                     </div>
                                 </div>
+
                                 @if($resolvedPrice)
                                     <div class="mt-3 pt-3 border-t border-white/10">
                                         <p class="text-sm text-gray-400">

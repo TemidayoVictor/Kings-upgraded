@@ -4,6 +4,7 @@ namespace App\Livewire\Shop;
 
 use App\Actions\CartAction;
 use App\DTOs\CartDTO;
+use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Section;
@@ -56,11 +57,11 @@ class Products extends Component
 
         // Get min and max prices for this brand only
         $this->minPrice = Product::where('brand_id', $brand->id)
-            ->where('is_active', true)
+            ->where('status', Status::ACTIVE)
             ->min('price') ?? 0;
 
         $this->maxPrice = Product::where('brand_id', $brand->id)
-            ->where('is_active', true)
+            ->where('status', Status::ACTIVE)
             ->max('price') ?? 100000;
 
         $this->priceRange = [$this->minPrice, $this->maxPrice];
@@ -126,7 +127,7 @@ class Products extends Component
     {
         $query = Product::query()
             ->where('brand_id', $this->brand->id)
-            ->where('is_active', true);
+            ->where('status', Status::ACTIVE);
 
         // Apply section filter
         if ($this->selectedSection !== 'all') {
@@ -156,8 +157,8 @@ class Products extends Component
                 $query->orderBy('price', 'desc');
                 break;
             case 'popular':
-                // You'll need a 'views' or 'sales_count' column
-                $query->orderBy('views', 'desc');
+                $query->withCount('orderItems')
+                    ->orderBy('order_items_count', 'desc');
                 break;
             case 'newest':
             default:
@@ -172,10 +173,10 @@ class Products extends Component
     {
         return Section::where('brand_id', $this->brand->id)
             ->whereHas('products', function ($query) {
-                $query->where('is_active', true);
+                $query->where('status', Status::ACTIVE);
             })
             ->withCount(['products' => function ($query) {
-                $query->where('is_active', true);
+                $query->where('status', Status::ACTIVE);
             }])
             ->orderBy('name')
             ->get();
@@ -184,7 +185,7 @@ class Products extends Component
     public function getFeaturedProductsProperty(): Collection
     {
         return Product::where('brand_id', $this->brand->id)
-            ->where('is_active', true)
+            ->where('status', Status::ACTIVE)
             ->where('is_featured', true)
             ->limit(4)
             ->get();

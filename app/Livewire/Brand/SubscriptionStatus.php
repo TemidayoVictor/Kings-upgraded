@@ -4,6 +4,7 @@ namespace App\Livewire\Brand;
 
 use App\Actions\Brand\AddProductAction;
 use App\Actions\Brand\SubscriptionStatusAction;
+use App\DTOs\GeneralDTO;
 use App\Models\Brand;
 use App\Traits\Toastable;
 use Carbon\Carbon;
@@ -114,8 +115,18 @@ class SubscriptionStatus extends Component
             return;
         }
 
+        $buildDTO = [
+            'id' => 1,
+            'value' => [
+                'plan' => $this->plan,
+                'month' => $this->month,
+            ],
+        ];
+
+        $dto = GeneralDTO::fromArray($buildDTO);
+
         try {
-            SubscriptionStatusAction::execute($this->plan, $this->month);
+            SubscriptionStatusAction::execute($dto);
             $this->toast('success', 'Subscription upgraded successfully');
             $this->closeModal();
         } catch (\Exception $e) {

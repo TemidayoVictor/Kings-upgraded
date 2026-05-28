@@ -5,6 +5,7 @@ namespace App\Enums;
 class Status
 {
     const ACTIVE = 'active';
+    const INACTIVE = 'inactive';
 
     const UNLISTED = 'unlisted';
 
@@ -53,6 +54,7 @@ class Status
     {
         return [
             self::ACTIVE,
+            self::INACTIVE,
             self::UNLISTED,
             self::SUSPENDED,
             self::COMPLETED,

@@ -235,4 +235,9 @@ class Product extends Model
     {
         return $this->belongsTo(Sale::class);
     }
+
+    public function dropshipperProducts()
+    {
+        return $this->hasMany(DropshipperProduct::class, 'original_product_id');
+    }
 }

@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin;
 
 use App\Enums\UserType;
-use App\Models\Brand;
 use App\Models\Dropshipper;
 use App\Models\User;
 use App\Traits\Toastable;
@@ -289,7 +288,7 @@ class UserManager extends Component
     {
         $this->totalUsers = User::count();
         $this->totalAdmins = User::where('role', UserType::ADMIN)->count();
-        $this->totalBrands = Brand::count();
+        $this->totalBrands = User::where('role', UserType::BRAND)->count();
         $this->totalDropshippers = Dropshipper::count();
         $this->totalClients = User::where('role', UserType::CLIENT)->count();
         $this->newUsers = User::where('created_at', '>=', now()->subDays(7))->count();

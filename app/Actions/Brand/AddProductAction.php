@@ -51,14 +51,26 @@ class AddProductAction
         try {
             DB::beginTransaction();
 
+            if (! $dto->dropshippingPrice || ! $dto->dropshippingPrice == 0) {
+                $dropshippingPrice = $dto->price;
+            } else {
+                $dropshippingPrice = $dto->dropshippingPrice;
+            }
+
+            if (! $dto->salesPrice || ! $dto->salesPrice == 0) {
+                $salesPrice = $dto->price;
+            } else {
+                $salesPrice = $dto->salesPrice;
+            }
+
             $product = Product::create([
                 'brand_id' => $brandId,
                 'name' => $dto->name,
                 'description' => $description,
                 'price' => $dto->price,
                 'status' => Status::ACTIVE,
-                'sales_price' => $dto->salesPrice,
-                'dropship_price' => $dto->dropshippingPrice,
+                'sales_price' => $salesPrice,
+                'dropship_price' => $dropshippingPrice,
                 'section_id' => $dto->sectionId,
                 'link' => $dto->link,
                 'stock' => $dto->stock,
@@ -76,6 +88,7 @@ class AddProductAction
             }
 
             DB::commit();
+
             return $product;
 
         } catch (\Exception $e) {
@@ -87,19 +100,25 @@ class AddProductAction
     /**
      * @throws Throwable
      */
-    public static function increaseProduct(int $productNumber): Brand
+    public static function increaseProduct(int $productNumber, ?int $brandId = null): Brand
     {
         $user = auth()->user();
-
-        if (! $user || $user->role != UserType::BRAND) {
-            throw new Exception('User not found.');
+        if ($brandId) {
+            // request is from admin
+            if (! $user || $user->role != UserType::ADMIN) {
+                throw new Exception('User not found.');
+            }
+            $brand = Brand::where('id', $brandId)->first();
+        } else {
+            if (! $user || $user->role != UserType::BRAND) {
+                throw new Exception('User not found.');
+            }
+            $brand = $user->brand;
         }
 
         // Increase products
         try {
             DB::beginTransaction();
-
-            $brand = Brand::where('id', auth()->user()->brand->id)->first();
             $additionalProducts = planDetails($brand->subscription_status);
 
             $newFee = $additionalProducts['additional_fee'] * $productNumber;

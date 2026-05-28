@@ -52,6 +52,11 @@ use App\Livewire\Shop\Products;
 use App\Livewire\Brand\AddBrand;
 use App\Livewire\Brand\SwitchAccounts;
 use App\Livewire\Brand\SubscriptionStatus;
+use App\Livewire\Admin\RevenueManager;
+use App\Livewire\Admin\BrandManager;
+use App\Livewire\Shop\About;
+use App\Livewire\Brand\Settings\StoreSettings;
+use App\Livewire\Dropshipper\TotalRevenueGenerated;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -59,6 +64,7 @@ Route::get('/', [NavigationController::class, 'home'])->name('home');
 
 // Brand Shops
 Route::get('/brands/{brand:slug}', Products::class)->name('shop');
+Route::get('/brands/about/{brand:slug}', About::class)->name('shop.about');
 Route::get('/cart/{brand:slug}', CartIndex::class)->name('cart');
 Route::get('/checkout/{brand:slug}', CheckoutIndex::class)->name('checkout');
 
@@ -104,13 +110,17 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
         Route::get('/roles', RoleManager::class)->middleware('permission:roles.view')->name('roles');
         // Permission Management Routes
         Route::get('/permissions', PermissionManager::class)->middleware('permission:roles.view')->name('permissions');
+
         Route::get('/manage-users', UserManager::class)->middleware('permission:roles.view')->name('manage-users');
+        Route::get('/manage-brands', BrandManager::class)->middleware('permission:users.view')->name('manage-brands');
 
         Route::get('/orders/{admin}', BrandOrdersList::class)->name('orders');
 
         Route::get('/general-settings', GeneralSettings::class)->middleware('permission:roles.view')->name('general-settings');
 
         Route::get('/start-impersonator/{user}', [ImpersonateController::class, 'startImpersonate'])->middleware('permission:users.impersonate')->name('start-impersonator');
+
+        Route::get('/revenue-report', RevenueManager::class)->middleware('permission:reports.view')->name('revenue-report');
     }
     );
 
@@ -120,6 +130,7 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/dashboard', BrandDashboard::class)->name('dashboard');
         Route::get('/settings/brand-details', BrandSettings::class)->name('details');
         Route::get('/settings/additional-details', AdditionalDetails::class)->name('additional-details');
+        Route::get('/settings/store-settings', StoreSettings::class)->name('store-settings');
 
         Route::get('/section', ManageSection::class)->name('section');
         Route::get('/product/add-product', AddProduct::class)->name('add-product');
@@ -176,6 +187,7 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
         Route::get('/all-orders/{dropshipperId}', DropshipperOrdersList::class)->name('all-orders');
 
         Route::get('/revenue-generated/{storeId}', RevenueGenerated::class)->name('revenue-generated');
+        Route::get('/total-revenue', TotalRevenueGenerated::class)->name('total-revenue');
 
         Route::get('/batched-orders/{store}', BatchedOrder::class)->name('batched-orders');
     }

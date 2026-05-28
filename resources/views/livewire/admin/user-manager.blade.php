@@ -24,21 +24,21 @@
         <div class="max-w-7xl mx-auto">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('all')">
+                <div class="bg-[#3d3d40] rounded-lg p-4 {{ $filter == 'all' ? 'bg-yellow-500/20 border border-yellow-500' : 'bg-[#3d3d40]'}}" wire:click="setFilter('all')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Total Users</p>
-                            <p class="text-2xl font-bold text-white">{{ $totalUsers }}</p>
+                            <p class="text-2xl font-bold text-yellow-400">{{ $totalUsers }}</p>
                         </div>
-                        <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('new-users')">
+                <div class="bg-[#3d3d40] rounded-lg p-4 {{ $filter == 'new-users' ? 'bg-purple-500/20 border border-purple-500' : 'bg-[#3d3d40]'}}" wire:click="setFilter('new-users')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">New Users</p>
@@ -52,10 +52,10 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('brands')">
+                <div class="bg-[#3d3d40] rounded-lg p-4 {{ $filter == 'brands' ? 'bg-blue-500/20 border border-blue-500' : 'bg-[#3d3d40]'}}" wire:click="setFilter('brands')">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-400 mb-1">Brands</p>
+                            <p class="text-sm text-gray-400 mb-1">Brand Owners</p>
                             <p class="text-2xl font-bold text-blue-400">{{ $totalBrands }}</p>
                         </div>
                         <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('dropshippers')">
+                <div class="bg-[#3d3d40] rounded-lg p-4 {{ $filter == 'dropshippers' ? 'bg-green-500/20 border border-green-500' : 'bg-[#3d3d40]'}}" wire:click="setFilter('dropshippers')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Dropshippers</p>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="bg-[#3d3d40] rounded-lg p-4" wire:click="setFilter('clients')">
+                <div class="bg-[#3d3d40] rounded-lg p-4 border-transparent {{ $filter == 'clients' ? 'bg-yellow-gray/20 border border-white' : 'bg-[#3d3d40]'}}" wire:click="setFilter('clients')">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-400 mb-1">Clients</p>
@@ -107,6 +107,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">USER</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">TYPE</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">STATUS</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">VERIFICATION CODE</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">JOINED AT</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">LAST LOGIN AT</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ADMIN ROLES</th>
@@ -144,6 +145,11 @@
                                             @else bg-gray-500/20 text-gray-400
                                             @endif">
                                             {{ $user->onboarding_step ? ucfirst($user->onboarding_step) : 'Unassigned' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs rounded-full">
+                                        {{ $user->verification ? $user->verification->code : 'N/A' }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">

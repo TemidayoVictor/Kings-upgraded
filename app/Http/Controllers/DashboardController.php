@@ -10,8 +10,7 @@ class DashboardController extends Controller
         if (! $user) {
             return redirect()->route('login');
         }
-        $role = $user->role;
 
-        return redirect()->route("$role-dashboard");
+        return redirect()->route($user->dashboardRoute());
     }
 }

@@ -5,8 +5,10 @@ namespace App\Livewire\Dropshipper;
 use App\Actions\Brand\EditProductAction;
 use App\Actions\Dropshipper\CloneStoreAction;
 use App\DTOs\GeneralDTO;
+use App\Enums\Status;
 use App\Models\DropshipperProduct;
 use App\Models\DropshipperStore;
+use App\Models\Product;
 use App\Traits\Toastable;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -38,6 +40,7 @@ class ManageStore extends Component
     public bool $showEditStoreModal = false;
 
     public int $perPage = 15;
+    public bool $showNewProducts = false;
 
     public function mount($store): void
     {
@@ -51,6 +54,11 @@ class ManageStore extends Component
         $this->selectedProduct = $product;
         $this->price = $product->custom_price;
         $this->showEditModal = true;
+    }
+
+    public function newProductsModal(): void
+    {
+        $this->showNewProducts = true;
     }
 
     public function editStore(): void
@@ -93,7 +101,7 @@ class ManageStore extends Component
 
     public function closeModal(): void
     {
-        $this->reset(['showEditModal', 'selectedProduct', 'showEditStoreModal']);
+        $this->reset(['showEditModal', 'selectedProduct', 'showEditStoreModal', 'showNewProducts']);
     }
 
     public function updatedStoreName(): void
@@ -137,6 +145,19 @@ class ManageStore extends Component
 
     }
 
+    public function updateNewProducts(): void
+    {
+        try {
+            CloneStoreAction::updateNewProducts($this->store->id);
+            $this->closeModal();
+            $this->toast('success', 'Products added successfully.');
+        } catch (\Exception $e) {
+            $this->closeModal();
+            $this->toast('error', $e->getMessage());
+        }
+
+    }
+
     public function render(): View
     {
         $products = DropshipperProduct::query()
@@ -156,8 +177,17 @@ class ManageStore extends Component
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
 
+        $newProducts = Product::query()
+            ->where('brand_id', $this->store->brand_id)
+            ->where('status', Status::ACTIVE)
+            ->whereDoesntHave('dropshipperProducts', function ($query) {
+                $query->where('dropshipper_store_id', $this->store->id);
+            })
+            ->get();
+
         return view('livewire.dropshipper.manage-store', [
             'products' => $products,
+            'newProducts' => $newProducts,
         ])->layout('layouts.auth')
             ->title('Manage Store');
     }

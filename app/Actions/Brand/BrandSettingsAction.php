@@ -4,6 +4,7 @@ namespace App\Actions\Brand;
 
 use App\DTOs\Brand\BrandSettingsDTO;
 use App\Enums\Status;
+use App\Enums\UserType;
 use App\Models\Brand;
 use App\Models\User;
 use Exception;
@@ -16,11 +17,11 @@ class BrandSettingsAction
     public static function execute(BrandSettingsDTO $dto): User
     {
         $user = auth()->user();
-        if (! $user) {
+        if (! $user || $user->role != UserType::BRAND) {
             throw new Exception('User not found.');
         }
 
-        $brand = Brand::where('user_id', $user->id)->first();
+        $brand = $user->brand;
         if (! $brand) {
             throw new Exception('Brand not found.');
         }

@@ -2,32 +2,41 @@
 
 namespace App\Livewire\Brand\Settings;
 
+use App\Actions\Brand\AdditionalDetailsActions;
+use App\DTOs\Brand\AdditionalDetailsDTO;
+use App\Models\User;
+use App\Traits\Toastable;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-use App\Models\User;
-use App\DTOs\Brand\AdditionalDetailsDTO;
-use App\Actions\Brand\AdditionalDetailsActions;
-
-use App\Traits\Toastable;
-
 class AdditionalDetails extends Component
 {
-    use WithFileUploads;
     use Toastable;
+    use WithFileUploads;
 
     public $logo;
+
     public User $user;
+
     public string $currentLogo = '';
-    public string|null $about = '';
-    public string|null $motto = '';
-    public string|null $instagram = '';
-    public string|null $tiktok = '';
-    public string|null $linkedin = '';
-    public string|null $twitter = '';
-    public string|null $facebook = '';
-    public string|null $youtube = '';
-    public string|null $website = '';
+
+    public ?string $about = '';
+
+    public ?string $motto = '';
+
+    public ?string $instagram = '';
+
+    public ?string $tiktok = '';
+
+    public ?string $linkedin = '';
+
+    public ?string $twitter = '';
+
+    public ?string $facebook = '';
+
+    public ?string $youtube = '';
+
+    public ?string $website = '';
 
     protected $rules = [
         'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // 2MB max
@@ -42,7 +51,8 @@ class AdditionalDetails extends Component
         'website' => 'string|nullable',
     ];
 
-    public function mount(): void {
+    public function mount(): void
+    {
         $user = User::with('brand')->where('id', auth()->id())->first();
         $this->user = $user;
         $this->currentLogo = $user->brand->image ?? 'images/profile_pic.svg';
@@ -56,7 +66,9 @@ class AdditionalDetails extends Component
         $this->youtube = $user->brand->youtube;
         $this->website = $user->brand->website;
     }
-    public function updatedLogo($logo): void {
+
+    public function updatedLogo($logo): void
+    {
         $this->logo = $logo;
         $this->currentLogo = '';
     }
@@ -74,7 +86,8 @@ class AdditionalDetails extends Component
                 'title' => 'Success',
                 'duration' => 5000,
             ]);
-//          redirect to dashboard
+
+            //          redirect to dashboard
             return redirect()->route('brand-dashboard');
         } catch (\Exception $e) {
             session()->flash('toast', [
@@ -83,6 +96,7 @@ class AdditionalDetails extends Component
                 'title' => 'Success',
                 'duration' => 5000,
             ]);
+
             return back();
         }
     }

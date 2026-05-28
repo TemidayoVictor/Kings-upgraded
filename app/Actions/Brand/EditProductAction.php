@@ -44,6 +44,8 @@ class EditProductAction
             throw new Exception('You can only add a total of '.maxImages().' images.');
         }
 
+        $oldDropshipPrice = $product->dropship_price;
+
         $product->update([
             'name' => $dto->name,
             'description' => $description,
@@ -54,6 +56,17 @@ class EditProductAction
             'link' => $dto->link,
             'stock' => $dto->stock,
         ]);
+
+        if ($oldDropshipPrice !== $dto->dropshippingPrice) {
+            // update the price for all dropshippers
+            $dropshipperProducts = DropshipperProduct::where('original_product_id', $product->id)->get();
+            foreach ($dropshipperProducts as $dropshipperProduct) {
+                $updatePrice = $dropshipperProduct->profit + $dto->dropshippingPrice;
+                $dropshipperProduct->update([
+                    'custom_price' => $updatePrice,
+                ]);
+            }
+        }
 
         //        Upload images
         if ($newImagesCount > 0) {

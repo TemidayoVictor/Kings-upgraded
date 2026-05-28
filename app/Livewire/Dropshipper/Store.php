@@ -141,11 +141,10 @@ class Store extends Component
 
     public function getProductsProperty(): LengthAwarePaginator
     {
-        $query = DropshipperProduct::with(['originalProduct.section'])
+        $query = DropshipperProduct::query()
+            ->with('originalProduct.section')
             ->where('dropshipper_store_id', $this->store->id)
-            ->whereHas('originalProduct', function ($q) {
-                $q->where('is_active', true);
-            });
+            ->active();
 
         // Apply section filter
         if ($this->selectedSection !== 'all') {
@@ -212,12 +211,10 @@ class Store extends Component
 
     public function getFeaturedProductsProperty(): Collection
     {
-        return DropshipperProduct::with('originalProduct')
+        return DropshipperProduct::query()
+            ->with('originalProduct')
             ->where('dropshipper_store_id', $this->store->id)
-            ->whereHas('originalProduct', function ($q) {
-                $q->where('is_active', true)
-                    ->where('publish', true);
-            })
+            ->active()
             ->get();
     }
 

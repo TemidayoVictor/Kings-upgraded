@@ -10,6 +10,9 @@
             <flux:navlist aria-label="{{ __('Settings') }}">
                 <flux:navlist.item :href="route('brand-additional-details')">{{ __('Additional Details') }}</flux:navlist.item>
             </flux:navlist>
+            <flux:navlist aria-label="{{ __('Settings') }}">
+                <flux:navlist.item :href="route('brand-store-settings')">{{ __('Store Settings') }}</flux:navlist.item>
+            </flux:navlist>
         @elseif(auth()->user()->role == App\Enums\UserType::DROPSHIPPER)
             <flux:navlist aria-label="{{ __('Settings') }}">
                 <flux:navlist.item :href="route('dropshipper-details')">{{ __('Dropshipper Details') }}</flux:navlist.item>

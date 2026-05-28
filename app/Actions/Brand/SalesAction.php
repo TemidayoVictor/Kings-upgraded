@@ -25,7 +25,7 @@ class SalesAction
             throw new Exception('User not found.');
         }
 
-        $brand = Brand::where('user_id', $user->id)->first();
+        $brand = $user->brand;
         if (! $brand) {
             throw new Exception('Brand not found.');
         }
@@ -69,7 +69,7 @@ class SalesAction
             throw new Exception('User not found.');
         }
 
-        $brand = Brand::where('user_id', $user->id)->first();
+        $brand = $user->brand;
         if (! $brand) {
             throw new Exception('Brand not found.');
         }
@@ -209,6 +209,9 @@ class SalesAction
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private static function validateTime($startDate, $endDate): void
     {
         $now = Carbon::now();

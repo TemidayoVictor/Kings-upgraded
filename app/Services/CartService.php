@@ -7,7 +7,6 @@ use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\Product;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -41,11 +40,8 @@ class CartService
                 ->where('brand_id', $this->brandId)
                 ->first();
 
-            // If session cart exists → merge ALWAYS
-            if ($sessionId) {
-                $this->cart = $this->mergeSessionCart($sessionId, $userCart);
-            } else {
-                $this->cart = $userCart;
+            if (! $userCart) {
+                $this->createCart();
             }
         }
 
@@ -85,65 +81,6 @@ class CartService
             'discount' => 0,
             'total' => 0,
         ]);
-    }
-
-    protected function mergeSessionCart(string $sessionId, ?Cart $userCart = null): Cart
-    {
-        $sessionCart = Cart::with('items')
-            ->where('session_id', $sessionId)
-            ->where('brand_id', $this->brandId)
-            ->first();
-
-        if (! $sessionCart) {
-            return $userCart ?? $this->createCart();
-        }
-
-        // ✅ If user has no cart → just assign session cart
-        if (! $userCart) {
-            $sessionCart->update([
-                'user_id' => auth()->id(),
-            ]);
-
-            Session::forget('cart_session_id_'.$this->brandId);
-
-            return $sessionCart;
-        }
-
-        // ✅ Merge carts
-        DB::transaction(function () use ($sessionCart, $userCart) {
-            foreach ($sessionCart->items as $item) {
-
-                $existing = $userCart->items()
-                    ->where('product_id', $item->product_id)
-                    ->get()
-                    ->first(function ($i) use ($item) {
-                        return json_encode($i->options) === json_encode($item->options);
-                    });
-
-                if ($existing) {
-                    $existing->increment('quantity', $item->quantity);
-                    $existing->recalculate();
-                } else {
-                    $userCart->items()->create([
-                        'product_id' => $item->product_id,
-                        'product_name' => $item->product_name,
-                        'sku' => $item->sku,
-                        'unit_price' => $item->unit_price,
-                        'discount_price' => $item->discount_price,
-                        'quantity' => $item->quantity,
-                        'subtotal' => $item->subtotal,
-                        'total' => $item->total,
-                        'options' => $item->options,
-                    ]);
-                }
-            }
-
-            $sessionCart->delete();
-        });
-
-        Session::forget('cart_session_id_'.$this->brandId);
-
-        return $userCart;
     }
 
     /**

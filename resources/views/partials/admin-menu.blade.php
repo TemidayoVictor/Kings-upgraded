@@ -1,32 +1,25 @@
 <flux:sidebar.nav>
-    <flux:sidebar.item icon="chart-bar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-        {{ __('Dashboard') }}
-    </flux:sidebar.item>
-    <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-manage-users')" :current="request()->routeIs('admin-manage-users')" wire:navigate>
-        {{ __('Manage Users') }}
-    </flux:sidebar.item>
+    <flux:sidebar.group :heading="__('Users')" class="grid">
+        <flux:sidebar.item icon="user-group" :href="route('admin-manage-users')" :current="request()->routeIs('admin-manage-users')" wire:navigate>
+            {{ __('Manage Users') }}
+        </flux:sidebar.item>
+    </flux:sidebar.group>
+
+    <flux:sidebar.group :heading="__('Brands')" class="grid">
+        <flux:sidebar.item icon="calendar" :href="route('admin-manage-brands')" :current="request()->routeIs('admin-manage-brands')" wire:navigate>
+            {{ __('Manage Brands') }}
+        </flux:sidebar.item>
+    </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Orders')" class="grid">
         <flux:sidebar.item icon="clipboard-document-list" :href="route('admin-orders', ['admin' => 'admin-view'])" :current="request()->routeIs('admin-orders')" wire:navigate>
-            {{ __('Store Orders') }}
+            {{ __('All Orders') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Features')" class="grid">
-        <flux:sidebar.item icon="tag" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Run Sales') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="user-group" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Manage Dropshippers') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="arrow-trending-up" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+        <flux:sidebar.item icon="arrow-trending-up" :href="route('admin-revenue-report')" :current="request()->routeIs('admin-revenue-report')" wire:navigate>
             {{ __('Revenue Generated') }}
-        </flux:sidebar.item>
-    </flux:sidebar.group>
-
-    <flux:sidebar.group :heading="__('Subscription')" class="grid">
-        <flux:sidebar.item icon="arrow-path" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-            {{ __('Subscription Status') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 

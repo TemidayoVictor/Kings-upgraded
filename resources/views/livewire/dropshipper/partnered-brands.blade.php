@@ -1,5 +1,5 @@
 <section class="w-full">
-    @include('partials.partnerships')
+    @include('partials.dropshipper-dashboard-heading')
 
     <flux:heading class="sr-only">{{ __('Partnered Brands') }}</flux:heading>
 

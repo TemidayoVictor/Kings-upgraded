@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -71,7 +72,8 @@ class DropshipperProduct extends Model
     public function scopeActive($query)
     {
         return $query->whereHas('originalProduct', function ($q) {
-            $q->where('is_active', true);
+            $q->where('status', Status::ACTIVE)
+                ->where('publish', true);
         });
     }
 
@@ -86,5 +88,12 @@ class DropshipperProduct extends Model
         })->whereHas('originalProduct', function ($q) {
             $q->where('stock', '>', 0);
         });
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->originalProduct
+            && $this->originalProduct->status === Status::ACTIVE
+            && $this->originalProduct->publish;
     }
 }

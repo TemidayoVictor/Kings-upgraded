@@ -112,7 +112,7 @@ class DropshipperCartService
         $cart = $this->getCart();
 
         // Check if original product is active and published
-        if (! $product->originalProduct || ! $product->originalProduct->is_active || ! $product->originalProduct->publish) {
+        if (! $product->isAvailable()) {
             throw new Exception('This product is no longer available');
         }
 
@@ -187,7 +187,7 @@ class DropshipperCartService
         }
 
         // Check if original product is still active
-        if (! $item->dropshipperProduct->originalProduct || ! $item->dropshipperProduct->originalProduct->is_active || ! $item->dropshipperProduct->originalProduct->publish) {
+        if (! $item->dropshipperProduct->isAvailable()) {
             throw new Exception('This product is no longer available');
         }
 
@@ -284,84 +284,5 @@ class DropshipperCartService
             'delivery_location_id' => $locationId,
             'total' => $cart->subtotal + $cart->tax + $shippingCost - $cart->discount,
         ]);
-    }
-
-    /**
-     * Set tax amount
-     */
-    public function setTax(float $taxAmount): void
-    {
-        $cart = $this->getCart();
-
-        $cart->update([
-            'tax' => $taxAmount,
-            'total' => $cart->subtotal + $taxAmount + $cart->shipping - $cart->discount,
-        ]);
-    }
-
-    /**
-     * Get cart summary
-     */
-    public function getSummary(): array
-    {
-        $cart = $this->getCart();
-
-        return [
-            'subtotal' => $cart->subtotal,
-            'tax' => $cart->tax,
-            'shipping' => $cart->shipping,
-            'discount' => $cart->discount,
-            'total' => $cart->total,
-            'item_count' => $cart->items->sum('quantity'),
-            'unique_item_count' => $cart->items->count(),
-            'coupon_code' => $cart->coupon_code,
-        ];
-    }
-
-    /**
-     * Validate all cart items (check if still available)
-     */
-    public function validateCart(): array
-    {
-        $cart = $this->getCart();
-        $invalidItems = [];
-
-        foreach ($cart->items as $item) {
-            $product = $item->product;
-
-            // Check if original product is still active
-            if (! $product->originalProduct || ! $product->originalProduct->is_active || ! $product->originalProduct->publish) {
-                $invalidItems[] = [
-                    'id' => $item->id,
-                    'name' => $item->product_name,
-                    'reason' => 'Product is no longer available',
-                ];
-                $item->delete();
-
-                continue;
-            }
-
-            // Check stock
-            if ($product->effective_stock < $item->quantity) {
-                $invalidItems[] = [
-                    'id' => $item->id,
-                    'name' => $item->product_name,
-                    'reason' => "Only {$product->effective_stock} items available",
-                ];
-
-                if ($product->effective_stock > 0) {
-                    $item->quantity = $product->effective_stock;
-                    $item->recalculate()->save();
-                } else {
-                    $item->delete();
-                }
-            }
-        }
-
-        if (count($invalidItems) > 0) {
-            $cart->recalculateTotals();
-        }
-
-        return $invalidItems;
     }
 }

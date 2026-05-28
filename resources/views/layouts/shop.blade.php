@@ -8,10 +8,10 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=playfair-display:400,500i|plus-jakarta-sans:300,400,500,600" rel="stylesheet" />
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Font Awesome (Using verified stable CDN for all free basic styles) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Styles -->
     @vite(['resources/css/app.css'])
@@ -20,172 +20,197 @@
     @livewireStyles
 
     <style>
-        /* Custom styles for the warm aesthetic */
-        .bg-warm {
-            background: #f7f5f2;
+        :root {
+            /* Fallback to original color theme styles if settings are unconfigured */
+            --primary: {{ $brand->brandSetting->primary_color ?? '#b55a3b' }};
+            --secondary: {{ $brand->brandSetting->secondary_color ?? '#e7dfd7' }};
+
+            /* Build dynamic translucent overlays directly using hex-alpha matching */
+            --primary-muted: {{ ($brand->brandSetting->primary_color ?? '#b55a3b') . '1A' }}; /* '1A' adds an implicit 10% opacity in hex */
+
+            --surface: #fcfbfa;
+            --text-main: #191615;
         }
 
-        .bg-warm-light {
-            background: #eae1d7;
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--surface);
+            color: var(--text-main);
         }
 
-        .text-terracotta {
-            color: #b55a3b;
+        .serif-display {
+            font-family: 'Playfair Display', serif;
         }
 
-        .border-warm {
-            border-color: #e5dbd2;
+        /* Fluid Premium Elevation Styles */
+        .card-smooth {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .hover-terracotta:hover {
-            color: #b55a3b;
+        .card-smooth:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
         }
 
-        .bg-terracotta {
-            background-color: #b55a3b;
-        }
-
-        .card-shadow {
-            box-shadow: 0 12px 28px -8px rgba(0,0,0,0.06);
-        }
-
-        .card-shadow:hover {
-            box-shadow: 0 30px 40px -14px rgba(98, 64, 48, 0.15);
-        }
+        /* Clean custom scrollbar removal */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="font-sans antialiased bg-[#f7f5f2] text-[#1e1b1b]">
-<!-- Header with blur effect -->
-<header class="bg-white/85 backdrop-blur-md sticky top-0 z-50 border-b border-[#e0d6cc]/40">
+<body class="antialiased selection:bg-[var(--primary)] selection:text-white">
+
+<!-- Elegant Sticky Navigation Overlay -->
+<header class="bg-white/70 backdrop-blur-xl sticky top-0 z-40 border-b border-neutral-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-            <!-- Logo -->
-            <a href="/" class="text-3xl font-light text-[#2c2420] tracking-tight">
-                ELIXIR<span class="text-[#b55a3b] font-medium">.</span>
+        <div class="flex items-center justify-between h-24">
+
+            <!-- Dynamic Modular Logo Section -->
+            <a href="{{route('shop', $brand)}}" class="text-2xl font-light tracking-widest uppercase serif-display">
+                ELIXIR<span class="text-[var(--primary)] font-bold">.</span>
             </a>
 
-            <!-- Desktop Navigation -->
-            <nav class="hidden md:flex items-center gap-10">
-                <a href="#" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors border-b border-transparent hover:border-[#b55a3b] pb-1">Shop</a>
-                <a href="#" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors border-b border-transparent hover:border-[#b55a3b] pb-1">New</a>
-                <a href="#" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors border-b border-transparent hover:border-[#b55a3b] pb-1">Serums</a>
-                <a href="#" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors border-b border-transparent hover:border-[#b55a3b] pb-1">Bestsellers</a>
+            <!-- Balanced Centered Minimalist Menu Links -->
+            <nav class="hidden md:flex items-center gap-10 text-xs font-medium tracking-widest uppercase text-neutral-500">
+                <a href="{{route('shop', $brand)}}" class="hover:text-[var(--primary)] transition-colors tracking-widest">Shop</a>
+                <a href="{{route('shop.about', $brand)}}" class="hover:text-[var(--primary)] transition-colors tracking-widest">About Us</a>
             </nav>
 
-            <!-- Right Navigation -->
-            <div class="flex items-center gap-6">
-                <!-- Cart Icon with Count -->
-                <button
-                    x-data
-                    @click="$dispatch('open-cart')"
-                    class="relative p-2 text-[#2c2420] hover:text-[#b55a3b] transition-colors"
-                >
-                    <i class="fa-regular fa-bag-shopping text-xl"></i>
-                    <span
-                        x-data="{ count: 0 }"
-                        x-on:cart-updated.window="count = $event.detail.count"
-                        x-show="count > 0"
-                        x-transition
-                        class="absolute -top-1 -right-1 bg-[#b55a3b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-lg"
-                    >
-                                <span x-text="count"></span>
-                            </span>
+            <!-- Utility Action Controls Drawer -->
+            <div class="flex items-center gap-3">
+
+                <!-- Wishlist Trigger Interface -->
+                <button class="w-11 h-11 text-neutral-700 hover:text-[var(--primary)] hover:bg-neutral-50 rounded-full transition-all flex items-center justify-center">
+                    <i class="fa-regular fa-heart text-base"></i>
                 </button>
 
-                <!-- Wishlist Icon -->
-                <i class="fa-regular fa-heart text-xl text-[#2c2420] hover:text-[#b55a3b] transition-colors cursor-pointer hidden sm:block"></i>
-                <a href="{{ route('cart', ['brand' => $brand->slug]) }}" class="relative">
-                    <i class="fa-regular fa-bag-shopping text-2xl text-[#2c2420] hover:text-[#b55a3b] transition-colors"></i>
+                <!-- Cart Anchor interface element -->
+                <a
+                    href="{{ route('cart', ['brand' => $brand->slug]) }}"
+                    class="relative w-11 h-11 text-neutral-700 hover:text-[var(--primary)] hover:bg-neutral-50 rounded-full transition-all flex items-center justify-center"
+                >
+                    <i class="fa-solid fa-bag-shopping text-base"></i>
                     <span
                         x-data="{ count: 0 }"
                         x-on:cart-updated.window="count = $event.detail.count"
                         x-show="count > 0"
                         x-transition
-                        class="absolute -top-2 -right-2 bg-[#b55a3b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                        class="absolute top-1.5 right-1.5 bg-[var(--primary)] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-md"
                     >
-                            <span x-text="count"></span>
-                        </span>
+                        <span x-text="count"></span>
+                    </span>
                 </a>
-                <!-- User Menu -->
+
+                <!-- User Interactive State Layout Trigger -->
                 @auth
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center gap-2">
-                            <div class="w-10 h-10 rounded-full bg-[#eae1d7] flex items-center justify-center border-2 border-white shadow-md">
-                                <span class="text-sm font-medium text-[#2c2420]">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                    <div class="relative ml-1" x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center focus:outline-none">
+                            <div class="w-10 h-10 rounded-full bg-[var(--secondary)] border border-white flex items-center justify-center shadow-sm">
+                                <span class="text-xs font-semibold text-neutral-800 uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
                             </div>
                         </button>
-                        <!-- Dropdown menu -->
-                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#e5dbd2] py-2">
-                            <a href="#" class="block px-4 py-2 text-[#2c2420] hover:bg-[#f7f5f2]">Profile</a>
-                            <a href="#" class="block px-4 py-2 text-[#2c2420] hover:bg-[#f7f5f2]">Orders</a>
+                        <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-3 w-52 bg-white rounded-2xl shadow-xl border border-neutral-100 py-2 z-50">
+                            <a href="#" class="block px-5 py-2.5 text-xs font-medium text-neutral-600 hover:bg-neutral-50">My Orders</a>
+                            <hr class="my-1.5 border-neutral-100">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-[#2c2420] hover:bg-[#f7f5f2]">Logout</button>
+                                <button type="submit" class="block w-full text-left px-5 py-2.5 text-xs font-medium text-rose-600 hover:bg-rose-50/50">Sign Out</button>
                             </form>
                         </div>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors">Sign In</a>
+                    <a href="{{ route('login') }}" class="text-xs font-semibold tracking-widest uppercase text-neutral-700 hover:text-[var(--primary)] transition-colors px-4 py-2.5 rounded-full hover:bg-neutral-50">Login</a>
                 @endauth
-
-                <!-- Mobile Menu Button -->
-                <button class="md:hidden text-2xl text-[#2c2420]">
-                    <i class="fa-regular fa-bars"></i>
-                </button>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
+<!-- Main Container Content Injector -->
 <main>
     <x-toast position="top-right" duration="5000" />
     {{ $slot }}
 </main>
 
-<!-- Footer -->
-<footer class="bg-[#f0eae4] rounded-t-[40px] mt-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-            <div>
-                <h5 class="text-xl font-medium text-[#2e251f] mb-6">ELIXIR.</h5>
-                <p class="text-[#4c3f37] mb-6">slow beauty, modern rituals.<br>inspired by nature.</p>
-                <div class="flex gap-6">
-                    <i class="fa-brands fa-instagram text-2xl text-[#5b4b40] hover:text-[#b55a3b] transition-colors cursor-pointer"></i>
-                    <i class="fa-brands fa-facebook text-2xl text-[#5b4b40] hover:text-[#b55a3b] transition-colors cursor-pointer"></i>
-                    <i class="fa-brands fa-pinterest text-2xl text-[#5b4b40] hover:text-[#b55a3b] transition-colors cursor-pointer"></i>
+<!-- High-End Structural Footer Layer -->
+<footer class="bg-neutral-950 text-neutral-400 w-full border-t border-neutral-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+
+        <!-- Main Link Network Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 md:gap-8 lg:gap-12">
+
+            <!-- Column 1: Core Brand Statement Frame (Wider profile allocation) -->
+            <div class="space-y-5 sm:col-span-2 lg:col-span-2">
+                <h5 class="text-xl font-bold tracking-wider text-white uppercase">
+                    {{ config('app.name') }}<span class="text-neutral-500">.</span>
+                </h5>
+                <p class="text-xs sm:text-sm text-neutral-400 max-w-sm leading-relaxed font-light">
+                    Providing seamless e-commerce solutions and premium storefront interfaces. Crafted to deliver high-quality, dependable framework execution for modern digital ecosystems.
+                </p>
+                <!-- Universal Social Media Anchor Nodes -->
+                <div class="flex gap-2.5 pt-1">
+                    <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                        <i class="fa-brands fa-instagram text-sm"></i>
+                    </a>
+                    <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                        <i class="fa-brands fa-facebook-f text-sm"></i>
+                    </a>
+                    <a href="#" aria-label="X / Twitter" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                        <i class="fa-brands fa-x-twitter text-sm"></i>
+                    </a>
+                    <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                        <i class="fa-brands fa-linkedin-in text-sm"></i>
+                    </a>
                 </div>
             </div>
-            <div>
-                <h5 class="font-medium text-[#2e251f] mb-6">explore</h5>
-                <ul class="space-y-3">
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">shop all</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">bestsellers</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">new arrivals</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">gift cards</a></li>
+
+            <!-- Column 2: Generic Collection Array -->
+            <div class="space-y-4">
+                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">Shop & Explore</h5>
+                <ul class="space-y-2.5 text-xs font-light tracking-wide">
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">All Collections</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Featured Products</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">New Arrivals</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Exclusive Offers</a></li>
                 </ul>
             </div>
-            <div>
-                <h5 class="font-medium text-[#2e251f] mb-6">help</h5>
-                <ul class="space-y-3">
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">contact</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">shipping</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">returns</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">FAQ</a></li>
+
+            <!-- Column 3: Universal Customer Success Desk -->
+            <div class="space-y-4">
+                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">Customer Support</h5>
+                <ul class="space-y-2.5 text-xs font-light tracking-wide">
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Help & FAQs</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Shipping & Delivery</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Returns & Exchanges</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Track Your Order</a></li>
                 </ul>
             </div>
-            <div>
-                <h5 class="font-medium text-[#2e251f] mb-6">journal</h5>
-                <ul class="space-y-3">
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">skin glossary</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">rituals</a></li>
-                    <li><a href="#" class="text-[#5b4b40] hover:text-[#b55a3b]">sustainability</a></li>
+
+            <!-- Column 4: Corporate / Company Node -->
+            <div class="space-y-4">
+                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">Our Company</h5>
+                <ul class="space-y-2.5 text-xs font-light tracking-wide">
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">About Us</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Contact Directory</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Careers Channel</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Corporate Responsibility</a></li>
                 </ul>
+            </div>
+
+        </div>
+
+        <!-- Lower Metadata Legal Agreement Bar -->
+        <div class="mt-16 pt-8 border-t border-neutral-900/80 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 font-light tracking-wider">
+            <p class="text-center sm:text-left">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                <a href="#" class="hover:text-neutral-400 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-neutral-400 transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-neutral-400 transition-colors">Cookie Configurations</a>
             </div>
         </div>
-        <p class="text-center text-[#7f6e63] text-sm mt-12 pt-8 border-t border-[#dfcfc0]">
-            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
-        </p>
+
     </div>
 </footer>
 

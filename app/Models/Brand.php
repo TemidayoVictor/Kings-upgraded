@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
+use App\Livewire\Brand\Settings\BrandSettings;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -108,5 +111,33 @@ class Brand extends Model
     public function pendingDropshipperApplications(): HasMany
     {
         return $this->dropshipperApplications()->where('status', 'pending');
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', Status::COMPLETED);
+    }
+
+    public function scopeInactive(Builder $query): Builder
+    {
+        return $query->where('status', Status::UNLISTED);
+    }
+
+    public function scopeExpired(Builder $query): Builder
+    {
+        return $query
+            ->where('subscription_status', '!=', Status::BASIC)
+            ->whereDate('exp_date', '<', now());
+    }
+
+    public function scopeNew(Builder $query): Builder
+    {
+        return $query
+            ->where('created_at', '>=', now()->subDays(7));
+    }
+
+    public function brandSetting()
+    {
+        return $this->hasOne(BrandSetting::class);
     }
 }

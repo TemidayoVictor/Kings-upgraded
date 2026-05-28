@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Status;
+use App\Models\Brand;
 use App\Models\Coupon;
 use App\Models\DropshipperStore;
 use App\Models\GeneralSetting;
@@ -170,13 +171,18 @@ if (! function_exists('validateDateRange')) {
     }
 
     if (! function_exists('resolvePricing')) {
-        function resolvePricing($currentPlan, $newPlan, $month = 0): ?int
+        function resolvePricing($currentPlan, $newPlan, $month = 0, $id = null): ?int
         {
             if ($currentPlan == $newPlan) {
                 return 0;
             }
 
-            $brand = auth()->user()->brand;
+            if (! $id) {
+                $brand = auth()->user()->brand;
+            } else {
+                $brand = Brand::findOrFail($id);
+            }
+
             $expDate = expiryDate($brand->exp_date);
             $daysRemaining = $expDate['daysRemaining'];
             $currentRemainingValue = 0;

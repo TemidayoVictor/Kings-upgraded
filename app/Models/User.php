@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserType;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -107,5 +108,21 @@ class User extends Authenticatable
     public function couponUsages(): HasMany
     {
         return $this->hasMany(CouponUsage::class);
+    }
+
+    public function verification(): HasOne
+    {
+        return $this->hasOne(VerificationCode::class);
+    }
+
+    public function dashboardRoute(): string
+    {
+        return match ($this->role) {
+            UserType::ADMIN => 'admin-manage-users',
+            UserType::BRAND => 'brand-dashboard',
+            UserType::DROPSHIPPER => 'dropshipper-partnered-brands',
+            UserType::CLIENT => 'client-dashboard',
+            default => 'home',
+        };
     }
 }
