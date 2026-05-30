@@ -4,7 +4,7 @@
         <div class="border-b border-neutral-200/60 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
                 <span class="text-[10px] font-bold uppercase tracking-[3px] text-neutral-400 block mb-1">
-                    @if($admin) Administrator @elseif($user) Your Account @else Brand Partner @endif
+                   Your Account
                 </span>
                 <h1 class="text-2xl sm:text-4xl font-light tracking-tight text-neutral-900 serif-display">All Orders</h1>
             </div>

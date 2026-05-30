@@ -75,7 +75,10 @@
             <nav class="hidden md:flex items-center gap-8 lg:gap-10 text-xs font-medium tracking-widest uppercase text-neutral-500 whitespace-nowrap">
                 <a href="{{ route('shop', $brand) }}" class="hover:text-[var(--primary)] transition-colors tracking-widest">Shop</a>
                 <a href="{{ route('shop.about', $brand) }}" class="hover:text-[var(--primary)] transition-colors tracking-widest">About Us</a>
-                <a href="{{ route('shop.orders', $brand) }}" class="hover:text-[var(--primary)] transition-colors tracking-widest">My Orders</a>
+                @auth
+                    <a href="{{ route('shop.orders', $brand) }}" class="hover:text-[var(--primary)] transition-colors tracking-widest">My Orders</a>
+                @endauth
+                <a href="{{ route('shop.ratings', $brand) }}" class="hover:text-[var(--primary)] transition-colors tracking-widest">Reviews</a>
             </nav>
 
             <div class="flex items-center justify-end gap-1.5 sm:gap-3 flex-shrink-0">
@@ -149,7 +152,10 @@
         <nav class="px-6 py-6 flex flex-col gap-4 text-xs font-semibold uppercase tracking-widest text-neutral-600">
             <a href="{{ route('shop', $brand) }}" class="py-2.5 border-b border-neutral-50 hover:text-[var(--primary)] transition-colors block" @click="mobileMenuOpen = false">Shop</a>
             <a href="{{ route('shop.about', $brand) }}" class="py-2.5 border-b border-neutral-50 hover:text-[var(--primary)] transition-colors block" @click="mobileMenuOpen = false">About Us</a>
-            <a href="{{ route('shop.orders', $brand) }}" class="py-2.5 hover:text-[var(--primary)] transition-colors block" @click="mobileMenuOpen = false">My Orders</a>
+            @auth
+                <a href="{{ route('shop.orders', $brand) }}" class="py-2.5 hover:text-[var(--primary)] transition-colors block" @click="mobileMenuOpen = false">My Orders</a>
+            @endauth
+            <a href="{{ route('shop.ratings', $brand) }}" class="py-2.5 hover:text-[var(--primary)] transition-colors block" @click="mobileMenuOpen = false">Reviews</a>
         </nav>
     </div>
 </header>

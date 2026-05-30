@@ -140,4 +140,9 @@ class Brand extends Model
     {
         return $this->hasOne(BrandSetting::class);
     }
+
+    public function ratings(): HasMany
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

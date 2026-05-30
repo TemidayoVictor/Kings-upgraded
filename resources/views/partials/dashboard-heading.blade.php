@@ -32,7 +32,7 @@
         </flux:heading>
 
         <flux:button size="sm" variant="primary" href="{{route('shop', auth()->user()->brand)}}">
-            View Store
+            Visit Store
         </flux:button>
     </div>
 

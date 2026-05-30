@@ -34,7 +34,7 @@
                         wire:model.defer="password"
                     />
 
-                    <flux:link class="absolute top-0 text-sm end-0" wire:navigate>
+                    <flux:link class="absolute top-0 text-sm end-0" href="{{route('password.request')}}" wire:navigate>
                         {{ __('Forgot your password?') }}
                     </flux:link>
 

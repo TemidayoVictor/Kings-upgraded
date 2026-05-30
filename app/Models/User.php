@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\UserType;
+use App\Notifications\CustomResetPassword;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -118,6 +119,12 @@ class User extends Authenticatable
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        // Send clean, custom email instead of the default one
+        $this->notify(new CustomResetPassword($token));
     }
 
     public function dashboardRoute(): string

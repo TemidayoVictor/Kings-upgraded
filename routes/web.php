@@ -11,7 +11,9 @@ use App\Livewire\Admin\PermissionManager;
 use App\Livewire\Admin\RevenueManager;
 use App\Livewire\Admin\RoleManager;
 use App\Livewire\Admin\UserManager;
+use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\Signup;
 use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Brand\AddBrand;
@@ -59,7 +61,7 @@ use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\About;
 use App\Livewire\Shop\Orders;
 use App\Livewire\Shop\Products;
-use App\Livewire\Shop\Rating;
+use App\Livewire\Shop\Ratings;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -69,7 +71,7 @@ Route::get('/', [NavigationController::class, 'home'])->name('home');
 Route::get('/brands/{brand:slug}', Products::class)->name('shop');
 Route::get('/brands/about/{brand:slug}', About::class)->name('shop.about');
 Route::get('/brands/orders/{brand:slug}', Orders::class)->name('shop.orders');
-Route::get('/brands/ratings/{brand:slug}', Rating::class)->name('shop.ratings');
+Route::get('/brands/ratings/{brand:slug}', Ratings::class)->name('shop.ratings');
 Route::get('/cart/{brand:slug}', CartIndex::class)->name('cart');
 Route::get('/checkout/{brand:slug}', CheckoutIndex::class)->name('checkout');
 
@@ -91,6 +93,8 @@ Route::get('/add-brand', AddBrand::class)->name('add-brand');
 Route::middleware(['guest'])->group(function () {
     Route::get('/signup', Signup::class)->name('signup');
     Route::get('/login', Login::class)->name('login');
+    Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
+    Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
 });
 
 // Protected Routes

@@ -17,25 +17,25 @@
             <!-- Left Text Content (order-2 on mobile pushes it under the image if you want the image on top, or remove order utilities to keep text on top) -->
             <div class="p-8 sm:p-12 lg:p-20 lg:col-span-7 relative z-10 space-y-6 order-2 lg:order-1">
                 <span class="text-xs font-bold tracking-[4px] uppercase text-neutral-500 block">
-                    {{ $brand->brandSetting->hero_tagline ?? 'curated lifestyle collections' }}
+                    {{ $brand->brandSetting->hero_tagline ?? 'Quality collections made for you' }}
                 </span>
 
-                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-light tracking-tight text-neutral-900 leading-[1.05] serif-display">
-                    {{ $brand->brandSetting->hero_title_line_1 ?? 'Elixirs for the' }}
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal tracking-tight text-neutral-900 leading-[1.05] serif-display">
+                    {{ $brand->brandSetting->hero_title_line_1 ?? 'Designed for your' }}
                     <br>
                     <span class="text-brand-primary font-normal italic">
-                        {{ $brand->brandSetting->hero_title_line_2_italic ?? 'modern identity.' }}
+                        {{ $brand->brandSetting->hero_title_line_2_italic ?? 'everyday life.' }}
                     </span>
                 </h1>
 
-                <p class="text-sm sm:text-base text-neutral-600 max-w-md font-light leading-relaxed">
-                    {{ $brand->brandSetting->hero_description ?? 'Radiant serums, cold‑pressed botanical extractions. Formulated seamlessly to anchor your everyday morning skin glow routine.' }}
+                <p class="text-sm sm:text-base text-neutral-600 max-w-md font-normal leading-relaxed">
+                    {{ $brand->brandSetting->hero_description ?? 'Discover our premium range of products and services. Crafted with care to give you the best experience possible.' }}
                 </p>
 
                 <div class="pt-4">
                     <button class="w-full sm:w-auto justify-center bg-neutral-950 text-white text-xs font-medium tracking-widest uppercase px-8 py-4.5 rounded-full hover:bg-brand-primary transition-all duration-300 shadow-lg hover:-translate-y-1 flex items-center gap-3 group cursor-pointer">
-                        {{ $brand->brandSetting->hero_button_text ?? 'Discover Bestsellers' }}
-                        <i class="fa-solid fa-arrow-right-long transition-transform group-hover:translate-x-1.5"></i>
+                        {{ $brand->brandSetting->hero_button_text ?? 'Explore More' }}
+                        <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1.5"></i>
                     </button>
                 </div>
             </div>
@@ -65,7 +65,7 @@
     <!-- Main Content Grid Component Frame -->
     <!-- Main Content Grid Component Frame -->
     <div class="max-w-4xl mx-auto px-4 py-10 sm:py-20">
-        <div class="w-full space-y-12 max-w-3xl mx-auto">
+        <div class="w-full space-y-2 max-w-3xl mx-auto">
 
             <!-- Brand Identity Title & Banner Frame -->
             <div class="space-y-4 text-center pb-8 border-b border-neutral-200/60 relative">
@@ -90,7 +90,7 @@
             @endif
 
             <!-- Highlighted Contact Box Element -->
-            <div class="bg-white rounded-[2rem] p-6 sm:p-10 border border-neutral-200/80 shadow-xs space-y-8 mt-12">
+            <div class="bg-white rounded-[1.5rem] p-6 sm:p-10 border border-neutral-200/80 shadow-xs space-y-8 mt-12">
                 <div class="space-y-1.5">
                     <h2 class="text-2xl sm:text-3xl font-light tracking-tight text-neutral-900 font-serif">
                         Get in Touch
