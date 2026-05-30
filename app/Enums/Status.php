@@ -49,6 +49,10 @@ class Status
 
     const RENEWAL = 'renewal';
 
+    const SERVICE = 'service';
+
+    const PRODUCT = 'product';
+
     // Optional: get all types
     public static function all(): array
     {
@@ -76,6 +80,8 @@ class Status
             self::UPGRADE,
             self::INCREMENT,
             self::RENEWAL,
+            self::SERVICE,
+            self::PRODUCT,
         ];
     }
 }

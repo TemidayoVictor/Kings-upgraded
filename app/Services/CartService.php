@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\Product;
+use App\Models\Wishlist;
 use Exception;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -320,5 +321,29 @@ class CartService
             'discount' => $discount,
             'coupon_data' => $couponData,
         ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addItemToWishlist(int $productId): void
+    {
+        $product = Product::findOrFail($productId);
+
+        if ($product->brand_id !== $this->brandId) {
+            throw new \Exception('Product does not belong to this brand');
+        }
+
+        $user = auth()->user();
+        $existingWish = Wishlist::where('product_id', $productId)->where('user_id', $user->id)->first();
+
+        if ($existingWish) {
+            throw new \Exception('You already have this item in your wishlist');
+        } else {
+            Wishlist::create([
+                'user_id' => $user->id,
+                'product_id' => $productId,
+            ]);
+        }
     }
 }

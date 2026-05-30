@@ -1,28 +1,24 @@
 <?php
 
-namespace App\Livewire\Brand\Orders;
+namespace App\Livewire\Shop;
 
 use App\Enums\Status;
+use App\Models\Brand;
 use App\Models\DropshipperStore;
 use App\Models\Order;
 use App\Models\OrderBatch;
 use App\Models\OrderStatusHistory;
 use App\Models\Sale;
-use App\Traits\Toastable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
 
-class Index extends Component
+class Orders extends Component
 {
-    use Toastable;
-
-    // Filters
-    use WithPagination;
-
     public ?OrderBatch $batch = null;
+
+    public Brand $brand;
 
     public ?Sale $sale = null;
 
@@ -65,22 +61,10 @@ class Index extends Component
 
     protected array $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
 
-    public function mount($batch = null, $sale = null, $status = null, $store = null, $admin = null, $user = null): void
+    public function mount(Brand $brand): void
     {
-        if ($batch) {
-            $this->batch = $batch;
-        } elseif ($sale) {
-            $this->sale = $sale;
-        } elseif ($status) {
-            $this->status = $status;
-        } elseif ($store) {
-            $this->store = $store;
-        } elseif ($admin) {
-            $this->admin = true;
-        } elseif ($user) {
-            $this->user = true;
-        }
         $this->calculateStats();
+        $this->brand = $brand;
     }
 
     public function updatedStatusFilter(): void
@@ -88,24 +72,6 @@ class Index extends Component
         $this->resetPage();
         $this->calculateStats();
     }
-
-    public function updatedPaymentFilter(): void
-    {
-        $this->resetPage();
-        $this->calculateStats();
-    }
-
-    public function updatedDateRange(): void
-    {
-        $this->resetPage();
-        $this->calculateStats();
-    }
-
-    public function updatedSearch(): void
-    {
-        $this->resetPage();
-    }
-
     public function getOrdersProperty(): LengthAwarePaginator
     {
         $query = $this->getBaseQuery();
@@ -143,27 +109,7 @@ class Index extends Component
     private function getBaseQuery(): Builder
     {
         $user = auth()->user();
-        if ($this->batch != null) {
-            return Order::where('brand_id', $user->brand->id)
-                ->where('order_batch_id', $this->batch->id);
-        } elseif ($this->sale != null) {
-            return Order::where('brand_id', $user->brand->id)
-                ->whereHas('items', function ($query) {
-                    $query->where('sale_id', $this->sale->id);
-                });
-        } elseif ($this->status != null) {
-            return Order::where('brand_id', $user->brand->id)
-                ->where('status', $this->status);
-        } elseif ($this->store != null) {
-            return Order::where('brand_id', $user->brand->id)
-                ->where('dropshipper_store_id', $this->store->id);
-        } elseif ($this->admin) {
-            return Order::query();
-        } elseif ($this->user) {
-            return Order::where('user_id', $user->id);
-        } else {
-            return Order::where('brand_id', $user->brand->id);
-        }
+        return Order::where('user_id', $user->id)->where('brand_id', $this->brand->id);
     }
 
     private function calculateStats(): void
@@ -184,11 +130,9 @@ class Index extends Component
             $currentQuery->where('created_at', '>=', now()->subDays((int) $this->dateRange));
         }
 
-        $this->totalOrders = $this->applyValidOrders(clone $currentQuery)->count();
-        $this->totalRevenue = $this->getRevenue($this->applyValidOrders($currentQuery));
-        $this->pendingOrders = $this->applyValidOrders(clone $currentQuery)
-            ->where('status', 'pending')
-            ->count();
+        $this->totalOrders = $currentQuery->count();
+        $this->totalRevenue = $this->getRevenue($currentQuery);
+        $this->pendingOrders = $currentQuery->where('status', 'pending')->count();
 
         $this->avgOrderValue = $this->totalOrders > 0 ? $this->totalRevenue / $this->totalOrders : 0;
 
@@ -218,17 +162,6 @@ class Index extends Component
                 ? round((($this->totalRevenue - $previousRevenue) / $previousRevenue) * 100, 1)
                 : ($this->totalRevenue > 0 ? 100 : 0);
         }
-    }
-
-    private function applyValidOrders($query)
-    {
-        return $query->where(function ($q) {
-            $q->whereNull('dropshipper_store_id')
-                ->orWhere(function ($q2) {
-                    $q2->whereNotNull('dropshipper_store_id')
-                        ->where('dropshipper_status', 'approved');
-                });
-        });
     }
 
     private function getRevenue($query): float
@@ -333,9 +266,10 @@ class Index extends Component
 
     public function render(): View
     {
-        return view('livewire.brand.orders.index', [
+        return view('livewire.shop.orders', [
             'orders' => $this->orders,
-        ])->layout('layouts.auth')
-            ->title('Orders');
+        ])->layout('layouts.shop', [
+            'brand' => $this->brand,
+        ])->title('Orders');
     }
 }

@@ -30,6 +30,10 @@
         <flux:heading size="xl" level="1">
             {{ $greeting }}, {{ Str::before(auth()->user()->name, ' ') }}
         </flux:heading>
+
+        <flux:button size="sm" variant="primary" href="{{route('shop', auth()->user()->brand)}}">
+            View Store
+        </flux:button>
     </div>
 
     <flux:subheading size="lg" class="mb-6 text-gray-400">

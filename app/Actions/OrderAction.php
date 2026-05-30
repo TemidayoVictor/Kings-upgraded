@@ -11,6 +11,7 @@ use App\Models\CouponUsage;
 use App\Models\DropshipperEarning;
 use App\Models\Order;
 use App\Models\OrderBatch;
+use App\Models\Wishlist;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -233,6 +234,30 @@ class OrderAction
         } catch (\Exception $e) {
             DB::rollBack();
             throw new Exception('Orders batching failed: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public static function removeWish(int $id): void
+    {
+        $user = auth()->user();
+        if (! $user) {
+            throw new Exception('User not found.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $wishList = Wishlist::findOrFail($id);
+            $wishList->delete();
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new Exception('Error: '.$e->getMessage());
         }
     }
 }

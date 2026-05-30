@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\DTOs\CartDTO;
+use App\DTOs\GeneralDTO;
 use App\Enums\UserType;
 use App\Models\DropshipperProduct;
 use App\Models\Product;
@@ -121,6 +122,19 @@ class CartAction
             $cartService->removeCoupon();
         } catch (\Exception $e) {
             throw new Exception('Failed to remove coupon: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function addToWishlist(GeneralDTO $dto): void
+    {
+        try {
+            $cartService = new CartService($dto->value['brandId'], $dto->value['stockAlert']);
+            $cartService->addItemToWishlist($dto->value['productId']);
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage());
         }
     }
 }

@@ -115,6 +115,11 @@ class User extends Authenticatable
         return $this->hasOne(VerificationCode::class);
     }
 
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     public function dashboardRoute(): string
     {
         return match ($this->role) {

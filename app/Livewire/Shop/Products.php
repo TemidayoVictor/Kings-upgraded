@@ -4,6 +4,7 @@ namespace App\Livewire\Shop;
 
 use App\Actions\CartAction;
 use App\DTOs\CartDTO;
+use App\DTOs\GeneralDTO;
 use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\Product;
@@ -42,7 +43,7 @@ class Products extends Component
 
     public $addedToCart = false;
 
-    public $perPage = 12;
+    public $perPage = 2;
 
     protected $queryString = [
         'selectedSection' => ['except' => 'all'],
@@ -102,6 +103,7 @@ class Products extends Component
             $this->addedToCart = $productId;
             // Get updated cart count
             $cart = $cartBag['cartBag']->getCart();
+            $this->showQuickView = false;
             $this->toast('success', $cartBag['productName'].' added to cart!');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
@@ -189,6 +191,27 @@ class Products extends Component
             ->where('is_featured', true)
             ->limit(4)
             ->get();
+    }
+
+    public function addToWishlist($productId): void
+    {
+        $buildDto = [
+            'id' => 1,
+            'value' => [
+                'productId' => $productId,
+                'brandId' => $this->brand->id,
+                'stockAlert' => $this->brand->stock_alert,
+            ],
+        ];
+
+        $dto = GeneralDTO::fromArray($buildDto);
+
+        try {
+            CartAction::addToWishlist($dto);
+            $this->toast('success', 'Item added to wishlist!');
+        } catch (\Exception $e) {
+            $this->toast('error', $e->getMessage());
+        }
     }
 
     public function render(): View

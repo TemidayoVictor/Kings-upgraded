@@ -5,13 +5,16 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImpersonateController;
 use App\Http\Controllers\NavigationController;
 use App\Livewire\Admin\AdminDashboard;
+use App\Livewire\Admin\BrandManager;
 use App\Livewire\Admin\GeneralSettings;
 use App\Livewire\Admin\PermissionManager;
+use App\Livewire\Admin\RevenueManager;
 use App\Livewire\Admin\RoleManager;
 use App\Livewire\Admin\UserManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Signup;
 use App\Livewire\Auth\VerifyEmail;
+use App\Livewire\Brand\AddBrand;
 use App\Livewire\Brand\ApprovedDropshippers;
 use App\Livewire\Brand\BrandDashboard;
 use App\Livewire\Brand\ManageSales;
@@ -28,6 +31,9 @@ use App\Livewire\Brand\RevenueDashboard;
 use App\Livewire\Brand\RunSales;
 use App\Livewire\Brand\Settings\AdditionalDetails;
 use App\Livewire\Brand\Settings\BrandSettings;
+use App\Livewire\Brand\Settings\StoreSettings;
+use App\Livewire\Brand\SubscriptionStatus;
+use App\Livewire\Brand\SwitchAccounts;
 use App\Livewire\Cart\DropshipperCart;
 use App\Livewire\Cart\Index as CartIndex;
 use App\Livewire\Checkout\DropshipperCheckout;
@@ -46,17 +52,14 @@ use App\Livewire\Dropshipper\PartneredBrands;
 use App\Livewire\Dropshipper\RevenueGenerated;
 use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 use App\Livewire\Dropshipper\Store;
+use App\Livewire\Dropshipper\TotalRevenueGenerated;
+use App\Livewire\ManageWishlist;
 use App\Livewire\SelectRole;
 use App\Livewire\Settings\ProfileSettings;
-use App\Livewire\Shop\Products;
-use App\Livewire\Brand\AddBrand;
-use App\Livewire\Brand\SwitchAccounts;
-use App\Livewire\Brand\SubscriptionStatus;
-use App\Livewire\Admin\RevenueManager;
-use App\Livewire\Admin\BrandManager;
 use App\Livewire\Shop\About;
-use App\Livewire\Brand\Settings\StoreSettings;
-use App\Livewire\Dropshipper\TotalRevenueGenerated;
+use App\Livewire\Shop\Orders;
+use App\Livewire\Shop\Products;
+use App\Livewire\Shop\Rating;
 use Illuminate\Support\Facades\Route;
 
 // General Routes
@@ -65,6 +68,8 @@ Route::get('/', [NavigationController::class, 'home'])->name('home');
 // Brand Shops
 Route::get('/brands/{brand:slug}', Products::class)->name('shop');
 Route::get('/brands/about/{brand:slug}', About::class)->name('shop.about');
+Route::get('/brands/orders/{brand:slug}', Orders::class)->name('shop.orders');
+Route::get('/brands/ratings/{brand:slug}', Rating::class)->name('shop.ratings');
 Route::get('/cart/{brand:slug}', CartIndex::class)->name('cart');
 Route::get('/checkout/{brand:slug}', CheckoutIndex::class)->name('checkout');
 
@@ -94,6 +99,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/verify-email', VerifyEmail::class)->name('verify-email');
         Route::get('/select-role', SelectRole::class)->name('select-role');
+
+        Route::get('/wishlist', ManageWishlist::class)->name('wishlist');
+        Route::get('/user-orders/{user}', BrandOrdersList::class)->name('user-orders');
     }
     );
     Route::get('/settings/profile', ProfileSettings::class)->name('settings.profile');
