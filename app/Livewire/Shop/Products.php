@@ -43,7 +43,7 @@ class Products extends Component
 
     public $addedToCart = false;
 
-    public $perPage = 2;
+    public $perPage = 12;
 
     protected $queryString = [
         'selectedSection' => ['except' => 'all'],

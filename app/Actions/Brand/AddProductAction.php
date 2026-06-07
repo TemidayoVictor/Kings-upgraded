@@ -6,9 +6,11 @@ use App\DTOs\Brand\ProductDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Revenue;
+use App\Models\Subcategory;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -86,6 +88,23 @@ class AddProductAction
                     'image_path' => $path,
                 ]);
             }
+
+            //            // Update category and subcategory counts
+            //            $category = Category::where()->first('category', $user->brand->category)->first();
+            //            if ($category) {
+            //                $currentProducts = $category->products;
+            //                $category->update([
+            //                    'products' => $currentProducts + 1,
+            //                ]);
+            //            }
+            //
+            //            $subcategory = Subcategory::where()->first('subcategory', $user->brand->sub_category)->first();
+            //            if ($subcategory) {
+            //                $currentProducts = $subcategory->products;
+            //                $subcategory->update([
+            //                    'products' => $currentProducts + 1,
+            //                ]);
+            //            }
 
             DB::commit();
 

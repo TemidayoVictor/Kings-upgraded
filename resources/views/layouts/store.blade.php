@@ -8,135 +8,136 @@
 
     <title>{{ $store->store_name }} | {{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @fluxAppearance
     @stack('styles')
+
+    <style>
+        :root {
+            --store-primary: #b55a3b;        /* Brand accents & CTA elements */
+            --store-primary-hover: #96462b;  /* Button interactive states */
+            --store-bg: #f8f6f4;             /* Universal page canvas tint */
+            --store-surface: #eae1d7;        /* Footer backgrounds and structured strips */
+        }
+    </style>
 </head>
-<body class="font-sans antialiased bg-[#f7f5f2]">
-<!-- Store Header -->
-<header class="bg-white border-b border-[#e5dbd2] sticky top-0 z-40">
+<body class="font-sans antialiased bg-[var(--store-bg)] text-stone-900 selection:bg-amber-100">
+
+<header class="bg-white border-b border-stone-200 sticky top-0 z-40 shadow-sm/5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-            <!-- Logo & Store Name -->
-            <div class="flex items-center gap-4">
-                <a href="{{ route('dropshipper-store', $store) }}" class="flex items-center gap-3">
+        <div class="flex items-center justify-between h-20 gap-4">
+
+            <div class="flex items-center shrink-0">
+                <a href="{{ route('dropshipper-store', $store) }}" class="flex items-center gap-2.5 sm:gap-3">
                     @if($store->image)
-                        <img src="{{ Storage::url($store->image) }}" alt="{{ $store->store_name }}" class="h-12 w-12 rounded-full object-cover border-2 border-[#b55a3b]">
+                        <img src="{{ Storage::url($store->image) }}" alt="{{ $store->store_name }}" class="h-10 w-10 sm:h-11 sm:w-11 rounded-xl object-cover ring-2 ring-[var(--store-primary)] ring-offset-2">
                     @else
-                        <div class="h-12 w-12 bg-[#b55a3b] rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        <div class="h-10 w-10 sm:h-11 sm:w-11 bg-[var(--store-primary)] rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-sm">
                             {{ substr($store->store_name, 0, 1) }}
                         </div>
                     @endif
-                    <div>
-                        <h1 class="text-xl font-semibold text-[#1e1b1b]">{{ $store->store_name }}</h1>
-                        <p class="text-xs text-[#94897f]">by {{ $store->dropshipper->user->name }}</p>
+                    <div class="max-w-[140px] sm:max-w-xs truncate">
+                        <h1 class="text-base sm:text-lg font-semibold text-stone-950 tracking-tight leading-tight truncate">{{ $store->store_name }}</h1>
+                        <p class="text-[10px] sm:text-xs text-stone-500 hidden sm:block truncate">by {{ $store->dropshipper->user->name }}</p>
                     </div>
                 </a>
             </div>
 
-            <!-- Navigation -->
-            <nav class="hidden md:flex items-center gap-8">
-                <a href="" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors font-medium">Home</a>
-                <a href="" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors font-medium">Shop</a>
-                <a href="" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors font-medium">About</a>
-                <a href="" class="text-[#2c2420] hover:text-[#b55a3b] transition-colors font-medium">Contact</a>
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-stone-600">
+                <a href="#" class="hover:text-[var(--store-primary)] transition-colors">Home</a>
+                <a href="#" class="hover:text-[var(--store-primary)] transition-colors text-[var(--store-primary)]">Shop</a>
+                <a href="#" class="hover:text-[var(--store-primary)] transition-colors">About</a>
+                <a href="#" class="hover:text-[var(--store-primary)] transition-colors">Contact</a>
             </nav>
 
-            <!-- Cart & Account -->
-            <div class="flex items-center gap-4">
-                <button class="relative p-2 text-[#2c2420] hover:text-[#b55a3b] transition-colors">
-                    <i class="fa-regular fa-magnifying-glass text-xl"></i>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button class="p-2 text-stone-700 hover:text-[var(--store-primary)] transition-colors text-center w-9 h-9 flex items-center justify-center">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
 
-                <a href="" class="relative p-2 text-[#2c2420] hover:text-[#b55a3b] transition-colors">
-                    <i class="fa-regular fa-bag-shopping text-xl"></i>
-                    @if(session('cart_'.$store->id))
-                        <span class="absolute -top-1 -right-1 bg-[#b55a3b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                                {{ session('cart_'.$store->id)->item_count ?? 0 }}
-                            </span>
-                    @endif
-                </a>
+                <a href="{{ route('dropshipper-cart', ['store' => $store]) }}" class="relative p-2 text-stone-700 hover:text-[var(--store-primary)] transition-colors w-10 h-10 flex items-center justify-center">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
 
-                <a href="{{ route('dropshipper-cart', ['store' => $store]) }}" class="relative">
-                    <i class="fa-regular fa-bag-shopping text-2xl text-[#2c2420] hover:text-[#b55a3b] transition-colors"></i>
+                    @if(session('cart_'.$store->id))
+                        <span class="absolute top-1 right-1 bg-[var(--store-primary)] text-white text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm">
+                            {{ session('cart_'.$store->id)->item_count ?? 0 }}
+                        </span>
+                    @endif
+
                     <span
                         x-data="{ count: 0 }"
                         x-on:cart-updated.window="count = $event.detail.count"
                         x-show="count > 0"
                         x-transition
-                        class="absolute -top-2 -right-2 bg-[#b55a3b] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                        class="absolute top-1 right-1 bg-[var(--store-primary)] text-white text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-sm"
+                        style="display: none;"
                     >
-                            <span x-text="count"></span>
-                        </span>
+                        <span x-text="count"></span>
+                    </span>
                 </a>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
 <main>
     <x-toast position="top-right" duration="5000" />
     {{ $slot }}
 </main>
 
-<!-- Store Footer -->
-<footer class="bg-[#eae1d7] border-t border-[#dfcfc0] mt-16">
+<footer class="bg-[var(--store-surface)] border-t border-stone-300/60 mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-                <h3 class="font-semibold text-[#1e1b1b] mb-4">{{ $store->store_name }}</h3>
-                <p class="text-sm text-[#4c3f37] leading-relaxed">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="sm:col-span-2 md:col-span-1">
+                <h3 class="font-semibold text-stone-950 mb-3 text-base">{{ $store->store_name }}</h3>
+                <p class="text-xs sm:text-sm text-stone-700 leading-relaxed max-w-xs">
                     A curated selection of quality products, brought to you by {{ $store->dropshipper->user->name }}.
                 </p>
             </div>
 
             <div>
-                <h4 class="font-medium text-[#1e1b1b] mb-4">Quick Links</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="text-[#4c3f37] hover:text-[#b55a3b] transition-colors">About Us</a></li>
-                    <li><a href="#" class="text-[#4c3f37] hover:text-[#b55a3b] transition-colors">Contact</a></li>
-                    <li><a href="#" class="text-[#4c3f37] hover:text-[#b55a3b] transition-colors">Shipping Info</a></li>
-                    <li><a href="#" class="text-[#4c3f37] hover:text-[#b55a3b] transition-colors">Returns</a></li>
+                <h4 class="font-medium text-stone-900 mb-3 text-sm tracking-wide uppercase">Quick Links</h4>
+                <ul class="space-y-2 text-xs sm:text-sm">
+                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">About Us</a></li>
+                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">Contact Information</a></li>
+                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">Shipping Framework</a></li>
+                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">Returns & Exchanges</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="font-medium text-[#1e1b1b] mb-4">Categories</h4>
-                <ul class="space-y-2 text-sm">
+                <h4 class="font-medium text-stone-900 mb-3 text-sm tracking-wide uppercase">Categories</h4>
+                <ul class="space-y-2 text-xs sm:text-sm">
                     @foreach($sections ?? [] as $section)
-                        <li><a href="#" class="text-[#4c3f37] hover:text-[#b55a3b] transition-colors">{{ $section->name }}</a></li>
+                        <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">{{ $section->name }}</a></li>
                     @endforeach
                 </ul>
             </div>
 
             <div>
-                <h4 class="font-medium text-[#1e1b1b] mb-4">Connect</h4>
-                <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#2c2420] hover:text-[#b55a3b] hover:shadow-md transition-all">
-                        <i class="fa-brands fa-instagram"></i>
+                <h4 class="font-medium text-stone-900 mb-3 text-sm tracking-wide uppercase">Connect</h4>
+                <div class="flex gap-2.5">
+                    <a href="#" class="w-9 h-9 bg-white rounded-xl flex items-center justify-center text-stone-800 hover:text-[var(--store-primary)] hover:shadow-sm transition-all border border-stone-200">
+                        <i class="fa-brands fa-instagram text-sm"></i>
                     </a>
-                    <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#2c2420] hover:text-[#b55a3b] hover:shadow-md transition-all">
-                        <i class="fa-brands fa-facebook-f"></i>
+                    <a href="#" class="w-9 h-9 bg-white rounded-xl flex items-center justify-center text-stone-800 hover:text-[var(--store-primary)] hover:shadow-sm transition-all border border-stone-200">
+                        <i class="fa-brands fa-facebook-f text-sm"></i>
                     </a>
-                    <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#2c2420] hover:text-[#b55a3b] hover:shadow-md transition-all">
-                        <i class="fa-brands fa-x-twitter"></i>
+                    <a href="#" class="w-9 h-9 bg-white rounded-xl flex items-center justify-center text-stone-800 hover:text-[var(--store-primary)] hover:shadow-sm transition-all border border-stone-200">
+                        <i class="fa-brands fa-x-twitter text-sm"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="border-t border-[#dfcfc0] mt-8 pt-8 text-center text-sm text-[#4c3f37]">
+        <div class="border-t border-stone-300/50 mt-8 pt-6 text-center text-xs text-stone-600">
             <p>&copy; {{ date('Y') }} {{ $store->store_name }}. All rights reserved. Powered by KING'S.</p>
         </div>
     </div>

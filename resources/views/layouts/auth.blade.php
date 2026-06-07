@@ -24,7 +24,7 @@
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="sparkles" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
+                <flux:sidebar.item icon="sparkles" href="{{route('home')}}">
                     {{ __('Explore') }}
                 </flux:sidebar.item>
             </flux:sidebar.nav>

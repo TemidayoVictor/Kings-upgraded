@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->id();
-            $table->string('category');
-            $table->integer('brands')->nullable();
-            $table->integer('contracts')->nullable();
-            $table->integer('products')->nullable();
-            $table->timestamps();
+        Schema::table('category', function (Blueprint $table) {
+            $table->string('icon', 50)->after('category')->nullable();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::table('category', function (Blueprint $table) {
+            $table->dropColumn('icon');
+        });
     }
 };

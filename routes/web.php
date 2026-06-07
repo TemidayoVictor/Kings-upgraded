@@ -66,6 +66,9 @@ use Illuminate\Support\Facades\Route;
 
 // General Routes
 Route::get('/', [NavigationController::class, 'home'])->name('home');
+Route::get('/brands', [NavigationController::class, 'brands'])->name('brands');
+Route::get('/sales', [NavigationController::class, 'sales'])->name('sales');
+Route::get('/features', [NavigationController::class, 'features'])->name('features');
 
 // Brand Shops
 Route::get('/brands/{brand:slug}', Products::class)->name('shop');

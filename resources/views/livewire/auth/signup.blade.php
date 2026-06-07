@@ -1,5 +1,5 @@
 
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen bg-[radial-gradient(133.44%_100%_at_50%_0%,_#2D251E_0%,_#1A1612_100%)]">
         <x-toast position="top-right" duration="5000" />
         <div class="flex-1 flex justify-center items-center">
             <div class="space-y-6 mx-auto max-w-[80%] md:min-w-[25%] md:max-w-[25%]">

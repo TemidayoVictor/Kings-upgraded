@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('subcategory');
             $table->integer('brands')->nullable();
             $table->integer('contracts')->nullable();
-            $table->integer('adverts')->nullable();
+            $table->integer('products')->nullable();
             $table->timestamps();
         });
     }
