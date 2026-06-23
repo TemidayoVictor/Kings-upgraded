@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Subcategory extends Model
 {
-    protected $table = 'subcategory';
-
     protected $fillable = [
-        'category',
-        'subcategory',
-        'brands',
-        'contracts',
-        'products',
+        'category_id',
+        'name',
+        'id',
     ];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
