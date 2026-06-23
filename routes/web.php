@@ -6,6 +6,7 @@ use App\Http\Controllers\ImpersonateController;
 use App\Http\Controllers\NavigationController;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\BrandManager;
+use App\Livewire\Admin\CategorySettings;
 use App\Livewire\Admin\GeneralSettings;
 use App\Livewire\Admin\PermissionManager;
 use App\Livewire\Admin\RevenueManager;
@@ -136,6 +137,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
         Route::get('/start-impersonator/{user}', [ImpersonateController::class, 'startImpersonate'])->middleware('permission:users.impersonate')->name('start-impersonator');
 
         Route::get('/revenue-report', RevenueManager::class)->middleware('permission:reports.view')->name('revenue-report');
+
+        Route::get('/category-settings', CategorySettings::class)->middleware('permission:users.view')->name('category-settings');
     }
     );
 
@@ -205,5 +208,11 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
         Route::get('/total-revenue', TotalRevenueGenerated::class)->name('total-revenue');
 
         Route::get('/batched-orders/{store}', BatchedOrder::class)->name('batched-orders');
-    }
-    );
+    });
+
+Route::get('/preview-email', function () {
+    return view('emails.password-reset', [
+        'name' => 'John Doe',
+        'url' => '#',
+    ]);
+});

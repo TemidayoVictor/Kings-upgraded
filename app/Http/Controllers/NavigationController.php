@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Status;
 use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\View\View;
 
 class NavigationController extends Controller
@@ -16,8 +17,11 @@ class NavigationController extends Controller
             ->with('products', 'ratings')
             ->get();
 
+        $categories = Category::inRandomOrder()->limit(7)->get();
+
         return view('home', [
             'brands' => $brands,
+            'categories' => $categories,
         ]);
     }
 

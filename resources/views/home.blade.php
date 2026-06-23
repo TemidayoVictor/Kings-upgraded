@@ -35,7 +35,7 @@ Home
                 <!-- Right Content Block: Ecosystem Grid Illustration -->
                 <div class="lg:col-span-6">
                     <div class="p-6 md:p-8 bg-white/5 rounded-3xl border border-white/5 relative shadow-2xl">
-                        <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none hidden sm:flex">
+                        <div class="absolute inset-0 items-center justify-center opacity-10 pointer-events-none hidden sm:flex">
                             <i class="fas fa-circle-nodes text-white text-[200px]"></i>
                         </div>
 
@@ -163,30 +163,48 @@ Home
             @if($brands->count() > 0)
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($brands as $brand)
-                        <div class="card-interactive flex flex-col justify-between overflow-hidden">
+                        <div class="group relative flex flex-col justify-between bg-white border border-stone-200/60 rounded-2xl overflow-hidden hover:shadow-xl hover:border-amber-200/50 transition-all duration-300">
+
+                            <!-- OPTIONAL: Top accent bar/gradient for visual weight -->
+                            <div class="h-2"></div>
+
                             <div class="p-6">
-                                <div class="flex items-center gap-3 mb-4">
-                                    <div class="flex items-center gap-2.5 sm:gap-3">
-                                        @if($brand->image)
-                                            <img src="{{ Storage::url($brand->image) }}" alt="{{ $brand->brand_name }}" class="h-12 w-12 rounded-xl object-cover">
-                                        @else
-                                            <div class="h-12 w-12 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-sm">
-                                                {{ substr($brand->brand_name, 0, 1) }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <h3 class="font-bold text-stone-800 text-base leading-tight">{{$brand->brand_name}}</h3>
-                                        <span class="text-xs text-brand-muted">{{$brand->description}}</span>
+                                <!-- Category Tag (If applicable) -->
+                                <div class="mb-4">
+                                     <span class="px-2.5 py-0.5 rounded-full bg-stone-100 text-[10px] font-bold uppercase tracking-wider text-stone-500">
+                                        {{ $brand->category ?? 'General' }}
+                                     </span>
+                                </div>
+
+                                <div class="flex items-center gap-4 mb-5">
+                                    @if($brand->image)
+                                        <img src="{{ Storage::url($brand->image) }}" alt="{{ $brand->brand_name }}" class="h-14 w-14 rounded-xl object-cover shadow-sm">
+                                    @else
+                                        <div class="h-14 w-14 rounded-xl flex items-center justify-center bg-stone-100 text-stone-500 text-xl font-bold">
+                                            {{ substr($brand->brand_name, 0, 1) }}
+                                        </div>
+                                    @endif
+
+                                    <div class="min-w-0">
+                                        <h3 class="font-bold text-stone-900 text-base leading-tight truncate">{{$brand->brand_name}}</h3>
+                                        <p class="text-[11px] text-stone-400 mt-0.5 uppercase tracking-wide font-medium">Verified Brand</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-4 text-xs text-stone-500 py-2 border-y border-stone-100 mb-4">
-                                    <div><i class="fas fa-star text-brand-primary mr-1"></i>{{$brand->ratings()->avg('rating') > 0 ? number_format($brand->ratings()->avg('rating'), 1) : 'N/A'}}</div>
-                                    <div><strong class="text-stone-800">{{$brand->products->count()}}</strong> Products Listed</div>
+
+                                <div class="flex items-center gap-4 text-xs font-medium text-stone-500 py-3 border-y border-stone-100">
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fas fa-star text-amber-400"></i>
+                                        <span class="text-stone-800">{{$brand->ratings()->avg('rating') > 0 ? number_format($brand->ratings()->avg('rating'), 1) : '0.0'}}</span>
+                                    </div>
+                                    <div class="w-px h-3 bg-stone-200"></div>
+                                    <div><span class="text-stone-800">{{$brand->products->count()}}</span> Product{{$brand->products->count() == 1 ? '' : 's'}} </div>
                                 </div>
                             </div>
+
                             <div class="p-6 pt-0">
-                                <a href="{{route('shop', $brand)}}" class="block w-full text-center bg-stone-50 text-stone-700 font-bold text-xs py-3 rounded-xl border border-stone-200/60 hover:bg-amber-50 hover:text-brand-accent hover:border-amber-200 transition-all">Visit Store</a>
+                                <a href="{{route('shop', $brand)}}" class="block w-full text-center bg-stone-900 text-white font-semibold text-xs py-3 rounded-xl hover:bg-amber-600 transition-colors">
+                                    Visit Store
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -241,65 +259,53 @@ Home
                 </p>
             </div>
 
+            @if($categories->count() > 0)
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
-
-                <!-- Fashion -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-brand-primary flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-shirt text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Fashion</span>
-                </div>
-
-                <!-- Beauty -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-gem text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Beauty</span>
-                </div>
-
-                <!-- Electronics -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-microchip text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Electronics</span>
-                </div>
-
-                <!-- Food -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-bowl-food text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Food</span>
-                </div>
-
-                <!-- Home & Living -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-house text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Home & Living</span>
-                </div>
-
-                <!-- Health -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-heart-circle-plus text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Health</span>
-                </div>
-
-                <!-- Services -->
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
-                    <div class="w-12 h-12 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center transition duration-300 group-hover:scale-110">
-                        <i class="fas fa-briefcase text-lg"></i>
-                    </div>
-                    <span class="text-xs font-bold text-stone-800">Services</span>
-                </div>
-
+                @foreach($categories as $category)
+                    <a href="{{route('home')}}" class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-brand-primary flex items-center justify-center transition duration-300 group-hover:scale-110">
+                            <i class="{{$category->icon}} text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-stone-800">{{$category->name}}</span>
+                    </a>
+                @endforeach
             </div>
+            @else
+                <div class="max-w-md mx-auto text-center py-16 px-4 space-y-6">
+
+                    <!-- Subtle Icon Stack -->
+                    <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                        <!-- Light Decorative Background Glow Layer -->
+                        <div class="absolute inset-0 bg-amber-500/5 rounded-full blur-xl"></div>
+
+                        <!-- Central Icon Design -->
+                        <div class="relative w-16 h-16 bg-white border border-stone-200/80 rounded-2xl flex items-center justify-center text-stone-400 shadow-sm">
+                            <i class="fas fa-store-slash text-xl text-stone-300"></i>
+                            <!-- Tiny Accent Dot -->
+                            <span class="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
+                        </div>
+                    </div>
+
+                    <!-- Descriptive Text Elements -->
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-black text-stone-900 tracking-tight">
+                            No Categories Found.
+                        </h3>
+                        <p class="text-xs text-brand-muted leading-relaxed max-w-xs mx-auto">
+                            Please check back later.
+                        </p>
+                    </div>
+
+                    <!-- Clean Action Buttons -->
+                    <div class="pt-2 flex flex-row items-center justify-center gap-3">
+                        <a href="{{route('brands')}}" class="w-full sm:w-auto bg-brand-dark hover:bg-stone-800 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-sm">
+                            View Brands
+                        </a>
+                    </div>
+
+                </div>
+            @endif
+
         </div>
     </section>
 
@@ -307,53 +313,59 @@ Home
     <section class="py-16 md:py-24 bg-brand-canvas border-y border-stone-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-xl mx-auto mb-14">
-                <span class="text-brand-secondary font-bold text-xs uppercase tracking-widest block mb-2">Unfair Advantages</span>
-                <h2 class="text-2xl md:text-3xl font-black text-stone-900 tracking-tight">The Core Optimization Platform</h2>
+                <span class="text-brand-secondary font-bold text-xs uppercase tracking-widest block mb-2">Why Choose Us</span>
+                <h2 class="text-2xl md:text-3xl font-black text-stone-900 tracking-tight">Everything You Need in One Platform</h2>
             </div>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-amber-50 text-brand-primary rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-window-restore text-brand-dark"></i></div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 mb-1">Online Store</h4>
-                        <p class="text-xs text-stone-500 leading-relaxed">Instantly spawn fast-loading storefront designs optimized for search indexes natively.</p>
+                <!-- Repeating Item Structure -->
+                @php
+                    $features = [
+                        [
+                            'icon' => 'shopping-bag',
+                            'title' => 'Online Store',
+                            'desc' => 'Create a beautiful online store and start selling in minutes.'
+                        ],
+                        [
+                            'icon' => 'share',
+                            'title' => 'Dropshipping',
+                            'desc' => 'Add products from trusted suppliers and fulfill orders automatically.'
+                        ],
+                        [
+                            'icon' => 'inbox',
+                            'title' => 'Customer Reviews',
+                            'desc' => 'Collect and display reviews to build trust with new customers.'
+                        ],
+                        [
+                            'icon' => 'tag',
+                            'title' => 'Promotions',
+                            'desc' => 'Run discounts, coupons, and special offers to increase sales.'
+                        ],
+                        [
+                            'icon' => 'chart-pie',
+                            'title' => 'Analytics',
+                            'desc' => 'Track sales, orders, and customer activity from one dashboard.'
+                        ],
+                        [
+                            'icon' => 'users',
+                            'title' => 'Customer Management',
+                            'desc' => 'Manage customers, orders, and communication with ease.'
+                        ],
+                    ];
+                @endphp
+
+                @foreach($features as $feature)
+                    <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
+                        <!-- Uniform Icon Container -->
+                        <div class="w-10 h-10 bg-amber-50 text-brand-primary rounded-xl flex items-center justify-center shrink-0">
+                            <flux:icon name="{{ $feature['icon'] }}" class="w-5 h-5" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-stone-900 mb-1">{{ $feature['title'] }}</h4>
+                            <p class="text-xs text-stone-500 leading-relaxed">{{ $feature['desc'] }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-stone-100 text-brand-secondary rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-hubspot"></i></div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 mb-1">Dropshipping Network</h4>
-                        <p class="text-xs text-stone-500 leading-relaxed">Let thousands of hyper-focused digital marketers scale transaction volumes for your lines.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-amber-50 text-brand-accent rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-comment-nodes"></i></div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 mb-1">Reviews & Trust</h4>
-                        <p class="text-xs text-stone-500 leading-relaxed">Aggregate customer ratings automatically to boost social proof across distributed pages.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-stone-900 text-brand-primary rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-tags"></i></div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 mb-1">Sales Campaigns</h4>
-                        <p class="text-xs text-stone-500 leading-relaxed">Deploy smart coupon splits and time-boxed discount sequences with absolute fluidity.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-stone-100 text-stone-700 rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-chart-pie"></i></div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 mb-1">Analytics</h4>
-                        <p class="text-xs text-stone-500 leading-relaxed">Track metrics across margins, distribution funnels, and store nodes inside a clean layout.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-stone-100 text-brand-secondary rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-sliders"></i></div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 mb-1">Customer Management</h4>
-                        <p class="text-xs text-stone-500 leading-relaxed">Synchronize dispatch coordinates and multi-party payment settlement rules seamlessly.</p>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -362,10 +374,18 @@ Home
     <section class="py-16 md:py-24 bg-brand-dark text-white relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-xl mx-auto mb-12">
-                <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block mb-1">Trending Aggregates</span>
-                <h2 class="text-2xl md:text-3xl font-black tracking-tight">Top High-Velocity Products</h2>
-                <p class="text-sm text-stone-400 mt-2">Source individual high-margin items currently performing across nodes.</p>
+                <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block mb-1">
+                    Best Sellers
+                </span>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight">
+                    Top Selling Products
+                </h2>
+
+                <p class="text-sm text-stone-400 mt-2">
+                    Discover products customers are buying the most right now.
+                </p>
             </div>
+
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Product Card Structure (Dark Variant) -->
@@ -542,11 +562,11 @@ Home
 
                 <div class="grid lg:grid-cols-12 gap-8 items-center">
                     <div class="lg:col-span-5 space-y-4 text-center lg:text-left">
-                        <span class="bg-brand-primary/10 text-brand-primary border border-brand-primary/20 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">High Margin Program</span>
-                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">Become a Network Dropshipper</h2>
-                        <p class="text-stone-300 text-sm md:text-base max-w-sm mx-auto lg:mx-0">Skip manufacturing complexities entirely. Tap straight into pre-vetted active enterprise supply inventories immediately.</p>
+                        <span class="bg-brand-primary/10 text-brand-primary border border-brand-primary/20 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Dropshipping Made Simple</span>
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">Sell Products Without Stocking Them</h2>
+                        <p class="text-stone-300 text-sm md:text-base max-w-sm mx-auto lg:mx-0">Create your account, clone a brand's store, and start selling online. When you get an order, the brand owner handles fulfillment for you. </p></p>
                         <div class="pt-2">
-                            <a href="#" class="inline-block bg-brand-primary text-brand-dark font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-amber-400 transition shadow-lg shadow-amber-500/10">Start Dropshipping</a>
+                            <a href="#" class="inline-block bg-brand-primary text-brand-dark font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-amber-400 transition shadow-lg shadow-amber-500/10">Get Started</a>
                         </div>
                     </div>
 
@@ -554,7 +574,7 @@ Home
                     <div class="lg:col-span-7 grid sm:grid-cols-5 gap-4 text-center sm:text-left">
                         <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
                             <div class="font-black text-brand-primary text-xl">01</div>
-                            <h4 class="font-bold text-white text-xs">Join Nodes</h4>
+                            <h4 class="font-bold text-white text-xs">Create Profile</h4>
                         </div>
                         <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
                             <div class="font-black text-brand-primary text-xl">02</div>

@@ -21,6 +21,9 @@
             <flux:navlist aria-label="{{ __('General Settings') }}">
                 <flux:navlist.item :href="route('admin-general-settings')">{{ __('General Settings') }}</flux:navlist.item>
             </flux:navlist>
+            <flux:navlist aria-label="{{ __('Category Settings') }}">
+                <flux:navlist.item :href="route('admin-category-settings')">{{ __('Category Settings') }}</flux:navlist.item>
+            </flux:navlist>
         @endif
     </div>
 

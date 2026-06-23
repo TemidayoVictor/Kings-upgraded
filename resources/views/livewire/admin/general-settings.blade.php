@@ -5,12 +5,6 @@
 
     <x-settings.layout :heading="__('General System Settings')" :subheading="__('Configure platform fees and limits')">
         <form wire:submit="save">
-            @if(session()->has('message'))
-                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                    {{ session('message') }}
-                </div>
-            @endif
-
             <flux:fieldset>
                 <div class="space-y-6">
                     <!-- Basic Plan Section -->
