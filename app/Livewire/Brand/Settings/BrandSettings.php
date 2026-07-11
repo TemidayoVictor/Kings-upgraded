@@ -81,18 +81,18 @@ class BrandSettings extends Component
 
     public function mount(): void
     {
-        $user = User::with('brand')->where('id', auth()->id())->first();
+        $user = User::with('brand.categoryModel', 'brand.subcategoryModel')->where('id', auth()->id())->first();
         $this->user = $user;
-        $this->categories = Category::pluck('category', 'id')->toArray();
+        $this->categories = Category::pluck('name', 'id')->toArray();
         $this->states = State::pluck('name', 'id')->toArray();
         $this->brandName = $user->brand->brand_name;
         $this->brandEmail = $user->brand->brand_email;
-        $this->selectedCategory = $user->brand->category;
-        $this->selectedSubcategory = $user->brand->sub_category;
+        $this->selectedCategory = $user->brand->categoryModel->id;
+        $this->selectedSubcategory = $user->brand->subcategoryModel->id;
         // populate subcategory field if it exists
         if ($this->selectedCategory) {
-            $this->subcategories = Subcategory::where('category', $this->selectedCategory)
-                ->pluck('subcategory', 'id')
+            $this->subcategories = Subcategory::where('category_id', $user->brand->categoryModel->id)
+                ->pluck('name', 'id')
                 ->toArray();
         }
         $this->selectedState = $user->brand->state;
@@ -116,8 +116,8 @@ class BrandSettings extends Component
     // Runs automatically when category changes
     public function updatedSelectedCategory($category): void
     {
-        $this->subcategories = Subcategory::where('category', $category)
-            ->pluck('subcategory', 'id')->toArray();
+        $this->subcategories = Subcategory::where('category_id', $category)
+            ->pluck('name', 'id')->toArray();
 
         $this->selectedSubcategory = '';
     }

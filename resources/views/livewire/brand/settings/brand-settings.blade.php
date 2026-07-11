@@ -29,15 +29,15 @@
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:select label="Category" wire:model.live="selectedCategory">
                             <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category }}">{{ $category }}</option>
+                            @foreach($categories as $id => $category)
+                                <option value="{{ $id }}">{{ $category }}</option>
                             @endforeach
                         </flux:select>
                         <div>
                             <flux:select label="Subcategory" wire:model="selectedSubcategory">
                                 <option>Select Subcategory</option>
-                                @foreach($subcategories as $subcategory)
-                                    <option value="{{ $subcategory }}">{{ $subcategory }}</option>
+                                @foreach($subcategories as $id => $subcategory)
+                                    <option value="{{ $id }}">{{ $subcategory }}</option>
                                 @endforeach
                             </flux:select>
                             <small wire:target="selectedCategory" wire:loading> <i>Loading...</i> </small>

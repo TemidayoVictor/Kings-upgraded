@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\Status;
-use App\Livewire\Brand\Settings\BrandSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -144,5 +143,15 @@ class Brand extends Model
     public function ratings(): HasMany
     {
         return $this->hasMany(Rating::class);
+    }
+
+    public function categoryModel(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category');
+    }
+
+    public function subcategoryModel(): BelongsTo
+    {
+        return $this->belongsTo(Subcategory::class, 'sub_category');
     }
 }

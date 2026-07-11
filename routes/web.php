@@ -8,6 +8,7 @@ use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\BrandManager;
 use App\Livewire\Admin\CategorySettings;
 use App\Livewire\Admin\GeneralSettings;
+use App\Livewire\Admin\ManageProducts;
 use App\Livewire\Admin\PermissionManager;
 use App\Livewire\Admin\RevenueManager;
 use App\Livewire\Admin\RoleManager;
@@ -129,6 +130,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
 
         Route::get('/manage-users', UserManager::class)->middleware('permission:roles.view')->name('manage-users');
         Route::get('/manage-brands', BrandManager::class)->middleware('permission:users.view')->name('manage-brands');
+        Route::get('/manage-products', ManageProducts::class)->middleware('permission:users.view')->name('manage-products');
 
         Route::get('/orders/{admin}', BrandOrdersList::class)->name('orders');
 
@@ -216,3 +218,9 @@ Route::get('/preview-email', function () {
         'url' => '#',
     ]);
 });
+
+Route::get('/subcategory/{subcategory}/ads', function ($subcategoryId) {
+    $subcategory = App\Models\Subcategory::findOrFail($subcategoryId);
+    // Fetch ads for this subcategory
+    return view('subcategory-ads', compact('subcategory'));
+})->name('subcategory.ads');

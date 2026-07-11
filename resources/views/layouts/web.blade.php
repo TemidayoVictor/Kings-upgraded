@@ -12,7 +12,8 @@
     <!-- Swiper.js Stylesheets & Script Engines -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/Logo-Crown.svg') }}">
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 
 
     <!-- Reusable Design Tokens via Tailwind Config -->
@@ -322,6 +323,8 @@
     </div>
 </footer>
 
+@livewireScripts
+@stack('scripts')
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 

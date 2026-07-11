@@ -25,6 +25,7 @@ class Product extends Model
         'publish',
         'visible',
         'is_active',
+        'is_featured',
     ];
 
     protected $casts = [

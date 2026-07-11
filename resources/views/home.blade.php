@@ -319,42 +319,7 @@ Home
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Repeating Item Structure -->
-                @php
-                    $features = [
-                        [
-                            'icon' => 'shopping-bag',
-                            'title' => 'Online Store',
-                            'desc' => 'Create a beautiful online store and start selling in minutes.'
-                        ],
-                        [
-                            'icon' => 'share',
-                            'title' => 'Dropshipping',
-                            'desc' => 'Add products from trusted suppliers and fulfill orders automatically.'
-                        ],
-                        [
-                            'icon' => 'inbox',
-                            'title' => 'Customer Reviews',
-                            'desc' => 'Collect and display reviews to build trust with new customers.'
-                        ],
-                        [
-                            'icon' => 'tag',
-                            'title' => 'Promotions',
-                            'desc' => 'Run discounts, coupons, and special offers to increase sales.'
-                        ],
-                        [
-                            'icon' => 'chart-pie',
-                            'title' => 'Analytics',
-                            'desc' => 'Track sales, orders, and customer activity from one dashboard.'
-                        ],
-                        [
-                            'icon' => 'users',
-                            'title' => 'Customer Management',
-                            'desc' => 'Manage customers, orders, and communication with ease.'
-                        ],
-                    ];
-                @endphp
-
-                @foreach($features as $feature)
+                @foreach($featuresList as $feature)
                     <div class="bg-white p-6 rounded-2xl border border-stone-200/60 shadow-sm flex gap-4">
                         <!-- Uniform Icon Container -->
                         <div class="w-10 h-10 bg-amber-50 text-brand-primary rounded-xl flex items-center justify-center shrink-0">
@@ -386,77 +351,71 @@ Home
                 </p>
             </div>
 
+            @if($featuredProducts->count() > 0)
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach($featuredProducts as $product)
+                        <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
+                            <div class="relative overflow-hidden aspect-video bg-stone-800">
+                                @if($product->images->count() > 0)
+                                    <img
+                                        src="{{ $product->primary_image_url }}"
+                                        alt="{{ $product->name }}"
+                                        class="w-full h-full object-cover"
+                                    >
+                                @else
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-4xl font-bold text-stone-600">
+                                            {{ strtoupper(substr($product->name, 0, 1)) }}
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="p-5 space-y-3">
+                                <div class="flex justify-between items-start gap-2">
+                                    <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">{{$product->name}}</h3>
+                                    <span class="text-brand-primary font-extrabold text-base">₦{{number_format($product->price)}}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs text-stone-400">
+                                    <span>By {{$product->brand->brand_name}}</span>
+{{--                                    <span class="text-brand-primary"><i class="fas fa-star mr-1"></i>4.9</span>--}}
+                                </div>
+                                <a
+                                    class="block text-center w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition"
+                                    href="{{route('shop', ['brand' => $product->brand, 'search' => $product->name])}}">
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="max-w-md mx-auto text-center py-16 px-4 space-y-6">
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Product Card Structure (Dark Variant) -->
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-stone-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-stone-600"><i class="far fa-image text-3xl"></i></div>
+                    <!-- Subtle Icon Stack -->
+                    <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+                        <!-- Light Decorative Background Glow Layer -->
+                        <div class="absolute inset-0 bg-amber-500/5 rounded-full blur-xl"></div>
+
+                        <!-- Central Icon Design -->
+                        <div class="relative w-16 h-16 bg-white border border-stone-200/80 rounded-2xl flex items-center justify-center text-stone-400 shadow-sm">
+                            <i class="fas fa-store-slash text-xl text-stone-300"></i>
+                            <!-- Tiny Accent Dot -->
+                            <span class="absolute top-2 right-2 w-2 h-2 bg-brand-primary rounded-full animate-pulse"></span>
+                        </div>
                     </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Minimalist Leather Chronograph</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$89</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-stone-400">
-                            <span>By VoltForge</span>
-                            <span class="text-brand-primary"><i class="fas fa-star mr-1"></i>4.9</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
+
+                    <!-- Descriptive Text Elements -->
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-black text-white tracking-tight">
+                            We're Growing Our Brand Network
+                        </h3>
+                        <p class="text-xs text-brand-muted leading-relaxed max-w-xs mx-auto">
+                            No featured products are available right now.
+                        </p>
                     </div>
                 </div>
 
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-stone-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-stone-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Heavyweight Organic Hoodie</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$65</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-stone-400">
-                            <span>By Aura Wear</span>
-                            <span class="text-brand-primary"><i class="fas fa-star mr-1"></i>5.0</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-stone-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-stone-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Sonic-Blast ANC Headset</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$120</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-stone-400">
-                            <span>By VoltForge</span>
-                            <span class="text-brand-primary"><i class="fas fa-star mr-1"></i>4.7</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-stone-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-stone-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Matte Thermal Mug Array</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$28</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-stone-400">
-                            <span>By EcoLife Labs</span>
-                            <span class="text-brand-primary"><i class="fas fa-star mr-1"></i>4.8</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </section>
 
@@ -465,8 +424,12 @@ Home
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-12 bg-gradient-to-b from-stone-200 to-transparent"></div>
 
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4 mb-10">
-            <span class="text-brand-accent font-bold text-xs uppercase tracking-widest block">Social Validation</span>
-            <h2 class="text-2xl md:text-3xl font-black text-stone-900 tracking-tight">Verified Growth Across the Network</h2>
+            <span class="text-brand-accent font-bold text-xs uppercase tracking-widest block">
+                Trusted Results
+            </span>
+            <h2 class="text-2xl md:text-3xl font-black text-stone-900 tracking-tight">
+                See How We've Helped Businesses Grow
+            </h2>
         </div>
 
         <!-- Swiper Container Framework with explicit width rules -->

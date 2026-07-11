@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->integer('uuid')->unique();
             $table->string('brand_name')->nullable();
-            $table->string('category')->nullable();
-            $table->string('sub_category')->nullable();
+            $table->integer('category')->nullable();
+            $table->integer('sub_category')->nullable();
             $table->string('description')->nullable();
             $table->string('position')->nullable();
             $table->string('state')->nullable();

@@ -11,6 +11,12 @@
         </flux:sidebar.item>
     </flux:sidebar.group>
 
+    <flux:sidebar.group :heading="__('Products')" class="grid">
+        <flux:sidebar.item icon="shopping-cart" :href="route('admin-manage-products')" :current="request()->routeIs('admin-manage-products')" wire:navigate>
+            {{ __('Manage Products') }}
+        </flux:sidebar.item>
+    </flux:sidebar.group>
+
     <flux:sidebar.group :heading="__('Orders')" class="grid">
         <flux:sidebar.item icon="clipboard-document-list" :href="route('admin-orders', ['admin' => 'admin-view'])" :current="request()->routeIs('admin-orders')" wire:navigate>
             {{ __('All Orders') }}

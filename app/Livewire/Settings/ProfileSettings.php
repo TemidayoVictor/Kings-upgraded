@@ -102,7 +102,6 @@ class ProfileSettings extends Component
             ]);
             $this->toast('success', 'Profile updated successfully');
             $user = User::where('id', auth()->user()->id)->first();
-
             if ($user->role === UserType::BRAND) {
                 $brand = $user->brand;
                 if ($brand->status != Status::COMPLETED) {

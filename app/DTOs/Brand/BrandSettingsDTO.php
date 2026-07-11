@@ -5,8 +5,8 @@ readonly class BrandSettingsDTO
     public function __construct(
         public string $brandName,
         public string $brandEmail,
-        public string $selectedCategory,
-        public string $selectedSubcategory,
+        public int $selectedCategory,
+        public int $selectedSubcategory,
         public string $description,
         public string $type,
         public string $slug,
