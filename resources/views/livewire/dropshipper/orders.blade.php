@@ -150,7 +150,7 @@
             </div>
 
             <div class="flex items-center justify-between mb-3">
-                @if($orders->count() > 0 && ($search || $statusFilter !== 'all' || $paymentFilter !== 'all' || $dateRange !== '30'))
+                @if($orders->count() > 0 && ($search || $statusFilter !== 'all' || $paymentFilter !== 'all' || $dateRange !== 'all'))
                     <flux:button wire:click="resetFilters" size="sm" variant="primary">
                         Clear Filters
                     </flux:button>

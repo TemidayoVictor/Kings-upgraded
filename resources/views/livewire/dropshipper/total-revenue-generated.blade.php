@@ -1,9 +1,9 @@
 {{-- resources/views/livewire/dropshipper-earnings.blade.php --}}
 <section class="w-full">
-    @include('partials.partnerships')
+    @include('partials.business')
 
     <flux:heading class="sr-only">{{ __('Monthly Earnings') }}</flux:heading>
-    <x-dropshippers.layout :heading="__('Earnings Overview')" :subheading="__('Track your monthly earnings and performance')">
+    <x-dropshippers.revenue :heading="__('Earnings Overview')" :subheading="__('Track your monthly earnings and performance')">
 
         <!-- Earnings Summary Cards -->
         @php
@@ -273,5 +273,5 @@
                 @endif
             </div>
         </div>
-    </x-dropshippers.layout>
+    </x-dropshippers.revenue>
 </section>

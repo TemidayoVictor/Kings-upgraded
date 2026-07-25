@@ -173,6 +173,7 @@ class RunSales extends Component
         $this->discount_value = $sale->discount_value;
         $this->starts_at = $sale->starts_at->format('Y-m-d\TH:i');
         $this->ends_at = $sale->ends_at->format('Y-m-d\TH:i');
+        $this->sale_mode = $sale->sale_mode;
     }
 
     public function render(): View

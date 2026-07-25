@@ -6,6 +6,7 @@ use App\Actions\Dropshipper\DropshipperDetailAction;
 use App\DTOs\Dropshipper\DropshipperDetailsDTO;
 use App\Models\User;
 use App\Traits\Toastable;
+use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Http\RedirectResponse;
@@ -102,7 +103,7 @@ class DropshipperDetails extends Component
         }
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.dropshipper.settings.dropshipper-details')
             ->layout('layouts.auth')

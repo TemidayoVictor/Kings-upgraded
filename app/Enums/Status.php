@@ -5,6 +5,7 @@ namespace App\Enums;
 class Status
 {
     const ACTIVE = 'active';
+
     const INACTIVE = 'inactive';
 
     const UNLISTED = 'unlisted';
@@ -53,6 +54,12 @@ class Status
 
     const PRODUCT = 'product';
 
+    const MONTHLY = 'monthly';
+
+    const COMMISSION = 'commission';
+
+    const DEACTIVATED = 'deactivated';
+
     // Optional: get all types
     public static function all(): array
     {
@@ -82,6 +89,9 @@ class Status
             self::RENEWAL,
             self::SERVICE,
             self::PRODUCT,
+            self::MONTHLY,
+            self::COMMISSION,
+            self::DEACTIVATED,
         ];
     }
 }

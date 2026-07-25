@@ -161,6 +161,7 @@
                    class="{{ request()->routeIs('features') ? 'text-brand-primary border-b-2 border-brand-primary pb-1' : 'text-stone-600 hover:text-brand-primary' }}">
                     Features
                 </a>
+
             </div>
 
             @auth

@@ -51,10 +51,17 @@
             </div>
 
             <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-stone-600">
-                <a href="#" class="hover:text-[var(--store-primary)] transition-colors">Home</a>
-                <a href="#" class="hover:text-[var(--store-primary)] transition-colors text-[var(--store-primary)]">Shop</a>
-                <a href="#" class="hover:text-[var(--store-primary)] transition-colors">About</a>
-                <a href="#" class="hover:text-[var(--store-primary)] transition-colors">Contact</a>
+                <a
+                    href="{{ route('dropshipper-store', ['store' => $store]) }}"
+                    class="hover:text-[var(--store-primary)] transition-colors {{ request()->routeIs('dropshipper-store') ? 'text-[var(--store-primary)]' : '' }}">
+                    Home
+                </a>
+
+                <a
+                    href="{{ route('dropshipper-cart', ['store' => $store]) }}"
+                    class="hover:text-[var(--store-primary)] transition-colors {{ request()->routeIs('dropshipper-cart') ? 'text-[var(--store-primary)]' : '' }}">
+                    Cart
+                </a>
             </nav>
 
             <div class="flex items-center gap-2 sm:gap-3">

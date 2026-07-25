@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sale extends Model
 {
@@ -29,6 +30,16 @@ class Sale extends Model
         'ends_at' => 'datetime',
         'is_active' => 'boolean',
     ];
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class)->oldest();
+    }
 
     public function section(): BelongsTo
     {

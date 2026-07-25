@@ -9,6 +9,8 @@ use App\Enums\UserType;
 use App\Models\Preference;
 use App\Models\User;
 use App\Traits\Toastable;
+use Illuminate\Support\Collection;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class ProfileSettings extends Component
@@ -21,9 +23,9 @@ class ProfileSettings extends Component
 
     public string $phone = '';
 
-    public $selectedPreferences = [];
+    public array $selectedPreferences = [];
 
-    public $allPreferences;
+    public Collection $allPreferences;
 
     public $search = '';
 
@@ -122,7 +124,7 @@ class ProfileSettings extends Component
         }
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.settings.profile-settings')
             ->layout('layouts.auth')

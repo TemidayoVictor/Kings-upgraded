@@ -37,6 +37,7 @@ class User extends Authenticatable
         'status',
         'onboarding_step',
         'last_login_at',
+        'subscription_type',
     ];
 
     /**

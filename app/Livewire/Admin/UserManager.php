@@ -294,6 +294,11 @@ class UserManager extends Component
         $this->newUsers = User::where('created_at', '>=', now()->subDays(7))->count();
     }
 
+    public function suspendUser(): void
+    {
+
+    }
+
     public function render(): View
     {
         $users = User::where(function ($query) {

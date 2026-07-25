@@ -64,7 +64,7 @@
                         <div class="space-y-6">
                             <div class="border-b border-stone-100 pb-3">
                                 <h2 class="text-lg font-medium text-stone-950 tracking-tight">Customer Information</h2>
-                                <p class="text-xs text-stone-400 mt-0.5">Please populate your baseline identity nodes for dispatch tracking profiles.</p>
+                                <p class="text-xs text-stone-400 mt-0.5"> Fill in your information to complete your order.</p>
                             </div>
 
                             <div class="space-y-4 [&_input]:text-stone-950 [&_input]:border-stone-400 [&_input]:focus:border-[var(--store-primary)] [&_input]:focus:ring-1 [&_input]:focus:ring-[var(--store-primary)]">
@@ -84,7 +84,7 @@
                         <div class="space-y-6">
                             <div class="border-b border-stone-100 pb-3">
                                 <h2 class="text-lg font-medium text-stone-950 tracking-tight">Delivery Information</h2>
-                                <p class="text-xs text-stone-400 mt-0.5">Specify destination rulesets to calculate line logistics costs accurately.</p>
+                                <p class="text-xs text-stone-400 mt-0.5">Provide your delivery details to complete your order.</p>
                             </div>
 
                             <div class="space-y-5">

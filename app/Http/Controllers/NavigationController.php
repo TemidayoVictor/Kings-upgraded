@@ -6,6 +6,7 @@ use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Sale;
 use Illuminate\View\View;
 
 class NavigationController extends Controller
@@ -18,7 +19,16 @@ class NavigationController extends Controller
             ->with('products', 'ratings')
             ->get();
 
-        $categories = Category::inRandomOrder()->limit(7)->get();
+        $categories = Category::whereIn(
+            'id',
+            Brand::where('status', Status::COMPLETED)
+                ->whereNotNull('category')
+                ->distinct()
+                ->pluck('category')
+        )
+            ->inRandomOrder()
+            ->limit(7)
+            ->get();
 
         $featuredProducts = Product::where('is_featured', true)
             ->inRandomOrder()->limit(4)
@@ -46,7 +56,17 @@ class NavigationController extends Controller
 
     public function sales(): View
     {
-        return view('sales');
+        $sales = Sale::where('is_active', true)
+            ->where(function ($query) {
+                $query->where('ongoing', true)
+                    ->orWhere('ends_at', '>', now());
+            })
+            ->latest()
+            ->paginate(15);
+
+        return view('sales', [
+            'sales' => $sales,
+        ]);
     }
 
     protected function featuresList(): array

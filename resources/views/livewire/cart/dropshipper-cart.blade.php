@@ -5,7 +5,7 @@
             <div>
                 <h1 class="text-2xl sm:text-3xl font-light text-stone-950 tracking-tight">Shopping Cart</h1>
                 <p class="text-xs sm:text-sm text-stone-500 mt-1">
-                    You have <span class="font-medium text-[var(--store-primary)]">{{ $itemCount }} {{ Str::plural('item', $itemCount) }}</span> reserved in your temporary batch session.
+                    You have <span class="font-medium text-[var(--store-primary)]">{{ $itemCount }} {{ Str::plural('item', $itemCount) }}</span> in your cart.
                 </p>
             </div>
             <a href="{{ route('dropshipper-store', ['store' => $store]) }}" class="inline-flex items-center justify-center gap-2 text-xs font-medium text-stone-600 hover:text-[var(--store-primary)] bg-stone-50 hover:bg-stone-100 border border-stone-200 px-4 py-2.5 rounded-xl transition-colors shrink-0">
@@ -194,11 +194,11 @@
                                 <span>Proceed to Secure Checkout</span>
                                 <i class="fa-solid fa-shield-check text-sm opacity-80"></i>
                             </button>
-                            <div class="mt-4 flex items-center justify-center gap-4 text-[11px] text-stone-400 font-medium">
-                                <span><i class="fa-solid fa-lock text-[10px] mr-1"></i> SSL Encrypted</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-truck-fast text-[10px] mr-1"></i> Trackable Dispatch</span>
-                            </div>
+{{--                            <div class="mt-4 flex items-center justify-center gap-4 text-[11px] text-stone-400 font-medium">--}}
+{{--                                <span><i class="fa-solid fa-lock text-[10px] mr-1"></i> SSL Encrypted</span>--}}
+{{--                                <span>•</span>--}}
+{{--                                <span><i class="fa-solid fa-truck-fast text-[10px] mr-1"></i> Trackable Dispatch</span>--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>
@@ -210,9 +210,9 @@
                     <i class="fa-solid fa-bag-shopping text-3xl text-[var(--store-primary)]/60"></i>
                 </div>
                 <h2 class="text-xl font-semibold text-stone-900 tracking-tight">Your cart is empty</h2>
-                <p class="text-xs text-stone-500 mt-1 mb-6 max-w-xs mx-auto">Looks like you haven't assigned items to your collection grid terminal yet.</p>
+                <p class="text-xs text-stone-500 mt-1 mb-6 max-w-xs mx-auto">Your selected items will appear here once you add them to your cart.</p>
                 <a href="{{ route('dropshipper-store', ['store' => $store->slug]) }}" class="inline-flex bg-[var(--store-primary)] hover:bg-[var(--store-primary-hover)] text-white text-xs font-semibold px-6 py-2.5 rounded-xl shadow-xs transition-colors">
-                    Start Product Discovery
+                    Continue shopping
                 </a>
             </div>
         @endif

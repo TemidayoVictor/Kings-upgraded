@@ -1,6 +1,6 @@
 <flux:sidebar.nav>
     <flux:sidebar.group :heading="__('Users')" class="grid">
-        <flux:sidebar.item icon="user-group" :href="route('admin-manage-users')" :current="request()->routeIs('admin-manage-users')" wire:navigate>
+        <flux:sidebar.item icon="user" :href="route('admin-manage-users')" :current="request()->routeIs('admin-manage-users')" wire:navigate>
             {{ __('Manage Users') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
@@ -8,6 +8,12 @@
     <flux:sidebar.group :heading="__('Brands')" class="grid">
         <flux:sidebar.item icon="calendar" :href="route('admin-manage-brands')" :current="request()->routeIs('admin-manage-brands')" wire:navigate>
             {{ __('Manage Brands') }}
+        </flux:sidebar.item>
+    </flux:sidebar.group>
+
+    <flux:sidebar.group :heading="__('Dropshippers')" class="grid">
+        <flux:sidebar.item icon="user-group" :href="route('admin-manage-dropshippers')" :current="request()->routeIs('admin-manage-dropshippers')" wire:navigate>
+            {{ __('Manage Dropshippers') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 

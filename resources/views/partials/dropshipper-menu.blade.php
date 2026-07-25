@@ -15,6 +15,9 @@
         <flux:sidebar.item icon="arrow-trending-up" :href="route('dropshipper-total-revenue')" :current="request()->routeIs('dropshipper-total-revenue')" wire:navigate>
             {{ __('Revenue Generated') }}
         </flux:sidebar.item>
+        <flux:sidebar.item icon="arrow-path" :href="route('dropshipper-subscriptions')" :current="request()->routeIs('dropshipper-subscriptions')" wire:navigate>
+            {{ __('Subscriptions') }}
+        </flux:sidebar.item>
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Settings')" class="grid">

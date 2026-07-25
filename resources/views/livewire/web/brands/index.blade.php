@@ -266,9 +266,9 @@
 
                             <!-- Descriptive Text Elements -->
                             <div class="space-y-2">
-                                <h3 class="text-lg font-black text-stone-900 tracking-tight">No Active Sales Found</h3>
+                                <h3 class="text-lg font-black text-stone-900 tracking-tight">No Brand Found</h3>
                                 <p class="text-xs text-brand-muted leading-relaxed max-w-xs mx-auto">
-                                    We couldn't find any brands running price discounts matching your choice right now.
+                                    We couldn't find any brands try adjusting your search keywords.
                                 </p>
                             </div>
 

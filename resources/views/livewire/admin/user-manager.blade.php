@@ -188,7 +188,7 @@
                                                 <flux:button href="{{ route('admin-start-impersonator', ['user' => $user])  }}" size="sm" variant="primary" wire:key="impersonate">
                                                     Impersonate
                                                 </flux:button>
-                                                <flux:button type="submit" size="sm" variant="primary" color="yellow">
+                                                <flux:button type="submit" size="sm" variant="primary" color="yellow" wire:click="suspendUser">
                                                     Suspend
                                                 </flux:button>
                                             @endif

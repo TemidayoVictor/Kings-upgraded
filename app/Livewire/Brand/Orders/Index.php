@@ -32,7 +32,7 @@ class Index extends Component
 
     public string $paymentFilter = 'all';
 
-    public string $dateRange = '30';
+    public string $dateRange = 'all';
 
     // Bulk actions
     public array $selectedOrders = [];
@@ -298,18 +298,6 @@ class Index extends Component
         $this->dateRange = '30';
         $this->resetPage();
         $this->calculateStats();
-    }
-
-    public function exportOrders(): void
-    {
-        $orders = $this->getBaseQuery()
-            ->when($this->statusFilter !== 'all', fn ($q) => $q->where('status', $this->statusFilter))
-            ->when($this->paymentFilter !== 'all', fn ($q) => $q->where('payment_status', $this->paymentFilter))
-            ->when($this->dateRange !== 'all', fn ($q) => $q->where('created_at', '>=', now()->subDays((int) $this->dateRange)))
-            ->get();
-
-        // Export logic here
-        session()->flash('message', 'Export started. You will be notified when ready.');
     }
 
     private function authorizeOrderAccess($order): void

@@ -234,8 +234,7 @@
                 <p class="text-stone-400 text-xs sm:text-sm">Join our platform today to start building or selling items online.</p>
             </div>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                <a href="#" class="w-full sm:w-auto bg-brand-primary hover:bg-amber-400 text-brand-dark font-bold text-xs px-6 py-3.5 rounded-xl transition">Create Your Store</a>
-                <a href="#" class="w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition">See All Brands</a>
+                <a href="{{route('brands')}}" class="w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-xs px-6 py-3.5 rounded-xl transition">See All Brands</a>
             </div>
         </div>
     </section>

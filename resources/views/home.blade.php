@@ -172,7 +172,7 @@ Home
                                 <!-- Category Tag (If applicable) -->
                                 <div class="mb-4">
                                      <span class="px-2.5 py-0.5 rounded-full bg-stone-100 text-[10px] font-bold uppercase tracking-wider text-stone-500">
-                                        {{ $brand->category ?? 'General' }}
+                                        {{ $brand->subcategoryModel->name ?? 'General' }}
                                      </span>
                                 </div>
 
@@ -262,7 +262,7 @@ Home
             @if($categories->count() > 0)
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
                 @foreach($categories as $category)
-                    <a href="{{route('home')}}" class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
+                    <a href="{{ route('brands', ['selectedCategory' => $category->id]) }}" class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-3 group">
                         <div class="w-12 h-12 rounded-xl bg-amber-50 text-brand-primary flex items-center justify-center transition duration-300 group-hover:scale-110">
                             <i class="{{$category->icon}} text-lg"></i>
                         </div>
@@ -520,7 +520,7 @@ Home
     <!-- ==================== 9. BECOME A DROPSHIPPER SECTION ==================== -->
     <section class="py-16 md:py-24 bg-brand-canvas border-t border-stone-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-br from-brand-dark via-[#2D251E] to-brand-dark rounded-3xl p-8 md:p-12 text-white border border-stone-800 shadow-xl relative overflow-hidden">
+            <div class="bg-premium-dark rounded-3xl p-8 md:p-12 text-white border border-stone-800 shadow-xl relative overflow-hidden">
                 <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-brand-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
 
                 <div class="grid lg:grid-cols-12 gap-8 items-center">
@@ -560,6 +560,7 @@ Home
             </div>
         </div>
     </section>
+
 
     <!-- ==================== 10. FINAL CTA SECTION ==================== -->
     <section class="py-20 md:py-28 bg-premium-dark text-white text-center relative overflow-hidden">

@@ -33,7 +33,7 @@ class Orders extends Component
 
     public string $paymentFilter = 'all';
 
-    public string $dateRange = '30';
+    public string $dateRange = 'all';
 
     // Bulk actions
     public array $selectedOrders = [];
@@ -243,7 +243,7 @@ class Orders extends Component
         $this->search = '';
         $this->statusFilter = 'all';
         $this->paymentFilter = 'all';
-        $this->dateRange = '30';
+        $this->dateRange = 'all';
         $this->resetPage();
         $this->calculateStats();
     }

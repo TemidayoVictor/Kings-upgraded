@@ -2,23 +2,25 @@
 
 namespace App\Livewire\Auth;
 
-use Livewire\Component;
-use App\DTOs\Auth\VerificationCodeDTO;
-use App\Actions\Auth\VerificationCodeAction;
 use App\Actions\Auth\SendVerificationCodeAction;
-use App\DTOs\Auth\SendVerificationCodeDTO;
+use App\Actions\Auth\VerificationCodeAction;
+use App\DTOs\Auth\VerificationCodeDTO;
 use App\Traits\Toastable;
+use Illuminate\View\View;
+use Livewire\Component;
 
 class VerifyEmail extends Component
 {
     use Toastable;
 
     public string $code = '';
+
     protected array $rules = [
         'code' => 'required|string|size:6',
     ];
 
-    public function submit() {
+    public function submit()
+    {
         $this->validate();
 
         $buildDto = [
@@ -29,14 +31,15 @@ class VerifyEmail extends Component
 
         try {
             VerificationCodeAction::execute($dto);
-//            trigger successful toast
+            // trigger successful toast
             session()->flash('toast', [
                 'type' => 'success',
                 'message' => 'Email verified successfully',
                 'title' => 'Success',
                 'duration' => 5000,
             ]);
-//            redirect
+
+            //            redirect
             return redirect()->route('select-role');
 
         } catch (\Exception $e) {
@@ -45,8 +48,9 @@ class VerifyEmail extends Component
         }
     }
 
-    public function resend(){
-        try{
+    public function resend()
+    {
+        try {
             SendVerificationCodeAction::execute();
             $this->toast('success', 'Verification code resent');
         } catch (\Exception $e) {
@@ -55,7 +59,7 @@ class VerifyEmail extends Component
         }
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.auth.verify-email')
             ->layout('layouts.app')

@@ -44,7 +44,7 @@
                             @endif
                         </div>
                         <div>
-                            <span class="text-[10px] text-stone-400 block uppercase tracking-wider font-semibold">Viewing Category</span>
+                            <span class="text-[10px] text-stone-400 block uppercase tracking-wider font-semibold">Category</span>
                             <span class="text-sm font-medium text-stone-800">
                         @if($selectedSection === 'all')
                                     All Products
@@ -97,7 +97,7 @@
                             onclick="document.getElementById('category-matrix-dropdown').removeAttribute('open')"
                             class="hover:text-stone-600 underline decoration-stone-200 underline-offset-2"
                         >
-                            Close Matrix
+                            Close
                         </button>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ class Revenue extends Model
     protected $fillable = [
         'user_id',
         'brand_id',
+        'dropshipper_id',
         'amount',
         'description',
         'subscription_status',

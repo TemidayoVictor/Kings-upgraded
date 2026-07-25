@@ -200,46 +200,47 @@
                         </div>
                     </div>
 
-                    <div
-                        id="generic-sale-fields"
-                        class="grid grid-cols-2 gap-x-4 gap-y-6"
-                    >
-                        <div>
-                            <flux:select
-                                label="Discount Type"
-                                wire:model="discount_type"
-                                :readonly="isset($selectedSale) && $selectedSale->ongoing"
-                            >
-                                <option value="percentage">
-                                    Percentage Discount (%)
-                                </option>
+                    @if($sale_mode == 'generic')
+                        <div
+                            id="generic-sale-fields"
+                            class="grid grid-cols-2 gap-x-4 gap-y-6"
+                        >
+                            <div>
+                                <flux:select
+                                    label="Discount Type"
+                                    wire:model="discount_type"
+                                    :readonly="isset($selectedSale) && $selectedSale->ongoing"
+                                >
+                                    <option value="percentage">
+                                        Percentage Discount (%)
+                                    </option>
 
-                                <option value="fixed">
-                                    Fixed Amount Discount (₦)
-                                </option>
-                            </flux:select>
+                                    <option value="fixed">
+                                        Fixed Amount Discount (₦)
+                                    </option>
+                                </flux:select>
 
-                            <p class="mt-2 text-xs text-zinc-500">
-                                Choose how discounts should be calculated.
-                            </p>
+                                <p class="mt-2 text-xs text-zinc-500">
+                                    Choose how discounts should be calculated.
+                                </p>
+                            </div>
+
+                            <div>
+                                <flux:input
+                                    label="Discount Value"
+                                    type="number"
+                                    step="0.01"
+                                    wire:model="discount_value"
+                                    placeholder="{{ $discount_type === 'percentage' ? 'e.g., 20' : 'e.g., 5000' }}"
+                                    :readonly="isset($selectedSale) && $selectedSale->ongoing"
+                                />
+
+                                <p class="mt-2 text-xs text-zinc-500">
+                                    Enter the amount customers should receive as discount.
+                                </p>
+                            </div>
                         </div>
-
-                        <div>
-                            <flux:input
-                                label="Discount Value"
-                                type="number"
-                                step="0.01"
-                                wire:model="discount_value"
-                                placeholder="{{ $discount_type === 'percentage' ? 'e.g., 20' : 'e.g., 5000' }}"
-                                :readonly="isset($selectedSale) && $selectedSale->ongoing"
-                            />
-
-                            <p class="mt-2 text-xs text-zinc-500">
-                                Enter the amount customers should receive as discount.
-                            </p>
-                        </div>
-                    </div>
-
+                    @endif
 
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:input

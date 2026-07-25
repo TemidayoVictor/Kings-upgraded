@@ -247,12 +247,12 @@
                                                     <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom"></flux:button>
 
                                                     <flux:menu>
-                                                        <flux:menu.item href="{{route('brand-update-sales', ['sale' => $sale])}}">Update Sale</flux:menu.item>
+                                                        <flux:menu.item href="{{route('brand-update-sales', ['sale' => $sale])}}">Edit Sale</flux:menu.item>
                                                         <flux:menu.item href="{{route('brand-view-sales-orders', ['sale' => $sale])}}">View Orders</flux:menu.item>
                                                         @if($sale->ongoing)
                                                             <flux:menu.item variant="danger" wire:click="selectSale({{$sale}}, 'end')" wire:key="end">End Sales</flux:menu.item>
                                                         @else
-                                                            <flux:menu.item wire:click="selectSale({{$sale}}, 'start')" wire:key="start">Start Sales</flux:menu.item>
+                                                            <flux:menu.item wire:click="selectSale({{$sale}}, 'start')" wire:key="start">Launch Sales</flux:menu.item>
                                                         @endif
                                                     </flux:menu>
                                                 </flux:dropdown>

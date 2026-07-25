@@ -53,6 +53,7 @@ class SelectRoleAction
             // Create a dropshipper table
             $user->dropshipper()->create([
                 'status' => Status::UNLISTED,
+                'subscription_type' => Status::COMMISSION,
             ]);
         }
 

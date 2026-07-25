@@ -7,6 +7,7 @@ use App\Http\Controllers\NavigationController;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\BrandManager;
 use App\Livewire\Admin\CategorySettings;
+use App\Livewire\Admin\DropshipperManager;
 use App\Livewire\Admin\GeneralSettings;
 use App\Livewire\Admin\ManageProducts;
 use App\Livewire\Admin\PermissionManager;
@@ -56,6 +57,7 @@ use App\Livewire\Dropshipper\PartneredBrands;
 use App\Livewire\Dropshipper\RevenueGenerated;
 use App\Livewire\Dropshipper\Settings\DropshipperDetails;
 use App\Livewire\Dropshipper\Store;
+use App\Livewire\Dropshipper\Subscriptions;
 use App\Livewire\Dropshipper\TotalRevenueGenerated;
 use App\Livewire\ManageWishlist;
 use App\Livewire\SelectRole;
@@ -131,6 +133,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
         Route::get('/manage-users', UserManager::class)->middleware('permission:roles.view')->name('manage-users');
         Route::get('/manage-brands', BrandManager::class)->middleware('permission:users.view')->name('manage-brands');
         Route::get('/manage-products', ManageProducts::class)->middleware('permission:users.view')->name('manage-products');
+        Route::get('/manage-dropshippers', DropshipperManager::class)->middleware('permission:users.view')->name('manage-dropshippers');
 
         Route::get('/orders/{admin}', BrandOrdersList::class)->name('orders');
 
@@ -210,6 +213,7 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
         Route::get('/total-revenue', TotalRevenueGenerated::class)->name('total-revenue');
 
         Route::get('/batched-orders/{store}', BatchedOrder::class)->name('batched-orders');
+        Route::get('/subscriptions', Subscriptions::class)->name('subscriptions');
     });
 
 Route::get('/preview-email', function () {
@@ -221,6 +225,7 @@ Route::get('/preview-email', function () {
 
 Route::get('/subcategory/{subcategory}/ads', function ($subcategoryId) {
     $subcategory = App\Models\Subcategory::findOrFail($subcategoryId);
+
     // Fetch ads for this subcategory
     return view('subcategory-ads', compact('subcategory'));
 })->name('subcategory.ads');
