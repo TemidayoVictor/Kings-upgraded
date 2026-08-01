@@ -1,136 +1,86 @@
-{{-- resources/views/emails/notifications/store-cloned-content.blade.php --}}
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Store is Ready!</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            border-radius: 10px 10px 0 0;
-        }
-        .content {
-            background: #f9f9f9;
-            padding: 30px;
-            border-radius: 0 0 10px 10px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 25px 0;
-        }
-        .stat-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4a5568;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: #718096;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #4f46e5;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            margin: 10px 5px;
-        }
-        .button-success {
-            background-color: #10b981;
-        }
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 12px;
-            color: #718096;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-<div class="header">
-    <h1>🎉 Your Store is Ready!</h1>
-    <p>Hello {{ $notifiable->name }}!</p>
-</div>
+@component('emails.layouts.layout', ['title' => 'New Store Clone Request'])
+    <!-- Main Content Panel Frame -->
+    <table width="100%" max-width="570" border="0" cellspacing="0" cellpadding="0" style="max-width: 570px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
 
-<div class="content">
-    <p>Great news! Your dropshipping store <strong>{{ $store->store_name }}</strong> has been successfully created.</p>
+        <!-- Top Body Content Panel -->
+        <tr>
+            <td style="padding: 40px 40px 32px 40px;">
+                <!-- Context / Action Purpose Identifier Badge -->
+                <table border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
+                    <tr>
+                        <td style="background-color: #eff6ff; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Store Partnership
+                        </td>
+                    </tr>
+                </table>
 
-    <div style="background: #e8f4fd; padding: 15px; border-radius: 8px; margin: 20px 0;">
-        <p style="margin: 5px 0;"><strong>Store Name:</strong> {{ $store->store_name }}</p>
-        <p style="margin: 5px 0;"><strong>Brand:</strong> {{ $brand->brand_name }}</p>
-        <p style="margin: 5px 0;"><strong>Created:</strong> {{ $store->created_at->format('F j, Y') }}</p>
-    </div>
+                <!-- Primary Subject Headline Greeting -->
+                <h1 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 500; color: #1a1a1a; letter-spacing: -0.3px;">
+                    {{ $headline ?? 'Hello ' . ($name ?? 'Store Owner') . ',' }}
+                </h1>
 
-    <h2 style="font-size: 18px; margin-top: 30px;">Cloning Summary</h2>
+                <!-- Main Context Body Text Description -->
+                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
+                    {{ $bodyText ?? 'A dropshipper has requested to clone your store catalog on KING\'S to sell products on your behalf and expand your sales reach.' }}
+                </p>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-value">{{ $stats['cloned_products'] ?? 0 }}</div>
-            <div class="stat-label">Products Cloned</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ $stats['skipped_products'] ?? 0 }}</div>
-            <div class="stat-label">Products Skipped</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ $stats['failed_products'] ?? 0 }}</div>
-            <div class="stat-label">Failed Products</div>
-        </div>
-    </div>
+                <!-- Dropshipper Details Highlight Box -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #fafafa; border: 1px solid #f0f0f0; border-radius: 10px;">
+                    <tr>
+                        <td style="padding: 20px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="padding-bottom: 12px; font-size: 13px; color: #737373;">Dropshipper Name:</td>
+                                    <td align="right" style="padding-bottom: 12px; font-size: 13px; font-weight: 600; color: #1a1a1a;">{{ $dropshipperName ?? 'Alex Smith' }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 13px; color: #737373;">Request Date:</td>
+                                    <td align="right" style="font-size: 13px; font-weight: 600; color: #1a1a1a;">{{ $requestDate ?? 'July 26, 2026' }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
 
-    @if(($stats['failed_products'] ?? 0) > 0)
-        <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0;">
-            <p style="margin: 0; color: #92400e;">
-                <strong>⚠️ Note:</strong> Some products failed to clone. Our team has been notified and will look into this. You can also try manually syncing them from your store dashboard.
-            </p>
-        </div>
-    @endif
+                <!-- Conditional Action Call to Action Button Box -->
+                <table border="0" cellspacing="0" cellpadding="0" style="margin: 32px 0;">
+                    <tr>
+                        <td align="center" style="border-radius: 10px; background-color: #0a0a0a;">
+                            <a href="{{ $url }}" target="_blank" style="display: inline-block; padding: 14px 32px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 10px; letter-spacing: 0.5px;">
+                                Review Clone Request
+                            </a>
+                        </td>
+                    </tr>
+                </table>
 
-    <h2 style="font-size: 18px; margin-top: 30px;">What's Next?</h2>
+                <!-- Secondary Security / Expiration Details Instruction -->
+                <p style="margin: 0 0 8px 0; font-size: 13px; line-height: 1.5; color: #737373; font-weight: 400;">
+                    You can choose to approve or decline this cloning request from your dashboard at any time.
+                </p>
+                <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #737373; font-weight: 400;">
+                    If you did not expect this request, you can safely ignore this email and no changes will be made to your store.
+                </p>
 
-    <div style="text-align: center; margin: 30px 0;">
-        <a href="{{ route('dropshipper.store.dashboard', $store) }}" class="button">Go to Store Dashboard</a>
-        <a href="{{ route('dropshipper.store.products', $store) }}" class="button button-success">Manage Products</a>
-    </div>
+            </td>
+        </tr>
 
-    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+        <!-- Separator line Divider -->
+        <tr>
+            <td style="padding: 0 40px;">
+                <div style="border-top: 1px solid #f0f0f0; height: 1px; line-height: 1px;"></div>
+            </td>
+        </tr>
 
-    <p style="font-size: 14px; color: #4b5563;">
-        Need help? Check out our <a href="{{ config('app.url') }}/docs" style="color: #4f46e5;">documentation</a>
-        or <a href="{{ config('app.url') }}/support" style="color: #4f46e5;">contact support</a>.
-    </p>
-
-    <div class="footer">
-        <p>Thanks,<br>{{ config('app.name') }}</p>
-        <p>© {{ $year }} {{ config('app.name') }}. All rights reserved.</p>
-    </div>
-</div>
-</body>
-</html>
+        <!-- Troubleshooting Link Text Section -->
+        <tr>
+            <td style="padding: 24px 40px 40px 40px;">
+                <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #a3a3a3; font-weight: 400;">
+                    If you are having trouble clicking the button, copy and paste the URL below directly into your web browser:
+                </p>
+                <p style="margin: 8px 0 0 0; font-size: 12px; line-height: 1.5; word-break: break-all; color: #2563eb; font-weight: 400;">
+                    <a href="{{ $url }}" target="_blank" style="color: #2563eb; text-decoration: none;">{{ $url }}</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+@endcomponent

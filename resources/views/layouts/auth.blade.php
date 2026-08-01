@@ -102,6 +102,9 @@
 
         @fluxScripts
         @stack('scripts')
+
+        {{-- Flutterwave Inline Library --}}
+        <script src="https://checkout.flutterwave.com/v3.js"></script>
     </body>
 </html>
 

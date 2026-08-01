@@ -22,6 +22,8 @@ class ForgotPassword extends Component
         $this->validate();
 
         // Sends the standard Laravel password reset email using core services
+        // But this uses a custom designed template.
+        // Check users model - "sendPasswordResetNotification"
         $status = Password::broker()->sendResetLink(
             ['email' => $this->email]
         );

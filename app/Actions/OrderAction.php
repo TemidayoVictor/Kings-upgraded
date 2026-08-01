@@ -6,6 +6,7 @@ use App\DTOs\GeneralDTO;
 use App\DTOs\OrderDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
+use App\Mail\OrderMail;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\DropshipperEarning;
@@ -14,6 +15,7 @@ use App\Models\OrderBatch;
 use App\Models\Wishlist;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class OrderAction
@@ -48,6 +50,7 @@ class OrderAction
 
             // Generate unique order number
             $orderNumber = 'ORD-'.strtoupper(uniqid());
+            $amount = $cart->total;
 
             // Create order
             $order = Order::create([
@@ -173,6 +176,22 @@ class OrderAction
             ]);
 
             DB::commit();
+
+            // send email
+            $url = $dto->type == UserType::DROPSHIPPER ? route('dropshipper-orders', $cart->dropshipperStore) : route('brand-orders');
+            $name = $dto->type == UserType::DROPSHIPPER ? $cart->dropshipperStore->dropshipper->user->name : $cart->brand->user->name;
+            $emailData = [
+                'name' => $name,
+                'orderNumber' => $orderNumber,
+                'customerName' => $dto->customerName,
+                'amount' => $amount,
+                'url' => $url,
+                'subject' => "New Order on KING'S!",
+            ];
+
+            $userEmail = $dto->type == UserType::DROPSHIPPER ? $cart->dropshipperStore->dropshipper->user->email : $cart->brand->user->email;
+
+            Mail::to($userEmail)->send(new OrderMail($emailData));
 
             return $order;
 

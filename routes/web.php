@@ -222,10 +222,3 @@ Route::get('/preview-email', function () {
         'url' => '#',
     ]);
 });
-
-Route::get('/subcategory/{subcategory}/ads', function ($subcategoryId) {
-    $subcategory = App\Models\Subcategory::findOrFail($subcategoryId);
-
-    // Fetch ads for this subcategory
-    return view('subcategory-ads', compact('subcategory'));
-})->name('subcategory.ads');

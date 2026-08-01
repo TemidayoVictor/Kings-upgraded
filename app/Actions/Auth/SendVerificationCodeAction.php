@@ -12,10 +12,10 @@ class SendVerificationCodeAction
     public static function execute(): void
     {
         $user = auth()->user();
-        //        Delete existing one if there is
+        // Delete existing one if there is
         VerificationCode::where('user_id', $user->id)->delete();
 
-        //        Create new code
+        // Create new code
         $verificationCode = VerificationCode::create([
             'user_id' => $user->id,
             'code' => rand(100000, 999999),
@@ -25,10 +25,11 @@ class SendVerificationCodeAction
             'user_id' => $user->id,
         ]);
 
-        //        Send verification code
+        // Send verification code
         $emailData = [
             'name' => firstName($user->name),
             'code' => $verificationCode->code,
+            'subject' => "KING'S Email Verification",
         ];
 
         Mail::to($user->email)->send(new VerificationMail($emailData));

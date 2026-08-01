@@ -10,6 +10,8 @@ use App\Models\Brand;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 
 class SelectRoleAction
 {
@@ -35,10 +37,11 @@ class SelectRoleAction
             'onboarding_step' => 'profile_setup',
         ]);
 
-        //        Create role table
+        // Create role table
         if ($role === UserType::BRAND) {
             // Create brand
             $brand = Brand::create([
+                'user_id' => $user->id,
                 'uuid' => rand(100000, 999999),
                 'status' => Status::UNLISTED,
                 'subscription_status' => Status::PREMIUM,
@@ -56,6 +59,15 @@ class SelectRoleAction
                 'subscription_type' => Status::COMMISSION,
             ]);
         }
+
+        // Send welcome email
+        $emailData = [
+            'name' => firstName($user->name),
+            'type' => $role,
+            'subject' => "Welcome to KING'S!",
+        ];
+
+        Mail::to($user->email)->send(new WelcomeMail($emailData));
 
         return $user;
     }

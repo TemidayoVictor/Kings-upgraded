@@ -16,12 +16,12 @@
 
                 <!-- Primary Subject Headline Greeting -->
                 <h1 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 500; color: #1a1a1a; letter-spacing: -0.3px;">
-                    {{ $headline ?? 'Hello ' . ($name ?? 'Store Owner') . ',' }}
+                    {{ 'Hello ' . ($emailData['name'] ?? 'Store Owner') . ',' }}
                 </h1>
 
                 <!-- Main Context Body Text Description -->
                 <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    {{ $bodyText ?? 'Great news! You have received a new order on KING\'S. Review the details below and log in to your dashboard to fulfill it.' }}
+                    {{ 'Great news! You have received a new order on KING\'S. Review the details below and log in to your dashboard to view it.' }}
                 </p>
 
                 <!-- Order Details Highlight Box -->
@@ -31,15 +31,15 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td style="padding-bottom: 12px; font-size: 13px; color: #737373;">Order Number:</td>
-                                    <td align="right" style="padding-bottom: 12px; font-size: 13px; font-weight: 600; color: #1a1a1a;">{{ $orderNumber ?? '#ORD-94820' }}</td>
+                                    <td align="right" style="padding-bottom: 12px; font-size: 13px; font-weight: 600; color: #1a1a1a;">{{ $emailData['orderNumber']}}</td>
                                 </tr>
                                 <tr>
                                     <td style="padding-bottom: 12px; font-size: 13px; color: #737373;">Customer Name:</td>
-                                    <td align="right" style="padding-bottom: 12px; font-size: 13px; font-weight: 600; color: #1a1a1a;">{{ $customerName ?? 'Jane Doe' }}</td>
+                                    <td align="right" style="padding-bottom: 12px; font-size: 13px; font-weight: 600; color: #1a1a1a;">{{ $emailData['customerName'] }}</td>
                                 </tr>
                                 <tr>
                                     <td style="font-size: 13px; color: #737373;">Total Amount:</td>
-                                    <td align="right" style="font-size: 15px; font-weight: 700; color: #1a1a1a;">{{ $orderTotal ?? '$150.00' }}</td>
+                                    <td align="right" style="font-size: 15px; font-weight: 700; color: #1a1a1a;">₦{{ number_format($emailData['amount']) }}</td>
                                 </tr>
                             </table>
                         </td>
@@ -50,7 +50,7 @@
                 <table border="0" cellspacing="0" cellpadding="0" style="margin: 32px 0;">
                     <tr>
                         <td align="center" style="border-radius: 10px; background-color: #0a0a0a;">
-                            <a href="{{ $url }}" target="_blank" style="display: inline-block; padding: 14px 32px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 10px; letter-spacing: 0.5px;">
+                            <a href="{{ $emailData['url'] }}" target="_blank" style="display: inline-block; padding: 14px 32px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 10px; letter-spacing: 0.5px;">
                                 View Order Details
                             </a>
                         </td>
@@ -59,7 +59,7 @@
 
                 <!-- Secondary Security / Expiration Details Instruction -->
                 <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #737373; font-weight: 400;">
-                    Make sure to process and ship this order promptly to maintain a great customer experience on KING'S.
+                    Make sure to process this order promptly to maintain a great customer experience on KING'S.
                 </p>
 
             </td>
@@ -69,18 +69,6 @@
         <tr>
             <td style="padding: 0 40px;">
                 <div style="border-top: 1px solid #f0f0f0; height: 1px; line-height: 1px;"></div>
-            </td>
-        </tr>
-
-        <!-- Troubleshooting Link Text Section -->
-        <tr>
-            <td style="padding: 24px 40px 40px 40px;">
-                <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #a3a3a3; font-weight: 400;">
-                    If you are having trouble clicking the button, copy and paste the URL below directly into your web browser:
-                </p>
-                <p style="margin: 8px 0 0 0; font-size: 12px; line-height: 1.5; word-break: break-all; color: #2563eb; font-weight: 400;">
-                    <a href="{{ $url }}" target="_blank" style="color: #2563eb; text-decoration: none;">{{ $url }}</a>
-                </p>
             </td>
         </tr>
     </table>
