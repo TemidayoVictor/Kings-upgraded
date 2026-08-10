@@ -9,13 +9,14 @@ use App\Enums\UserType;
 use App\Mail\OrderMail;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
-use App\Models\DropshipperEarning;
 use App\Models\Order;
-use App\Models\OrderBatch;
+use App\Models\Payment;
 use App\Models\Wishlist;
+use App\Services\OrderBatchService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Throwable;
 
 class OrderAction
@@ -204,7 +205,7 @@ class OrderAction
     /**
      * @throws Throwable
      */
-    public static function batch(GeneralDTO $dto): void
+    public static function batch(GeneralDTO $dto): Payment|bool
     {
         $user = auth()->user();
         if (! $user) {
@@ -220,35 +221,56 @@ class OrderAction
             DB::beginTransaction();
             $unbatchedOrders = $dto->items;
 
-            if ($unbatchedOrders->count() != 0) {
-                $batch = OrderBatch::create([
-                    'dropshipper_store_id' => $dto->id,
-                    'orders' => $unbatchedOrders->count(),
-                    'amount' => $unbatchedOrders->sum('total'),
-                    'dropshipper_amount' => $unbatchedOrders->sum('total') - $unbatchedOrders->sum('dropshipper_profit'),
-                ]);
-
-                foreach ($unbatchedOrders as $order) {
-                    $order->update(
-                        [
-                            'dropshipper_status' => Status::APPROVED,
-                            'order_batch_id' => $batch->id,
-                        ]
-                    );
-
-                    // record earning
-                    DropshipperEarning::create([
-                        'dropshipper_store_id' => $dto->id,
-                        'order_id' => $order->id,
-                        'amount' => $order->dropshipper_profit,
-                    ]);
-                }
-
-            } else {
+            if ($unbatchedOrders->isEmpty()) {
                 throw new Exception('No orders are ready to be batched.');
             }
 
+            if ($dropshipper->subscription_type === Status::MONTHLY) {
+                if ($dropshipper->exp_date->isFuture()) {
+                    app(OrderBatchService::class)->createBatch($dto->id, $unbatchedOrders);
+                    DB::commit();
+
+                    return true;
+                } else {
+                    throw new Exception('Kindly Renew your subscription to batch orders.');
+                }
+            }
+
+            // Dropshipper utilizes commission.
+            $txRef = (string) Str::uuid();
+            $userId = auth()->id();
+            $amount = (int) max(
+                $unbatchedOrders->sum('dropshipper_profit') * (generalSetting()->dropshipper_percent / 100),
+                500
+            );
+
+            $payload = [
+                'user_id' => $userId,
+                'dropshipper_id' => $dropshipper->id,
+                'amount' => $amount,
+                'description' => 'Commission Payment',
+                'subscription_status' => Status::COMMISSION,
+                'storeId' => $dto->id,
+                'orderIds' => $unbatchedOrders->pluck('id')->all(),
+            ];
+
+            $payment = Payment::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'status' => Status::PENDING,
+                ],
+                [
+                    'transaction_ref' => $txRef,
+                    'amount' => $amount,
+                    'currency' => 'NGN',
+                    'action' => 'dropshipper_commission',
+                    'payload' => $payload,
+                ]
+            );
+
             DB::commit();
+
+            return $payment;
 
         } catch (\Exception $e) {
             DB::rollBack();

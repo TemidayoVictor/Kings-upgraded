@@ -170,7 +170,7 @@
                 <flux:callout icon="clock" class="mb-5" color="yellow">
                     <flux:callout.heading><strong class="text-[1rem]">You have unbatched orders</strong></flux:callout.heading>
                     <flux:callout.text>
-                        You have {{$batchedOrderCount}} unbatched order {{ $batchedOrderCount > 1 ? 's' : ''  }}. Click the button below, to batch this orders and send to the brand.
+                        You have {{$batchedOrderCount}} unbatched order{{ $batchedOrderCount > 1 ? 's' : ''  }}. Click the button below, to batch this orders and send to the brand.
                     </flux:callout.text>
                     <flux:button size="sm" variant="primary" class="mt-2" wire:click="showBatchOrders">Batch Orders</flux:button>
                 </flux:callout>
@@ -319,7 +319,7 @@
                                     <!-- Payment Status Badge -->
                                     @if($order->dropshipper_status === App\Enums\Status::APPROVED)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
-                                            Approved
+                                            Batched
                                         </span>
                                     @elseif($order->dropshipper_status === App\Enums\Status::PENDING)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
@@ -570,12 +570,52 @@
                             </div>
                             <div class="flex items-center justify-between">
                                 <div>
+                                    <p class="text-white font-medium">Total Amount:</p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">₦ {{$batchedOrdersTotal}}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-medium">Total Profit:</p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">₦ {{$batchedOrdersProfit}}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
                                     <p class="text-white font-medium">Amount to send:</p>
                                 </div>
                                 <div class="sm:text-right">
                                     <p class="text-white font-medium">₦ {{$batchedOrderSum}}</p>
                                 </div>
                             </div>
+                            @if(auth()->user()->dropshipper && auth()->user()->dropshipper->subscription_type == \App\Enums\Status::COMMISSION)
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white font-medium">Clearance Amount:</p>
+                                    </div>
+                                    <div class="sm:text-right">
+                                        <p class="text-white font-medium">₦ {{ number_format($batchedOrderClearanceAmount)}}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 rounded-lg border border-yellow-400/20 bg-yellow-400/10 px-4 py-3">
+                                    <div class="flex items-start gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M13 16h-1v-4h-1m1-4h.01M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+                                        </svg>
+
+                                        <p class="text-sm text-yellow-100 leading-6">
+                                            <span class="font-semibold">Clearance Fee:</span>
+                                            5% of your total profit, with a minimum charge of
+                                            <span class="font-semibold">₦500</span>. Any amount below ₦500 is automatically charged as ₦500.
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <flux:separator />
                         <div class="flex justify-end items-center my-3">

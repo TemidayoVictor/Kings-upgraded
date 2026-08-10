@@ -6,8 +6,10 @@ use App\DTOs\ApplicationDTO;
 use App\Enums\Status;
 use App\Models\DropshipperApplication;
 use App\Models\DropshipperStore;
+use App\Models\Payment;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class ApplicationAction
@@ -49,7 +51,7 @@ class ApplicationAction
     /**
      * @throws Throwable
      */
-    public static function approve(ApplicationDTO $dto): DropshipperApplication
+    public static function approve(ApplicationDTO $dto): Payment
     {
         $user = auth()->user();
 
@@ -69,15 +71,47 @@ class ApplicationAction
 
         DB::beginTransaction();
         try {
-            $application->update([
+            // prepare payment
+            $txRef = Str::uuid();
+            $userId = auth()->user()->id;
+            $amount = generalSetting()->dropshipper_fee;
+            $payload = [
+                'brand_id' => $brand->id,
+                'dropshipper_id' => $application->dropshipper_id,
+                'application_id' => $application->id,
                 'status' => Status::APPROVED,
                 'notes' => $dto->notes,
                 'reviewed_at' => now(),
                 'reviewed_by' => auth()->id(),
-            ]);
+                'description' => 'add-dropshipper',
+            ];
+
+            $payment = Payment::where('user_id', $userId)
+                ->where('status', Status::PENDING)->first();
+
+            if ($payment) {
+                $payment->update([
+                    'transaction_ref' => $txRef,
+                    'amount' => $amount,
+                    'currency' => 'NGN',
+                    'action' => 'add_dropshipper',
+                    'payload' => $payload,
+                ]);
+            } else {
+                $payment = Payment::create([
+                    'user_id' => $userId,
+                    'transaction_ref' => $txRef,
+                    'amount' => $amount,
+                    'currency' => 'NGN',
+                    'status' => Status::PENDING,
+                    'action' => 'add_dropshipper',
+                    'payload' => $payload,
+                ]);
+            }
+
             DB::commit();
 
-            return $application;
+            return $payment;
         } catch (\Exception $e) {
             DB::rollBack();
             throw new Exception("Failed to submit application {$e->getMessage()}");

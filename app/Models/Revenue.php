@@ -10,6 +10,7 @@ class Revenue extends Model
     protected $fillable = [
         'user_id',
         'brand_id',
+        'payment_id',
         'dropshipper_id',
         'amount',
         'description',
@@ -24,5 +25,10 @@ class Revenue extends Model
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function payment(): BelongsTo
+    {
+        return $this->belongsTo(Payment::class);
     }
 }

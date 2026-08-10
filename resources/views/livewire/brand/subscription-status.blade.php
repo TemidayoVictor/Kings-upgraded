@@ -254,7 +254,8 @@
                                               d="M9 5l7 7-7 7"/>
                                     </svg>
                                 </button>
-                            @elseif($brand->subscription_status == \App\Enums\Status::PREMIUM || $brand->subscription_status == \App\Enums\Status::PLATINUM)
+                            @endif
+                            @if($brand->subscription_status == \App\Enums\Status::PREMIUM || $brand->subscription_status == \App\Enums\Status::PLATINUM)
                                 <button class="w-full flex items-center justify-between p-4 rounded-2xl border border-gray-200 dark:border-white/10 hover:border-blue-500/30 hover:bg-blue-500/5 transition-all" wire:click="displayModal('renew')">
                                     <div class="flex items-center gap-3">
                                         <div class="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center">

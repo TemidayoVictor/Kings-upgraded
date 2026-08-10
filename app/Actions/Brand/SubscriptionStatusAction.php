@@ -6,11 +6,14 @@ use App\DTOs\GeneralDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\Brand;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Revenue;
+use App\Services\FlutterwavePaymentService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class SubscriptionStatusAction
@@ -18,7 +21,7 @@ class SubscriptionStatusAction
     /**
      * @throws Throwable
      */
-    public static function execute(GeneralDTO $dto): Brand
+    public static function execute(GeneralDTO $dto): Payment
     {
         $user = auth()->user();
         $plan = $dto->value['plan'];
@@ -62,25 +65,37 @@ class SubscriptionStatusAction
                 $amount = resolvePricing($brand->subscription_status, $plan, $month, $brand->id);
             }
 
-            $brand->update([
+            // prepare payment
+            $txRef = Str::uuid();
+            $userId = auth()->user()->id;
+
+            $payload = [
+                'brand_id' => $brand->id,
                 'subscription_amount' => $planDetails['fee'],
                 'no_of_products' => $planDetails['number'],
                 'subscription_status' => $plan,
-                'exp_date' => $newExpiry,
-            ]);
-
-            // Add Revenue
-            Revenue::create([
-                'user_id' => $user->id,
-                'brand_id' => $brand->id,
-                'amount' => $amount,
+                'expiry_date' => $newExpiry,
                 'description' => Status::UPGRADE,
-                'subscription_status' => $plan,
-            ]);
+            ];
+
+            $payment = Payment::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'status' => Status::PENDING,
+                ],
+                [
+                    'transaction_ref' => $txRef,
+                    'amount' => $amount,
+                    'currency' => 'NGN',
+                    'status' => Status::PENDING,
+                    'action' => 'upgrade_subscription',
+                    'payload' => $payload,
+                ]
+            );
 
             DB::commit();
 
-            return $brand;
+            return $payment;
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -91,7 +106,7 @@ class SubscriptionStatusAction
     /**
      * @throws Throwable
      */
-    public static function renew(int $month, ?int $brandId = null): Brand
+    public static function renew(int $month, ?int $brandId = null): Payment
     {
         $user = auth()->user();
         if ($brandId) {
@@ -124,22 +139,36 @@ class SubscriptionStatusAction
                 $newExpiry = now()->addMonth($month);
             }
 
-            $brand->update([
-                'exp_date' => $newExpiry,
-            ]);
+            // prepare payment
+            $txRef = Str::uuid();
+            $amount = $brand->subscription_amount * $month;
+            $userId = auth()->user()->id;
 
-            // Add Revenue
-            Revenue::create([
-                'user_id' => $user->id,
+            $payload = [
+                'expiry_date' => $newExpiry,
                 'brand_id' => $brand->id,
-                'amount' => $brand->subscription_amount * $month,
                 'description' => Status::RENEWAL,
                 'subscription_status' => $brand->subscription_status,
-            ]);
+            ];
+
+            $payment = Payment::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'status' => Status::PENDING,
+                ],
+                [
+                    'transaction_ref' => $txRef,
+                    'amount' => $amount,
+                    'currency' => 'NGN',
+                    'status' => Status::PENDING,
+                    'action' => 'renew_subscription',
+                    'payload' => $payload,
+                ]
+            );
 
             DB::commit();
 
-            return $brand;
+            return $payment;
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -198,5 +227,38 @@ class SubscriptionStatusAction
             DB::rollBack();
             throw new Exception('Error: '.$e->getMessage());
         }
+    }
+
+    public function makePayment(FlutterwavePaymentService $flutterwave, array $payload): void
+    {
+        $txRef = Str::uuid();
+        $amount = $payload['amount'];
+        // save payment
+        Payment::create([
+            'user_id' => auth()->user()->id,
+            'transaction_ref' => $txRef,
+            'amount' => $amount,
+            'currency' => $payload['currency'] ?? 'NGN',
+            'status' => 'pending',
+            'action' => $payload['action'],
+            'payload' => $payload,
+        ]);
+
+        $this->dispatch(
+            'flutterwave-payment',
+            $flutterwave->checkoutData(
+                amount: $amount,
+                txRef: $txRef,
+                customer: [
+                    'email' => auth()->user()->email,
+                    'phone' => auth()->user()->phone,
+                    'name' => auth()->user()->name,
+                ],
+                description: 'payment',
+                meta: [
+                    'plan_id' => 'basic',
+                ]
+            )
+        );
     }
 }

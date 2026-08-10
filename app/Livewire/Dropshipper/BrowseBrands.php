@@ -4,6 +4,7 @@ namespace App\Livewire\Dropshipper;
 
 use App\Actions\ApplicationAction;
 use App\DTOs\ApplicationDTO;
+use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\DropshipperApplication;
 use App\Traits\Toastable;
@@ -104,6 +105,7 @@ class BrowseBrands extends Component
             : [];
 
         $brands = Brand::with('user')
+            ->where('status', Status::COMPLETED)
             ->whereNotIn('id', $appliedBrandIds)
             ->when($this->search, function ($query) {
                 return $query->where(function ($q) {

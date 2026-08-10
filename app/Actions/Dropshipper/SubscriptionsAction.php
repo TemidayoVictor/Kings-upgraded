@@ -4,11 +4,12 @@ namespace App\Actions\Dropshipper;
 
 use App\Enums\Status;
 use App\Models\Dropshipper;
-use App\Models\Revenue;
+use App\Models\Payment;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class SubscriptionsAction
@@ -61,7 +62,7 @@ class SubscriptionsAction
         }
     }
 
-    public static function renew(int $month, ?int $id = null): User
+    public static function renew(int $month, ?int $id = null): Payment
     {
         $user = auth()->user();
         if (! $user) {
@@ -88,27 +89,42 @@ class SubscriptionsAction
                 $newExpiry = now()->addMonth($month);
             }
 
-            $dropshipper->update([
-                'exp_date' => $newExpiry,
-            ]);
-
+            // prepare payment
+            $txRef = Str::uuid();
             $amount = generalSetting()->dropshipper_fee * $month;
+            $userId = auth()->user()->id;
 
-            // Add Revenue
-            Revenue::create([
-                'user_id' => $user->id,
+            $payload = [
+                'expiry_date' => $newExpiry,
+                'user_id' => $userId,
                 'dropshipper_id' => $dropshipper->id,
                 'amount' => $amount,
-                'description' => Status::RENEWAL,
-                'subscription_status' => 'Renewal for '.$month.' month(s)',
-            ]);
+                'description' => 'Renewal for '.$month.' month(s)',
+                'subscription_status' => Status::RENEWAL,
+            ];
+
+            $payment = Payment::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'status' => Status::PENDING,
+                ],
+                [
+                    'transaction_ref' => $txRef,
+                    'amount' => $amount,
+                    'currency' => 'NGN',
+                    'status' => Status::PENDING,
+                    'action' => 'dropshipper_monthly_subscription',
+                    'payload' => $payload,
+                ]
+            );
 
             DB::commit();
 
-            return $user;
+            return $payment;
+
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new Exception("Failed to create store: {$e->getMessage()}");
+            throw new Exception("Failed: {$e->getMessage()}");
         }
     }
 }

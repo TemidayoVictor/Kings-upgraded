@@ -105,6 +105,14 @@
 
         {{-- Flutterwave Inline Library --}}
         <script src="https://checkout.flutterwave.com/v3.js"></script>
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('flutterwave-payment', (data) => {
+                    console.log(data)
+                    openFlutterwaveCheckout(data[0]);
+                });
+            });
+        </script>
     </body>
 </html>
 

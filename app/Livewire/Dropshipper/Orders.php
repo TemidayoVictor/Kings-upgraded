@@ -4,10 +4,13 @@ namespace App\Livewire\Dropshipper;
 
 use App\Actions\OrderAction;
 use App\DTOs\GeneralDTO;
+use App\Enums\Status;
 use App\Models\DropshipperStore;
 use App\Models\Order;
 use App\Models\OrderBatch;
 use App\Models\OrderStatusHistory;
+use App\Models\Payment;
+use App\Services\FlutterwavePaymentService;
 use App\Traits\Toastable;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -62,10 +65,25 @@ class Orders extends Component
 
     public ?string $batchedOrderSum = '0';
 
+    public ?string $batchedOrderClearanceAmount = '0';
+
+    public ?string $batchedOrdersTotal = '0';
+
+    public ?string $batchedOrdersProfit = '0';
+
     protected $queryString = ['search', 'statusFilter', 'paymentFilter', 'dateRange'];
 
     public function mount($store = null, $batch = null, $dropshipperId = null): void
     {
+        // notification once payment is successful or fails
+        if (session('success')) {
+            $this->toast('success', session('success'));
+        }
+
+        if (session('error')) {
+            $this->toast('error', session('error'));
+        }
+
         if ($store) {
             $this->store = $store;
         } elseif ($batch) {
@@ -263,8 +281,14 @@ class Orders extends Component
         ];
         $dto = GeneralDTO::fromArray($buildDto);
         try {
-            OrderAction::batch($dto);
-            $this->toast('success', 'Order batched successfully.');
+            $subscriptionType = auth()->user()->dropshipper->subscription_type;
+            if ($subscriptionType === Status::MONTHLY) {
+                OrderAction::batch($dto);
+                $this->toast('success', 'Order batched successfully.');
+            } else {
+                $payment = OrderAction::batch($dto);
+                $this->triggerPayment($payment);
+            }
         } catch (\Throwable $e) {
             $this->toast('error', $e->getMessage());
         }
@@ -282,9 +306,18 @@ class Orders extends Component
         if ($unbatchedOrders->count() > 0) {
             $this->batchedOrderCount = $unbatchedOrders->count();
             $this->batchedOrderSum = number_format($unbatchedOrders->sum('total') - $unbatchedOrders->sum('dropshipper_profit'), 2);
+            $this->batchedOrderClearanceAmount = (int) max(
+                $unbatchedOrders->sum('dropshipper_profit') * (generalSetting()->dropshipper_percent / 100),
+                500
+            );
+            $this->batchedOrdersTotal = number_format($unbatchedOrders->sum('total'), 2);
+            $this->batchedOrdersProfit = number_format($unbatchedOrders->sum('dropshipper_profit'), 2);
         } else {
             $this->batchedOrderCount = 0;
             $this->batchedOrderSum = '0';
+            $this->batchedOrderClearanceAmount = '0';
+            $this->batchedOrdersTotal = '0';
+            $this->batchedOrdersProfit = '0';
         }
 
         return $unbatchedOrders;
@@ -298,15 +331,28 @@ class Orders extends Component
         }
     }
 
-    private function canAccessOrder($order): bool
+    public function triggerPayment(Payment $payment): void
     {
-        try {
-            $this->authorizeOrderAccess($order);
+        $this->toast('success', 'Loading Payment Gateway. . .');
+        $flutterwavePaymentService = new FlutterwavePaymentService;
+        $this->makePayment($flutterwavePaymentService, $payment);
+    }
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+    public function makePayment(FlutterwavePaymentService $flutterwave, Payment $payment): void
+    {
+        $this->dispatch(
+            'flutterwave-payment',
+            $flutterwave->checkoutData(
+                amount: $payment->amount,
+                txRef: $payment->transaction_ref,
+                customer: [
+                    'email' => auth()->user()->email,
+                    'phone' => auth()->user()->phone,
+                    'name' => auth()->user()->name,
+                ],
+                description: $payment->payload['description'],
+            )
+        );
     }
 
     public function render(): View

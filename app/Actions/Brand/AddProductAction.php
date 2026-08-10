@@ -7,13 +7,14 @@ use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Models\Revenue;
 use App\Models\Subcategory;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class AddProductAction
@@ -119,7 +120,7 @@ class AddProductAction
     /**
      * @throws Throwable
      */
-    public static function increaseProduct(int $productNumber, ?int $brandId = null): Brand
+    public static function increaseProduct(int $productNumber, ?int $brandId = null): Payment
     {
         $user = auth()->user();
         if ($brandId) {
@@ -146,23 +147,36 @@ class AddProductAction
             $new_subscription_amount = $brand->subscription_amount + $newFee;
             $new_no_of_products = $brand->no_of_products + $newProductNumber;
 
-            $brand->update([
+            // prepare payment
+            $txRef = Str::uuid();
+            $userId = auth()->user()->id;
+
+            $payload = [
+                'brand_id' => $brand->id,
                 'subscription_amount' => $new_subscription_amount,
                 'no_of_products' => $new_no_of_products,
-            ]);
-
-            // Add Revenue
-            Revenue::create([
-                'user_id' => $user->id,
-                'brand_id' => $brand->id,
-                'amount' => $newFee,
                 'description' => Status::INCREMENT,
                 'subscription_status' => $brand->subscription_status,
-            ]);
+            ];
+
+            $payment = Payment::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'status' => Status::PENDING,
+                ],
+                [
+                    'transaction_ref' => $txRef,
+                    'amount' => $newFee,
+                    'currency' => 'NGN',
+                    'status' => Status::PENDING,
+                    'action' => 'increase_products',
+                    'payload' => $payload,
+                ]
+            );
 
             DB::commit();
 
-            return $brand;
+            return $payment;
 
         } catch (\Exception $e) {
             DB::rollBack();

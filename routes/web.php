@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FlutterwaveController;
 use App\Http\Controllers\ImpersonateController;
 use App\Http\Controllers\NavigationController;
 use App\Livewire\Admin\AdminDashboard;
@@ -73,6 +74,9 @@ Route::get('/', [NavigationController::class, 'home'])->name('home');
 Route::get('/brands', [NavigationController::class, 'brands'])->name('brands');
 Route::get('/sales', [NavigationController::class, 'sales'])->name('sales');
 Route::get('/features', [NavigationController::class, 'features'])->name('features');
+
+// Flutterwave
+Route::get('/flutterwave/callback', [FlutterwaveController::class, 'callback'])->name('flutterwave.callback');
 
 // Brand Shops
 Route::get('/brands/{brand:slug}', Products::class)->name('shop');

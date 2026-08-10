@@ -35,6 +35,9 @@
                                             @endif
                                         </button>
                                     </th>
+                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Actions
+                                    </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                                         <button wire:click="sortBy('applied_date')" class="flex items-center space-x-1 hover:text-gray-200">
                                             <span>APPLIED</span>
@@ -51,9 +54,6 @@
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                                         Notes
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
-                                        Actions
                                     </th>
                                 </tr>
                                 </thead>
@@ -84,21 +84,6 @@
                                             </div>
                                         </td>
 
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                                            {{ $application->created_at->format('M d, Y') }}
-                                            <div class="text-xs text-gray-500">
-                                                {{ $application->created_at->diffForHumans() }}
-                                            </div>
-                                        </td>
-
-                                        <td class="px-6 py-4 max-w-xs">
-                                            @if($application->notes)
-                                                <p class="text-sm text-gray-400 truncate">{{ $application->notes }}</p>
-                                            @else
-                                                <span class="text-sm text-gray-600">—</span>
-                                            @endif
-                                        </td>
-
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center justify-end space-x-2">
                                                 <flux:button wire:click="viewApplication({{ $application->id }})"
@@ -113,6 +98,21 @@
                                                     Reject
                                                 </flux:button>
                                             </div>
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            {{ $application->created_at->format('M d, Y') }}
+                                            <div class="text-xs text-gray-500">
+                                                {{ $application->created_at->diffForHumans() }}
+                                            </div>
+                                        </td>
+
+                                        <td class="px-6 py-4 max-w-xs">
+                                            @if($application->notes)
+                                                <p class="text-sm text-gray-400 truncate">{{ $application->notes }}</p>
+                                            @else
+                                                <span class="text-sm text-gray-600">—</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -230,12 +230,15 @@
                                                 <div class="text-lg font-medium text-white">{{ $selectedApplication->dropshipper->user->name }}</div>
                                                 <div class="text-sm text-gray-400">Username: {{ $selectedApplication->dropshipper->username }}</div>
                                                 <div class="text-sm text-gray-400">Email: {{ $selectedApplication->dropshipper->user->email }}</div>
-                                                @if($selectedApplication->dropshipper->account_name)
-                                                    <div class="text-sm text-gray-400 mt-2">
-                                                        Bank: {{ $selectedApplication->dropshipper->bank_name }} |
-                                                        Account: {{ $selectedApplication->dropshipper->account_name }} ({{ $selectedApplication->dropshipper->account_number }})
-                                                    </div>
-                                                @endif
+{{--                                                @if($selectedApplication->dropshipper->account_name)--}}
+{{--                                                    <div class="text-sm text-gray-400 mt-2">--}}
+{{--                                                        Bank: {{ $selectedApplication->dropshipper->bank_name }} |--}}
+{{--                                                        Account: {{ $selectedApplication->dropshipper->account_name }} ({{ $selectedApplication->dropshipper->account_number }})--}}
+{{--                                                    </div>--}}
+{{--                                                @endif--}}
+                                                <div class="text-sm text-gray-400 mt-2">
+                                                    Applied on: {{ $selectedApplication->created_at->format('M d, Y') }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

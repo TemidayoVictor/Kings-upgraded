@@ -67,7 +67,6 @@
                                 </div>
                             </div>
 
-                            <!-- Brand Content - Takes remaining space and pushes button to bottom -->
                             <div class="pt-10 p-4 flex flex-col flex-grow">
                                 <!-- Top section: Title and badge -->
                                 <div>
@@ -102,7 +101,7 @@
                                         <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l5 5a2 2 0 01.586 1.414V19a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"></path>
                                         </svg>
-                                        <span class="truncate">{{ $application->brand->category }} @if($application->brand->sub_category) / {{ $application->brand->sub_category }} @endif</span>
+                                        <span class="truncate">{{ $application->brand->categoryModel->name }} @if($application->brand->sub_category) / {{ $application->brand->subcategoryModel->name }} @endif</span>
                                     </div>
 
                                     <div class="flex items-center text-sm text-gray-400">

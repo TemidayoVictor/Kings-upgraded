@@ -6,6 +6,8 @@ use App\Actions\Brand\AddProductAction;
 use App\Actions\Brand\SubscriptionStatusAction;
 use App\DTOs\GeneralDTO;
 use App\Models\Brand;
+use App\Models\Payment;
+use App\Services\FlutterwavePaymentService;
 use App\Traits\Toastable;
 use Carbon\Carbon;
 use Illuminate\View\View;
@@ -30,6 +32,18 @@ class SubscriptionStatus extends Component
     public int $total = 0;
 
     public bool $showTotal = false;
+
+    public function mount(): void
+    {
+        // notification once payment is successful or fails
+        if (session('success')) {
+            $this->toast('success', session('success'));
+        }
+
+        if (session('error')) {
+            $this->toast('error', session('error'));
+        }
+    }
 
     public function getRemainingDaysAttribute(): array
     {
@@ -95,9 +109,8 @@ class SubscriptionStatus extends Component
         ]);
 
         try {
-            SubscriptionStatusAction::renew($this->month);
-            $this->toast('success', 'Subscription renewed successfully');
-            $this->closeModal();
+            $payment = SubscriptionStatusAction::renew($this->month);
+            $this->triggerPayment($payment);
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
             $this->closeModal();
@@ -126,9 +139,8 @@ class SubscriptionStatus extends Component
         $dto = GeneralDTO::fromArray($buildDTO);
 
         try {
-            SubscriptionStatusAction::execute($dto);
-            $this->toast('success', 'Subscription upgraded successfully');
-            $this->closeModal();
+            $payment = SubscriptionStatusAction::execute($dto);
+            $this->triggerPayment($payment);
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
             $this->closeModal();
@@ -143,10 +155,8 @@ class SubscriptionStatus extends Component
         ]);
 
         try {
-            AddProductAction::increaseProduct($this->additionalProductNumber);
-
-            $this->toast('success', 'Products capacity increased successfully');
-            $this->closeModal();
+            $payment = AddProductAction::increaseProduct($this->additionalProductNumber);
+            $this->triggerPayment($payment);
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
             $this->closeModal();
@@ -179,8 +189,32 @@ class SubscriptionStatus extends Component
 
             return false;
         }
-
         return true;
+    }
+
+    public function triggerPayment(Payment $payment): void
+    {
+        $this->toast('success', 'Loading Payment Gateway. . .');
+        $flutterwavePaymentService = new FlutterwavePaymentService;
+        $this->makePayment($flutterwavePaymentService, $payment);
+        $this->closeModal();
+    }
+
+    public function makePayment(FlutterwavePaymentService $flutterwave, Payment $payment): void
+    {
+        $this->dispatch(
+            'flutterwave-payment',
+            $flutterwave->checkoutData(
+                amount: $payment->amount,
+                txRef: $payment->transaction_ref,
+                customer: [
+                    'email' => auth()->user()->email,
+                    'phone' => auth()->user()->phone,
+                    'name' => auth()->user()->name,
+                ],
+                description: $payment->payload['description'],
+            )
+        );
     }
 
     public function render(): View
