@@ -85,7 +85,9 @@
             <!-- Narrative Body Description -->
             @if($brand->about || $brand->description)
                 <div class="text-base sm:text-xl text-neutral-700 leading-relaxed whitespace-pre-line font-serif tracking-wide drop-cap-styling px-2 sm:px-6">
-                    {!! nl2br(e($brand->about ?? $brand->description)) !!}
+                    <div class="prose max-w-none">
+                        {!! $brand->about ?? $brand->description !!}
+                    </div>
                 </div>
             @endif
 
@@ -136,48 +138,48 @@
                         <div class="flex flex-wrap gap-2.5">
 
                             <!-- WhatsApp Context Channel Button link -->
-                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $brand->brand_email) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 border border-emerald-200/60 hover:border-emerald-600 text-xs font-semibold text-emerald-700 hover:text-white transition-all active:scale-95 cursor-pointer">
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $brand->brand_email) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 border border-emerald-200/60 hover:border-emerald-600 text-xs font-semibold text-emerald-700  transition-all active:scale-95 cursor-pointer">
                                 <i class="fa-brands fa-whatsapp text-sm"></i> <span>WhatsApp Chat</span>
                             </a>
 
                             @if($brand->instagram)
-                                <a href="https://instagram.com/{{ trim($brand->instagram, '@') }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="https://instagram.com/{{ trim($brand->instagram, '@') }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-brands fa-instagram text-sm"></i> <span>Instagram</span>
                                 </a>
                             @endif
 
                             @if($brand->facebook)
-                                <a href="{{ $brand->facebook }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="{{ $brand->facebook }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-brands fa-facebook-f text-sm"></i> <span>Facebook</span>
                                 </a>
                             @endif
 
                             @if($brand->twitter)
-                                <a href="https://twitter.com/{{ trim($brand->twitter, '@') }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="https://twitter.com/{{ trim($brand->twitter, '@') }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-brands fa-x-twitter text-sm"></i> <span>Twitter</span>
                                 </a>
                             @endif
 
                             @if($brand->tiktok)
-                                <a href="https://tiktok.com/@{{ trim($brand->tiktok, '@') }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="https://tiktok.com/@{{ trim($brand->tiktok, '@') }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-brands fa-tiktok text-sm"></i> <span>TikTok</span>
                                 </a>
                             @endif
 
                             @if($brand->youtube)
-                                <a href="{{ $brand->youtube }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="{{ $brand->youtube }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-brands fa-youtube text-sm"></i> <span>YouTube</span>
                                 </a>
                             @endif
 
                             @if($brand->linkedin)
-                                <a href="{{ $brand->linkedin }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="{{ $brand->linkedin }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-brands fa-linkedin-in text-sm"></i> <span>LinkedIn</span>
                                 </a>
                             @endif
 
                             @if($brand->website)
-                                <a href="{{ $brand->website }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700 hover:text-white hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
+                                <a href="{{ $brand->website }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs font-medium text-neutral-700  hover:bg-brand-primary hover:border-brand-primary transition-all active:scale-95 cursor-pointer">
                                     <i class="fa-solid fa-globe text-sm"></i> <span>Main Website</span>
                                 </a>
                             @endif

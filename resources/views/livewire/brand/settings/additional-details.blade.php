@@ -29,7 +29,35 @@
                             <flux:error name="logo"/>
                         </div>
                     </div>
-                    <flux:textarea label="About Brand" resize="none" wire:model="about" placeholder="Tell us more about your brand. Your dream, vision, drive, and what makes your brand stand out"/>
+                    <div
+                        x-data="{
+                            editor: null,
+                            init() {
+                                this.editor = new window.TiptapEditor(
+                                    this.$refs.editor,
+                                    this.$wire,
+                                    'about'
+                                )
+                            }
+                        }"
+                    >
+                        <label class="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            About Brand
+                        </label>
+
+                        <div
+                            wire:ignore
+                            class="outline-none overflow-hidden rounded-lg border border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900"
+                        >
+                            <div
+                                x-ref="editor"
+                                class="prose prose-sm max-w-none min-h-[8rem] p-5 [&_.ProseMirror]:outline-none bg-[#3d3d40]"
+                            ></div>
+                        </div>
+                        <p class="mt-1 text-sm text-zinc-500">
+                            Tell us more about your brand. Your dream, vision, drive, and what makes your brand stand out.
+                        </p>
+                    </div>
                     <flux:input label="Brand Motto" wire:model="motto" placeholder="Brand Motto" class="max-full" />
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:input label="Instagram" wire:model="instagram" placeholder="@username" />

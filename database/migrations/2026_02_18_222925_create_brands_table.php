@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('city')->nullable();
             $table->string('address')->nullable();
-            $table->string('about')->nullable();
+            $table->longText('about')->nullable();
             $table->string('motto')->nullable();
             $table->string('image')->nullable();
             $table->string('instagram')->nullable();

@@ -6,6 +6,7 @@ use App\Actions\Brand\AdditionalDetailsActions;
 use App\DTOs\Brand\AdditionalDetailsDTO;
 use App\Models\User;
 use App\Traits\Toastable;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -73,7 +74,7 @@ class AdditionalDetails extends Component
         $this->currentLogo = '';
     }
 
-    public function submit()
+    public function submit(): mixed
     {
         $validated = $this->validate();
         $dto = AdditionalDetailsDTO::fromArray($validated);
