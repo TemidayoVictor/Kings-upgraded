@@ -56,6 +56,7 @@ class FlutterwaveController extends Controller
         $payment->update([
             'status' => 'successful',
             'transaction_id' => $data['id'],
+            'paid_at' => now(),
         ]);
 
         $processor = new PaymentProcessorService;

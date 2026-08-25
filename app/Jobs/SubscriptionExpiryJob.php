@@ -9,6 +9,7 @@ use App\Models\Dropshipper;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SubscriptionExpiryJob implements ShouldQueue
@@ -22,6 +23,7 @@ class SubscriptionExpiryJob implements ShouldQueue
     {
         $today = Carbon::today();
         $expiryLimit = $today->copy()->addDays(5);
+        Log::info('Running subscription expiry job');
 
         Brand::query()
             ->whereDate('exp_date', '>=', $today)

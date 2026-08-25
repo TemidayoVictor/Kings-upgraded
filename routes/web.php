@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\AdminUtilitiesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FlutterwaveController;
 use App\Http\Controllers\ImpersonateController;
@@ -10,6 +11,7 @@ use App\Livewire\Admin\BrandManager;
 use App\Livewire\Admin\CategorySettings;
 use App\Livewire\Admin\DropshipperManager;
 use App\Livewire\Admin\GeneralSettings;
+use App\Livewire\Admin\Logs;
 use App\Livewire\Admin\ManageProducts;
 use App\Livewire\Admin\PermissionManager;
 use App\Livewire\Admin\RevenueManager;
@@ -148,6 +150,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin-')
         Route::get('/revenue-report', RevenueManager::class)->middleware('permission:reports.view')->name('revenue-report');
 
         Route::get('/category-settings', CategorySettings::class)->middleware('permission:users.view')->name('category-settings');
+
+        Route::get('/logs', Logs::class)->middleware('permission:logs.view')->name('logs');
+        Route::get('/download-logs', [AdminUtilitiesController::class, 'downloadLogs'])->middleware('permission:logs.view')->name('download-logs');
     }
     );
 

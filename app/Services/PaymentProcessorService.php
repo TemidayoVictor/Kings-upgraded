@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\Status;
+use App\Mail\NotifyDropshipperMail;
 use App\Models\Brand;
 use App\Models\Dropshipper;
 use App\Models\DropshipperApplication;
@@ -11,6 +12,7 @@ use App\Models\Payment;
 use App\Models\Revenue;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentProcessorService
 {
@@ -152,8 +154,10 @@ class PaymentProcessorService
         try {
             DB::beginTransaction();
             $applicationId = $payment->payload['application_id'];
+            $dropshipperApplication = DropshipperApplication::where('id', $applicationId)
+                ->with('dropshipper', 'brand')->first();
 
-            DropshipperApplication::where('id', $applicationId)->update([
+            $dropshipperApplication->update([
                 'status' => $payment->payload['status'],
                 'notes' => $payment->payload['notes'],
                 'reviewed_at' => now(),
@@ -170,6 +174,16 @@ class PaymentProcessorService
                 'description' => $payment->payload['description'],
                 'subscription_status' => Status::COMMISSION,
             ]);
+
+            // send mail to dropshipper
+            $emailData = [
+                'name' => $dropshipperApplication->dropshipper->user->name,
+                'subject' => "KING'S Dropshipper Application Notification",
+                'type' => 'approved',
+                'brandName' => $dropshipperApplication->brand->brand_name,
+                'url' => route('dropshipper-applications'),
+            ];
+            Mail::to($dropshipperApplication->dropshipper->user->email)->send(new NotifyDropshipperMail($emailData));
 
             DB::commit();
 

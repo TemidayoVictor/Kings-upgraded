@@ -38,7 +38,6 @@ class PartneredBrands extends Component
 
         $stores = DropshipperStore::with('brand')
             ->where('dropshipper_id', $dropshipper->id)
-            ->where('status', Status::CLONED)
             ->when($this->search, function ($query) {
                 return $query->whereHas('brand', function ($q) {
                     $q->where('brand_name', 'like', '%'.$this->search.'%');

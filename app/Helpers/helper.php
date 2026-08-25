@@ -3,6 +3,7 @@
 use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\Coupon;
+use App\Models\DropshipperApplication;
 use App\Models\DropshipperStore;
 use App\Models\GeneralSetting;
 use App\Models\Product;
@@ -204,6 +205,29 @@ if (! function_exists('validateDateRange')) {
                 return ($newValue - $currentRemainingValue) + ($newPlanPrice * $month);
             }
 
+        }
+    }
+
+    if (! function_exists('checkFreeDropshippers')) {
+        function checkFreeDropshippers($brandId): ?array
+        {
+            $processedApplications = DropshipperApplication::where('brand_id', $brandId)
+                ->where('status', Status::APPROVED)
+                ->orWhere('status', Status::REJECTED)
+                ->count();
+
+            $freeDropshippersNumber = generalSetting()->free_dropshippers_number;
+            $remainingFreeDropshippers = $freeDropshippersNumber - $processedApplications;
+
+            $freeDropshippersExceeded = true;
+            if ($remainingFreeDropshippers > 0) {
+                $freeDropshippersExceeded = false;
+            }
+
+            return [
+                'remainingFreeDropshippers' => $remainingFreeDropshippers,
+                'freeDropshippersExceeded' => $freeDropshippersExceeded,
+            ];
         }
     }
 }

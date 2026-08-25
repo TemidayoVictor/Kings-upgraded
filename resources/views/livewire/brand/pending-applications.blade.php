@@ -11,6 +11,21 @@
 
         <flux:separator/>
 
+        @if(!$freeDropshippersExceeded)
+            <div class="mt-2">
+                <flux:callout icon="information-circle" variant="warning">
+                    <flux:callout.heading>
+                        Your can add {{$remainingFreeDropshippers}} dropshippers for free
+                    </flux:callout.heading>
+
+                    <flux:callout.text>
+                        You can approve up to {{$remainingFreeDropshippers}} dropshippers at no cost. After that, a fee of ₦{{number_format(generalSetting()->dropshipper_fee)}} will apply
+                        for each additional dropshipper you approve.
+                    </flux:callout.text>
+                </flux:callout>
+            </div>
+        @endif
+
         <div class="min-h-screen mt-4">
             <div class="max-w-7xl mx-auto">
                 <!-- Applications List -->

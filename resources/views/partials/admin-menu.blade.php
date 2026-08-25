@@ -42,5 +42,8 @@
         <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-roles')" :current="request()->routeIs('admin-roles', 'admin-permissions')" wire:navigate>
             {{ __('Roles and Permissions') }}
         </flux:sidebar.item>
+        <flux:sidebar.item icon="cog-6-tooth" :href="route('admin-logs')" :current="request()->routeIs('admin-logs')" wire:navigate>
+            {{ __('Manage Logs') }}
+        </flux:sidebar.item>
     </flux:sidebar.group>
 </flux:sidebar.nav>

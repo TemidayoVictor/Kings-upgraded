@@ -25,5 +25,6 @@ class GeneralSetting extends Model
         'dropshipper_fee',
         'dropshipper_percent',
         'collector_percent',
+        'free_dropshippers_number', // number of free dropshippers that Brand owners get.
     ];
 }

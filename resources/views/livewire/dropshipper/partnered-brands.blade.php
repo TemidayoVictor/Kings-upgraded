@@ -66,9 +66,17 @@
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400 border border-green-500/30 whitespace-nowrap flex-shrink-0">
                                             Cloned
                                         </span>
-                                    @else()
+                                    @elseif($store->status === App\Enums\Status::SUSPENDED)
                                         <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 whitespace-nowrap flex-shrink-0">
-                                            Not cloned
+                                            Suspended By Brand
+                                        </span>
+                                    @elseif($store->status === App\Enums\Status::SUSPENDED_BY_ADMIN)
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 whitespace-nowrap flex-shrink-0">
+                                            Suspended By Admin
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 whitespace-nowrap flex-shrink-0">
+                                            Not Cloned
                                         </span>
                                     @endif
 

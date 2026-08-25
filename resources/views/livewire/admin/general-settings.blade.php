@@ -158,6 +158,12 @@
                                 placeholder="Commission percentage"
                             />
                             <flux:input
+                                label="Free Dropshippers Number"
+                                type="number"
+                                wire:model="free_dropshippers_number"
+                                placeholder="Free Dropshippers Number"
+                            />
+                            <flux:input
                                 label="Collector Commission (%)"
                                 type="number"
                                 step="0.01"

@@ -4,11 +4,16 @@ namespace App\Actions;
 
 use App\DTOs\ApplicationDTO;
 use App\Enums\Status;
+use App\Mail\DropshipperApplicationMail;
+use App\Mail\NotifyDropshipperMail;
+use App\Models\Brand;
 use App\Models\DropshipperApplication;
 use App\Models\DropshipperStore;
 use App\Models\Payment;
+use App\Services\PaymentProcessorService;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -38,6 +43,18 @@ class ApplicationAction
                 'notes' => $dto->notes,
                 'status' => Status::PENDING,
             ]);
+
+            $brand = Brand::findOrFail($application->brand_id);
+
+            // send email to business owner
+            $emailData = [
+                'name' => $brand->user->name,
+                'subject' => "KING'S Dropshipper Application",
+                'dropshipper' => $dropshipper->username,
+                'url' => route('brand-pending-applications'),
+            ];
+            Mail::to($brand->user->email)->send(new DropshipperApplicationMail($emailData));
+
             DB::commit();
 
             return $application;
@@ -51,7 +68,7 @@ class ApplicationAction
     /**
      * @throws Throwable
      */
-    public static function approve(ApplicationDTO $dto): Payment
+    public static function approve(ApplicationDTO $dto): Payment|array
     {
         $user = auth()->user();
 
@@ -69,22 +86,26 @@ class ApplicationAction
             throw new Exception('Application not found.');
         }
 
+        // check if the addition of this dropshipper should be free or paid
+        $check = checkFreeDropshippers($brand->id);
+        $amount = $check['freeDropshippersExceeded'] ? generalSetting()->dropshipper_fee : 0;
+
+        $payload = [
+            'brand_id' => $brand->id,
+            'dropshipper_id' => $application->dropshipper_id,
+            'application_id' => $application->id,
+            'status' => Status::APPROVED,
+            'notes' => $dto->notes,
+            'reviewed_at' => now(),
+            'reviewed_by' => auth()->id(),
+            'description' => 'add-dropshipper',
+        ];
+
         DB::beginTransaction();
         try {
             // prepare payment
             $txRef = Str::uuid();
             $userId = auth()->user()->id;
-            $amount = generalSetting()->dropshipper_fee;
-            $payload = [
-                'brand_id' => $brand->id,
-                'dropshipper_id' => $application->dropshipper_id,
-                'application_id' => $application->id,
-                'status' => Status::APPROVED,
-                'notes' => $dto->notes,
-                'reviewed_at' => now(),
-                'reviewed_by' => auth()->id(),
-                'description' => 'add-dropshipper',
-            ];
 
             $payment = Payment::where('user_id', $userId)
                 ->where('status', Status::PENDING)->first();
@@ -111,10 +132,27 @@ class ApplicationAction
 
             DB::commit();
 
-            return $payment;
+            // If dropshipper addition should not be free, proceed to payment
+            if ($check['freeDropshippersExceeded']) {
+                return $payment;
+            }
+
+            // else call the processPaymentService
+            $paymentProcessor = new PaymentProcessorService;
+            $addDropshipper = $paymentProcessor->addDropshipper($payment);
+            if ($addDropshipper['status'] === 'success') {
+                $payment->update([
+                    'status' => 'successful',
+                    'transaction_id' => 'FREE',
+                    'paid_at' => now(),
+                ]);
+            }
+
+            return $addDropshipper;
+
         } catch (\Exception $e) {
             DB::rollBack();
-            throw new Exception("Failed to submit application {$e->getMessage()}");
+            throw new Exception("Failed to approve application {$e->getMessage()}");
         }
     }
 
@@ -147,6 +185,17 @@ class ApplicationAction
                 'reviewed_at' => now(),
                 'reviewed_by' => auth()->id(),
             ]);
+
+            // send mail to dropshipper
+            $emailData = [
+                'name' => $application->dropshipper->user->name,
+                'subject' => "KING'S Dropshipper Application Notification",
+                'type' => 'rejected',
+                'brandName' => $brand->brand_name,
+                'url' => route('dropshipper-applications'),
+            ];
+            Mail::to($application->dropshipper->user->email)->send(new NotifyDropshipperMail($emailData));
+
             DB::commit();
 
             return $application;
@@ -209,7 +258,10 @@ class ApplicationAction
         }
 
         $application = DropshipperApplication::where('dropshipper_id', $dto->dropshipperId)
-            ->where('brand_id', $dto->brandId);
+            ->where('brand_id', $dto->brandId)
+            ->with('dropshipper', 'brand')
+            ->first();
+
         if (! $application) {
             throw new Exception('Application not found.');
         }
@@ -228,6 +280,17 @@ class ApplicationAction
                     'status' => Status::SUSPENDED,
                 ]);
             }
+
+            // send mail to dropshipper
+            $emailData = [
+                'name' => $application->dropshipper->user->name,
+                'subject' => "KING'S Dropshipper Application Notification",
+                'type' => 'revoked',
+                'brandName' => $brand->brand_name,
+                'url' => route('dropshipper-applications'),
+            ];
+            Mail::to($application->dropshipper->user->email)->send(new NotifyDropshipperMail($emailData));
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

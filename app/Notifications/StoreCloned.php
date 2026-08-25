@@ -2,18 +2,17 @@
 
 namespace App\Notifications;
 
+use App\Models\DropshipperStore;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\DropshipperStore;
-use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class StoreCloned extends Notification
 {
     use Queueable;
 
     protected DropshipperStore $store;
+
     protected array $stats;
 
     /**

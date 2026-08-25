@@ -45,6 +45,8 @@ class GeneralSettings extends Component
 
     public int $dropshipper_percent = 0;
 
+    public int $free_dropshippers_number = 0;
+
     public int $collector_percent = 0;
 
     protected $rules = [
@@ -65,10 +67,11 @@ class GeneralSettings extends Component
         'platinum_additional_products_number' => 'required|integer|min:0',
         'dropshipper_fee' => 'required|numeric|min:0',
         'dropshipper_percent' => 'required|numeric|min:0|max:100',
+        'free_dropshippers_number' => 'required|numeric|min:0',
         'collector_percent' => 'required|numeric|min:0|max:100',
     ];
 
-    //Custom validation messages
+    // Custom validation messages
     protected $messages = [
         'basic_fee.required' => 'Basic fee is required',
         'basic_fee.numeric' => 'Basic fee must be a number',
@@ -90,24 +93,25 @@ class GeneralSettings extends Component
         $settings = generalSetting();
 
         if ($settings) {
-            $this->basic_fee = $settings->basic_fee;
-            $this->basic_products_number = $settings->basic_products_number;
-            $this->basic_images_number = $settings->basic_images_number;
-            $this->basic_additional_products_fee = $settings->basic_additional_products_fee;
-            $this->basic_additional_products_number = $settings->basic_additional_products_number;
-            $this->premium_fee = $settings->premium_fee;
-            $this->premium_products_number = $settings->premium_products_number;
-            $this->premium_images_number = $settings->premium_images_number;
-            $this->premium_additional_products_fee = $settings->premium_additional_products_fee;
-            $this->premium_additional_products_number = $settings->premium_additional_products_number;
-            $this->platinum_fee = $settings->platinum_fee;
-            $this->platinum_products_number = $settings->platinum_products_number;
-            $this->platinum_images_number = $settings->platinum_images_number;
-            $this->platinum_additional_products_fee = $settings->platinum_additional_products_fee;
-            $this->platinum_additional_products_number = $settings->platinum_additional_products_number;
-            $this->dropshipper_fee = $settings->dropshipper_fee;
-            $this->dropshipper_percent = $settings->dropshipper_percent;
-            $this->collector_percent = $settings->collector_percent;
+            $this->basic_fee = (int) $settings->basic_fee;
+            $this->basic_products_number = (int) $settings->basic_products_number;
+            $this->basic_images_number = (int) $settings->basic_images_number;
+            $this->basic_additional_products_fee = (int) $settings->basic_additional_products_fee;
+            $this->basic_additional_products_number = (int) $settings->basic_additional_products_number;
+            $this->premium_fee = (int) $settings->premium_fee;
+            $this->premium_products_number = (int) $settings->premium_products_number;
+            $this->premium_images_number = (int) $settings->premium_images_number;
+            $this->premium_additional_products_fee = (int) $settings->premium_additional_products_fee;
+            $this->premium_additional_products_number = (int) $settings->premium_additional_products_number;
+            $this->platinum_fee = (int) $settings->platinum_fee;
+            $this->platinum_products_number = (int) $settings->platinum_products_number;
+            $this->platinum_images_number = (int) $settings->platinum_images_number;
+            $this->platinum_additional_products_fee = (int) $settings->platinum_additional_products_fee;
+            $this->platinum_additional_products_number = (int) $settings->platinum_additional_products_number;
+            $this->dropshipper_fee = (int) $settings->dropshipper_fee;
+            $this->free_dropshippers_number = (int) $settings->free_dropshippers_number;
+            $this->dropshipper_percent = (int) $settings->dropshipper_percent;
+            $this->collector_percent = (int) $settings->collector_percent;
         }
     }
 
@@ -144,6 +148,7 @@ class GeneralSettings extends Component
         $settings->platinum_additional_products_number = $this->platinum_additional_products_number;
         $settings->dropshipper_fee = $this->dropshipper_fee;
         $settings->dropshipper_percent = $this->dropshipper_percent;
+        $settings->free_dropshippers_number = $this->free_dropshippers_number;
         $settings->collector_percent = $this->collector_percent;
 
         $settings->save();

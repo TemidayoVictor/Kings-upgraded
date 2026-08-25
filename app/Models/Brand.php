@@ -8,11 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Te7aHoudini\LaravelTrix\Traits\HasTrixRichText;
 
 class Brand extends Model
 {
-    use HasTrixRichText;
     protected $fillable = [
         'user_id',
         'uuid',
@@ -54,7 +52,7 @@ class Brand extends Model
     protected $casts = [
         'uuid' => 'integer',
         'revenue' => 'decimal:2',
-        'exp_date' => 'date',
+        'exp_date' => 'datetime',
     ];
 
     public function user(): BelongsTo

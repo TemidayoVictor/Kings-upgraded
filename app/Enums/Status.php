@@ -11,6 +11,7 @@ class Status
     const UNLISTED = 'unlisted';
 
     const SUSPENDED = 'suspended';
+    const SUSPENDED_BY_ADMIN = 'suspended-by-admin';
 
     const COMPLETED = 'completed';
 
@@ -68,6 +69,7 @@ class Status
             self::INACTIVE,
             self::UNLISTED,
             self::SUSPENDED,
+            self::SUSPENDED_BY_ADMIN,
             self::COMPLETED,
             self::BASIC,
             self::PREMIUM,

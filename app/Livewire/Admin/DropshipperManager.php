@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Actions\Dropshipper\SubscriptionsAction;
 use App\Enums\Status;
 use App\Models\Dropshipper;
+use App\Models\DropshipperStore;
 use App\Traits\Toastable;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -77,6 +78,16 @@ class DropshipperManager extends Component
             $dropshipper->update([
                 'status' => Status::DEACTIVATED,
             ]);
+
+            // suspend all stores
+            $stores = DropshipperStore::where('dropshipper_id', $dropshipperId)->get();
+            if ($stores->count() > 0) {
+                foreach ($stores as $store) {
+                    $store->update([
+                        'status' => Status::SUSPENDED_BY_ADMIN,
+                    ]);
+                }
+            }
             $this->toast('success', 'Dropshipper deactivated successfully.');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
@@ -94,6 +105,14 @@ class DropshipperManager extends Component
             $dropshipper->update([
                 'status' => Status::COMPLETED,
             ]);
+            $stores = DropshipperStore::where('dropshipper_id', $dropshipperId)->get();
+            if ($stores->count() > 0) {
+                foreach ($stores as $store) {
+                    $store->update([
+                        'status' => Status::CLONED,
+                    ]);
+                }
+            }
             $this->toast('success', 'Dropshipper activated successfully.');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());

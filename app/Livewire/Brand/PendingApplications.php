@@ -116,7 +116,13 @@ class PendingApplications extends Component
 
         try {
             $payment = ApplicationAction::approve($dto);
-            $this->triggerPayment($payment);
+            if (isset($payment['status']) && $payment['status'] === 'success') {
+                // this means that it was a free addition
+                $this->toast('success', 'Dropshipper added successfully.');
+                $this->closeModal();
+            } else {
+                $this->triggerPayment($payment);
+            }
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
             $this->closeModal();
@@ -226,9 +232,13 @@ class PendingApplications extends Component
             })
             ->paginate(10);
 
+        $check = checkFreeDropshippers($this->brand->id);
+
         return view('livewire.brand.pending-applications', [
             'applications' => $applications,
             'brands' => $this->brands,
+            'freeDropshippersExceeded' => $check['freeDropshippersExceeded'],
+            'remainingFreeDropshippers' => $check['remainingFreeDropshippers'],
         ])->layout('layouts.auth')
             ->title('Pending Applications');
     }
