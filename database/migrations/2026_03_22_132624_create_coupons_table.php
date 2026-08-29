@@ -30,15 +30,6 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
-
-        Schema::create('coupon_usage', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('coupon_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->decimal('discount_amount', 10, 2);
-            $table->timestamps();
-        });
     }
 
     /**
@@ -46,7 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('coupon_usage');
         Schema::dropIfExists('coupons');
     }
 };
