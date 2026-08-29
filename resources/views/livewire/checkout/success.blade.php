@@ -13,13 +13,123 @@
             <!-- Header -->
             <div class="text-center mb-10">
                 <h1 class="text-2xl font-medium text-stone-950 mb-2 tracking-tight">Order Confirmed</h1>
-                <p class="text-sm text-stone-500 font-light">Thank you for your purchase. Your order is now being processed.</p>
+                <p class="text-sm text-stone-500 font-light">Thank you for your purchase. Kindly proceed below.</p>
             </div>
 
             <!-- Order Identification -->
             <div class="bg-stone-50 rounded-2xl p-6 text-center mb-10 border border-stone-100">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-1">Order Reference</span>
                 <span class="text-xl font-semibold text-stone-950 tracking-tight">{{ $order->order_number }}</span>
+            </div>
+
+            {{-- Bank Account Details --}}
+            <div class="mb-10">
+                <div class="rounded-2xl border border-neutral-200 bg-neutral-50/50 overflow-hidden mb-3">
+                    {{-- Card Header --}}
+                    <div class="px-5 py-4 border-b border-neutral-200 bg-white">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center">
+                                <i class="fa-solid fa-building-columns text-xs"></i>
+                            </div>
+
+                            <div>
+                                <h3 class="text-sm font-medium text-neutral-900">
+                                    Payment Account
+                                </h3>
+
+                                <p class="text-[11px] text-neutral-400 font-light mt-0.5">
+                                    Please make your transfer to this account
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Account Details --}}
+                    <div class="p-5 space-y-4">
+
+                        {{-- Account Name --}}
+                        <div class="flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-neutral-400 font-medium">
+                                    Account Name
+                                </p>
+
+                                <p class="text-sm text-neutral-900 font-medium mt-1">
+                                    {{ $accountName }}
+                                </p>
+                            </div>
+                        </div>
+
+
+                        {{-- Account Number --}}
+                        <div class="flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-neutral-400 font-medium">
+                                    Account Number
+                                </p>
+
+                                <p class="text-lg text-neutral-900 font-semibold tracking-wide mt-1">
+                                    {{ $accountNumber }}
+                                </p>
+                            </div>
+
+                            <div x-data="{ copied: false }">
+                                <button
+                                    type="button"
+                                    onclick="copyAccountNumber('{{ $accountNumber }}')"
+                                    @click="copied = true; setTimeout(() => copied = false, 2000)"
+                                    class="shrink-0 w-9 h-9 rounded-lg border border-neutral-200 bg-white text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 transition"
+                                    :title="copied ? 'Copied!' : 'Copy account number'"
+                                >
+                                    <i
+                                        class="text-xs"
+                                        :class="copied ? 'fa-solid fa-check text-green-600' : 'fa-regular fa-copy'"
+                                    ></i>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        {{-- Bank --}}
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-neutral-400 font-medium">
+                                Bank
+                            </p>
+
+                            <p class="text-sm text-neutral-900 font-medium mt-1">
+                                {{ $bank }}
+                            </p>
+                        </div>
+                    </div>
+
+
+                    {{-- Notice --}}
+                    <div class="px-5 py-4 bg-neutral-100/70 border-t border-neutral-200">
+                        <div class="flex gap-3">
+                            <i class="fa-solid fa-circle-info text-neutral-400 text-xs mt-0.5"></i>
+
+                            <p class="text-[11px] leading-relaxed text-neutral-500 font-light">
+                                Please ensure that the account name and number are correct before making your transfer.
+                                Your order will be processed once your payment has been confirmed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <a
+                    href="https://wa.me/{{ $whatsappNumber }}?text={{ urlencode(
+                        "Hello, my name is {$order->customer_name}, I just placed an order on your KING'S store.\n\n" .
+                        "Order Number: #{$order->order_number}\n" .
+                        "Amount: ₦" . number_format($order->total, 2) . "\n\n" .
+                        "I have made payment. Thank you." . "\n\n" .
+                        "Link: {$link}"
+                    ) }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block w-full items-center gap-2 text-center bg-neutral-950 hover:bg-[var(--primary)] text-white text-xs font-semibold tracking-widest uppercase px-8 py-4 rounded-xl transition-all shadow-lg active:scale-98"
+                >
+                    <i wire:loading wire:target="placeOrder" class="fa-solid fa-spinner animate-spin text-[11px]"></i>
+                    <span wire:loading.remove wire:target="placeOrder">{{ __('I have made payment') }}</span>
+                </a>
             </div>
 
             <!-- Details Section -->
@@ -85,3 +195,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    function copyAccountNumber(accountNumber) {
+        const input = document.createElement('textarea');
+
+        input.value = accountNumber;
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+
+        document.body.appendChild(input);
+
+        input.focus();
+        input.select();
+
+        try {
+            document.execCommand('copy');
+            console.log('Account number copied!');
+        } catch (error) {
+            console.error('Failed to copy:', error);
+        }
+
+        document.body.removeChild(input);
+    }
+</script>

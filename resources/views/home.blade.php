@@ -40,30 +40,67 @@ Home
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 relative z-10">
-                            <!-- Node 1: Brand Owner -->
+
+                            <!-- Node 1: Business Owner -->
                             <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-brand-primary/20 text-brand-primary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-user-tie"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">1. Brand Owner</h4>
-                                <p class="text-xs text-stone-400 mt-1">Supplies & Hosts Products</p>
+                                <div class="w-10 h-10 bg-brand-primary/20 text-brand-primary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+
+                                <h4 class="font-bold text-white text-sm sm:text-base">
+                                    1. Business Owner
+                                </h4>
+
+                                <p class="text-xs text-stone-400 mt-1">
+                                    Lists Products & Runs Their Business
+                                </p>
                             </div>
-                            <!-- Node 2: Store Hub -->
+
+                            <!-- Node 2: Online Store -->
                             <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-stone-500/20 text-stone-300 rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-store"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">2. Shared Store</h4>
-                                <p class="text-xs text-stone-400 mt-1">Ecom Engine Layer</p>
+                                <div class="w-10 h-10 bg-stone-500/20 text-stone-300 rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0">
+                                    <i class="fas fa-store"></i>
+                                </div>
+
+                                <h4 class="font-bold text-white text-sm sm:text-base">
+                                    2. Online Store
+                                </h4>
+
+                                <p class="text-xs text-stone-400 mt-1">
+                                    Showcases Products & Builds Trust
+                                </p>
                             </div>
-                            <!-- Node 3: Dropshippers -->
+
+                            <!-- Node 3: Sales Partners -->
                             <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-brand-secondary/20 text-brand-secondary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-people-arrows"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">3. Dropshippers</h4>
-                                <p class="text-xs text-stone-400 mt-1">Multiplies Global Reach</p>
+                                <div class="w-10 h-10 bg-brand-secondary/20 text-brand-secondary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0">
+                                    <i class="fas fa-people-arrows"></i>
+                                </div>
+
+                                <h4 class="font-bold text-white text-sm sm:text-base">
+                                    3. Dropshippers
+                                </h4>
+
+                                <p class="text-xs text-stone-400 mt-1">
+                                    Help Businesses Reach More Customers
+                                </p>
                             </div>
+
                             <!-- Node 4: Customers -->
                             <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-amber-500/20 text-brand-primary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-users text-sm"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">4. Happy Customers</h4>
-                                <p class="text-xs text-stone-400 mt-1">Buys Directly Securely</p>
+                                <div class="w-10 h-10 bg-amber-500/20 text-brand-primary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0">
+                                    <i class="fas fa-users text-sm"></i>
+                                </div>
+
+                                <h4 class="font-bold text-white text-sm sm:text-base">
+                                    4. Customers
+                                </h4>
+
+                                <p class="text-xs text-stone-400 mt-1">
+                                    Discover & Buy With Confidence
+                                </p>
                             </div>
+
                         </div>
                     </div>
                 </div>

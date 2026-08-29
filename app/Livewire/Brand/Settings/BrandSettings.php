@@ -87,8 +87,8 @@ class BrandSettings extends Component
         $this->states = State::pluck('name', 'id')->toArray();
         $this->brandName = $user->brand->brand_name;
         $this->brandEmail = $user->brand->brand_email;
-        $this->selectedCategory = $user->brand->categoryModel->id;
-        $this->selectedSubcategory = $user->brand->subcategoryModel->id;
+        $this->selectedCategory = $user->brand->categoryModel?->id;
+        $this->selectedSubcategory = $user->brand->subcategoryModel?->id;
         // populate subcategory field if it exists
         if ($this->selectedCategory) {
             $this->subcategories = Subcategory::where('category_id', $user->brand->categoryModel->id)

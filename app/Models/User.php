@@ -30,6 +30,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'google_id',
         'phone',
         'role',
         'current_brand_id',
@@ -134,7 +135,7 @@ class User extends Authenticatable
             UserType::ADMIN => 'admin-manage-users',
             UserType::BRAND => 'brand-dashboard',
             UserType::DROPSHIPPER => 'dropshipper-partnered-brands',
-            UserType::CLIENT => 'client-dashboard',
+            UserType::CLIENT => 'wishlist',
             default => 'home',
         };
     }

@@ -182,71 +182,14 @@
                     @if($currentStep === 3)
                         <!-- Step 3 Layout Panel View Workspace -->
                         <div class="space-y-6">
-                            <div class="border-b border-stone-100 pb-3">
-                                <h2 class="text-lg font-medium text-stone-950 tracking-tight">Payment Method</h2>
-                                <p class="text-xs text-stone-400 mt-0.5">Select a primary transaction layer framework execution strategy.</p>
-                            </div>
-
-                            <div class="space-y-3">
-                                <!-- Added name="payment_method" to all radio buttons to ensure browser-level exclusive selection -->
-
-                                <!-- Card Layer -->
-                                <label class="flex items-center p-4 border border-stone-400 rounded-xl cursor-pointer hover:bg-stone-50 transition-all select-none group [has(:checked)]:border-[var(--store-primary)] [has(:checked)]:bg-[var(--store-primary)]/[0.02]">
-                                    <input type="radio" name="payment_method" wire:model="payment_method" value="card" class="w-4 h-4 text-[var(--store-primary)] border-stone-400 focus:ring-0">
-                                    <span class="ml-3.5 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-stone-100 group-has-[:checked]:bg-white border border-stone-300 flex items-center justify-center text-stone-500 group-has-[:checked]:text-[var(--store-primary)]">
-                                            <i class="fa-solid fa-credit-card text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-sm font-semibold text-stone-950 block">Credit/Debit Card Terminal</span>
-                                            <span class="text-[10px] text-stone-400 block font-normal">Instant activation processing over secure channels</span>
-                                        </div>
-                                    </span>
-                                </label>
-
-                                <!-- Transfer Layer -->
-                                <label class="flex items-center p-4 border border-stone-400 rounded-xl cursor-pointer hover:bg-stone-50 transition-all select-none group [has(:checked)]:border-[var(--store-primary)] [has(:checked)]:bg-[var(--store-primary)]/[0.02]">
-                                    <input type="radio" name="payment_method" wire:model="payment_method" value="bank_transfer" class="w-4 h-4 text-[var(--store-primary)] border-stone-400 focus:ring-0">
-                                    <span class="ml-3.5 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-stone-100 group-has-[:checked]:bg-white border border-stone-300 flex items-center justify-center text-stone-500 group-has-[:checked]:text-[var(--store-primary)]">
-                                            <i class="fa-solid fa-building-columns text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-sm font-semibold text-stone-950 block">Direct Bank Electronic Transfer</span>
-                                            <span class="text-[10px] text-stone-400 block font-normal">Generate temporary checkout nodes matching totals</span>
-                                        </div>
-                                    </span>
-                                </label>
-
-                                <!-- COD Layer -->
-                                <label class="flex items-center p-4 border border-stone-400 rounded-xl cursor-pointer hover:bg-stone-50 transition-all select-none group [has(:checked)]:border-[var(--store-primary)] [has(:checked)]:bg-[var(--store-primary)]/[0.02]">
-                                    <input type="radio" name="payment_method" wire:model="payment_method" value="cash_on_delivery" class="w-4 h-4 text-[var(--store-primary)] border-stone-400 focus:ring-0">
-                                    <span class="ml-3.5 flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-stone-100 group-has-[:checked]:bg-white border border-stone-300 flex items-center justify-center text-stone-500 group-has-[:checked]:text-[var(--store-primary)]">
-                                            <i class="fa-solid fa-hand-holding-dollar text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-sm font-semibold text-stone-950 block">Cash on Delivery (COD)</span>
-                                            <span class="text-[10px] text-stone-400 block font-normal">Pay physically on site arrival within approved bounds</span>
-                                        </div>
-                                    </span>
-                                </label>
+                            <div>
+                                <h2 class="text-xl font-medium text-neutral-900 tracking-tight font-serif">Complete Order</h2>
+                                <p class="text-xs text-neutral-400 font-light mt-1">Make Payment to complete your Order</p>
                             </div>
 
                             <!-- Textarea with high contrast and no outline -->
                             <div class="[&_textarea]:border-stone-400 [&_textarea]:text-stone-950 [&_textarea]:focus:border-[var(--store-primary)] [&_textarea]:focus:ring-0">
-                                <flux:textarea label="Order Notes (Optional)" wire:model="customer_notes" placeholder="Any special dispatch requests or landmark delivery notations?" class="max-full" />
-                            </div>
-
-                            <!-- Terms and Conditions -->
-                            <div class="mt-6 pt-4 border-t border-stone-100">
-                                <label class="flex items-start cursor-pointer select-none group">
-                                    <input type="checkbox" wire:model="termsAccepted" class="w-4 h-4 rounded border-stone-400 text-[var(--store-primary)] focus:ring-0 mt-0.5">
-                                    <span class="ml-2.5 text-xs text-stone-500 leading-relaxed">
-                                        I certify full review and acknowledge absolute agreement matching the digital store parameters specified inside the <a href="#" class="text-stone-950 font-semibold underline decoration-stone-200 hover:text-[var(--store-primary)]">Terms and Conditions</a> framework.
-                                    </span>
-                                </label>
-                                @error('termsAccepted') <span class="text-rose-600 text-xs block mt-2 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i> {{ $message }}</span> @enderror
+                                <flux:textarea label="Order Notes (Optional)" wire:model="customer_notes" placeholder="Any additional message for the store owner?" class="max-full" />
                             </div>
                         </div>
                     @endif
@@ -283,7 +226,7 @@
             <!-- Right Panel Column: Static Floating Summary Manifest -->
             <div class="w-full lg:w-96 shrink-0 lg:sticky lg:top-24">
                 <div class="bg-white rounded-2xl p-6 border border-stone-200/80 shadow-sm">
-                    <h2 class="text-base font-semibold text-stone-950 tracking-tight pb-3 border-b border-stone-100 mb-4">Summary Manifest</h2>
+                    <h2 class="text-base font-semibold text-stone-950 tracking-tight pb-3 border-b border-stone-100 mb-4">Order Summary</h2>
 
                     <!-- Inline Itemized Line Loops Container Tracker -->
                     <div class="space-y-3 mb-5 max-h-56 overflow-y-auto pr-1 divide-y divide-stone-50">
@@ -312,17 +255,13 @@
                             <span class="font-medium text-stone-800">₦{{ number_format($subtotal) }}</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-stone-500">Estimated VAT (7.5%)</span>
-                            <span class="font-medium text-stone-800">₦{{ number_format($tax) }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-stone-500">Logistics Routing Fees</span>
+                            <span class="text-stone-500">Shipping Fees</span>
                             <span class="font-medium text-stone-800">₦{{ number_format($shipping) }}</span>
                         </div>
 
                         @if($delivery_location_id)
                             <div class="flex justify-between items-start bg-stone-50 border border-stone-200/40 rounded-xl px-2.5 py-2 text-[11px]">
-                                <span class="text-stone-400 flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> Route Profile</span>
+                                <span class="text-stone-400 flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> Delivery Location</span>
                                 <span class="font-semibold text-stone-700 text-right max-w-[150px] truncate">{{ $cart->location ? $cart->location->name : '--' }}</span>
                             </div>
                         @endif

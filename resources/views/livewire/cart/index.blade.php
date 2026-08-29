@@ -3,7 +3,7 @@
 
         <div class="border-b border-neutral-200/60 pb-8 mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-                <span class="text-[10px] font-bold uppercase tracking-[3px] text-neutral-400 block mb-2">Your Curated Selection</span>
+                <span class="text-[10px] font-bold uppercase tracking-[3px] text-neutral-400 block mb-2">Your Items</span>
                 <h1 class="text-3xl sm:text-5xl font-light tracking-tight text-neutral-900 serif-display">Shopping Bag</h1>
             </div>
             <p class="text-xs sm:text-sm text-neutral-500 font-light tracking-wide">
@@ -186,7 +186,7 @@
                                         <input
                                             type="text"
                                             wire:model="couponCode"
-                                            placeholder="Enter promotional code"
+                                            placeholder="Coupon code"
                                             class="w-full bg-neutral-50 text-neutral-800 text-xs rounded-xl border border-neutral-200 focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] px-4 py-3.5 pl-9 outline-none transition-all"
                                         />
                                         <i class="fa-solid fa-percent absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-[10px]"></i>
@@ -215,15 +215,11 @@
 
                         <div class="space-y-4 pt-4 border-t border-neutral-100 text-xs text-neutral-500 font-light">
                             <div class="flex justify-between items-center">
-                                <span>Bag Subtotal</span>
+                                <span>Subtotal</span>
                                 <span class="text-neutral-900 font-medium">₦{{ number_format($subtotal) }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span>Vat Metrics (7.5%)</span>
-                                <span class="text-neutral-900 font-medium">₦{{ number_format($tax) }}</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span>Premium Logistics Care</span>
+                                <span>Shipping Fee</span>
                                 <span class="text-neutral-900 font-medium">₦{{ number_format($shipping) }}</span>
                             </div>
 
@@ -236,7 +232,7 @@
 
                             <div class="border-t border-neutral-100 pt-4 mt-2">
                                 <div class="flex justify-between items-baseline">
-                                    <span class="text-sm font-medium text-neutral-900">Total Due</span>
+                                    <span class="text-sm font-medium text-neutral-900">Total Amount</span>
                                     <span class="text-2xl font-semibold text-neutral-900 tracking-tight">₦{{ number_format($total) }}</span>
                                 </div>
                             </div>
@@ -256,7 +252,7 @@
                                 href="{{ route('shop', ['brand' => $brand->slug]) }}"
                                 class="block text-center text-xs font-medium text-neutral-400 hover:text-[var(--primary)] py-2 transition-colors tracking-wide"
                             >
-                                <i class="fa-solid fa-arrow-left-long text-[9px] mr-1"></i> Return to Catalog Store
+                                <i class="fa-solid fa-arrow-left-long text-[9px] mr-1"></i> Return to shop
                             </a>
                         </div>
                     </div>

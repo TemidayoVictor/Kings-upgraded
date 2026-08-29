@@ -11,16 +11,16 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div class="bg-[var(--secondary)] rounded-[1.5em] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center min-h-[540px] relative border border-neutral-200/40 shadow-xs">
+        <div class="bg-[var(--primary)] rounded-[1.5em] overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center min-h-[540px] relative border-neutral-200/40 shadow-xs">
             <div class="absolute inset-0 bg-gradient-to-tr from-white/40 via-transparent to-black/[0.02] pointer-events-none"></div>
 
             <!-- Left Text Content (order-2 on mobile pushes it under the image if you want the image on top, or remove order utilities to keep text on top) -->
             <div class="p-8 sm:p-12 lg:p-20 lg:col-span-7 relative z-10 space-y-6 order-2 lg:order-1">
-                <span class="text-xs font-bold tracking-[4px] uppercase text-neutral-500 block">
+                <span class="text-xs font-bold tracking-[4px] uppercase text-white block">
                     {{ $brand->brandSetting->hero_tagline ?? 'Quality collections made for you' }}
                 </span>
 
-                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal tracking-tight text-neutral-900 leading-[1.05] serif-display">
+                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-normal tracking-tight text-[var(--secondary)] leading-[1.05] serif-display">
                     {{ $brand->brandSetting->hero_title_line_1 ?? 'Designed for your' }}
                     <br>
                     <span class="text-brand-primary font-normal italic">
@@ -28,12 +28,12 @@
                     </span>
                 </h1>
 
-                <p class="text-sm sm:text-base text-neutral-600 max-w-md font-normal leading-relaxed">
+                <p class="text-sm sm:text-base text-white max-w-md font-normal leading-relaxed">
                     {{ $brand->brandSetting->hero_description ?? 'Discover our premium range of products and services. Crafted with care to give you the best experience possible.' }}
                 </p>
 
                 <div class="pt-4">
-                    <button class="w-full sm:w-auto justify-center bg-neutral-950 text-white text-xs font-medium tracking-widest uppercase px-8 py-4.5 rounded-full hover:bg-brand-primary transition-all duration-300 shadow-lg hover:-translate-y-1 flex items-center gap-3 group cursor-pointer">
+                    <button class="w-full sm:w-auto justify-center bg-[var(--secondary)] text-white text-xs font-medium tracking-widest uppercase px-8 py-4.5 rounded-full hover:bg-brand-primary transition-all duration-300 shadow-lg hover:-translate-y-1 flex items-center gap-3 group cursor-pointer">
                         {{ $brand->brandSetting->hero_button_text ?? 'Explore More' }}
                         <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1.5"></i>
                     </button>
@@ -74,8 +74,8 @@
                     About {{ $brand->brand_name }}
                 </h1>
                 @if($brand->motto)
-                    <div class="inline-block px-6 py-2 rounded-full bg-[var(--secondary)]/50 border border-neutral-200/30 mt-2">
-                        <p class="text-sm sm:text-base italic text-neutral-600 font-serif">
+                    <div class="inline-block px-6 py-2 rounded-full bg-[var(--secondary)] border border-neutral-200/30 mt-2">
+                        <p class="text-sm sm:text-base italic text-[var(--primary)] font-serif font-bold">
                             "{{ $brand->motto }}"
                         </p>
                     </div>
@@ -200,7 +200,7 @@
                     <i class="fa-solid fa-bolt text-base"></i>
                 </div>
                 <div>
-                    <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-800">Fast Turnaround</h4>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-white">Fast Turnaround</h4>
                     <p class="text-xs text-neutral-500 mt-0.5 font-light">Efficient processing and prompt execution</p>
                 </div>
             </div>
@@ -210,7 +210,7 @@
                     <i class="fa-solid fa-award text-base"></i>
                 </div>
                 <div>
-                    <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-800">Premium Quality</h4>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-white">Premium Quality</h4>
                     <p class="text-xs text-neutral-500 mt-0.5 font-light">Curated to meet rigorous industry standards</p>
                 </div>
             </div>
@@ -220,7 +220,7 @@
                     <i class="fa-solid fa-headset text-base"></i>
                 </div>
                 <div>
-                    <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-800">Dedicated Support</h4>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-white">Dedicated Support</h4>
                     <p class="text-xs text-neutral-500 mt-0.5 font-light">Expert assistance whenever you need it</p>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                     <i class="fa-solid fa-shield-halved text-base"></i>
                 </div>
                 <div>
-                    <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-800">Secure Experience</h4>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-white">Secure Experience</h4>
                     <p class="text-xs text-neutral-500 mt-0.5 font-light">Safe transactions and complete peace of mind</p>
                 </div>
             </div>

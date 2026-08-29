@@ -244,81 +244,149 @@
 
 <!-- ==================== GLOBAL FOOTER LAYER ==================== -->
 <footer class="bg-brand-dark text-stone-400 py-16 border-t border-white/5 text-sm relative overflow-hidden">
-    <!-- Subtle warm glow behind footer elements -->
-    <div class="absolute bottom-0 right-0 w-80 h-80 bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <!-- Subtle background glow -->
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-brand-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute top-0 left-1/4 w-72 h-72 bg-brand-primary/[0.02] rounded-full blur-[100px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        <!-- Top Section: Core Brand Info & Links Mapping -->
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-8 pb-12 border-b border-stone-800/80">
+        <!-- Main Footer Content -->
+        <div class="pb-12 border-b border-stone-800/80">
 
-            <!-- Column 1: Brand Identifier (Spans 4 columns on large viewports) -->
-            <div class="col-span-2 md:col-span-4 lg:col-span-4 space-y-4">
-                <a href="#" class="flex items-center gap-2.5 group">
-                    <div class="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center shadow-md shadow-amber-500/10">
-                        <i class="fas fa-cubes text-brand-dark text-base"></i>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+
+                <!-- Brand -->
+                <div class="lg:col-span-5">
+
+                    <a href="#" class="inline-flex items-center gap-2.5 group">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center">
+                            <img class="w-8 h-8" src="{{ asset('images/Logo-Crown.svg') }}" alt="">
+                        </div>
+
+                        <span class="font-extrabold text-[1.5rem] tracking-tight text-white">
+                            <span class="text-brand-primary">KING'S</span>
+                        </span>
+                    </a>
+
+                    <p class="mt-5 text-sm text-stone-400 max-w-md leading-relaxed">
+                        A platform where businesses can build their presence, showcase their products,
+                        earn customer trust, and reach more people through a growing network of sales partners.
+                    </p>
+
+                    <!-- Social Media -->
+                    <div class="mt-6">
+                        <a href="#"
+                           class="group inline-flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/5 hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all">
+                            <span class="w-9 h-9 rounded-lg bg-white/5 group-hover:bg-brand-primary/10 text-stone-400 group-hover:text-brand-primary flex items-center justify-center transition-all">
+                                <i class="fab fa-instagram text-base"></i>
+                            </span>
+
+                            <span class="text-xs font-medium text-stone-400 group-hover:text-white transition-colors">
+                                Follow us on Instagram
+                            </span>
+
+                            <i class="fas fa-arrow-up-right-from-square text-[10px] text-stone-600 group-hover:text-brand-primary transition-colors"></i>
+                        </a>
                     </div>
-                    <span class="font-extrabold text-xl tracking-tight text-white">
-              Nexus<span class="text-brand-primary">Hub</span>
-            </span>
-                </a>
-                <p class="text-xs text-stone-500 max-w-sm leading-relaxed">
-                    The decentralized distribution engine connecting premium brand suppliers with thousands of high-velocity dropshipping storefronts worldwide.
-                </p>
-                <!-- Social Media Vector Footprint -->
-                <div class="flex items-center gap-3 pt-2">
-                    <a href="#" class="w-8 h-8 rounded-lg bg-white/5 border border-white/5 hover:border-brand-primary/40 text-stone-400 hover:text-brand-primary flex items-center justify-center transition-all" aria-label="Twitter"><i class="fab fa-twitter text-xs"></i></a>
-                    <a href="#" class="w-8 h-8 rounded-lg bg-white/5 border border-white/5 hover:border-brand-primary/40 text-stone-400 hover:text-brand-primary flex items-center justify-center transition-all" aria-label="LinkedIn"><i class="fab fa-linkedin-in text-xs"></i></a>
-                    <a href="#" class="w-8 h-8 rounded-lg bg-white/5 border border-white/5 hover:border-brand-primary/40 text-stone-400 hover:text-brand-primary flex items-center justify-center transition-all" aria-label="Instagram"><i class="fab fa-instagram text-xs"></i></a>
-                    <a href="#" class="w-8 h-8 rounded-lg bg-white/5 border border-white/5 hover:border-brand-primary/40 text-stone-400 hover:text-brand-primary flex items-center justify-center transition-all" aria-label="Discord"><i class="fab fa-discord text-xs"></i></a>
+
                 </div>
-            </div>
 
-            <!-- Column 2: Platform Links Directory -->
-            <div class="col-span-1 md:col-span-2 lg:col-span-2 space-y-3">
-                <h5 class="text-xs font-bold uppercase tracking-widest text-white/90">Marketplace</h5>
-                <ul class="space-y-2 text-xs font-medium">
-                    <li><a href="#" class="hover:text-brand-primary transition">Discover Hubs</a></li>
-                    <li><a href="#" class="hover:text-brand-primary transition">Trending Items</a></li>
-                    <li><a href="#" class="hover:text-brand-primary transition">Featured Stores</a></li>
-                    <li><a href="#" class="hover:text-brand-primary transition">Niche Map Matrix</a></li>
-                </ul>
-            </div>
 
-            <!-- Column 3: Network Business Rules Link Tree -->
-            <div class="col-span-1 md:col-span-2 lg:col-span-2 space-y-3">
-                <h5 class="text-xs font-bold uppercase tracking-widest text-white/90">Ecosystem Roles</h5>
-                <ul class="space-y-2 text-xs font-medium">
-                    <li><a href="#" class="hover:text-brand-primary transition">For Brand Owners</a></li>
-                    <li><a href="#" class="hover:text-brand-primary transition">For Dropshippers</a></li>
-                    <li><a href="#" class="hover:text-brand-primary transition">Split Commission Rules</a></li>
-                    <li><a href="#" class="hover:text-brand-primary transition">Enterprise Tiering</a></li>
-                </ul>
-            </div>
+                <!-- What KING'S Offers -->
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-8">
 
-            <!-- Column 4: Newsletter Engine Input Capture -->
-            <div class="col-span-2 md:col-span-4 lg:col-span-4 space-y-3">
-                <h5 class="text-xs font-bold uppercase tracking-widest text-white/90">Stay Synced</h5>
-                <p class="text-xs text-stone-500 leading-relaxed">Receive updates whenever new verified suppliers deploy inventories into the marketplace nodes.</p>
-                <form class="flex gap-2 pt-1" onsubmit="event.preventDefault();">
-                    <input type="email" placeholder="Your secure email..." class="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-brand-primary/50 w-full transition" required>
-                    <button type="submit" class="bg-brand-primary text-brand-dark px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-400 transition whitespace-nowrap">Join Matrix</button>
-                </form>
+                    <!-- Discover -->
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center mb-4">
+                            <i class="fas fa-compass text-sm"></i>
+                        </div>
+
+                        <h5 class="text-sm font-bold text-white mb-2">
+                            Be Discovered
+                        </h5>
+
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            Put your business in front of people looking for products and services like yours.
+                        </p>
+                    </div>
+
+
+                    <!-- Build Trust -->
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center mb-4">
+                            <i class="fas fa-star text-sm"></i>
+                        </div>
+
+                        <h5 class="text-sm font-bold text-white mb-2">
+                            Build Trust
+                        </h5>
+
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            Showcase your business, customer reviews, ratings, and products in one place.
+                        </p>
+                    </div>
+
+
+                    <!-- Grow -->
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center mb-4">
+                            <i class="fas fa-chart-line text-sm"></i>
+                        </div>
+
+                        <h5 class="text-sm font-bold text-white mb-2">
+                            Grow Your Sales
+                        </h5>
+
+                        <p class="text-xs text-stone-500 leading-relaxed">
+                            Reach more customers and work with dropshippers who help bring your products to more people.
+                        </p>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
 
-        <!-- Bottom Section: Legal Meta Protocols & Ledger Attribution -->
-        <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-stone-500">
-            <div class="text-center md:text-left space-y-1">
-                <div>© 2026 NexusHub Inc. Distributed ledger orchestration layer architecture. All items verified natively.</div>
-                <p class="text-[11px] text-stone-600">Built for seamless multi-party settlement sequences globally.</p>
+
+        <!-- Bottom Section -->
+        <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-5 text-xs font-medium text-stone-500">
+
+            <!-- Copyright -->
+            <div class="text-center md:text-left">
+                <p>
+                    © 2026 KING'S Incorporated. All rights reserved.
+                </p>
+
+                <p class="mt-1.5 text-[11px] text-stone-600">
+                    Helping businesses get discovered, build trust, and grow.
+                </p>
             </div>
+
+
+            <!-- Legal -->
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-stone-400">
-                <a href="#" class="hover:text-brand-primary transition flex items-center gap-1.5"><i class="fas fa-shield-halved text-[10px] text-brand-primary/70"></i> Privacy Engine</a>
-                <a href="#" class="hover:text-brand-primary transition flex items-center gap-1.5"><i class="fas fa-gavel text-[10px] text-brand-primary/70"></i> Terms of Node Protocol</a>
-                <a href="#" class="hover:text-brand-primary transition flex items-center gap-1.5"><i class="fas fa-network-wired text-[10px] text-brand-primary/70"></i> SLA Coordinates</a>
+
+                <a href="#"
+                   class="hover:text-brand-primary transition flex items-center gap-1.5">
+                    <i class="fas fa-shield-halved text-[10px] text-brand-primary/70"></i>
+                    Privacy Policy
+                </a>
+
+                <a href="#"
+                   class="hover:text-brand-primary transition flex items-center gap-1.5">
+                    <i class="fas fa-gavel text-[10px] text-brand-primary/70"></i>
+                    Terms of Service
+                </a>
+
+                <a href="#"
+                   class="hover:text-brand-primary transition flex items-center gap-1.5">
+                    <i class="fas fa-headset text-[10px] text-brand-primary/70"></i>
+                    Help & Support
+                </a>
+
             </div>
+
         </div>
 
     </div>

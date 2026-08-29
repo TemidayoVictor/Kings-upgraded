@@ -9,9 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SignupAction
 {
+    /**
+     * @throws Throwable
+     */
     public static function execute(SignupDTO $dto): User
     {
         DB::beginTransaction();
@@ -25,7 +29,7 @@ class SignupAction
             ]);
 
             // Log user in
-            Auth::login($user);
+            Auth::login($user, true);
 
             $buildDto = [
                 'id' => $user->id,
@@ -40,7 +44,7 @@ class SignupAction
 
             return $user;
 
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             DB::rollBack();
             Log::error('Signup failed', [
                 'message' => $e->getMessage(),

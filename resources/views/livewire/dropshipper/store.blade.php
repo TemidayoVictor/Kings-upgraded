@@ -1,6 +1,6 @@
 {{-- resources/views/livewire/dropshipper-store/products.blade.php --}}
 <div class="min-h-screen bg-[var(--store-bg)]">
-    @if($store->status === 'suspended')
+    @if($store->status !== \App\Enums\Status::CLONED)
         <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
             <div class="bg-white rounded-3xl p-8 sm:p-12 text-center border border-stone-200/80 shadow-sm relative overflow-hidden group">
 
@@ -29,7 +29,7 @@
                         // Format the phone number for WhatsApp: remove spaces, dashes, plus signs, etc.
                         // Falls back gracefully if no phone column exists.
                         $rawPhone = $store->dropshipper->user->phone ?? '';
-                        $cleanPhone = preg_replace('/[^0-9]/', '', $rawPhone);
+                        $cleanPhone = '234'.ltrim($rawPhone, '0');
 
                         // Optional preset message for the user when they click
                         $whatsappMessage = urlencode("Hello {$store->dropshipper->user->name}, I tried visiting your store '{$store->store_name}' but noticed it is currently inactive.");

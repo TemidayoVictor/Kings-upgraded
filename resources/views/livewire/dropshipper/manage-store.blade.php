@@ -6,7 +6,7 @@
 
         <div class="flex justify-end mb-4 gap-x-2">
             <flux:button size="sm" variant="primary" wire:click="editStore">
-                Edit Store Details
+                Edit Store
             </flux:button>
             <flux:button size="sm" variant="primary" href="{{route('dropshipper-revenue-generated', ['storeId' => $store->id])}}">
                 Store Revenue

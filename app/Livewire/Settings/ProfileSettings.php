@@ -39,6 +39,15 @@ class ProfileSettings extends Component
 
     public function mount(): void
     {
+        // notification once payment is successful or fails
+        if (session('success')) {
+            $this->toast('success', session('success'));
+        }
+
+        if (session('error')) {
+            $this->toast('error', session('error'));
+        }
+
         $user = auth()->user();
         $this->name = $user->name;
         $this->email = $user->email;

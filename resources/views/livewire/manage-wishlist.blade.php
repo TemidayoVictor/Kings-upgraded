@@ -1,6 +1,6 @@
 {{-- resources/views/livewire/shop/user-wishlist.blade.php --}}
 <section class="w-full">
-    @include('partials.settings-heading')
+    @include('partials.wishlist-heading')
 
     <flux:heading class="sr-only">{{ __('My Saved Wishlist Items') }}</flux:heading>
 

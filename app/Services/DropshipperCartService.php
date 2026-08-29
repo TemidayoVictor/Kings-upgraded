@@ -259,7 +259,7 @@ class DropshipperCartService
             ->first();
 
         $subtotal = $totals->subtotal ?? 0;
-        $tax = round($subtotal * 0.075, 2);
+        $tax = 0;
         $discount = 0.00;
         $total = $subtotal + $tax + $this->cart->shipping;
 

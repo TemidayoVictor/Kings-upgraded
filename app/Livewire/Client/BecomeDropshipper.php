@@ -1,20 +1,25 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Client;
 
 use App\Actions\SelectRoleAction;
 use App\DTOs\SelectRoleDTO;
-use App\Traits\Toastable;
+use App\Enums\UserType;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class SelectRole extends Component
+class BecomeDropshipper extends Component
 {
-    use Toastable;
-
-    public function submit($role): mixed
+    public function render(): View
     {
-        $dto = SelectRoleDTO::fromArray(['role' => $role]);
+        return view('livewire.client.become-dropshipper')
+            ->layout('layouts.auth')
+            ->title('Become a Dropshipper');
+    }
+
+    public function submit(): mixed
+    {
+        $dto = SelectRoleDTO::fromArray(['role' => UserType::DROPSHIPPER]);
         try {
             SelectRoleAction::execute($dto);
 
@@ -30,12 +35,5 @@ class SelectRole extends Component
             $this->toast('error', $e->getMessage());
             return back();
         }
-    }
-
-    public function render(): View
-    {
-        return view('livewire.select-role')
-            ->layout('layouts.app')
-            ->title('Select Role');
     }
 }

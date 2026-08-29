@@ -27,7 +27,7 @@
             <div class="lg:col-span-3 sticky top-28 space-y-8 hidden lg:block">
                 <!-- Search Component Segment -->
                 <div class="space-y-3">
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-neutral-400">Catalog Discovery</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-neutral-400">Product Discovery</h4>
                     <div class="relative">
                         <input
                             type="text"

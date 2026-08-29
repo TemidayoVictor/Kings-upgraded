@@ -10,43 +10,72 @@ use App\Models\State;
 use App\Services\CartService;
 use App\Traits\Toastable;
 use Livewire\Component;
+use Illuminate\Support\Facades\Crypt;
 
 class Index extends Component
 {
     use Toastable;
 
     public $cart;
+
     public Brand $brand;
+
     public CartService $cartService;
+
     public $cartItems = [];
+
     public $subtotal = 0;
+
     public $tax = 0;
+
     public $shipping = 0;
+
     public $discount = 0;
+
     public $total = 0;
+
     // Customer Information
     public $customer_name = '';
+
     public $customer_email = '';
+
     public $customer_phone = '';
+
     // Delivery Information
     public $delivery_address = '';
+
     public $delivery_city = '';
+
     public $delivery_state = '';
+
     public $delivery_zip = '';
+
     public $delivery_instructions = '';
+
     public $delivery_location_id = null;
+
     public $delivery_locations = [];
+
     public $selected_location = null;
+
     public $delivery_price = 0;
+
     // Payment
-    public $payment_method = 'card';
+    public $payment_method = 'bank_transfer';
+
     public $customer_notes = '';
+
     // UI State
     public $currentStep = 1;
+
     public $termsAccepted = false;
+
     public $processing = false;
+
     public $selected_child_parent_id = null;
+
     public array $states = [];
+
     protected $rules = [
         // Step 1: Customer Information
         'customer_name' => 'required|string|min:3|max:255',
@@ -62,8 +91,8 @@ class Index extends Component
         'delivery_instructions' => 'nullable|string|max:500',
 
         // Step 3: Payment
-        'payment_method' => 'required|in:card,bank_transfer,cash_on_delivery',
-        'termsAccepted' => 'accepted',
+        // 'payment_method' => 'required|in:card,bank_transfer,cash_on_delivery',
+        // 'termsAccepted' => 'accepted',
     ];
 
     protected $messages = [
@@ -203,10 +232,11 @@ class Index extends Component
             ]);
 
             // redirect to success page
-            return redirect()->route('checkout.success', ['order' => $order]);
+            return redirect()->route('checkout.success', ['orderId' => urlencode(Crypt::encryptString((string) $order->id))]);
         } catch (\Exception $e) {
             $this->processing = false;
             $this->toast('error', $e->getMessage());
+
             return back();
         }
     }

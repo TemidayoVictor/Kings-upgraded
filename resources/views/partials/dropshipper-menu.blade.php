@@ -20,6 +20,15 @@
         </flux:sidebar.item>
     </flux:sidebar.group>
 
+    <flux:sidebar.group :heading="__('Personal')" class="grid">
+        <flux:sidebar.item icon="shopping-bag" :href="route('wishlist')" :current="request()->routeIs('wishlist')" wire:navigate>
+            {{ __('Wishlist') }}
+        </flux:sidebar.item>
+        <flux:sidebar.item icon="clipboard-document-list" :href="route('user-orders', ['user' => 'view'])" :current="request()->routeIs('user-orders')" wire:navigate>
+            {{ __('Orders By You') }}
+        </flux:sidebar.item>
+    </flux:sidebar.group>
+
     <flux:sidebar.group :heading="__('Settings')" class="grid">
         <flux:sidebar.item icon="cog-6-tooth" :href="route('settings.profile')" :current="request()->routeIs('settings.profile', 'dropshipper-details')" wire:navigate>
             {{ __('General Settings') }}

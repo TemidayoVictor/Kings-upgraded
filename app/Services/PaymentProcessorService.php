@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\Status;
+use App\Enums\UserType;
 use App\Mail\NotifyDropshipperMail;
 use App\Models\Brand;
 use App\Models\Dropshipper;
@@ -10,6 +11,7 @@ use App\Models\DropshipperApplication;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Revenue;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -25,6 +27,7 @@ class PaymentProcessorService
             'add_dropshipper' => $this->addDropshipper($payment),
             'dropshipper_monthly_subscription' => $this->dropShipperMonthlySubscription($payment),
             'dropshipper_commission' => $this->dropshipperCommission($payment),
+            'add_brand' => $this->addBrand($payment),
             default => throw new \Exception("Unknown payment action: {$payment->action}"),
         };
     }
@@ -280,6 +283,57 @@ class PaymentProcessorService
 
             return [
                 'route' => 'dropshipper-orders',
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+    public function addBrand(Payment $payment): array
+    {
+        try {
+            DB::beginTransaction();
+            $user = User::findOrFail($payment->payload['user_id']);
+
+            // Create in brand table
+            $brand = Brand::create([
+                'user_id' => $payment->payload['user_id'],
+                'uuid' => rand(100000, 999999),
+                'status' => Status::UNLISTED,
+                'subscription_status' => $payment->payload['subscription_status'],
+                'no_of_products' => $payment->payload['no_of_products'],
+                'subscription_amount' => $payment->payload['subscription_amount'],
+                'exp_date' => Carbon::now()->addMonth($payment->payload['month']),
+            ]);
+            $user->update([
+                'current_brand_id' => $brand->id,
+                'role' => UserType::BRAND, // for times when clients or non brand owners add accounts
+                'onboarding_step' => 'profile_setup',
+            ]);
+
+            // Add Revenue
+            Revenue::create([
+                'user_id' => $payment->user_id,
+                'brand_id' => $brand->id,
+                'payment_id' => $payment->id,
+                'amount' => $payment->amount,
+                'description' => $payment->payload['description'],
+                'subscription_status' => $payment->payload['subscription_status'],
+            ]);
+
+            DB::commit();
+
+            return [
+                'route' => 'settings.profile',
+                'status' => 'success',
+                'message' => 'Brand added successfully.',
+            ];
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return [
+                'route' => 'settings.profile',
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ];

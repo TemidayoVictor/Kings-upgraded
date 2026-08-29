@@ -72,7 +72,7 @@
                 <flux:separator text="or" />
 
                 <div class="space-y-4">
-                    <flux:button class="w-full">
+                    <flux:button class="w-full" href="{{route('auth.google')}}">
                         <x-slot name="icon">
                             <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M23.06 12.25C23.06 11.47 22.99 10.72 22.86 10H12.5V14.26H18.42C18.16 15.63 17.38 16.79 16.21 17.57V20.34H19.78C21.86 18.42 23.06 15.6 23.06 12.25Z" fill="#4285F4"/>

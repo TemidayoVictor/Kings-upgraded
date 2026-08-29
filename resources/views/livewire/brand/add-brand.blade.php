@@ -178,7 +178,7 @@
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                                 </svg>
-                                <span>✓ Everything in Premium</span>
+                                <span>Everything in Premium</span>
                             </div>
                             <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -444,7 +444,7 @@
                                 </flux:button>
                                 <flux:button type="submit" size="sm" variant="primary">
                                     <flux:icon.loading wire:loading wire:target="addBrandFree" />
-                                    <span wire:loading.remove wire:target="confirmRevoke">Proceed</span>
+                                    <span wire:loading.remove wire:target="addBrandFree">Proceed</span>
                                 </flux:button>
                             </div>
                         </div>
@@ -468,7 +468,7 @@
                                 </flux:button>
                                 <flux:button type="submit" size="sm" variant="primary">
                                     <flux:icon.loading wire:loading wire:target="addBrand" />
-                                    <span wire:loading.remove wire:target="confirmRevoke">Proceed</span>
+                                    <span wire:loading.remove wire:target="addBrand">Proceed</span>
                                 </flux:button>
                             </div>
                         </div>

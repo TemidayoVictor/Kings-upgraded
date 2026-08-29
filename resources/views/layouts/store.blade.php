@@ -100,53 +100,24 @@
 </main>
 
 <footer class="bg-[var(--store-surface)] border-t border-stone-300/60 mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            <div class="sm:col-span-2 md:col-span-1">
-                <h3 class="font-semibold text-stone-950 mb-3 text-base">{{ $store->store_name }}</h3>
-                <p class="text-xs sm:text-sm text-stone-700 leading-relaxed max-w-xs">
-                    A curated selection of quality products, brought to you by {{ $store->dropshipper->user->name }}.
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <div class="text-center">
+            <h3 class="font-semibold text-stone-950 text-base">
+                {{ $store->store_name }}
+            </h3>
+
+            <p class="text-xs sm:text-sm text-stone-600 mt-2 max-w-md mx-auto leading-relaxed">
+                Thank you for shopping with us. We appreciate your business.
+            </p>
+
+            <div class="border-t border-stone-300/50 mt-8 pt-6">
+                <p class="text-xs text-stone-500">
+                    &copy; {{ date('Y') }} {{ $store->store_name }}. All rights reserved.
                 </p>
             </div>
-
-            <div>
-                <h4 class="font-medium text-stone-900 mb-3 text-sm tracking-wide uppercase">Quick Links</h4>
-                <ul class="space-y-2 text-xs sm:text-sm">
-                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">About Us</a></li>
-                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">Contact Information</a></li>
-                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">Shipping Framework</a></li>
-                    <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">Returns & Exchanges</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-medium text-stone-900 mb-3 text-sm tracking-wide uppercase">Categories</h4>
-                <ul class="space-y-2 text-xs sm:text-sm">
-                    @foreach($sections ?? [] as $section)
-                        <li><a href="#" class="text-stone-700 hover:text-[var(--store-primary)] transition-colors">{{ $section->name }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-medium text-stone-900 mb-3 text-sm tracking-wide uppercase">Connect</h4>
-                <div class="flex gap-2.5">
-                    <a href="#" class="w-9 h-9 bg-white rounded-xl flex items-center justify-center text-stone-800 hover:text-[var(--store-primary)] hover:shadow-sm transition-all border border-stone-200">
-                        <i class="fa-brands fa-instagram text-sm"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 bg-white rounded-xl flex items-center justify-center text-stone-800 hover:text-[var(--store-primary)] hover:shadow-sm transition-all border border-stone-200">
-                        <i class="fa-brands fa-facebook-f text-sm"></i>
-                    </a>
-                    <a href="#" class="w-9 h-9 bg-white rounded-xl flex items-center justify-center text-stone-800 hover:text-[var(--store-primary)] hover:shadow-sm transition-all border border-stone-200">
-                        <i class="fa-brands fa-x-twitter text-sm"></i>
-                    </a>
-                </div>
-            </div>
         </div>
 
-        <div class="border-t border-stone-300/50 mt-8 pt-6 text-center text-xs text-stone-600">
-            <p>&copy; {{ date('Y') }} {{ $store->store_name }}. All rights reserved. Powered by KING'S.</p>
-        </div>
     </div>
 </footer>
 

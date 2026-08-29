@@ -83,9 +83,9 @@
 
             <div class="flex items-center justify-end gap-1.5 sm:gap-3 flex-shrink-0">
 
-                <button type="button" class="w-10 h-10 sm:w-11 sm:h-11 text-neutral-700 hover:text-[var(--primary)] hover:bg-neutral-50 rounded-full transition-all flex items-center justify-center cursor-pointer">
+                <a href="{{route('wishlist')}}" class="w-10 h-10 sm:w-11 sm:h-11 text-neutral-700 hover:text-[var(--primary)] hover:bg-neutral-50 rounded-full transition-all flex items-center justify-center cursor-pointer">
                     <i class="fa-regular fa-heart text-base"></i>
-                </button>
+                </a>
 
                 <a
                     href="{{ route('cart', ['brand' => $brand->slug]) }}"
@@ -107,8 +107,8 @@
                 @auth
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" type="button" class="flex items-center focus:outline-none cursor-pointer">
-                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--secondary)] border border-white flex items-center justify-center shadow-xs">
-                                <span class="text-xs font-semibold text-neutral-800 uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--primary)] border border-white flex items-center justify-center shadow-xs">
+                                <span class="text-xs font-semibold text-white uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
                             </div>
                         </button>
                         <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-3 w-52 bg-white rounded-2xl shadow-xl border border-neutral-100 py-2 z-50" x-cloak>
@@ -166,76 +166,196 @@
 </main>
 
 <footer class="bg-neutral-950 text-neutral-400 w-full border-t border-neutral-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 md:gap-8 lg:gap-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
 
+            {{-- Brand Information --}}
             <div class="space-y-5 sm:col-span-2 lg:col-span-2">
                 <h5 class="text-xl font-bold tracking-wider text-white uppercase">
-                    {{ config('app.name') }}<span class="text-neutral-500">.</span>
+                    {{ $brand->brand_name }}<span class="text-neutral-500">.</span>
                 </h5>
-                <p class="text-xs sm:text-sm text-neutral-400 max-w-sm leading-relaxed font-light">
-                    Providing seamless e-commerce solutions and premium storefront interfaces. Crafted to deliver high-quality, dependable framework execution for modern digital ecosystems.
-                </p>
-                <div class="flex gap-2.5 pt-1">
-                    <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
-                        <i class="fa-brands fa-instagram text-sm"></i>
-                    </a>
-                    <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
-                        <i class="fa-brands fa-facebook-f text-sm"></i>
-                    </a>
-                    <a href="#" aria-label="X / Twitter" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
-                        <i class="fa-brands fa-x-twitter text-sm"></i>
-                    </a>
-                    <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
-                        <i class="fa-brands fa-linkedin-in text-sm"></i>
-                    </a>
-                </div>
+
+                @if($brand->about || $brand->description)
+                    <p class="text-xs sm:text-sm text-neutral-400 max-w-md leading-relaxed font-light">
+                        {{ strip_tags($brand->about ?? $brand->description) }}
+                    </p>
+                @else
+                    <p class="text-xs sm:text-sm text-neutral-400 max-w-md leading-relaxed font-light">
+                        Discover products and services from {{ $brand->brand_name }}.
+                    </p>
+                @endif
+
+                {{-- Social Links --}}
+                @if(
+                    $brand->instagram ||
+                    $brand->facebook ||
+                    $brand->twitter ||
+                    $brand->youtube ||
+                    $brand->tiktok ||
+                    $brand->linkedin ||
+                    $brand->website
+                )
+                    <div class="flex flex-wrap gap-2.5 pt-1">
+
+                        @if($brand->instagram)
+                            <a href="{{ $brand->instagram }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="Instagram"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-brands fa-instagram text-sm"></i>
+                            </a>
+                        @endif
+
+                        @if($brand->facebook)
+                            <a href="{{ $brand->facebook }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="Facebook"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-brands fa-facebook-f text-sm"></i>
+                            </a>
+                        @endif
+
+                        @if($brand->twitter)
+                            <a href="{{ $brand->twitter }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="X / Twitter"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-brands fa-x-twitter text-sm"></i>
+                            </a>
+                        @endif
+
+                        @if($brand->youtube)
+                            <a href="{{ $brand->youtube }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="YouTube"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-brands fa-youtube text-sm"></i>
+                            </a>
+                        @endif
+
+                        @if($brand->tiktok)
+                            <a href="{{ $brand->tiktok }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="TikTok"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-brands fa-tiktok text-sm"></i>
+                            </a>
+                        @endif
+
+                        @if($brand->linkedin)
+                            <a href="{{ $brand->linkedin }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="LinkedIn"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-brands fa-linkedin-in text-sm"></i>
+                            </a>
+                        @endif
+
+                        @if($brand->website)
+                            <a href="{{ $brand->website }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="Website"
+                               class="w-9 h-9 rounded-xl bg-neutral-900 border border-neutral-800/60 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-all active:scale-95">
+                                <i class="fa-solid fa-globe text-sm"></i>
+                            </a>
+                        @endif
+
+                    </div>
+                @endif
             </div>
 
+            {{-- Shop --}}
             <div class="space-y-4">
-                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">Shop & Explore</h5>
+                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">
+                    Shop
+                </h5>
+
                 <ul class="space-y-2.5 text-xs font-light tracking-wide">
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">All Collections</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Featured Products</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">New Arrivals</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Exclusive Offers</a></li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            All Products
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            Featured Products
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            New Arrivals
+                        </a>
+                    </li>
                 </ul>
             </div>
 
+            {{-- Information --}}
             <div class="space-y-4">
-                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">Customer Support</h5>
-                <ul class="space-y-2.5 text-xs font-light tracking-wide">
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Help & FAQs</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Shipping & Delivery</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Returns & Exchanges</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Track Your Order</a></li>
-                </ul>
-            </div>
+                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">
+                    Information
+                </h5>
 
-            <div class="space-y-4">
-                <h5 class="text-xs font-semibold uppercase text-white tracking-widest">Our Company</h5>
                 <ul class="space-y-2.5 text-xs font-light tracking-wide">
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">About Us</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Contact Directory</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Careers Channel</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors py-0.5 block">Corporate Responsibility</a></li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            About Us
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            Contact Us
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            Shipping & Delivery
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="hover:text-white transition-colors py-0.5 block">
+                            Returns & Exchanges
+                        </a>
+                    </li>
                 </ul>
             </div>
 
         </div>
 
-        <div class="mt-16 pt-8 border-t border-neutral-900/80 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 font-light tracking-wider">
-            <p class="text-center sm:text-left">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+        {{-- Bottom Bar --}}
+        <div class="mt-14 pt-7 border-t border-neutral-900/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 font-light tracking-wide">
+
+            <p class="text-center sm:text-left">
+                &copy; {{ date('Y') }} {{ $brand->brand_name }}. All rights reserved.
+            </p>
+
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
-                <a href="#" class="hover:text-neutral-400 transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-neutral-400 transition-colors">Terms of Service</a>
-                <a href="#" class="hover:text-neutral-400 transition-colors">Cookie Configurations</a>
+                <a href="#" class="hover:text-neutral-400 transition-colors">
+                    Privacy Policy
+                </a>
+
+                <a href="#" class="hover:text-neutral-400 transition-colors">
+                    Terms of Service
+                </a>
             </div>
+
         </div>
 
     </div>
 </footer>
+
 
 @fluxScripts
 @vite(['resources/js/app.js'])

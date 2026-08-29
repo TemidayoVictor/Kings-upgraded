@@ -92,14 +92,13 @@
                         <!-- Step 2: Delivery Information -->
                         <div class="space-y-6 animate-fade-in">
                             <div>
-                                <h2 class="text-xl font-medium text-neutral-900 tracking-tight font-serif">Delivery Framework</h2>
-                                <p class="text-xs text-neutral-400 font-light mt-1">Select location matrix maps to establish exact premium routing weights</p>
+                                <h2 class="text-xl font-medium text-neutral-900 tracking-tight font-serif">Delivery Location</h2>
+                                <p class="text-xs text-neutral-400 font-light mt-1">Select your delivery location</p>
                             </div>
 
                             <div class="space-y-5 pt-2 checkout-custom-inputs">
                                 <!-- Delivery Location Selection -->
                                 <div>
-                                    <label class="block text-xs font-medium text-neutral-500 uppercase tracking-wider mb-3">Select Delivery Region</label>
                                     <div class="space-y-3">
                                         @foreach($delivery_locations as $location)
                                             <div class="border rounded-2xl overflow-hidden transition-all duration-300 bg-neutral-50/30 {{ $delivery_location_id == $location->id || $this->isParentOfSelectedChild($location->id) ? 'border-neutral-900 ring-1 ring-neutral-900/5 shadow-xs' : 'border-neutral-200' }}">
@@ -178,86 +177,16 @@
 
                     @if($currentStep === 3)
                         <!-- Step 3: Payment -->
-                        <div class="space-y-6 animate-fade-in">
+                        <div class="animate-fade-in">
                             <div>
-                                <h2 class="text-xl font-medium text-neutral-900 tracking-tight font-serif">Payment Modality</h2>
-                                <p class="text-xs text-neutral-400 font-light mt-1">Select your preferred transactional exchange interface</p>
+                                <h2 class="text-xl font-medium text-neutral-900 tracking-tight font-serif">Complete Order</h2>
+                                <p class="text-xs text-neutral-400 font-light mt-1">Make Payment to complete your Order</p>
                             </div>
 
-                            <div class="space-y-4 pt-2 checkout-custom-inputs">
-                                <!-- Payment Radio Selection Array Stack Grid -->
-                                <div class="grid grid-cols-1 gap-3">
-
-                                    <!-- Card option element -->
-                                    <label class="flex items-center p-4.5 border rounded-2xl cursor-pointer transition-all duration-300 hover:bg-neutral-50/40 {{ $payment_method === 'card' ? 'border-neutral-900 bg-neutral-50/20 ring-1 ring-neutral-900/5 shadow-xs' : 'border-neutral-200' }}">
-                                        <input
-                                            type="radio"
-                                            wire:model="payment_method"
-                                            value="card"
-                                            class="w-4 h-4 text-neutral-900 bg-white border-neutral-300 focus:ring-0 outline-none focus:ring-offset-0"
-                                        >
-                                        <span class="ml-4 flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-500">
-                                                <i class="fa-regular fa-credit-card text-sm"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-neutral-800">Credit / Debit Card gateway</span>
-                                        </span>
-                                    </label>
-
-                                    <!-- Bank transfer option element -->
-                                    <label class="flex items-center p-4.5 border rounded-2xl cursor-pointer transition-all duration-300 hover:bg-neutral-50/40 {{ $payment_method === 'bank_transfer' ? 'border-neutral-900 bg-neutral-50/20 ring-1 ring-neutral-900/5 shadow-xs' : 'border-neutral-200' }}">
-                                        <input
-                                            type="radio"
-                                            wire:model="payment_method"
-                                            value="bank_transfer"
-                                            class="w-4 h-4 text-neutral-900 bg-white border-neutral-300 focus:ring-0 outline-none focus:ring-offset-0"
-                                        >
-                                        <span class="ml-4 flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-500">
-                                                <i class="fa-solid fa-building-columns text-sm"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-neutral-800">Direct Wire Bank Transfer</span>
-                                        </span>
-                                    </label>
-
-                                    <!-- Cash on delivery option element -->
-                                    <label class="flex items-center p-4.5 border rounded-2xl cursor-pointer transition-all duration-300 hover:bg-neutral-50/40 {{ $payment_method === 'cash_on_delivery' ? 'border-neutral-900 bg-neutral-50/20 ring-1 ring-neutral-900/5 shadow-xs' : 'border-neutral-200' }}">
-                                        <input
-                                            type="radio"
-                                            wire:model="payment_method"
-                                            value="cash_on_delivery"
-                                            class="w-4 h-4 text-neutral-900 bg-white border-neutral-300 focus:ring-0 outline-none focus:ring-offset-0"
-                                        >
-                                        <span class="ml-4 flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-500">
-                                                <i class="fa-solid fa-hand-holding-dollar text-sm"></i>
-                                            </div>
-                                            <span class="text-sm font-medium text-neutral-800">Cash on Delivery metrics</span>
-                                        </span>
-                                    </label>
-                                </div>
-
+                            <div class="checkout-custom-inputs">
                                 <!-- Customer Notes -->
                                 <div class="pt-2">
-                                    <flux:textarea label="Order Notes (Optional)" wire:model="customer_notes" placeholder="Any special instructions regarding logistics execution frameworks?" class="w-full text-xs" />
-                                </div>
-
-                                <!-- Terms and Conditions Agreement Layer -->
-                                <div class="mt-6 bg-neutral-50/70 rounded-2xl p-4.5 border border-neutral-200/80">
-                                    <label class="flex items-start cursor-pointer select-none">
-                                        <input
-                                            type="checkbox"
-                                            wire:model="termsAccepted"
-                                            id="termsAccepted"
-                                            class="w-4 h-4 mt-0.5 rounded border-neutral-300 text-neutral-900 focus:ring-0 outline-none bg-white"
-                                        >
-                                        <span class="ml-3 text-xs text-neutral-500 font-light leading-relaxed">
-                                            I verify that all recorded data metrics matches identity properties and fully agree to the corporate <a href="#" class="text-neutral-900 font-medium hover:underline underline-offset-4">Terms and Conditions</a> policy architecture.
-                                        </span>
-                                    </label>
-                                    @error('termsAccepted')
-                                    <p class="text-rose-600 text-[11px] mt-2 font-medium flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation text-[9px]"></i> {{ $message }}</p>
-                                    @enderror
+                                    <flux:textarea label="Order Notes (Optional)" wire:model="customer_notes" placeholder="Add any extra information for the brand owner" class="w-full text-xs" />
                                 </div>
                             </div>
                         </div>

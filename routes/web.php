@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\AdminUtilitiesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FlutterwaveController;
@@ -47,6 +48,7 @@ use App\Livewire\Cart\Index as CartIndex;
 use App\Livewire\Checkout\DropshipperCheckout;
 use App\Livewire\Checkout\Index as CheckoutIndex;
 use App\Livewire\Checkout\Success as CheckoutSuccess;
+use App\Livewire\Client\BecomeDropshipper;
 use App\Livewire\Client\ClientDashboard;
 use App\Livewire\Dropshipper\Applications;
 use App\Livewire\Dropshipper\BatchedOrder;
@@ -94,7 +96,7 @@ Route::get('/dropshippers-cart/{store:slug}', DropshipperCart::class)->name('dro
 Route::get('/dropshippers-checkout/{store:slug}', DropshipperCheckout::class)->name('dropshipper-checkout');
 
 // Checkout success page
-Route::get('/checkout/success/{order}', CheckoutSuccess::class)->name('checkout.success');
+Route::get('/checkout/success/{orderId}', CheckoutSuccess::class)->name('checkout.success');
 
 // Stop impersonation
 Route::get('/stop-impersonator', [ImpersonateController::class, 'stopImpersonate'])->name('stop-impersonator');
@@ -108,6 +110,8 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/login', Login::class)->name('login');
     Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
     Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
+    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 });
 
 // Protected Routes
@@ -197,6 +201,7 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
 Route::middleware(['auth', 'role:client', 'onboarding'])->prefix('client')->name('client-')
     ->group(function () {
         Route::get('/dashboard', ClientDashboard::class)->name('dashboard');
+        Route::get('/become-dropshipper', BecomeDropshipper::class)->name('become-dropshipper');
     }
     );
 

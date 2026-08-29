@@ -6,6 +6,8 @@ use App\Actions\SelectRoleAction;
 use App\DTOs\GeneralDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
+use App\Models\Payment;
+use App\Services\FlutterwavePaymentService;
 use App\Traits\Toastable;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -25,6 +27,7 @@ class AddBrand extends Component
     public function selectPlan($plan): void
     {
         $this->plan = $plan;
+        $this->isFree = false;
         $this->showModal = true;
     }
 
@@ -51,6 +54,7 @@ class AddBrand extends Component
             'value' => [
                 'plan' => $this->plan,
                 'month' => $this->month,
+                'isFree' => false,
             ],
         ];
 
@@ -69,6 +73,7 @@ class AddBrand extends Component
             'value' => [
                 'plan' => $this->plan,
                 'month' => 1,
+                'isFree' => true,
             ],
         ];
 
@@ -79,21 +84,53 @@ class AddBrand extends Component
     {
         $dto = GeneralDTO::fromArray($buildDto);
         try {
-            SelectRoleAction::addBrand($dto);
-            session()->flash('toast', [
-                'type' => 'success',
-                'message' => 'Brand added successfully',
-                'title' => 'Success',
-                'duration' => 5000,
-            ]);
+            $payment = SelectRoleAction::addBrand($dto);
+            if (isset($payment['status']) && $payment['status'] === 'success') {
+                // this means that it was a free addition
+                session()->flash('toast', [
+                    'type' => 'success',
+                    'message' => 'Brand added successfully',
+                    'title' => 'Success',
+                    'duration' => 5000,
+                ]);
 
-            return redirect()->route('brand-details');
+                return redirect()->route('settings.profile');
+            } else {
+                $this->triggerPayment($payment);
+            }
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
             $this->closeModal();
 
             return back();
         }
+
+        return back();
+    }
+
+    public function triggerPayment(Payment $payment): void
+    {
+        $this->toast('success', 'Loading Payment Gateway. . .');
+        $flutterwavePaymentService = new FlutterwavePaymentService;
+        $this->makePayment($flutterwavePaymentService, $payment);
+        $this->closeModal();
+    }
+
+    public function makePayment(FlutterwavePaymentService $flutterwave, Payment $payment): void
+    {
+        $this->dispatch(
+            'flutterwave-payment',
+            $flutterwave->checkoutData(
+                amount: $payment->amount,
+                txRef: $payment->transaction_ref,
+                customer: [
+                    'email' => auth()->user()->email,
+                    'phone' => auth()->user()->phone,
+                    'name' => auth()->user()->name,
+                ],
+                description: $payment->payload['description'],
+            )
+        );
     }
 
     public function render(): View

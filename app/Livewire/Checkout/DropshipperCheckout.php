@@ -10,6 +10,7 @@ use App\Models\DropshipperStore;
 use App\Models\State;
 use App\Services\DropshipperCartService;
 use App\Traits\Toastable;
+use Illuminate\Support\Facades\Crypt;
 use Livewire\Component;
 
 class DropshipperCheckout extends Component
@@ -61,7 +62,7 @@ class DropshipperCheckout extends Component
     public $delivery_price = 0;
 
     // Payment
-    public $payment_method = 'card';
+    public $payment_method = 'bank_transfer';
 
     public $customer_notes = '';
 
@@ -89,10 +90,6 @@ class DropshipperCheckout extends Component
         'delivery_state' => 'required|string|max:100',
         'delivery_zip' => 'nullable|string|max:20',
         'delivery_instructions' => 'nullable|string|max:500',
-
-        // Step 3: Payment
-        'payment_method' => 'required|in:card,bank_transfer,cash_on_delivery',
-        'termsAccepted' => 'accepted',
     ];
 
     protected $messages = [
@@ -234,7 +231,7 @@ class DropshipperCheckout extends Component
             ]);
 
             // redirect to success page
-            return redirect()->route('checkout.success', ['order' => $order]);
+            return redirect()->route('checkout.success', ['orderId' => urlencode(Crypt::encryptString((string) $order->id))]);
         } catch (\Exception $e) {
             $this->processing = false;
             $this->toast('error', $e->getMessage());
