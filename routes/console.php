@@ -9,4 +9,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::job(new SubscriptionExpiryJob)->everyMinute();
+Schedule::job(new SubscriptionExpiryJob)->dailyAt('08:00');
