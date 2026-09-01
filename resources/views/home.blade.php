@@ -598,21 +598,5 @@ Home
         </div>
     </section>
 
-
-    <!-- ==================== 10. FINAL CTA SECTION ==================== -->
-    <section class="py-20 md:py-28 bg-premium-dark text-white text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-        <div class="max-w-2xl mx-auto px-4 relative z-10 space-y-6">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">Ready to Grow Your Business?</h2>
-            <p class="text-stone-300 text-sm md:text-base max-w-md mx-auto">Create your store in minutes and start configuring your distribution network today.</p>
-
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
-                <a href="#" class="btn-primary px-8 py-3.5 w-full sm:w-auto text-center text-sm">Create Store</a>
-                <a href="#" class="bg-white/5 hover:bg-white/10 text-white font-semibold border border-white/10 px-8 py-3.5 rounded-xl w-full sm:w-auto text-center transition text-sm">Explore Brands</a>
-            </div>
-        </div>
-    </section>
-
 @endsection
 

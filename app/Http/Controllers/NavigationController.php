@@ -80,7 +80,7 @@ class NavigationController extends Controller
             [
                 'icon' => 'share',
                 'title' => 'Dropshipping',
-                'desc' => 'Add products from trusted suppliers and fulfill orders automatically.',
+                'desc' => 'Expand your reach and increase sales through trusted dropshippers.',
             ],
             [
                 'icon' => 'inbox',
