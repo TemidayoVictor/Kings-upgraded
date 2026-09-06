@@ -213,25 +213,25 @@
 <div class="lg:hidden fixed bottom-0 left-0 right-0 nav-glass border-t border-stone-200/60 z-50 px-6 py-3">
     <div class="flex justify-between items-center max-w-md mx-auto">
         <a href="{{ route('home') }}"
-           class="flex flex-col items-center gap-1 {{ request()->routeIs('home') ? 'text-brand-primary' : 'text-stone-500' }}">
+           class="flex flex-col items-center gap-1 {{ request()->routeIs('home') ? 'text-brand-primary' : 'text-stone-500' }} hover:text-brand-primary">
             <i class="fas fa-house text-lg"></i>
             <span class="text-[9px] font-bold uppercase tracking-wider">Home</span>
         </a>
 
         <a href="{{ route('brands') }}"
-           class="flex flex-col items-center gap-1 {{ request()->routeIs('brands') ? 'text-brand-primary' : 'text-stone-500' }}">
+           class="flex flex-col items-center gap-1 {{ request()->routeIs('brands') ? 'text-brand-primary' : 'text-stone-500' }} hover:text-brand-primary">
             <i class="fas fa-tags text-lg"></i>
             <span class="text-[9px] font-bold uppercase tracking-wider">Brands</span>
         </a>
 
         <a href="{{ route('sales') }}"
-           class="flex flex-col items-center gap-1 {{ request()->routeIs('sales') ? 'text-brand-primary' : 'text-stone-500' }}">
+           class="flex flex-col items-center gap-1 {{ request()->routeIs('sales') ? 'text-brand-primary' : 'text-stone-500' }} hover:text-brand-primary">
             <i class="fas fa-bolt text-lg"></i>
             <span class="text-[9px] font-bold uppercase tracking-wider">Sales</span>
         </a>
 
         <a href="{{ route('features') }}"
-           class="flex flex-col items-center gap-1 {{ request()->routeIs('features') ? 'text-brand-primary' : 'text-stone-500' }}">
+           class="flex flex-col items-center gap-1 {{ request()->routeIs('features') ? 'text-brand-primary' : 'text-stone-500' }} hover:text-brand-primary">
             <i class="fas fa-circle-info text-lg"></i>
             <span class="text-[9px] font-bold uppercase tracking-wider">Features</span>
         </a>
