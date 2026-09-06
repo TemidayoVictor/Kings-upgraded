@@ -22,14 +22,6 @@ Home
                     <p class="text-stone-300 text-base md:text-lg lg:text-xl font-normal max-w-xl mx-auto lg:mx-0 leading-relaxed">
                         Create your online store, showcase your products, grow a community of customers, and let dropshippers sell for you.
                     </p>
-                    <div class="flex sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#" class="text-[.8em] sm:text-[1em] btn-primary px-8 py-3 text-center flex items-center justify-center gap-3">
-                            Start Selling Free
-                        </a>
-                        <a href="#" class="text-[.8em] sm:text-[1em] bg-white/5 hover:bg-white/10 border border-white/10 px-8 py-3 rounded-lg font-semibold text-center transition">
-                            Explore Brands
-                        </a>
-                    </div>
                 </div>
 
                 <!-- Right Content Block: Ecosystem Grid Illustration -->
