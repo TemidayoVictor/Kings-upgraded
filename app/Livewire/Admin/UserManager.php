@@ -28,8 +28,6 @@ class UserManager extends Component
 
     public bool $showDeleteModal = false;
 
-    public bool $showPermissionsModal = false;
-
     public int $userId;
 
     public string $name;
@@ -107,16 +105,7 @@ class UserManager extends Component
         $this->userType = UserType::ADMIN;
         $this->isAdmin = false;
         $this->showCreateModal = true;
-    }
-
-    public function closeModal(): void
-    {
-        $this->showCreateModal = false;
-        $this->showEditModal = false;
-        $this->showDeleteModal = false;
-        $this->showPermissionsModal = false;
-        $this->reset(['name', 'email', 'password', 'userType', 'isAdmin', 'selectedRoles', 'selectedPermissions', 'userId']);
-        $this->resetValidation();
+        $this->dispatch('load-modal');
     }
 
     public function setFilter(string $filter): void
@@ -155,6 +144,7 @@ class UserManager extends Component
             $this->toast('error', 'Error creating user: '.$e->getMessage());
         }
         $this->closeModal();
+        $this->dispatch('close-modal');
     }
 
     public function editUser($id): void
@@ -171,6 +161,7 @@ class UserManager extends Component
         }
 
         $this->showEditModal = true;
+        $this->dispatch('load-modal');
     }
 
     public function updateUser(): void
@@ -212,6 +203,7 @@ class UserManager extends Component
             $this->toast('error', 'Error updating user: '.$e->getMessage());
         }
         $this->closeModal();
+        $this->dispatch('close-modal');
     }
 
     public function confirmDelete($id): void
@@ -265,7 +257,7 @@ class UserManager extends Component
             ...$this->roleBasedPermissions,
         ]);
 
-        $this->showPermissionsModal = true;
+        $this->dispatch('load-permission');
     }
 
     public function updateUserPermissions(): void
@@ -280,8 +272,7 @@ class UserManager extends Component
         } catch (\Exception $e) {
             $this->toast('error', 'Error updating permissions: '.$e->getMessage());
         }
-
-        $this->closeModal();
+        $this->dispatch('close-modal');
     }
 
     public function loadUserStats(): void
@@ -294,9 +285,13 @@ class UserManager extends Component
         $this->newUsers = User::where('created_at', '>=', now()->subDays(7))->count();
     }
 
-    public function suspendUser(): void
+    public function closeModal(): void
     {
-
+        $this->showCreateModal = false;
+        $this->showEditModal = false;
+        $this->showDeleteModal = false;
+        $this->reset(['name', 'email', 'password', 'userType', 'isAdmin', 'selectedRoles', 'selectedPermissions', 'userId']);
+        $this->resetValidation();
     }
 
     public function render(): View

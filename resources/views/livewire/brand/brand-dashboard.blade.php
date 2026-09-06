@@ -308,18 +308,22 @@
                             <tr class="border-b border-gray-500 hover:bg-neutral-800/50 transition-colors">
                                 <td class="py-3">
                                     <div class="flex items-center gap-3">
-                                        @if($product->product->images->count() > 0)
+                                        @if($product->product && $product->product->images->count() > 0)
                                             <img src="{{ $product->product->primary_image_url }}"
                                                  alt="{{ $product->name }}"
                                                  class="w-10 h-10 object-cover rounded-full">
                                         @else
                                             <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
-                                                <span class="text-gray-300 font-medium">{{ substr($product->name, 0, 1) }}</span>
+                                                <span class="text-gray-300 font-medium">{{ substr($product->product_name, 0, 1) }}</span>
                                             </div>
                                         @endif
                                         <div>
                                             <p class="text-sm font-medium text-white">{{ Str::limit($product->product_name, 40) }}</p>
-                                            <p class="text-xs text-gray-500">Price: ₦ {{ number_format($product->product->price) }}</p>
+                                            @if($product->product?->price)
+                                                <p class="text-xs text-gray-500">Price: ₦ {{ number_format($product->product?->price) }}</p>
+                                            @else
+                                                <p class="text-xs text-gray-500">Product not found</p>
+                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -346,18 +350,22 @@
                 @forelse($dashboardData['top_products'] ?? [] as $product)
                     <div class="bg-[#2a2a2e] rounded-lg p-4">
                         <div class="flex items-start gap-3 mb-3">
-                            @if($product->product->images->count() > 0)
+                            @if($product->product && $product->product->images->count() > 0)
                                 <img src="{{ $product->product->primary_image_url }}"
                                      alt="{{ $product->name }}"
                                      class="w-10 h-10 object-cover rounded-full">
                             @else
                                 <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
-                                    <span class="text-gray-300 font-medium">{{ substr($product->name, 0, 1) }}</span>
+                                    <span class="text-gray-300 font-medium">{{ substr($product->product_name, 0, 1) }}</span>
                                 </div>
                             @endif
                             <div class="flex-1 min-w-0">
                                 <h4 class="font-medium text-white truncate">{{ $product->product_name }}</h4>
-                                <p class="text-xs text-gray-500">Price: ₦ {{ number_format($product->product->price) }}</p>
+                                @if($product->product?->price)
+                                    <p class="text-xs text-gray-500">Price: ₦ {{ number_format($product->product?->price) }}</p>
+                                @else
+                                    <p class="text-xs text-gray-500">Product not found</p>
+                                @endif
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3 text-sm">

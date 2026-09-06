@@ -1,5 +1,31 @@
 {{-- resources/views/livewire/brand/sales-index.blade.php --}}
-<section class="w-full">
+<section class="w-full"
+         x-data="{
+        salesModal: false,
+        salesAction: null,
+        selectedSaleId: null,
+        selectedSaleName: '',
+        selectedSale: {},
+
+        openSalesModal(action, sale) {
+            this.salesAction = action;
+            this.selectedSaleId = sale.id;
+            this.selectedSaleName = sale.name;
+            this.salesModal = true;
+            this.selectedSale = sale;
+            $wire.selectedSale = sale;
+        },
+
+        closeSalesModal() {
+            this.salesModal = false;
+            this.salesAction = null;
+            this.selectedSaleId = null;
+            this.selectedSaleName = '';
+        }
+    }"
+
+         x-on:close-modal.window="closeSalesModal()"
+>
     @include('partials.sales-heading')
 
     <flux:heading class="sr-only">{{ __('Manage Sales') }}</flux:heading>
@@ -250,9 +276,9 @@
                                                         <flux:menu.item href="{{route('brand-update-sales', ['sale' => $sale])}}">Edit Sale</flux:menu.item>
                                                         <flux:menu.item href="{{route('brand-view-sales-orders', ['sale' => $sale])}}">View Orders</flux:menu.item>
                                                         @if($sale->ongoing)
-                                                            <flux:menu.item variant="danger" wire:click="selectSale({{$sale}}, 'end')" wire:key="end">End Sales</flux:menu.item>
+                                                            <flux:menu.item variant="danger" x-on:click="openSalesModal('end', {{ $sale }})" wire:key="end">End Sales</flux:menu.item>
                                                         @else
-                                                            <flux:menu.item wire:click="selectSale({{$sale}}, 'start')" wire:key="start">Launch Sales</flux:menu.item>
+                                                            <flux:menu.item x-on:click="openSalesModal('start', {{ $sale }})" wire:key="start">Launch Sales</flux:menu.item>
                                                         @endif
                                                     </flux:menu>
                                                 </flux:dropdown>
@@ -352,62 +378,72 @@
             </div>
         </div>
 
-        @if($type === 'start')
-            <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
+            <div
+                x-show="salesModal"
+                x-cloak
+                x-on:keydown.escape.window="closeSalesModal()"
+                class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
                 <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
-                    <form wire:submit="startSales">
+                    <form>
                         <flux:fieldset>
                             <div class="space-y-4">
-                                <p class="text-white mb-4"> Are you sure you want to start "{{ $selectedSale->name }}"? </p>
+                                <p class="text-white mb-4">
+                                    <span x-show="salesAction === 'start'">
+                                        Are you sure you want to start
+                                        "<span x-text="selectedSaleName"></span>"?
+                                    </span>
+
+                                    <span x-show="salesAction === 'end'">
+                                        Are you sure you want to end
+                                        "<span x-text="selectedSaleName"></span>"?
+                                    </span>
+                                </p>
                                 <div class="flex justify-end items-center">
                                     <flux:button
                                         type="button"
                                         variant="ghost"
-                                        wire:click="closeModal"
+                                        x-on:click="closeSalesModal()"
                                         size="sm"
                                     >
                                         Cancel
                                     </flux:button>
-                                    <flux:button type="submit" size="sm" variant="primary" class="ml-2">
+
+                                    {{-- Start Sales --}}
+                                    <flux:button
+                                        x-show="salesAction === 'start'"
+                                        type="button"
+                                        variant="primary"
+                                        size="sm"
+                                        class="ml-2"
+                                        wire:click="startSales"
+                                    >
                                         <flux:icon.loading wire:loading wire:target="startSales" />
-                                        <span wire:loading.remove wire:target="startSales">{{ __('Start sales') }}</span>
+                                        <span wire:loading.remove wire:target="startSales">
+                                            Start sales
+                                        </span>
                                     </flux:button>
-                                </div>
-                            </div>
-                        </flux:fieldset>
-                    </form>
-                </div>
-            </div>
-        @endif
 
-        @if($type === 'end')
-            <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
-                <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
-                    <form wire:submit="endSales">
-                        <flux:fieldset>
-                            <div class="space-y-4">
-                                <p class="text-white mb-4"> Are you sure you want to end "{{ $selectedSale->name }}"? </p>
-                                <div class="flex justify-end items-center">
+                                    {{-- End Sales --}}
                                     <flux:button
+                                        x-show="salesAction === 'end'"
                                         type="button"
-                                        variant="ghost"
-                                        wire:click="closeModal"
+                                        variant="danger"
                                         size="sm"
+                                        class="ml-2"
+                                        wire:click="endSales"
                                     >
-                                        Cancel
-                                    </flux:button>
-                                    <flux:button type="submit" size="sm" variant="danger" class="ml-2">
                                         <flux:icon.loading wire:loading wire:target="endSales" />
-                                        <span wire:loading.remove wire:target="endSales">{{ __('End sales') }}</span>
+                                        <span wire:loading.remove wire:target="endSales">
+                                            End sales
+                                        </span>
                                     </flux:button>
+
                                 </div>
                             </div>
                         </flux:fieldset>
                     </form>
                 </div>
             </div>
-        @endif
-
     </x-brands.sales>
 </section>
 

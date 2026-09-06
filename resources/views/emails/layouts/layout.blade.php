@@ -19,7 +19,7 @@
                             <tr>
                                 <td align="center" style="padding-bottom: 12px;">
                                     <a href="{{ url('/') }}" style="text-decoration: none;">
-                                        <img src="{{ asset('images/Logo-Crown.png') }}" alt="Logo" width="48" height="48" style="display: block;">
+                                        <img src="{{ asset('images/Logo-Crown.png') }}" alt="Logo" width="48" height="40" style="display: block;">
                                     </a>
                                 </td>
                             </tr>
@@ -40,7 +40,7 @@
             <!-- Main Content Card -->
             <table width="100%" style="max-width: 570px; background-color: #ffffff; border: 1px solid #e8e8e8; border-radius: 16px; overflow: hidden;">
                 <tr>
-                    <td style="padding: 40px;">
+                    <td style="padding: 32px 24px;">
                         {{ $slot }}
                     </td>
                 </tr>

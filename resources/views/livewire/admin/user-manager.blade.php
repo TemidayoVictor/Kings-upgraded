@@ -1,5 +1,19 @@
 {{-- resources/views/livewire/admin/user-manager.blade.php --}}
-<section class="w-full">
+<section class="w-full"
+     x-data="{
+        showModal: false,
+        showPermissionModal: false,
+        showNewProductModal: false,
+        closeModal() {
+            this.showModal = false;
+            this.showPermissionModal = false;
+            this.showNewProductModal = false;
+        },
+     }"
+     x-on:close-modal.window="closeModal()"
+     x-on:load-modal.window="showModal = true"
+     x-on:load-permission.window="showPermissionModal = true"
+>
     @include('partials.admin-heading')
 
     <flux:heading class="sr-only">{{ __('Manage Users') }}</flux:heading>
@@ -10,7 +24,6 @@
                 placeholder="Search users by name or email..."
                 type="search"
             >
-{{--                    <flux:icon.search slot="icon" />--}}
             </flux:input>
         </div>
         <flux:button wire:click="openCreateModal" variant="primary">
@@ -175,21 +188,20 @@
                                         <div class="flex items-center justify-end space-x-2">
                                             @if($user->is_admin)
                                                 <button wire:key="manage-perms" wire:click="managePermissions({{ $user->id }})" class="text-gray-400 hover:text-blue-400" title="Manage Permissions">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <flux:icon.loading wire:loading wire:target="managePermissions({{ $user->id }})" />
+                                                    <svg wire:loading.remove wire:target="managePermissions({{ $user->id }})" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                                     </svg>
                                                 </button>
                                                 <button wire:key="edit" wire:click="editUser({{ $user->id }})" class="text-gray-400 hover:text-gray-200" title="Edit User">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <flux:icon.loading wire:loading wire:target="editUser({{ $user->id }})" />
+                                                    <svg wire:loading.remove wire:target="editUser({{ $user->id }})" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
                                                 </button>
                                             @else
                                                 <flux:button href="{{ route('admin-start-impersonator', ['user' => $user])  }}" size="sm" variant="primary" wire:key="impersonate">
                                                     Impersonate
-                                                </flux:button>
-                                                <flux:button type="submit" size="sm" variant="primary" color="yellow" wire:click="suspendUser">
-                                                    Suspend
                                                 </flux:button>
                                             @endif
                                         </div>
@@ -215,112 +227,116 @@
             </div>
 
             <!-- Create/Edit User Modal (simplified) -->
-            @if($showCreateModal || $showEditModal)
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto">
-                    <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-white mb-4">{{ $showCreateModal ? 'Add New User' : 'Edit User' }}</h3>
+            <div
+                x-show="showModal"
+                x-cloak
+                x-on:keydown.escape.window="showModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto">
+                <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full">
+                    <div class="p-6">
+                        <h3 class="text-lg font-medium text-white mb-4">{{ $showCreateModal ? 'Add New User' : 'Edit User' }}</h3>
 
-                            <form wire:submit="{{ $showCreateModal ? 'createUser' : 'updateUser' }}">
-                                <div class="space-y-4">
-                                    <div>
-                                        <flux:label class="mb-1">Full Name</flux:label>
-                                        <flux:input wire:model="name" class="w-full" />
-                                        @error('name') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div>
-                                        <flux:label class="mb-1">Email Address</flux:label>
-                                        <flux:input wire:model="email" type="email" class="w-full" />
-                                        @error('email') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div>
-                                        <flux:label class="mb-1">{{ $showCreateModal ? 'Password' : 'New Password' }}</flux:label>
-                                        <flux:input wire:model="password" type="password" class="w-full" />
-                                        @error('password') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
-                                    </div>
-
-                                    <div>
-                                        <flux:select label="Role" wire:model="userType">
-                                            <option value="">Select Role</option>
-                                            @foreach($roles as $role)
-                                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                            @endforeach
-                                        </flux:select>
-                                        @error('userType')
-                                        <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-
-                                    <div class="flex justify-end space-x-2 pt-4">
-                                        <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">Cancel</flux:button>
-                                        <flux:button type="submit" variant="primary" size="sm">{{ $showCreateModal ? 'Create' : 'Update' }}</flux:button>
-                                    </div>
+                        <form wire:submit="{{ $showCreateModal ? 'createUser' : 'updateUser' }}">
+                            <div class="space-y-4">
+                                <div>
+                                    <flux:label class="mb-1">Full Name</flux:label>
+                                    <flux:input wire:model="name" class="w-full" />
+                                    @error('name') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
-                            </form>
-                        </div>
+
+                                <div>
+                                    <flux:label class="mb-1">Email Address</flux:label>
+                                    <flux:input wire:model="email" type="email" class="w-full" />
+                                    @error('email') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <flux:label class="mb-1">{{ $showCreateModal ? 'Password' : 'New Password' }}</flux:label>
+                                    <flux:input wire:model="password" type="password" class="w-full" />
+                                    @error('password') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <flux:select label="Role" wire:model="userType">
+                                        <option value="">Select Role</option>
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </flux:select>
+                                    @error('userType')
+                                    <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="flex justify-end space-x-2 pt-4">
+                                    <flux:button type="button" variant="subtle" size="sm" x-on:click="showModal = false">Cancel</flux:button>
+                                    <flux:button type="submit" variant="primary" size="sm">{{ $showCreateModal ? 'Create' : 'Update' }}</flux:button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            @endif
+            </div>
 
-            @if($showPermissionsModal)
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto">
-                    <div class="bg-[#27272a] rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-white mb-2">
-                                Manage Permissions for {{ $name }}
-                            </h3>
-                            <p class="text-sm text-gray-400 mb-4">
-                                Assign direct permissions to this user (in addition to role-based permissions)
-                            </p>
+            <div
+                x-show="showPermissionModal"
+                x-cloak
+                x-on:keydown.escape.window="showPermissionModal = false"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto">
+                <div class="bg-[#27272a] rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <h3 class="text-lg font-medium text-white mb-2">
+                            Manage Permissions for {{ $name }}
+                        </h3>
+                        <p class="text-sm text-gray-400 mb-4">
+                            Assign direct permissions to this user (in addition to role-based permissions)
+                        </p>
 
-                            <form wire:submit="updateUserPermissions">
-                                <div class="space-y-4 max-h-96 overflow-y-auto mb-4">
-                                    @foreach($availablePermissions as $module => $modulePermissions)
-                                        <div class="border border-gray-700 rounded-lg overflow-hidden">
-                                            <div class="bg-[#3d3d40] px-4 py-2">
-                                                <h4 class="text-sm font-medium text-gray-200 uppercase">{{ ucfirst($module) }}</h4>
-                                            </div>
-                                            <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
-                                                @foreach($modulePermissions as $permission)
-                                                    @php
-                                                        $isRolePermission = in_array($permission['name'], $roleBasedPermissions);
-                                                    @endphp
-
-                                                    <label class="flex items-center space-x-2 text-sm cursor-pointer">
-                                                        <input
-                                                            type="checkbox"
-                                                            wire:model="directPermissions"
-                                                            value="{{ $permission['name'] }}"
-                                                        >
-
-                                                        <span class="text-gray-300">
-                                                            {{ $permission['name'] }}
-                                                            @if($isRolePermission)
-                                                                <span class="text-xs text-blue-400">(via role)</span>
-                                                            @endif
-                                                        </span>
-                                                    </label>
-                                                @endforeach
-                                            </div>
+                        <form wire:submit="updateUserPermissions">
+                            <div class="space-y-4 max-h-96 overflow-y-auto mb-4">
+                                @foreach($availablePermissions as $module => $modulePermissions)
+                                    <div class="border border-gray-700 rounded-lg overflow-hidden">
+                                        <div class="bg-[#3d3d40] px-4 py-2">
+                                            <h4 class="text-sm font-medium text-gray-200 uppercase">{{ ucfirst($module) }}</h4>
                                         </div>
-                                    @endforeach
-                                </div>
+                                        <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-2">
+                                            @foreach($modulePermissions as $permission)
+                                                @php
+                                                    $isRolePermission = in_array($permission['name'], $roleBasedPermissions);
+                                                @endphp
 
-                                <div class="flex justify-end space-x-2 pt-4 border-t border-gray-700">
-                                    <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                        Cancel
-                                    </flux:button>
-                                    <flux:button type="submit" size="sm" variant="primary">
-                                        Save Permissions
-                                    </flux:button>
-                                </div>
-                            </form>
-                        </div>
+                                                <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        wire:model="directPermissions"
+                                                        value="{{ $permission['name'] }}"
+                                                    >
+
+                                                    <span class="text-gray-300">
+                                                        {{ $permission['name'] }}
+                                                        @if($isRolePermission)
+                                                            <span class="text-xs text-blue-400">(via role)</span>
+                                                        @endif
+                                                    </span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="flex justify-end space-x-2 pt-4 border-t border-gray-700">
+                                <flux:button type="button" variant="subtle" size="sm" x-on:click="showPermissionModal = false">
+                                    Cancel
+                                </flux:button>
+                                <flux:button type="submit" size="sm" variant="primary">
+                                    Save Permissions
+                                </flux:button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            @endif
+            </div>
 
             <!-- Delete Modal -->
             @if($showDeleteModal)

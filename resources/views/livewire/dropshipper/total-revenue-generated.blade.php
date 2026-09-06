@@ -228,7 +228,8 @@
                                                     wire:click.stop="viewMonthDetails({{ $earning->year }}, {{ $earning->month_number }}, '{{ $earning->month_name }}')"
                                                     class="text-gray-400 hover:text-gray-200 transition-colors"
                                                 >
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <flux:icon.loading wire:loading wire:target="viewMonthDetails({{ $earning->year }}, {{ $earning->month_number }}, '{{ $earning->month_name }}')" />
+                                                    <svg wire:loading.remove wire:target="viewMonthDetails({{ $earning->year }}, {{ $earning->month_number }}, '{{ $earning->month_name }}')" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                                     </svg>
                                                 </button>

@@ -1,12 +1,38 @@
 {{-- resources/views/livewire/brand/product/coupons.blade.php --}}
-<section class="w-full">
+<section class="w-full"
+         x-data="{
+        modal: null,
+
+        openModal(name) {
+            this.modal = name;
+        },
+
+        closeModal() {
+            this.modal = null;
+            $wire.resetForm();
+        },
+
+        openEdit(id) {
+            this.modal = 'edit';
+            $wire.editCoupon(id);
+        },
+
+        openDeactivate(id) {
+            this.modal = 'deactivate';
+            $wire.confirmDeactivate(id);
+        }
+    }"
+         x-on:coupon-created.window="closeModal()"
+         x-on:coupon-updated.window="closeModal()"
+         x-on:coupon-deactivated.window="closeModal()"
+>
     @include('partials.products-settings-heading')
     <x-products.settings :heading="__('Coupons')" :subheading="__('Create and manage your coupons')">
 
         <flux:heading class="sr-only">{{ __('Coupons') }}</flux:heading>
 
         <div class="flex justify-end mb-4">
-            <flux:button wire:click="openCreateModal" size="sm" variant="primary">
+            <flux:button x-on:click="openModal('create')" size="sm" variant="primary">
                 Add Coupon
             </flux:button>
         </div>
@@ -36,7 +62,7 @@
                                         </div>
                                         <div class="flex items-center space-x-2">
                                             <button
-                                                wire:click="popup('edit', {{ $coupon->id }})"
+                                                x-on:click="openEdit({{ $coupon->id }})"
                                                 class="p-2 text-gray-400 hover:text-gray-200 transition-colors"
                                             >
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +71,7 @@
                                             </button>
                                             @if($coupon->is_active)
                                                 <button
-                                                    wire:click="popup('deactivate', {{ $coupon->id }})"
+                                                    x-on:click="openDeactivate({{ $coupon->id }})"
                                                     class="p-2 text-gray-400 hover:text-red-400 transition-colors"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,105 +135,115 @@
             </div>
 
             <!-- Create Modal -->
-            @if($showCreateModal)
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-                    <div class="bg-[#27272a] rounded-lg w-full max-w-md p-6">
-                        <h3 class="text-white text-lg font-semibold mb-4">Create Coupon</h3>
+            <div
+                x-show="modal === 'create'"
+                x-cloak
+                x-on:keydown.escape.window="closeModal()"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+                <div
+                    x-on:click.stop
+                    class="bg-[#27272a] rounded-lg w-full max-w-md p-6">
+                    <h3 class="text-white text-lg font-semibold mb-4">Create Coupon</h3>
 
-                        <form wire:submit="createCoupon" class="space-y-4">
-                            <flux:input label="Code (6 characters)" wire:model="code" maxlength="6" />
+                    <form wire:submit="createCoupon" class="space-y-4">
+                        <flux:input label="Code (6 characters)" wire:model="code" maxlength="6" />
 
-                            <div>
-                                <flux:select label="Coupon Type" wire:model.live="type">
-                                    <option value="fixed">Fixed</option>
-                                    <option value="percentage">Percentage</option>
-                                </flux:select>
-                            </div>
+                        <div>
+                            <flux:select label="Coupon Type" wire:model.live="type">
+                                <option value="fixed">Fixed</option>
+                                <option value="percentage">Percentage</option>
+                            </flux:select>
+                        </div>
 
-                            <div>
-                                <flux:label class="mb-2">Value</flux:label>
-                                <flux:input.group>
-                                    @if($type === 'fixed')
-                                        <flux:input.group.prefix>₦</flux:input.group.prefix>
-                                    @endif
-                                    <flux:input wire:model="value" placeholder="value" type="number" step="0.01" />
-                                    @if($type === 'percentage')
-                                        <flux:input.group.suffix>%</flux:input.group.suffix>
-                                    @endif
-                                </flux:input.group>
-                            </div>
+                        <div>
+                            <flux:label class="mb-2">Value</flux:label>
+                            <flux:input.group>
+                                @if($type === 'fixed')
+                                    <flux:input.group.prefix>₦</flux:input.group.prefix>
+                                @endif
+                                <flux:input wire:model="value" placeholder="value" type="number" step="0.01" />
+                                @if($type === 'percentage')
+                                    <flux:input.group.suffix>%</flux:input.group.suffix>
+                                @endif
+                            </flux:input.group>
+                        </div>
 
-                            <flux:input label="Starts At" wire:model="startsAt" type="date" />
-                            <flux:input label="Expires At" wire:model="expiresAt" type="date" />
+                        <flux:input label="Starts At" wire:model="startsAt" type="date" />
+                        <flux:input label="Expires At" wire:model="expiresAt" type="date" />
 
-                            <div class="flex justify-end space-x-2 pt-4">
-                                <flux:button wire:click="closeModal" type="button" variant="subtle" size="sm">Cancel</flux:button>
-                                <flux:button type="submit" variant="primary" size="sm">Create</flux:button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="flex justify-end space-x-2 pt-4">
+                            <flux:button x-on:click="closeModal()" type="button" variant="subtle" size="sm">Cancel</flux:button>
+                            <flux:button type="submit" variant="primary" size="sm">Create</flux:button>
+                        </div>
+                    </form>
                 </div>
-            @endif
+            </div>
 
             <!-- Edit Modal -->
-            @if($showEditModal)
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-                    <div class="bg-[#27272a] rounded-lg w-full max-w-md p-6">
-                        <div class="mb-4">
-                            <h3 class="text-white text-lg font-semibold">Edit Coupon</h3>
-                            <div class="text-xs text-gray-500">Editing an inactive coupon will reactivate it</div>
+            <div
+                x-show="modal === 'edit'"
+                x-cloak
+                x-on:keydown.escape.window="closeModal()"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+                <div
+                    x-on:click.stop
+                    class="bg-[#27272a] rounded-lg w-full max-w-md p-6">
+                    <div class="mb-4">
+                        <h3 class="text-white text-lg font-semibold">Edit Coupon</h3>
+                        <div class="text-xs text-gray-500">Editing an inactive coupon will reactivate it</div>
+                    </div>
+
+                    <form wire:submit="updateCoupon" class="space-y-4">
+                        <flux:input label="Code (6 characters)" wire:model="code" maxlength="6" />
+
+                        <div>
+                            <flux:select label="Coupon Type" wire:model.live="type">
+                                <option value="fixed">Fixed</option>
+                                <option value="percentage">Percentage</option>
+                            </flux:select>
                         </div>
 
-                        <form wire:submit="updateCoupon" class="space-y-4">
-                            <flux:input label="Code (6 characters)" wire:model="code" maxlength="6" />
+                        <div>
+                            <flux:label class="mb-2">Value</flux:label>
+                            <flux:input.group>
+                                @if($type === 'fixed')
+                                    <flux:input.group.prefix>₦</flux:input.group.prefix>
+                                @endif
+                                <flux:input wire:model="value" placeholder="value" type="number" step="0.01" />
+                                @if($type === 'percentage')
+                                    <flux:input.group.suffix>%</flux:input.group.suffix>
+                                @endif
+                            </flux:input.group>
+                        </div>
 
-                            <div>
-                                <flux:select label="Coupon Type" wire:model.live="type">
-                                    <option value="fixed">Fixed</option>
-                                    <option value="percentage">Percentage</option>
-                                </flux:select>
-                            </div>
+                        <flux:input label="Starts At" wire:model="startsAt" type="date" />
+                        <flux:input label="Expires At" wire:model="expiresAt" type="date" />
 
-                            <div>
-                                <flux:label class="mb-2">Value</flux:label>
-                                <flux:input.group>
-                                    @if($type === 'fixed')
-                                        <flux:input.group.prefix>₦</flux:input.group.prefix>
-                                    @endif
-                                    <flux:input wire:model="value" placeholder="value" type="number" step="0.01" />
-                                    @if($type === 'percentage')
-                                        <flux:input.group.suffix>%</flux:input.group.suffix>
-                                    @endif
-                                </flux:input.group>
-                            </div>
-
-                            <flux:input label="Starts At" wire:model="startsAt" type="date" />
-                            <flux:input label="Expires At" wire:model="expiresAt" type="date" />
-
-                            <div class="flex justify-end space-x-2 pt-4">
-                                <flux:button wire:click="closeModal" type="button" variant="subtle" size="sm">Cancel</flux:button>
-                                <flux:button type="submit" variant="primary" size="sm">Update</flux:button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="flex justify-end space-x-2 pt-4">
+                            <flux:button x-on:click="closeModal()" type="button" variant="subtle" size="sm">Cancel</flux:button>
+                            <flux:button type="submit" variant="primary" size="sm">Update</flux:button>
+                        </div>
+                    </form>
                 </div>
-            @endif
+            </div>
 
             <!-- Deactivate Confirmation Modal -->
-            @if($showDeactivateModal)
-                <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
-                    <div class="bg-[#27272a] rounded-lg w-full max-w-md p-6">
-                        <h3 class="text-white text-lg font-semibold mb-4">Deactivate Coupon</h3>
+            <div
+                x-show="modal === 'deactivate'"
+                x-cloak
+                x-on:keydown.escape.window="closeModal()"
+                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+                <div class="bg-[#27272a] rounded-lg w-full max-w-md p-6">
+                    <h3 class="text-white text-lg font-semibold mb-4">Deactivate Coupon</h3>
 
-                        <p class="text-gray-300 mb-6">Are you sure you want to deactivate this coupon? It will no longer be available for use.</p>
+                    <p class="text-gray-300 mb-6">Are you sure you want to deactivate this coupon? It will no longer be available for use.</p>
 
-                        <div class="flex justify-end space-x-2">
-                            <flux:button wire:click="closeModal" type="button" variant="subtle" size="sm">Cancel</flux:button>
-                            <flux:button wire:click="deactivateCoupon" type="button" variant="danger" size="sm">Deactivate</flux:button>
-                        </div>
+                    <div class="flex justify-end space-x-2">
+                        <flux:button x-on:click="closeModal()" type="button" variant="subtle" size="sm">Cancel</flux:button>
+                        <flux:button wire:click="deactivateCoupon" type="button" variant="danger" size="sm">Deactivate</flux:button>
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
     </x-products.settings>
 </section>

@@ -76,6 +76,12 @@
                                 <span class="text-sm  {{ in_array($preference->id, $selectedPreferences) ? 'font-medium text-white' : 'text-white' }}">
                                     {{ $preference->name }}
                                 </span>
+
+                                <!-- Loading icon -->
+                                <span class="absolute top-1 right-1 text-white">
+                                    <flux:icon.loading wire:loading wire:target="togglePreference({{ $preference->id }})"/>
+                                </span>
+
                                 <!-- Checkmark for selected -->
                                 @if(in_array($preference->id, $selectedPreferences))
                                     <span class="absolute top-1 right-1 text-white">

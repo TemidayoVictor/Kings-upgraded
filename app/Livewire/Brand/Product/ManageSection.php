@@ -18,25 +18,12 @@ class ManageSection extends Component
 
     public int $sectionId;
 
-    public bool $showEditModal = false;
-
-    public bool $showDeleteModal = false;
-
-    public bool $showCreateModal = false;
-
     public int $perPage = 10;
 
     protected array $rules = [
         'name' => 'required|string|max:255',
         'sectionId' => 'nullable|integer|exists:sections,id',
     ];
-
-    public function openCreateModal(): void
-    {
-        $this->resetValidation();
-        $this->reset(['name', 'sectionId']);
-        $this->showCreateModal = true;
-    }
 
     public function submit(): void
     {
@@ -45,21 +32,12 @@ class ManageSection extends Component
         try {
             SectionAction::execute($dto);
             $this->reset(['name', 'sectionId']);
-            $this->showCreateModal = false;
             $this->toast('success', 'Section added successfully.');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }
-    }
 
-    public function popup($type, $id): void
-    {
-        $section = Section::findOrFail($id);
-
-        $this->sectionId = $section->id;
-        $this->name = $section->name;
-
-        $type == 'edit' ? $this->showEditModal = true : $this->showDeleteModal = true;
+        $this->dispatch('section-created');
     }
 
     public function save(): void
@@ -69,11 +47,12 @@ class ManageSection extends Component
         try {
             SectionAction::edit($dto);
             $this->name = '';
-            $this->closeModal();
             $this->toast('success', 'Section updated successfully.');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }
+
+        $this->dispatch('section-saved');
     }
 
     public function delete(): void
@@ -83,18 +62,12 @@ class ManageSection extends Component
         try {
             SectionAction::delete($dto);
             $this->name = '';
-            $this->closeModal();
             $this->toast('success', 'Section deleted successfully.');
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }
-    }
 
-    public function closeModal(): void
-    {
-        $this->showEditModal = false;
-        $this->showDeleteModal = false;
-        $this->showCreateModal = false;
+        $this->dispatch('section-deleted');
     }
 
     public function render()

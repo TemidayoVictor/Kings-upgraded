@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Brand;
 
+use App\Actions\ApplicationAction;
+use App\DTOs\ApplicationDTO;
+use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\Dropshipper;
 use App\Models\DropshipperApplication;
-use App\DTOs\ApplicationDTO;
-use App\Actions\ApplicationAction;
 use App\Models\DropshipperStore;
 use App\Traits\Toastable;
-use App\Enums\Status;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -21,31 +22,23 @@ class ApprovedDropshippers extends Component
     use WithPagination;
 
     #[Url(history: true)]
-    public $brandFilter = 'all';
-
-    #[Url(history: true)]
-    public $search = '';
-
-    #[Url(history: true)]
-    public $sortBy = 'recent';
+    public string $search = '';
 
     public Brand $brand;
 
-    public $showDetailsModal = false;
+    public bool $showDetailsModal = false;
 
-    public $showRevokeModal = false;
+    public bool $showRevokeModal = false;
 
-    public $selectedDropshipper = null;
+    public Dropshipper|array|null $selectedDropshipper = null;
 
-    public $selectedBrandId = null;
+    public ?int $selectedBrandId = null;
 
-    public $dropshipperStores = [];
+    public ?Collection $dropshipperStores = null;
 
-    public $dropshipperStats = [];
+    public array $dropshipperStats = [];
 
-    public $revokeReason = '';
-
-    protected $listeners = ['refreshList' => '$refresh'];
+    public string $revokeReason = '';
 
     public function viewDetails($dropshipperId): void
     {
@@ -63,15 +56,7 @@ class ApprovedDropshippers extends Component
             'total_products' => $this->dropshipperStores->sum('dropshipper_products_count'),
         ];
 
-        $this->showDetailsModal = true;
-    }
-
-    public function revokeAccess($dropshipperId, $brandId): void
-    {
-        $this->selectedDropshipper = Dropshipper::findOrFail($dropshipperId);
-        $this->selectedBrandId = $brandId;
-        $this->revokeReason = '';
-        $this->showRevokeModal = true;
+        $this->dispatch('details-loaded');
     }
 
     public function confirmRevoke(): void
@@ -84,7 +69,7 @@ class ApprovedDropshippers extends Component
 
         $buildDto = [
             'notes' => $notes,
-            'dropshipperId' => $this->selectedDropshipper->id,
+            'dropshipperId' => $this->selectedDropshipper['id'],
             'brandId' => $this->selectedBrandId,
         ];
 
@@ -93,11 +78,11 @@ class ApprovedDropshippers extends Component
         try {
             ApplicationAction::revoke($dto);
             $this->toast('success', 'Access revoked successfully');
-            $this->closeModal();
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
         }
+
+        $this->dispatch('access-revoked');
     }
 
     public function closeModal(): void
@@ -106,7 +91,7 @@ class ApprovedDropshippers extends Component
         $this->showRevokeModal = false;
         $this->selectedDropshipper = null;
         $this->selectedBrandId = null;
-        $this->dropshipperStores = [];
+        $this->dropshipperStores = null;
         $this->dropshipperStats = [];
         $this->revokeReason = '';
     }

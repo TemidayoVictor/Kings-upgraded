@@ -1,11 +1,24 @@
-<section class="w-full">
+<section class="w-full"
+     x-data="{
+        showModal: false,
+        showEditProductModal: false,
+        showNewProductModal: false,
+        closeModal() {
+            this.showModal = false;
+            this.showEditProductModal = false;
+            this.showNewProductModal = false;
+        },
+     }"
+     x-on:close-modal.window="closeModal()"
+     x-on:loaded-product.window="showEditProductModal = true"
+>
     @include('partials.partnerships')
 
     <flux:heading class="sr-only">{{$store->store_name}}</flux:heading>
     <x-dropshippers.layout :heading="__('Manage Store')" :subheading="__('Edit or delete your products')">
 
         <div class="flex justify-end mb-4 gap-x-2">
-            <flux:button size="sm" variant="primary" wire:click="editStore">
+            <flux:button size="sm" variant="primary" x-on:click="showModal = true">
                 Edit Store
             </flux:button>
             <flux:button size="sm" variant="primary" href="{{route('dropshipper-revenue-generated', ['storeId' => $store->id])}}">
@@ -29,7 +42,7 @@
                         </div>
                     </div>
 
-                    <flux:button color="yellow" size="sm" variant="primary" class="mt-3" wire:click="newProductsModal">
+                    <flux:button color="yellow" size="sm" variant="primary" class="mt-3" x-on:click="showNewProductModal = true">
                         View Products
                     </flux:button>
 
@@ -95,8 +108,9 @@
                                                     <div class="text-sm font-medium text-gray-200">
                                                         {{ $product->originalProduct->name }}
                                                     </div>
-                                                    <div class="text-xs text-gray-500">
-                                                        {{ $product->created_at->format('M d, Y') }}
+
+                                                    <div class="text-sm text-gray-500">
+                                                        Price - ₦{{number_format($product->custom_price)}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,7 +124,8 @@
                                                     title="Edit selling price"
                                                     wire:key="edit-product{{$product}}"
                                                 >
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <flux:icon.loading wire:loading wire:target="editProduct({{$product}})" />
+                                                    <svg wire:loading.remove wire:target="editProduct({{$product}})" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
                                                 </button>
@@ -141,7 +156,7 @@
 
                                             <div>
                                                 <div class="font-medium text-gray-200">{{ Str::limit($product->originalProduct->name, 20) }}</div>
-                                                <div class="text-xs text-gray-500">{{ $product->created_at->format('M d, Y') }}</div>
+                                                <div class="text-sm text-gray-500">Price - ₦{{number_format($product->custom_price)}}</div>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-2">
@@ -150,7 +165,8 @@
                                                 class="p-2 text-gray-400 transition-colors"
                                                 wire:key="editProduct{{$product}}"
                                             >
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <flux:icon.loading wire:loading wire:target="editProduct({{$product}})" />
+                                                <svg wire:loading.remove wire:target="editProduct({{$product}})" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                             </button>
@@ -175,203 +191,209 @@
                     </div>
                 @endif
 
-                <!-- Delete Modal -->
-                @if($showEditModal)
-                    <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
-                        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
-                            <h3 class="text-[1.2rem] mb-2">{{ $selectedProduct->originalProduct->name}}</h3>
-                            <flux:separator />
-                            <div class="mt-2 flex flex-col gap-y-3 mb-2">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <p class="text-white font-medium">Dropship Price</p>
-                                    </div>
-                                    <div class="sm:text-right">
-                                        <p class="text-white font-medium">₦{{number_format($selectedProduct->originalProduct->dropship_price)}}</p>
-                                    </div>
+                <!-- Edit Product Modal -->
+                <div
+                    x-show="showEditProductModal"
+                    x-cloak
+                    x-on:keydown.escape.window="showEditProductModal = false"
+                    class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
+                    <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                        <h3 class="text-[1.2rem] mb-2">{{ $selectedProduct?->originalProduct->name}}</h3>
+                        <flux:separator />
+                        <div class="mt-2 flex flex-col gap-y-3 mb-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-medium">Dropship Price</p>
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <p class="text-white font-medium">Selling Price</p>
-                                    </div>
-                                    <div class="sm:text-right">
-                                        <p class="text-white font-medium">₦{{number_format($selectedProduct->custom_price)}}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <p class="text-white font-medium">Profit</p>
-                                    </div>
-                                    <div class="sm:text-right">
-                                        <p class="text-white font-medium">₦{{number_format($selectedProduct->profit)}}</p>
-                                    </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">₦{{number_format($selectedProduct?->originalProduct->dropship_price)}}</p>
                                 </div>
                             </div>
-                            <flux:separator />
-                            <form wire:submit="updateProduct" class="mt-2">
-                                <flux:fieldset>
-                                    <div class="space-y-4">
-                                        <flux:input
-                                            label="Selling Price"
-                                            wire:model="price"
-                                            placeholder="price"
-                                            class="max-full"
-                                        />
-                                        <div class="flex justify-end items-center">
-                                            <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                                Cancel
-                                            </flux:button>
-                                            <flux:button type="submit" size="sm" variant="primary" class="ml-2">
-                                                <flux:icon.loading wire:loading wire:target="save" />
-                                                <span wire:loading.remove wire:target="save">Update</span>
-                                            </flux:button>
-                                        </div>
-                                    </div>
-                                </flux:fieldset>
-                            </form>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-medium">Selling Price</p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">₦{{number_format($selectedProduct?->custom_price)}}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-medium">Profit</p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-white font-medium">₦{{number_format($selectedProduct?->profit)}}</p>
+                                </div>
+                            </div>
                         </div>
+                        <flux:separator />
+                        <form wire:submit="updateProduct" class="mt-2">
+                            <flux:fieldset>
+                                <div class="space-y-4">
+                                    <flux:input
+                                        label="Selling Price"
+                                        wire:model="price"
+                                        placeholder="price"
+                                        class="max-full"
+                                    />
+                                    <div class="flex justify-end items-center">
+                                        <flux:button type="button" variant="subtle" size="sm" x-on:click="showEditProductModal = false">
+                                            Cancel
+                                        </flux:button>
+                                        <flux:button type="submit" size="sm" variant="primary" class="ml-2">
+                                            <flux:icon.loading wire:loading wire:target="save" />
+                                            <span wire:loading.remove wire:target="save">Update</span>
+                                        </flux:button>
+                                    </div>
+                                </div>
+                            </flux:fieldset>
+                        </form>
                     </div>
-                @endif
+                </div>
 
-                @if($showEditStoreModal)
-                    <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
-                        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                <div
+                    x-show="showModal"
+                    x-cloak
+                    x-on:keydown.escape.window="showModal = false"
+                    class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
+                    <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
 
-                            <form wire:submit="updateStore" class="mt-2">
-                                <flux:fieldset>
-                                    <div>
-                                        <flux:label class="mb-2">Store Name</flux:label>
-                                        <flux:input
-                                            wire:model.live="storeName"
-                                            placeholder="e.g., John's Nike Store"
-                                            class="w-full"
-                                            :class="$errors->has('storeName') ? 'border-red-500' : ''"
-                                        />
-                                        <div class="flex justify-between mt-1">
-                                            <flux:error name="storeName" />
-                                            <span class="text-xs text-gray-500">{{ strlen($storeName ?? '') }}/100</span>
+                        <form wire:submit="updateStore" class="mt-2">
+                            <flux:fieldset>
+                                <div>
+                                    <flux:label class="mb-2">Store Name</flux:label>
+                                    <flux:input
+                                        wire:model.live="storeName"
+                                        placeholder="e.g., John's Nike Store"
+                                        class="w-full"
+                                        :class="$errors->has('storeName') ? 'border-red-500' : ''"
+                                    />
+                                    <div class="flex justify-between mt-1">
+                                        <flux:error name="storeName" />
+                                        <span class="text-xs text-gray-500">{{ strlen($storeName ?? '') }}/100</span>
+                                    </div>
+                                </div>
+
+                                <!-- Store URL / Slug -->
+                                <div>
+                                    @if(strlen($storeSlug ?? '') > 0)
+                                        <div class="mt-2 flex items-center space-x-2">
+                                            @if($isCheckingSlug)
+                                                <svg class="animate-spin h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <span class="text-sm text-gray-400">Checking availability...</span>
+                                            @elseif($slugAvailable && !$errors->has('storeSlug'))
+                                                <svg class="h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                <span class="text-sm text-green-400">URL is available!</span>
+                                            @elseif(!$slugAvailable)
+                                                <svg class="h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"></circle>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 8l8 8M16 8l-8 8"></path>
+                                                </svg>
+                                                <span class="text-sm text-red-500">URL is NOT available!</span>
+                                            @endif
                                         </div>
-                                    </div>
+                                    @endif
 
-                                    <!-- Store URL / Slug -->
-                                    <div>
-                                        @if(strlen($storeSlug ?? '') > 0)
-                                            <div class="mt-2 flex items-center space-x-2">
-                                                @if($isCheckingSlug)
-                                                    <svg class="animate-spin h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24">
-                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                    </svg>
-                                                    <span class="text-sm text-gray-400">Checking availability...</span>
-                                                @elseif($slugAvailable && !$errors->has('storeSlug'))
-                                                    <svg class="h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                    <span class="text-sm text-green-400">URL is available!</span>
-                                                @elseif(!$slugAvailable)
-                                                    <svg class="h-4 w-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"></circle>
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 8l8 8M16 8l-8 8"></path>
-                                                    </svg>
-                                                    <span class="text-sm text-red-500">URL is NOT available!</span>
-                                                @endif
-                                            </div>
-                                        @endif
-
-                                        <!-- URL preview -->
-                                        @if(strlen($storeSlug ?? '') > 0 && !$errors->has('storeSlug'))
-                                            <div class="mt-2 text-xs text-gray-500">
-                                                Full URL: <span class="text-blue-400">www.knkings.com/store/{{ $storeSlug }}</span>
-                                            </div>
-                                        @endif
-
-                                        <flux:error name="storeSlug" class="mt-1" />
-                                    </div>
-
-                                    <!-- Tips Box -->
-                                    <div class="bg-[#27272a] rounded-lg p-4">
-                                        <h4 class="text-sm font-medium text-gray-300 mb-2 flex items-center">
-                                            <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            URL Tips
-                                        </h4>
-                                        <ul class="text-xs text-gray-400 space-y-1 ml-6 list-disc">
-                                            <li>Use only lowercase letters, numbers, and hyphens</li>
-                                            <li>Keep it short and memorable</li>
-                                            <li>Avoid special characters and spaces</li>
-                                            <li>Minimum 3 characters</li>
-                                        </ul>
-                                    </div>
-
-                                    <flux:separator />
-
-                                    <div class="space-y-4 mt-2">
-                                        <div class="flex justify-end items-center">
-                                            <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                                Cancel
-                                            </flux:button>
-                                            <flux:button type="submit" size="sm" variant="primary" class="ml-2">
-                                                <flux:icon.loading wire:loading wire:target="updateStore" />
-                                                <span wire:loading.remove wire:target="updateStore">Update</span>
-                                            </flux:button>
+                                    <!-- URL preview -->
+                                    @if(strlen($storeSlug ?? '') > 0 && !$errors->has('storeSlug'))
+                                        <div class="mt-2 text-xs text-gray-500">
+                                            Full URL: <span class="text-blue-400">www.knkings.com/store/{{ $storeSlug }}</span>
                                         </div>
+                                    @endif
+
+                                    <flux:error name="storeSlug" class="mt-1" />
+                                </div>
+
+                                <!-- Tips Box -->
+                                <div class="bg-[#27272a] rounded-lg p-4">
+                                    <h4 class="text-sm font-medium text-gray-300 mb-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        URL Tips
+                                    </h4>
+                                    <ul class="text-xs text-gray-400 space-y-1 ml-6 list-disc">
+                                        <li>Use only lowercase letters, numbers, and hyphens</li>
+                                        <li>Keep it short and memorable</li>
+                                        <li>Avoid special characters and spaces</li>
+                                        <li>Minimum 3 characters</li>
+                                    </ul>
+                                </div>
+
+                                <flux:separator />
+
+                                <div class="space-y-4 mt-2">
+                                    <div class="flex justify-end items-center">
+                                        <flux:button type="button" variant="subtle" size="sm" x-on:click="showModal = false">
+                                            Cancel
+                                        </flux:button>
+                                        <flux:button type="submit" size="sm" variant="primary" class="ml-2">
+                                            <flux:icon.loading wire:loading wire:target="updateStore" />
+                                            <span wire:loading.remove wire:target="updateStore">Update</span>
+                                        </flux:button>
                                     </div>
-                                </flux:fieldset>
-                            </form>
-                        </div>
+                                </div>
+                            </flux:fieldset>
+                        </form>
                     </div>
-                @endif
+                </div>
 
-                @if($showNewProducts)
-                    <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
-                        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
-                            <h2 class="mb-2">Update New Products</h2>
-                            <div class="bg-[#3d3d40] rounded-lg shadow-lg overflow-hidden mb-2">
-                                <div class="divide-y divide-gray-500">
-                                    @foreach($newProducts as $product)
-                                        <div class="p-4 hover:bg-gray-750 transition-colors">
-                                            <div class="flex items-start justify-between mb-2">
-                                                <div class="flex items-start space-x-3">
+                <div
+                    x-show="showNewProductModal"
+                    x-cloak
+                    x-on:keydown.escape.window="showNewProductModal = false"
+                    class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
+                    <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                        <h2 class="mb-2">Update New Products</h2>
+                        <div class="bg-[#3d3d40] rounded-lg shadow-lg overflow-hidden mb-2">
+                            <div class="divide-y divide-gray-500">
+                                @foreach($newProducts as $product)
+                                    <div class="p-4 hover:bg-gray-750 transition-colors">
+                                        <div class="flex items-start justify-between mb-2">
+                                            <div class="flex items-start space-x-3">
 
-                                                    @if($product->count() > 0)
-                                                        <img src="{{ $product->primary_image_url }}"
-                                                             alt="{{ $product->name }}"
-                                                             class="object-cover h-10 w-10 rounded-full">
-                                                    @else
-                                                        <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
-                                                            <span class="text-gray-300 font-medium">{{ substr($product->name, 0, 1) }}</span>
-                                                        </div>
-                                                    @endif
-
-                                                    <div class="flex flex-col gap-1">
-                                                        <div class="font-medium text-gray-200">{{ Str::limit($product->name, 20) }}</div>
-                                                        <div class="text-xs text-gray-200">Selling Price: ₦ {{ number_format($product->price) }}</div>
-                                                        <div class="text-xs text-gray-200">Dropship Price: ₦ {{ number_format($product->dropship_price) }}</div>
+                                                @if($product->count() > 0)
+                                                    <img src="{{ $product->primary_image_url }}"
+                                                         alt="{{ $product->name }}"
+                                                         class="object-cover h-10 w-10 rounded-full">
+                                                @else
+                                                    <div class="flex-shrink-0 h-10 w-10 bg-[#27272a] rounded-full flex items-center justify-center">
+                                                        <span class="text-gray-300 font-medium">{{ substr($product->name, 0, 1) }}</span>
                                                     </div>
+                                                @endif
+
+                                                <div class="flex flex-col gap-1">
+                                                    <div class="font-medium text-gray-200">{{ Str::limit($product->name, 20) }}</div>
+                                                    <div class="text-xs text-gray-200">Selling Price: ₦ {{ number_format($product->price) }}</div>
+                                                    <div class="text-xs text-gray-200">Dropship Price: ₦ {{ number_format($product->dropship_price) }}</div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
+                        </div>
 
-                            <flux:separator/>
+                        <flux:separator/>
 
-                            <div class="space-y-4 mt-2">
-                                <div class="flex justify-end items-center">
-                                    <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                        Cancel
-                                    </flux:button>
-                                    <flux:button type="button" size="sm" variant="primary" class="ml-2" wire:click="updateNewProducts">
-                                        <flux:icon.loading wire:loading wire:target="updateNewProducts" />
-                                        <span wire:loading.remove wire:target="updateNewProducts">Update Products</span>
-                                    </flux:button>
-                                </div>
+                        <div class="space-y-4 mt-2">
+                            <div class="flex justify-end items-center">
+                                <flux:button type="button" variant="subtle" size="sm" x-on:click="showNewProductModal = false">
+                                    Cancel
+                                </flux:button>
+                                <flux:button type="button" size="sm" variant="primary" class="ml-2" wire:click="updateNewProducts">
+                                    <flux:icon.loading wire:loading wire:target="updateNewProducts" />
+                                    <span wire:loading.remove wire:target="updateNewProducts">Update Products</span>
+                                </flux:button>
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </x-dropshippers.layout>

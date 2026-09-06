@@ -1,23 +1,53 @@
 {{-- resources/views/livewire/brand/partials/location-row.blade.php --}}
 @props(['location', 'level'])
 
-<tr class="hover:bg-gray-750 transition-colors">
+<tr class="hover:bg-gray-750 transition-colors"
+    @if($level > 0)
+        x-show="expandedLocations[{{ $location->parent_id }}]"
+        x-cloak
+    @endif
+>
     <td class="">
         <div class="flex items-center" style="padding-left: {{ $level * 24 }}px;">
             @if($location->children->count() > 0)
                 <button
-                    wire:click="toggleExpand({{ $location->id }})"
+                    x-on:click="toggleExpand({{ $location->id }})"
                     class="mr-2 text-gray-400 hover:text-gray-200 focus:outline-none"
                 >
-                    @if(in_array($location->id, $expandedLocations))
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    @else
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    @endif
+                    {{-- Right arrow - collapsed --}}
+                    <svg
+                        x-show="!expandedLocations[{{ $location->id }}]"
+                        x-cloak
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 5l7 7-7 7"
+                        />
+                    </svg>
+
+                    {{-- Down arrow - expanded --}}
+                    <svg
+                        x-show="expandedLocations[{{ $location->id }}]"
+                        x-cloak
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"
+                        />
+                    </svg>
+
                 </button>
             @else
                 <div class="w-6"></div>
@@ -58,7 +88,11 @@
     <td class="px-6 py-4 text-right">
         <div class="flex items-center justify-end space-x-3">
             <button
-                wire:click="openCreateModal({{ $location->id }})"
+                x-on:click="openSubLocation(
+                    {{ $location->id }},
+                    @js($location->name),
+                    {{ $location->delivery_price }}
+                )"
                 class="text-gray-400 hover:text-gray-200 transition-colors"
                 title="Add sub-location"
                 type="button"
@@ -69,7 +103,7 @@
             </button>
 
             <button
-                wire:click="edit({{ $location->id }})"
+                x-on:click="openEdit({{ $location->id }})"
                 class="text-gray-400 hover:text-gray-200 transition-colors"
                 title="Edit location"
                 type="button"
@@ -80,7 +114,10 @@
             </button>
 
             <button
-                wire:click="confirmDelete({{ $location->id }})"
+                x-on:click="openDelete(
+                    {{ $location->id }},
+                    @js($location->name)
+                )"
                 class="text-gray-400 hover:text-red-400 transition-colors"
                 title="Delete location"
             >
@@ -92,8 +129,21 @@
     </td>
 </tr>
 
-@if(in_array($location->id, $expandedLocations) && $location->children->count() > 0)
+@if($location->children->count() > 0)
     @foreach($location->children as $child)
-        @include('livewire.brand.partials.location-row', ['location' => $child, 'level' => $level + 1])
+        <tr
+            x-show="expandedLocations[{{ $location->id }}]"
+            x-cloak
+        >
+            <td colspan="3" class="p-0">
+                @include(
+                    'livewire.brand.partials.location-row',
+                    [
+                        'location' => $child,
+                        'level' => $level + 1
+                    ]
+                )
+            </td>
+        </tr>
     @endforeach
 @endif

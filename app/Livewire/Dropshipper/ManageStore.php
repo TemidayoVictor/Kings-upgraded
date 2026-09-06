@@ -25,8 +25,6 @@ class ManageStore extends Component
 
     public string $search = '';
 
-    public bool $showEditModal = false;
-
     public string $price = '';
 
     public string $storeName = '';
@@ -37,10 +35,7 @@ class ManageStore extends Component
 
     public bool $slugAvailable = true;
 
-    public bool $showEditStoreModal = false;
-
     public int $perPage = 15;
-    public bool $showNewProducts = false;
 
     public function mount($store): void
     {
@@ -53,17 +48,7 @@ class ManageStore extends Component
     {
         $this->selectedProduct = $product;
         $this->price = $product->custom_price;
-        $this->showEditModal = true;
-    }
-
-    public function newProductsModal(): void
-    {
-        $this->showNewProducts = true;
-    }
-
-    public function editStore(): void
-    {
-        $this->showEditStoreModal = true;
+        $this->dispatch('loaded-product');
     }
 
     public function updateProduct(): void
@@ -74,8 +59,7 @@ class ManageStore extends Component
 
         if ($this->price - $this->selectedProduct->originalProduct->dropship_price < 0) {
             $this->toast('error', 'Selling price cannot be less than Dropship price');
-            $this->closeModal();
-
+            $this->dispatch('close-modal');
             return;
         }
 
@@ -90,18 +74,12 @@ class ManageStore extends Component
         $dto = GeneralDTO::fromArray($buildDto);
         try {
             EditProductAction::editPrice($dto);
-            $this->closeModal();
             $this->toast('success', 'Price updated successfully.');
         } catch (\Exception $e) {
-            $this->closeModal();
             $this->toast('error', $e->getMessage());
         }
 
-    }
-
-    public function closeModal(): void
-    {
-        $this->reset(['showEditModal', 'selectedProduct', 'showEditStoreModal', 'showNewProducts']);
+        $this->dispatch('close-modal');
     }
 
     public function updatedStoreName(): void
@@ -135,27 +113,31 @@ class ManageStore extends Component
 
         $dto = GeneralDTO::fromArray($buildDto);
         try {
-            CloneStoreAction::editStore($dto);
-            $this->closeModal();
+            $store = CloneStoreAction::editStore($dto);
+            // update the new store with the new value
+            $this->store = $store;
             $this->toast('success', 'Store updated successfully.');
         } catch (\Exception $e) {
-            $this->closeModal();
             $this->toast('error', $e->getMessage());
         }
 
+        $this->dispatch('close-modal');
     }
 
     public function updateNewProducts(): void
     {
         try {
             CloneStoreAction::updateNewProducts($this->store->id);
-            $this->closeModal();
             $this->toast('success', 'Products added successfully.');
         } catch (\Exception $e) {
-            $this->closeModal();
             $this->toast('error', $e->getMessage());
         }
+        $this->dispatch('close-modal');
+    }
 
+    public function closeModal(): void
+    {
+        $this->reset(['showEditModal', 'selectedProduct', 'showEditStoreModal', 'showNewProducts']);
     }
 
     public function render(): View

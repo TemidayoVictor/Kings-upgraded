@@ -24,7 +24,7 @@ class ManageSales extends Component
 
     public $per_page = 10;
 
-    public ?Sale $selectedSale = null;
+    public ?array $selectedSale = null;
 
     public string $type = '';
 
@@ -70,22 +70,10 @@ class ManageSales extends Component
         }
     }
 
-    public function selectSale(Sale $sale, string $type): void
-    {
-        $this->selectedSale = $sale;
-        $this->type = $type;
-    }
-
-    public function closeModal(): void
-    {
-        $this->selectedSale = null;
-        $this->type = '';
-    }
-
     public function startSales(): void
     {
         $buildDto = [
-            'id' => $this->selectedSale->id,
+            'id' => $this->selectedSale['id'],
         ];
 
         $dto = GeneralDTO::fromArray($buildDto);
@@ -96,13 +84,14 @@ class ManageSales extends Component
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }
-        $this->closeModal();
+
+        $this->dispatch('close-modal');
     }
 
     public function endSales(): void
     {
         $buildDto = [
-            'id' => $this->selectedSale->id,
+            'id' => $this->selectedSale['id'],
         ];
 
         $dto = GeneralDTO::fromArray($buildDto);
@@ -113,7 +102,8 @@ class ManageSales extends Component
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
         }
-        $this->closeModal();
+
+        $this->dispatch('close-modal');
     }
 
     public function getSalesProperty()

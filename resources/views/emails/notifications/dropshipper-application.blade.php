@@ -1,4 +1,4 @@
-@component('emails.layouts.layout', ['title' => 'New Dropshipper Application']) <!-- Main Content Panel Frame --> <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 570px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+@component('emails.layouts.layout', ['title' => 'New Dropshipper Application']) <!-- Main Content Panel Frame -->
     <!-- Top Body Content Panel -->
     <tr>
         <td style="padding: 40px 40px 32px 40px;">
@@ -62,7 +62,5 @@
             <div style="border-top: 1px solid #f0f0f0; height: 1px; line-height: 1px;"></div>
         </td>
     </tr>
-
-</table>
 
 @endcomponent

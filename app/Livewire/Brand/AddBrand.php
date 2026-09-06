@@ -28,19 +28,14 @@ class AddBrand extends Component
     {
         $this->plan = $plan;
         $this->isFree = false;
-        $this->showModal = true;
+        $this->dispatch('loaded-modal');
     }
 
     public function freePlan(): void
     {
         $this->plan = Status::PREMIUM;
         $this->isFree = true;
-        $this->showModal = true;
-    }
-
-    public function closeModal(): void
-    {
-        $this->showModal = false;
+        $this->dispatch('loaded-modal');
     }
 
     public function addBrand(): mixed
@@ -100,7 +95,7 @@ class AddBrand extends Component
             }
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
+            $this->dispatch('close-modal');
 
             return back();
         }
@@ -113,7 +108,7 @@ class AddBrand extends Component
         $this->toast('success', 'Loading Payment Gateway. . .');
         $flutterwavePaymentService = new FlutterwavePaymentService;
         $this->makePayment($flutterwavePaymentService, $payment);
-        $this->closeModal();
+        $this->dispatch('close-modal');
     }
 
     public function makePayment(FlutterwavePaymentService $flutterwave, Payment $payment): void

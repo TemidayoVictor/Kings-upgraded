@@ -16,7 +16,10 @@
             </flux:fieldset>
         </form>
 
-        <div class="min-h-screen">
+        <div class="min-h-screen"
+             x-data="{ showDeleteModal: false, productId: null, productName: '' }"
+             x-on:product-deleted.window="showDeleteModal = false"
+        >
             <div class="max-w-7xl mx-auto">
                 <!-- Header -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-3">
@@ -93,7 +96,11 @@
                                                 </a>
 
                                                 <button
-                                                    wire:click="confirmDelete({{ $product }})"
+                                                    @click="
+                                                        productId = {{ $product->id }};
+                                                        productName = @js($product->name);
+                                                        showDeleteModal = true;
+                                                    "
                                                     class="text-gray-400 hover:text-red-400 transition-colors"
                                                     title="Delete product"
                                                 >
@@ -189,29 +196,34 @@
                     </div>
                 @endif
 
-                <!-- Delete Modal -->
-                @if($showDeleteModal)
-                    <div class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4" style="z-index: 50;">
-                        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
-                            <form wire:submit="delete">
-                                <flux:fieldset>
-                                    <div class="space-y-4">
-                                        <p class="text-white mb-4"> Are you sure you want to delete "{{ $selectedProduct->name }}"? </p>
-                                        <div class="flex justify-end items-center">
-                                            <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                                Cancel
-                                            </flux:button>
-                                            <flux:button type="submit" size="sm" variant="danger" class="ml-2">
-                                                <flux:icon.loading wire:loading wire:target="save" />
-                                                <span wire:loading.remove wire:target="save">{{ __('Delete') }}</span>
-                                            </flux:button>
-                                        </div>
+                <div
+                    x-show="showDeleteModal"
+                    x-cloak
+                    @keydown.escape.window="showDeleteModal = false"
+                    class="fixed inset-0 bg-black/70 bg-opacity-20 flex items-center justify-center p-4"
+                    style="z-index: 50;"
+                >
+                    <div @click.outside="showDeleteModal = false" class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+                        <form>
+                            <flux:fieldset>
+                                <div class="space-y-4">
+                                    <p class="text-white mb-4"> Are you sure you want to delete "<span x-text="productName"></span>"? </p>
+                                    <div class="flex justify-end items-center">
+                                        <flux:button type="button" variant="subtle" size="sm" @click="showDeleteModal = false">
+                                            Cancel
+                                        </flux:button>
+                                        <flux:button type="button" size="sm" variant="danger" class="ml-2"
+                                         @click="$wire.delete(productId)"
+                                        >
+                                            <flux:icon.loading wire:loading wire:target="delete" />
+                                            <span wire:loading.remove wire:target="delete">{{ __('Delete') }}</span>
+                                        </flux:button>
                                     </div>
-                                </flux:fieldset>
-                            </form>
-                        </div>
+                                </div>
+                            </flux:fieldset>
+                        </form>
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </x-products.layout>

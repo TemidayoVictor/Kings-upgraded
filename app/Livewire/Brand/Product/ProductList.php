@@ -21,8 +21,6 @@ class ProductList extends Component
 
     public int $perPage = 15;
 
-    public bool $showDeleteModal = false;
-
     public int $productId;
 
     public function updatedSearch(): void
@@ -30,31 +28,20 @@ class ProductList extends Component
         $this->resetPage();
     }
 
-    public function confirmDelete(Product $product): void
-    {
-        $this->selectedProduct = $product;
-        $this->showDeleteModal = true;
-    }
-
-    public function delete(): void
+    public function delete($productId): void
     {
         $buildDTO = [
-            'id' => $this->selectedProduct->id,
+            'id' => $productId,
         ];
         $dto = GeneralDTO::fromArray($buildDTO);
         try {
             DeleteProductAction::execute($dto);
-            $this->closeModal();
             $this->toast('success', 'Product deleted successfully.');
         } catch (\Exception $e) {
-            $this->closeModal();
             $this->toast('error', $e->getMessage());
         }
-    }
 
-    public function closeModal(): void
-    {
-        $this->reset(['showDeleteModal', 'selectedProduct']);
+        $this->dispatch('product-deleted');
     }
 
     public function render(): View

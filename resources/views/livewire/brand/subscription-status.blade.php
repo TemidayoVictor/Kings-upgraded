@@ -1,4 +1,8 @@
-<section class="w-full">
+<section class="w-full"
+         x-data="{ showModal: false }"
+         x-on:loaded-modal.window="showModal = true"
+         x-on:close-modal.window="showModal = false"
+>
     @include('partials.subscription-heading')
 
     <div class="">
@@ -144,7 +148,7 @@
                                 </div>
 
                                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                                    12.4k
+                                    < 500
                                 </h3>
 
                                 <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -272,7 +276,12 @@
                                                 Renew Subscription
                                             </p>
                                             <p class="text-xs text-gray-500 dark:text-gray-400">
-                                                Extend your subscription
+                                                <span wire:loading wire:target="displayModal('renew')">
+                                                    Loading modal...
+                                                </span>
+                                                <span wire:loading.remove wire:target="displayModal('renew')">
+                                                    Extend your subscription
+                                                </span>
                                             </p>
                                         </div>
                                     </div>
@@ -300,7 +309,12 @@
                                             Buy More Product Slots
                                         </p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">
-                                            Expand your product limit
+                                            <span wire:loading wire:target="displayModal('increase')">
+                                                    Loading modal...
+                                                </span>
+                                            <span wire:loading.remove wire:target="displayModal('increase')">
+                                                    Expand your product limit
+                                                </span>
                                         </p>
                                     </div>
                                 </div>
@@ -387,9 +401,9 @@
                         @endif
 
                         <div class="mb-6 {{ $brand->subscription_status == 'premium' ? 'mt-2' : '' }}">
-            <span class="px-4 py-1 rounded-full bg-blue-500/10 text-blue-500 text-sm font-medium">
-                Premium
-            </span>
+                            <span class="px-4 py-1 rounded-full bg-blue-500/10 text-blue-500 text-sm font-medium">
+                                Premium
+                            </span>
                         </div>
 
                         <h3 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
@@ -490,241 +504,243 @@
         </div>
     </div>
 
-    @if($showModal)
-        <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4" style="z-index: 50;">
-            <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
-                <h3 class="text-lg font-medium text-white mb-4">
-                    @php
-                        $titles = [
-                            'renew' => 'Renew Subscription',
-                            'upgrade' => 'Upgrade Subscription',
-                            'capacity' => 'Increase Store Capacity',
-                        ];
-                    @endphp
+    <div
+        x-show="showModal"
+        x-cloak
+        x-on:keydown.escape.window="showModal = false"
+        class="fixed inset-0 bg-black/70 flex items-center justify-center p-4" style="z-index: 50;">
+        <div class="bg-[#27272a] rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 class="text-lg font-medium text-white mb-4">
+                @php
+                    $titles = [
+                        'renew' => 'Renew Subscription',
+                        'upgrade' => 'Upgrade Subscription',
+                        'capacity' => 'Increase Store Capacity',
+                    ];
+                @endphp
 
-                    {{ $titles[$type] ?? 'Subscription Action' }}
-                </h3>
+                {{ $titles[$type] ?? 'Subscription Action' }}
+            </h3>
 
-                @if($type == 'renew')
-                    <form wire:submit="renewSubscription">
-                        <div class="space-y-4">
+            @if($type == 'renew')
+                <form wire:submit="renewSubscription">
+                    <div class="space-y-4">
 
-                            <div>
-                                <flux:select label="Select Subscription Period" wire:model="month">
-                                    <option value="">Select Period</option>
-                                    <option value="1">1 month</option>
-                                    <option value="3">3 months</option>
-                                    <option value="6">6 months</option>
-                                    <option value="12">12 months</option>
-                                </flux:select>
-                            </div>
+                        <div>
+                            <flux:select label="Select Subscription Period" wire:model="month">
+                                <option value="">Select Period</option>
+                                <option value="1">1 month</option>
+                                <option value="3">3 months</option>
+                                <option value="6">6 months</option>
+                                <option value="12">12 months</option>
+                            </flux:select>
+                        </div>
 
-                            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <p class="text-sm text-gray-400">
-                                            Current Plan
-                                        </p>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">
+                                        Current Plan
+                                    </p>
 
-                                        <p class="text-white font-semibold text-lg mt-1 capitalize">
-                                            {{
-                                                auth()->user()->brand->subscription_status
-                                            }}
-                                        </p>
-                                    </div>
-
-                                    <div class="text-right">
-                                        <p class="text-sm text-gray-400">
-                                            Price
-                                        </p>
-
-                                        <p class="font-bold mt-1">
-                                            ₦{{
-                                                number_format(auth()->user()->brand->subscription_amount). ' / month'
-                                            }}
-                                        </p>
-                                    </div>
+                                    <p class="text-white font-semibold text-lg mt-1 capitalize">
+                                        {{
+                                            auth()->user()->brand->subscription_status
+                                        }}
+                                    </p>
                                 </div>
 
-                                <div class="mt-3 pt-3 border-t border-white/10">
-                                    <p class="text-xs text-gray-400">
-                                        Subscription will be renewed immediately after payment confirmation.
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">
+                                        Price
+                                    </p>
+
+                                    <p class="font-bold mt-1">
+                                        ₦{{
+                                            number_format(auth()->user()->brand->subscription_amount). ' / month'
+                                        }}
                                     </p>
                                 </div>
                             </div>
 
-                            <div class="flex justify-end space-x-2">
-                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                    Cancel
-                                </flux:button>
-
-                                <flux:button type="submit" size="sm" variant="primary">
-                                    <flux:icon.loading wire:loading wire:target="renewSubscription" />
-
-                                    <span wire:loading.remove wire:target="renewSubscription">
-                                        Proceed
-                                    </span>
-                                </flux:button>
+                            <div class="mt-3 pt-3 border-t border-white/10">
+                                <p class="text-xs text-gray-400">
+                                    Subscription will be renewed immediately after payment confirmation.
+                                </p>
                             </div>
                         </div>
-                    </form>
-                @elseif($type == 'increase')
-                    <form wire:submit="increaseProducts">
-                        <div class="space-y-4">
 
-                            <div>
-                                <flux:select label="Product Amount" wire:model="additionalProductNumber">
-                                    <option value="">Select Product Amount</option>
-                                    <option value="1">10 Products</option>
-                                    <option value="2">20 Products</option>
-                                    <option value="3">30 Products</option>
-                                </flux:select>
-                            </div>
+                        <div class="flex justify-end space-x-2">
+                            <flux:button type="button" variant="subtle" size="sm" x-on:click="showModal = false">
+                                Cancel
+                            </flux:button>
 
-                            <!-- Pricing Card -->
-                            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <p class="text-sm text-gray-400">
-                                            Current Plan
-                                        </p>
+                            <flux:button type="submit" size="sm" variant="primary">
+                                <flux:icon.loading wire:loading wire:target="renewSubscription" />
 
-                                        <p class="text-white font-semibold text-lg mt-1 capitalize">
-                                            {{
-                                                auth()->user()->brand->subscription_status
-                                            }}
-                                        </p>
-                                    </div>
-
-                                    <div class="text-right">
-                                        <p class="text-sm text-gray-400">
-                                            Price
-                                        </p>
-
-                                        <p class="font-bold mt-1">
-                                            ₦{{
-                                                number_format(planDetails(auth()->user()->brand->subscription_status)['additional_fee']). ' / '.
-                                                planDetails(auth()->user()->brand->subscription_status)['additional_number']. ' products'
-                                            }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="mt-3 pt-3 border-t border-white/10">
-                                    <p class="text-xs text-gray-400">
-                                        Capacity upgrade will be added immediately after payment confirmation.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-end space-x-2">
-                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                    Cancel
-                                </flux:button>
-
-                                <flux:button type="submit" size="sm" variant="primary">
-                                    <flux:icon.loading wire:loading wire:target="increaseProducts" />
-
-                                    <span wire:loading.remove wire:target="increaseProducts">
-                                        Proceed
-                                    </span>
-                                </flux:button>
-                            </div>
-
+                                <span wire:loading.remove wire:target="renewSubscription">
+                                    Proceed
+                                </span>
+                            </flux:button>
                         </div>
-                    </form>
-                @else
-                    <form wire:submit="getTotal">
-                        <div class="space-y-4">
+                    </div>
+                </form>
+            @elseif($type == 'increase')
+                <form wire:submit="increaseProducts">
+                    <div class="space-y-4">
 
-                            <div>
-                                <flux:select label="Select Subscription Period" wire:model="month">
-                                    <option value="">Select Period</option>
-                                    <option value="1">1 month</option>
-                                    <option value="3">3 months</option>
-                                    <option value="6">6 months</option>
-                                    <option value="12">12 months</option>
-                                </flux:select>
-                            </div>
+                        <div>
+                            <flux:select label="Product Amount" wire:model="additionalProductNumber">
+                                <option value="">Select Product Amount</option>
+                                <option value="1">10 Products</option>
+                                <option value="2">20 Products</option>
+                                <option value="3">30 Products</option>
+                            </flux:select>
+                        </div>
 
-                            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                                <div class="flex items-start justify-between">
-                                    <div>
-                                        <p class="text-sm text-gray-400">
-                                            Plan
-                                        </p>
+                        <!-- Pricing Card -->
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">
+                                        Current Plan
+                                    </p>
 
-                                        <p class="text-white font-semibold text-lg mt-1 capitalize">
-                                            {{
-                                                $plan
-                                            }}
-                                        </p>
-                                    </div>
-
-                                    <div class="text-right">
-                                        <p class="text-sm text-gray-400">
-                                            Price
-                                        </p>
-
-                                        <p class="font-bold mt-1">
-                                            ₦{{
-                                                number_format(planDetails($plan)['fee']). ' / month'
-                                            }}
-                                        </p>
-                                    </div>
+                                    <p class="text-white font-semibold text-lg mt-1 capitalize">
+                                        {{
+                                            auth()->user()->brand->subscription_status
+                                        }}
+                                    </p>
                                 </div>
 
-                                @if($resolvedPrice)
-                                    <div class="mt-3 pt-3 border-t border-white/10">
-                                        <p class="text-sm text-gray-400">
-                                            You have {{ expiryDate($brand->exp_date)['daysRemaining'] }} days remaining on your current plan.
-                                            When you upgrade, your subscription will be prorated, and you’ll only pay the difference of ₦{{ number_format($resolvedPrice) }}.
-                                        </p>
-                                    </div>
-                                @endif
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">
+                                        Price
+                                    </p>
 
-                                @if($showTotal)
-                                    <div class="mt-3 pt-3 border-t border-white/10">
-                                        <p class="text-white font-semibold text-sm mt-1 capitalize flex justify-between">
-                                            <span>Total</span>
-                                            <span>₦{{number_format($total)}}</span>
-                                        </p>
-                                    </div>
-                                @endif
-
-                                <div class="mt-3 pt-3 border-t border-white/10">
-                                    <p class="text-xs text-gray-400">
-                                        Your plan will be updated immediately after payment confirmation.
+                                    <p class="font-bold mt-1">
+                                        ₦{{
+                                            number_format(planDetails(auth()->user()->brand->subscription_status)['additional_fee']). ' / '.
+                                            planDetails(auth()->user()->brand->subscription_status)['additional_number']. ' products'
+                                        }}
                                     </p>
                                 </div>
                             </div>
 
-                            <div class="flex justify-end space-x-2">
-                                <flux:button type="button" variant="subtle" size="sm" wire:click="closeModal">
-                                    Cancel
-                                </flux:button>
-
-                                <flux:button type="submit" size="sm" variant="primary">
-                                    <flux:icon.loading wire:loading wire:target="getTotal" />
-                                    <span wire:loading.remove wire:target="getTotal">
-                                                Check Total
-                                            </span>
-                                </flux:button>
+                            <div class="mt-3 pt-3 border-t border-white/10">
+                                <p class="text-xs text-gray-400">
+                                    Capacity upgrade will be added immediately after payment confirmation.
+                                </p>
                             </div>
-                            @if($showTotal)
-                                <div class="flex justify-end space-x-2">
-                                    <flux:button type="button" size="sm" color="green" variant="primary" wire:click="upgradePlan">
-                                        <flux:icon.loading wire:loading wire:target="upgradePlan" />
-                                        <span>
-                                            Make Payment
-                                        </span>
-                                    </flux:button>
+                        </div>
+
+                        <div class="flex justify-end space-x-2">
+                            <flux:button type="button" variant="subtle" size="sm" x-on:click="showModal = false">
+                                Cancel
+                            </flux:button>
+
+                            <flux:button type="submit" size="sm" variant="primary">
+                                <flux:icon.loading wire:loading wire:target="increaseProducts" />
+
+                                <span wire:loading.remove wire:target="increaseProducts">
+                                    Proceed
+                                </span>
+                            </flux:button>
+                        </div>
+
+                    </div>
+                </form>
+            @elseif($type == 'upgrade')
+                <form wire:submit="getTotal">
+                    <div class="space-y-4">
+
+                        <div>
+                            <flux:select label="Select Subscription Period" wire:model="month">
+                                <option value="">Select Period</option>
+                                <option value="1">1 month</option>
+                                <option value="3">3 months</option>
+                                <option value="6">6 months</option>
+                                <option value="12">12 months</option>
+                            </flux:select>
+                        </div>
+
+                        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">
+                                        Plan
+                                    </p>
+
+                                    <p class="text-white font-semibold text-lg mt-1 capitalize">
+                                        {{
+                                            $plan
+                                        }}
+                                    </p>
+                                </div>
+
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">
+                                        Price
+                                    </p>
+
+                                    <p class="font-bold mt-1">
+                                        ₦{{
+                                            number_format(planDetails($plan)['fee']). ' / month'
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if($resolvedPrice)
+                                <div class="mt-3 pt-3 border-t border-white/10">
+                                    <p class="text-sm text-gray-400">
+                                        You have {{ expiryDate($brand->exp_date)['daysRemaining'] }} days remaining on your current plan.
+                                        When you upgrade, your subscription will be prorated, and you’ll only pay the difference of ₦{{ number_format($resolvedPrice) }}.
+                                    </p>
                                 </div>
                             @endif
+
+                            @if($showTotal)
+                                <div class="mt-3 pt-3 border-t border-white/10">
+                                    <p class="text-white font-semibold text-sm mt-1 capitalize flex justify-between">
+                                        <span>Total</span>
+                                        <span>₦{{number_format($total)}}</span>
+                                    </p>
+                                </div>
+                            @endif
+
+                            <div class="mt-3 pt-3 border-t border-white/10">
+                                <p class="text-xs text-gray-400">
+                                    Your plan will be updated immediately after payment confirmation.
+                                </p>
+                            </div>
                         </div>
-                    </form>
-                @endif
-            </div>
+
+                        <div class="flex justify-end space-x-2">
+                            <flux:button type="button" variant="subtle" size="sm" x-on:click="showModal = false">
+                                Cancel
+                            </flux:button>
+
+                            <flux:button type="submit" size="sm" variant="primary">
+                                <flux:icon.loading wire:loading wire:target="getTotal" />
+                                <span wire:loading.remove wire:target="getTotal">
+                                            Check Total
+                                        </span>
+                            </flux:button>
+                        </div>
+                        @if($showTotal)
+                            <div class="flex justify-end space-x-2">
+                                <flux:button type="button" size="sm" color="green" variant="primary" wire:click="upgradePlan">
+                                    <flux:icon.loading wire:loading wire:target="upgradePlan" />
+                                    <span>
+                                        Make Payment
+                                    </span>
+                                </flux:button>
+                            </div>
+                        @endif
+                    </div>
+                </form>
+            @endif
         </div>
-    @endif
+    </div>
 </section>

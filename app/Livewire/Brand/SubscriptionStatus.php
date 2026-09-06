@@ -23,9 +23,9 @@ class SubscriptionStatus extends Component
 
     public ?string $plan = null;
 
-    public ?int $month = 0;
+    public ?int $month = 1;
 
-    public ?int $additionalProductNumber;
+    public ?int $additionalProductNumber = 1;
 
     public int $resolvedPrice = 0;
 
@@ -87,25 +87,20 @@ class SubscriptionStatus extends Component
 
     public function displayModal($type, $plan = null): void
     {
-        $this->showModal = true;
         $this->type = $type;
         $this->plan = $plan;
 
         if ($plan) {
             $this->resolvedPrice = resolvePricing(auth()->user()->brand->subscription_status, $plan);
         }
-    }
 
-    public function closeModal(): void
-    {
-        $this->showModal = false;
-        $this->type = '';
+        $this->dispatch('loaded-modal');
     }
 
     public function renewSubscription(): void
     {
         $this->validate([
-            'month' => 'required',
+            'month' => 'required|min:1',
         ]);
 
         try {
@@ -113,7 +108,7 @@ class SubscriptionStatus extends Component
             $this->triggerPayment($payment);
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
+            $this->dispatch('close-modal');
         }
 
     }
@@ -143,7 +138,7 @@ class SubscriptionStatus extends Component
             $this->triggerPayment($payment);
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
+            $this->dispatch('close-modal');
         }
 
     }
@@ -159,7 +154,7 @@ class SubscriptionStatus extends Component
             $this->triggerPayment($payment);
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
+            $this->dispatch('close-modal');
         }
 
         return back();
@@ -185,10 +180,11 @@ class SubscriptionStatus extends Component
     {
         if ($this->resolvedPrice == 0 && $this->month == 0) {
             $this->toast('error', 'Kindly select a subscription duration');
-            $this->closeModal();
+            $this->dispatch('close-modal');
 
             return false;
         }
+
         return true;
     }
 
@@ -197,7 +193,7 @@ class SubscriptionStatus extends Component
         $this->toast('success', 'Loading Payment Gateway. . .');
         $flutterwavePaymentService = new FlutterwavePaymentService;
         $this->makePayment($flutterwavePaymentService, $payment);
-        $this->closeModal();
+        $this->dispatch('close-modal');
     }
 
     public function makePayment(FlutterwavePaymentService $flutterwave, Payment $payment): void

@@ -23,18 +23,6 @@ class ManageDeliveryLocations extends Component
     public ?int $editing_id = null;
 
     public ?int $brandId = null;
-
-    // UI state
-    public bool $showCreateModal = false;
-
-    public bool $showEditModal = false;
-
-    public bool $showDeleteModal = false;
-
-    public bool $showSubLocationModal = false;
-
-    public ?DeliveryLocation $selectedParent = null;
-
     public array $expandedLocations = [];
 
     protected function rules(): array
@@ -80,40 +68,24 @@ class ManageDeliveryLocations extends Component
         try {
             DeliveryLocationAction::execute($dto);
             $this->reset(['name', 'delivery_price', 'parent_id']);
-            $this->showCreateModal = false;
             $this->toast('success', 'Location added sucessfully.');
-            $this->closeModal();
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
         }
+
+        $this->dispatch('location-created');
     }
 
-    // Open create modal (optionally with parent)
-    public function openCreateModal(?int $parentId = null): void
-    {
-        $this->resetValidation();
-        $this->reset(['name', 'delivery_price', 'parent_id']);
-
-        if ($parentId) {
-            $this->parent_id = $parentId;
-            $this->selectedParent = DeliveryLocation::find($parentId);
-            $this->showSubLocationModal = true;
-        } else {
-            $this->showCreateModal = true;
-        }
-    }
-
-    // Edit location
     public function edit(int $id): void
     {
         $location = DeliveryLocation::findOrFail($id);
-        $this->editing_id = $id;
+
+        $this->editing_id = $location->id;
         $this->name = $location->name;
         $this->delivery_price = $location->delivery_price;
         $this->parent_id = $location->parent_id;
 
-        $this->showEditModal = true;
+        $this->resetValidation();
     }
 
     public function update(): void
@@ -128,37 +100,29 @@ class ManageDeliveryLocations extends Component
         $dto = DeliveryLocationDTO::fromArray($buildDto);
         try {
             DeliveryLocationAction::update($dto);
-            $this->closeModal();
             $this->toast('success', 'Location updated successfully!');
         } catch (\Exception $e) {
-            $this->closeModal();
             $this->toast('error', $e->getMessage());
         }
+
+        $this->dispatch('location-updated');
     }
 
     // Delete location
-    public function confirmDelete(int $id): void
-    {
-        $location = DeliveryLocation::findOrFail($id);
-        $this->editing_id = $id;
-        $this->name = $location->name;
-        $this->showDeleteModal = true;
-    }
-
-    public function delete(): void
+    public function delete($location): void
     {
         $buildDto = [
-            'id' => $this->editing_id,
+            'id' => $location,
         ];
         $dto = DeliveryLocationDTO::fromArray($buildDto);
         try {
             DeliveryLocationAction::delete($dto);
             $this->toast('success', 'Location deleted successfully!');
-            $this->closeModal();
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
         }
+
+        $this->dispatch('location-deleted');
     }
 
     // Toggle location expansion
@@ -172,15 +136,6 @@ class ManageDeliveryLocations extends Component
     }
 
     // Close modals
-    public function closeModal(): void
-    {
-        $this->reset(['name', 'delivery_price', 'parent_id', 'editing_id', 'selectedParent']);
-        $this->showCreateModal = false;
-        $this->showEditModal = false;
-        $this->showDeleteModal = false;
-        $this->showSubLocationModal = false;
-    }
-
     public function render(): View
     {
         return view('livewire.brand.product.manage-delivery-locations', [

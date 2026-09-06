@@ -7,6 +7,7 @@ use App\DTOs\Brand\CouponDTO;
 use App\DTOs\GeneralDTO;
 use App\Models\Coupon;
 use App\Traits\Toastable;
+use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,12 +16,6 @@ class Coupons extends Component
     use Toastable, WithPagination;
 
     public ?Coupon $coupon = null;
-
-    public $showCreateModal = false;
-
-    public $showEditModal = false;
-
-    public $showDeactivateModal = false;
 
     public string $code = '';
 
@@ -42,20 +37,6 @@ class Coupons extends Component
 
     protected $listeners = ['refreshCoupons' => '$refresh'];
 
-    public function openCreateModal(): void
-    {
-        $this->resetForm();
-        $this->showCreateModal = true;
-    }
-
-    public function closeModal(): void
-    {
-        $this->showCreateModal = false;
-        $this->showEditModal = false;
-        $this->showDeactivateModal = false;
-        $this->resetForm();
-    }
-
     public function createCoupon(): void
     {
         $validated = $this->validate([
@@ -69,11 +50,11 @@ class Coupons extends Component
         try {
             CouponAction::execute($dto);
             $this->toast('success', 'Coupon created successfully');
-            $this->closeModal();
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
         }
+
+        $this->dispatch('coupon-created');
     }
 
     public function editCoupon(int $couponId): void
@@ -86,8 +67,6 @@ class Coupons extends Component
         $this->value = $coupon->value;
         $this->startsAt = $coupon->starts_at ? $coupon->starts_at->format('Y-m-d') : null;
         $this->expiresAt = $coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : null;
-
-        $this->showEditModal = true;
     }
 
     public function updateCoupon(): void
@@ -106,17 +85,16 @@ class Coupons extends Component
         try {
             CouponAction::update($dto);
             $this->toast('success', 'Coupon updated successfully');
-            $this->closeModal();
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
         }
+
+        $this->dispatch('coupon-updated');
     }
 
     public function confirmDeactivate(int $couponId): void
     {
         $this->selectedCouponId = $couponId;
-        $this->showDeactivateModal = true;
     }
 
     public function deactivateCoupon(): void
@@ -128,28 +106,19 @@ class Coupons extends Component
         try {
             CouponAction::deactivate($dto);
             $this->toast('success', 'Coupon deactivated successfully');
-            $this->closeModal();
         } catch (\Exception $e) {
             $this->toast('error', $e->getMessage());
-            $this->closeModal();
         }
+        $this->dispatch('coupon-deactivated');
     }
 
-    public function popup($action, $couponId): void
-    {
-        if ($action === 'edit') {
-            $this->editCoupon($couponId);
-        } elseif ($action === 'deactivate') {
-            $this->confirmDeactivate($couponId);
-        }
-    }
-
-    private function resetForm(): void
+    public function resetForm(): void
     {
         $this->reset(['code', 'type', 'value', 'minOrderAmount', 'maxDiscountAmount', 'startsAt', 'expiresAt', 'selectedCouponId']);
+        $this->resetValidation();
     }
 
-    public function render()
+    public function render(): View
     {
         $coupons = Coupon::where('brand_id', auth()->user()->brand->id)
             ->orderBy('id', 'desc')
