@@ -9,7 +9,6 @@ use App\Enums\UserType;
 use App\Models\Preference;
 use App\Models\User;
 use App\Traits\Toastable;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -100,7 +99,7 @@ class ProfileSettings extends Component
         $this->selectedPreferences = array_values($this->selectedPreferences);
     }
 
-    public function submit(): RedirectResponse
+    public function submit(): mixed
     {
         $validated = $this->validate();
         $dto = ProfileSettingsDTO::fromArray($validated);
