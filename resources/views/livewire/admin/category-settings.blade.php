@@ -97,6 +97,12 @@
                             @endif
                         </div>
                     @endforeach
+
+                    @if($categories->hasPages())
+                        <div class="mt-6">
+                            {{ $categories->links() }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
