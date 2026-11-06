@@ -2,7 +2,6 @@
 
 namespace App\DTOs\Brand;
 
-
 readonly class SalesDTO
 {
     public function __construct(
@@ -15,6 +14,7 @@ readonly class SalesDTO
         public string $startsAt,
         public string $section,
         public string $endsAt,
+        public array $tags = [],
     ) {}
 
     public static function fromArray(array $data): self
@@ -29,6 +29,8 @@ readonly class SalesDTO
             startsAt: $data['startsAt'],
             section: $data['section'],
             endsAt: $data['endsAt'],
+            tags: $data['tags'] ?? [],
+
         );
     }
 }

@@ -5,7 +5,6 @@ namespace App\Livewire\Web\Brands;
 use App\Enums\Status;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Subcategory;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -24,13 +23,21 @@ class Index extends Component
 
     public bool $sidebarOpen = false;
 
-    protected array $queryString = [
+    public string $sort = 'featured';
+
+    protected $queryString = [
         'search' => ['except' => ''],
         'selectedCategory' => ['except' => null],
         'selectedSubcategory' => ['except' => null],
+        'sort' => ['except' => 'featured'],
     ];
 
     public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSort(): void
     {
         $this->resetPage();
     }
@@ -75,7 +82,9 @@ class Index extends Component
     public function getBrandsProperty(): LengthAwarePaginator
     {
         return Brand::query()
-            ->where('status', Status::COMPLETED) // Only show active brands
+            ->where('status', Status::COMPLETED)
+            ->with('products')
+            ->withCount('products')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('brand_name', 'like', '%'.$this->search.'%')
@@ -88,6 +97,15 @@ class Index extends Component
             })
             ->when($this->selectedCategory, function ($query) {
                 $query->where('category', $this->selectedCategory);
+            })
+            ->when($this->sort, function ($query) {
+                match ($this->sort) {
+                    'recently_added' => $query->latest(),
+                    'most_products' => $query->orderByDesc('products_count'),
+                    'alpha' => $query->orderBy('brand_name'),
+                    'featured' => $query->latest(), // fallback — change if you have a "featured" flag
+                    default => null,
+                };
             })
             ->paginate(12);
     }

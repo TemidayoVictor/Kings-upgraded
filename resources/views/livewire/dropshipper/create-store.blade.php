@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <h2 class="text-xl font-bold text-white">{{ $brand->brand_name }}</h2>
-                                    <p class="text-sm text-gray-400">{{ $brand->category }} • {{ $brand->products->count() ?? 0 }} products</p>
+                                    <p class="text-sm text-gray-400">{{ $brand->subcategoryModel->name }} • {{ $brand->products->count() ?? 0 }} products</p>
                                 </div>
                             </div>
                         </div>

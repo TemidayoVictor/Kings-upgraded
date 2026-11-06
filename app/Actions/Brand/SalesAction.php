@@ -4,9 +4,9 @@ namespace App\Actions\Brand;
 
 use App\DTOs\Brand\SalesDTO;
 use App\DTOs\GeneralDTO;
-use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Services\SaleTagService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -18,25 +18,28 @@ class SalesAction
      * @throws Exception
      * @throws Throwable
      */
+
     public static function execute(SalesDTO $dto): Sale
     {
         $user = auth()->user();
+
         if (! $user) {
             throw new Exception('User not found.');
         }
 
         $brand = $user->brand;
+
         if (! $brand) {
             throw new Exception('Brand not found.');
         }
 
-        self::validateTime($dto->startsAt, $dto->endsAt);
+        self::validateTime($dto->startsAt, $dto->endsAt, $dto->id);
 
-        DB::beginTransaction();
-        try {
+        return DB::transaction(function () use ($dto, $brand) {
+
             $sale = Sale::updateOrCreate(
                 [
-                    'brand_id' => auth()->user()->brand->id,
+                    'brand_id' => $brand->id,
                     'id' => $dto->id,
                 ],
                 [
@@ -49,14 +52,16 @@ class SalesAction
                     'section_id' => (int) $dto->section,
                     'ends_at' => $dto->endsAt,
                     'is_active' => true,
-                ]);
-            DB::commit();
+                ]
+            );
+
+            SaleTagService::sync(
+                $sale,
+                $dto->tags ?? []
+            );
 
             return $sale;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw new Exception("Failed to create sale: {$e->getMessage()}");
-        }
+        });
     }
 
     /**
@@ -212,9 +217,13 @@ class SalesAction
     /**
      * @throws Exception
      */
-    private static function validateTime($startDate, $endDate): void
-    {
+    private static function validateTime(
+        $startDate,
+        $endDate,
+        ?int $excludeSaleId = null
+    ): void {
         $now = Carbon::now();
+
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
 
@@ -222,25 +231,27 @@ class SalesAction
             throw new Exception('Start date cannot be in the past. Please select a future date.');
         }
 
-        // Check if end date is before start date
         if ($endDate->lte($startDate)) {
             throw new Exception('End date must be after the start date.');
         }
 
-        // Check if end date is too far in the future (optional - 1 year max)
         $maxEndDate = $now->copy()->addYear();
+
         if ($endDate->gt($maxEndDate)) {
             throw new Exception('Sale end date cannot be more than 1 year from now.');
         }
 
-        // Check minimum duration (optional - at least 1 hour)
         $minDuration = $startDate->copy()->addHour();
+
         if ($endDate->lt($minDuration)) {
             throw new Exception('Sale must last at least 1 hour.');
         }
 
         $existingSale = Sale::where('brand_id', auth()->user()->brand->id)
             ->where('is_active', true)
+            ->when($excludeSaleId, function ($query) use ($excludeSaleId) {
+                $query->where('id', '!=', $excludeSaleId);
+            })
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('starts_at', [$startDate, $endDate])
                     ->orWhereBetween('ends_at', [$startDate, $endDate])
@@ -248,7 +259,8 @@ class SalesAction
                         $q->where('starts_at', '<=', $startDate)
                             ->where('ends_at', '>=', $endDate);
                     });
-            })->exists();
+            })
+            ->exists();
 
         if ($existingSale) {
             throw new Exception('You already have a sale scheduled during this time period.');

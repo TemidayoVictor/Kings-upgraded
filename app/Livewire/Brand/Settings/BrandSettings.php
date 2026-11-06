@@ -61,7 +61,7 @@ class BrandSettings extends Component
         'selectedSubcategory' => 'required',
         'type' => 'required',
         'slug' => [
-            '',
+            'required',
             'max:255',
             'regex:/^[A-Za-z0-9_]+$/',
         ],
@@ -76,7 +76,7 @@ class BrandSettings extends Component
     ];
 
     protected array $messages = [
-        'slug.regex' => 'Please, only use letters, numbers and underscores.',
+        'slug.regex' => 'Please, only use small letters, numbers and underscores.',
     ];
 
     public function mount(): void

@@ -1,79 +1,160 @@
-<div class="flex min-h-screen bg-[#1A1612]">
-    <!-- Deep Premium Form Side -->
-    <div class="flex-1 flex justify-center items-center px-6 dark">
-        <div class="w-full max-w-sm space-y-6">
-            <div class="flex flex-col items-center justify-center space-y-3">
-                <a href="{{ route('home') }}" class="group flex items-center transition duration-300 transform hover:scale-105">
-                    <img src="{{ asset('images/Logo-Crown.svg') }}" alt="Logo" class="w-12 h-12">
-                </a>
-                <flux:heading class="text-center font-black text-white tracking-tight" size="xl">Choose new password</flux:heading>
-                <p class="text-xs text-stone-400 text-center font-medium max-w-xs leading-relaxed">
-                    Please enter and confirm your new account password below.
-                </p>
-            </div>
+<div>
 
-            <form class="flex flex-col gap-5" wire:submit.prevent="resetPassword">
-                <!-- Hidden Token & Email Infrastructure -->
-                <input type="hidden" wire:model="token">
-                <input type="hidden" wire:model="email">
+    <main class="relative z-10 w-full min-h-screen flex items-center justify-center px-gutter-mobile lg:px-gutter py-6 lg:py-space-xl pt-safe pb-safe">
+        <div class="w-full max-w-[384px] mx-auto">
 
-                <!-- New Password -->
-                <flux:input
-                    name="password"
-                    :label="__('New Password')"
-                    type="password"
-                    required
-                    placeholder="Minimum 8 characters"
-                    viewable
-                    wire:model="password"
-                />
+            {{-- ==================== RESET CARD ==================== --}}
+            <div class="w-full bg-surface-container/60 backdrop-blur-md rounded-2xl p-space-lg lg:p-space-xl shadow-xl relative">
 
-                <!-- Confirm Password -->
-                <flux:input
-                    name="password_confirmation"
-                    :label="__('Confirm Password')"
-                    type="password"
-                    required
-                    placeholder="Repeat new password"
-                    viewable
-                    wire:model="password_confirmation"
-                />
+                {{-- Ambient gold bloom behind crown --}}
+                <div class="absolute top-8 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
 
-                <div class="flex items-center justify-end pt-1">
-                    <flux:button type="submit" variant="primary" class="w-full bg-[#e9a35d] hover:bg-amber-500 text-[#1A1612] font-black py-3 rounded-xl border-none transition shadow-xs">
-                        <flux:icon.loading wire:loading wire:target="resetPassword" />
-                        <span wire:loading.remove wire:target="resetPassword" class="text-xs tracking-wide uppercase">{{ __('Save New Password') }}</span>
-                    </flux:button>
+                {{-- Heading --}}
+                <div class="text-center mt-space-md">
+                    <div class="flex justify-center mb-space-sm">
+                        <a href="{{ route('home') }}" class="transition-transform duration-300 hover:scale-105">
+                            <img src="{{ asset('images/Logo-Crown.svg') }}" alt="KING'S Crown Logo" class="w-12 h-12 object-contain filter drop-shadow-[0_2px_12px_rgba(233,163,93,0.35)]" />
+                        </a>
+                    </div>
+                    <h1 class="font-headline-md text-headline-md lg:font-headline-lg lg:text-headline-lg text-on-surface tracking-tight font-semibold">
+                        Choose new password
+                    </h1>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs px-2 leading-relaxed">
+                        Enter and confirm your new password to continue.
+                    </p>
                 </div>
-            </form>
+
+                {{-- ==================== FORM ==================== --}}
+                <form wire:submit="resetPassword" class="w-full mt-space-lg flex flex-col space-y-space-md">
+
+                    {{-- Hidden infrastructure --}}
+                    <input type="hidden" wire:model="token" />
+                    <input type="hidden" wire:model="email" />
+
+                    {{-- New Password --}}
+                    <div class="flex flex-col space-y-1.5 text-left w-full" x-data="{ showPw: false }">
+                        <div class="flex items-center justify-between px-1">
+                            <label for="password" class="font-label-sm text-label-sm uppercase tracking-widest text-outline font-medium">
+                                New Password
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3.5 top-4 text-outline text-[18px] pointer-events-none">lock</span>
+                            <input
+                                id="password"
+                                name="password"
+                                x-bind:type="showPw ? 'text' : 'password'"
+                                type="password"
+                                required
+                                autocomplete="new-password"
+                                placeholder="Minimum 8 characters"
+                                wire:model="password"
+                                class="w-full h-12 pl-10 pr-11 bg-surface-container-high text-on-surface placeholder:text-outline font-body-md text-body-md rounded-xl focus:outline-none focus:ring-2 focus:ring-primary shadow-sm transition duration-200"
+                            />
+                            <button
+                                type="button"
+                                @click="showPw = !showPw"
+                                aria-label="Toggle password visibility"
+                                class="absolute right-3 top-3 text-outline hover:text-primary transition p-1 flex items-center justify-center"
+                            >
+                                <span class="material-symbols-outlined text-[20px]" x-text="showPw ? 'visibility_off' : 'visibility'">visibility</span>
+                            </button>
+                        </div>
+                        @error('password')
+                        <div class="error-message flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-error-container/15 border border-error/25">
+                                <span class="material-symbols-outlined text-[16px] text-error shrink-0 mt-px" style="font-variation-settings: 'FILL' 1;">
+                                    error
+                                </span>
+                            <p class="text-error text-[12px] font-medium leading-relaxed tracking-wide">{{ $message }}</p>
+                        </div>
+                        @enderror
+                    </div>
+
+                    {{-- Confirm Password --}}
+                    <div class="flex flex-col space-y-1.5 text-left w-full" x-data="{ showPw2: false }">
+                        <div class="flex items-center justify-between px-1">
+                            <label for="password_confirmation" class="font-label-sm text-label-sm uppercase tracking-widest text-outline font-medium">
+                                Confirm Password
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3.5 top-4 text-outline text-[18px] pointer-events-none">verified_user</span>
+                            <input
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                x-bind:type="showPw2 ? 'text' : 'password'"
+                                type="password"
+                                required
+                                autocomplete="new-password"
+                                placeholder="Repeat new password"
+                                wire:model="password_confirmation"
+                                class="w-full h-12 pl-10 pr-11 bg-surface-container-high text-on-surface placeholder:text-outline font-body-md text-body-md rounded-xl focus:outline-none focus:ring-2 focus:ring-primary shadow-sm transition duration-200"
+                            />
+                            <button
+                                type="button"
+                                @click="showPw2 = !showPw2"
+                                aria-label="Toggle password visibility"
+                                class="absolute right-3 top-3 text-outline hover:text-primary transition p-1 flex items-center justify-center"
+                            >
+                                <span class="material-symbols-outlined text-[20px]" x-text="showPw2 ? 'visibility_off' : 'visibility'">visibility</span>
+                            </button>
+                        </div>
+                        @error('password_confirmation')
+                        <div class="error-message flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-error-container/15 border border-error/25">
+                                <span class="material-symbols-outlined text-[16px] text-error shrink-0 mt-px" style="font-variation-settings: 'FILL' 1;">
+                                    error
+                                </span>
+                            <p class="text-error text-[12px] font-medium leading-relaxed tracking-wide">{{ $message }}</p>
+                        </div>
+                        @enderror
+                    </div>
+
+                    {{-- Hidden token/email errors --}}
+                    @error('email')
+                    <div class="error-message flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-error-container/15 border border-error/25">
+                            <span class="material-symbols-outlined text-[16px] text-error shrink-0 mt-px" style="font-variation-settings: 'FILL' 1;">
+                                error
+                            </span>
+                        <p class="text-error text-[12px] font-medium leading-relaxed tracking-wide">{{ $message }}</p>
+                    </div>
+                    @enderror
+                    @error('token')
+                    <div class="error-message flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-error-container/15 border border-error/25">
+                            <span class="material-symbols-outlined text-[16px] text-error shrink-0 mt-px" style="font-variation-settings: 'FILL' 1;">
+                                error
+                            </span>
+                        <p class="text-error text-[12px] font-medium leading-relaxed tracking-wide">{{ $message }}</p>
+                    </div>
+                    @enderror
+
+                    {{-- Submit --}}
+                    <div class="pt-space-xs">
+                        <flux:button
+                            type="submit"
+                            variant="primary"
+                            class="w-full bg-primary-container text-on-primary-container hover:bg-primary transition duration-200 focus:outline-none focus:ring-2 focus:ring-primary-fixed active:scale-[0.99] flex items-center justify-center gap-space-sm !py-3.5 !rounded-xl"
+                            data-test="reset-password-button"
+                        >
+                            <span wire:loading.remove wire:target="resetPassword" class="inline-flex items-center justify-center gap-2">
+                                {{ __('Save New Password') }}
+                                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                            </span>
+                            <span wire:loading wire:target="resetPassword" class="inline-flex items-center justify-center gap-2">
+                                {{ __('Updating vault…') }}
+                                <span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+                            </span>
+                        </flux:button>
+                    </div>
+                </form>
+
+                {{-- Back to login --}}
+                <div class="mt-space-lg flex items-center justify-center">
+                    <a href="{{ route('login') }}" wire:navigate class="inline-flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-fixed transition-colors duration-150 py-1.5 px-3 rounded-lg hover:bg-surface-container-high/40">
+                        <span class="material-symbols-outlined text-base">arrow_back</span>
+                        <span>Back to login</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <!-- Image Billboard Side -->
-    <div class="flex-1 p-5 max-lg:hidden bg-[#1A1612]">
-        <div class="text-white relative rounded-[2rem] h-full w-full bg-stone-950 flex flex-col items-start justify-end p-16 overflow-hidden border border-white/5 shadow-xs">
-            <div class="absolute inset-0">
-                <!-- Rich vignette layer overlaying image asset -->
-                <div class="absolute inset-0 bg-gradient-to-t from-[#1A1612] via-[#1A1612]/50 to-transparent z-10"></div>
-                <div class="absolute inset-0 transform scale-105 transition duration-700 hover:scale-100"
-                     style="background-image: url('{{ asset('images/aurora-2.jpg') }}'); background-size: cover; background-position: center;">
-                </div>
-            </div>
-
-            <!-- Content Area overlaying image -->
-            <div class="relative z-20 space-y-4 max-w-lg">
-                <div class="flex gap-1 p-1 bg-white/5 border border-white/10 rounded-xl w-fit backdrop-blur-sm">
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                </div>
-
-                <div class="font-black text-white text-3xl xl:text-4xl leading-tight tracking-tight">
-                    Enabling businesses to grow revenue and reach customers everywhere
-                </div>
-            </div>
-        </div>
-    </div>
+    </main>
 </div>

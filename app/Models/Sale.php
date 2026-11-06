@@ -57,4 +57,9 @@ class Sale extends Model
             'order_id'
         )->distinct();
     }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(SaleTag::class);
+    }
 }

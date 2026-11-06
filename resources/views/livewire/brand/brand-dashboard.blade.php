@@ -5,7 +5,7 @@
         <div class="bg-[#3d3d40] rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs sm:text-sm text-gray-400 mb-1">Today's Revenue</p>
+                    <p class="font-display-lg text-xs sm:text-sm text-gray-400 mb-1">Today's Revenue</p>
                     <p class="text-xl sm:text-2xl md:text-2xl text-white">₦{{ number_format($realTimeMetrics['today_revenue'] ?? 0, 2) }}</p>
                 </div>
                 <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">

@@ -36,7 +36,7 @@ class PartneredBrands extends Component
     {
         $dropshipper = auth()->user()->dropshipper;
 
-        $stores = DropshipperStore::with('brand')
+        $stores = DropshipperStore::with('brand.categoryModel', 'brand.subcategoryModel')
             ->where('dropshipper_id', $dropshipper->id)
             ->when($this->search, function ($query) {
                 return $query->whereHas('brand', function ($q) {

@@ -2,10 +2,12 @@
 
 namespace App\Actions\Brand;
 
+use App\DTOs\Brand\CatalogDTO;
 use App\DTOs\Brand\ProductDTO;
 use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\Brand;
+use App\Models\CatalogItem;
 use App\Models\Category;
 use App\Models\Payment;
 use App\Models\Product;
@@ -14,7 +16,10 @@ use App\Models\Subcategory;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Throwable;
 
 class AddProductAction
@@ -182,5 +187,121 @@ class AddProductAction
             DB::rollBack();
             throw new Exception('Error: '.$e->getMessage());
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function addCatalog(CatalogDTO $dto): array
+    {
+        $user = auth()->user();
+
+        if (! $user || $user->role != UserType::BRAND) {
+            throw new Exception('You are not authorised to manage this catalog.');
+        }
+
+        $brand = $user->brand;
+
+        if (! $brand || $brand->id !== $dto->brandId) {
+            throw new Exception('Brand not found.');
+        }
+
+        $uploaded = 0;
+        $skipped = $dto->skippedFiles;
+
+        foreach ($dto->photos as $photo) {
+            if (! $photo instanceof TemporaryUploadedFile) {
+                $skipped++;
+
+                continue;
+            }
+
+            $validator = Validator::make(
+                ['photo' => $photo],
+                [
+                    'photo' => [
+                        'required',
+                        'image',
+                        'mimes:jpg,jpeg,png,webp,gif',
+                        'max:10240',
+                    ],
+                ]
+            );
+
+            if ($validator->fails()) {
+                $skipped++;
+
+                continue;
+            }
+
+            $path = null;
+
+            try {
+                $path = $photo->store('catalog', 'public');
+
+                if (! $path) {
+                    throw new \RuntimeException('Unable to store catalog image.');
+                }
+
+                DB::transaction(function () use ($brand, $photo, $path) {
+                    CatalogItem::create([
+                        'brand_id' => $brand->id,
+                        'image_path' => $path,
+                        'original_name' => mb_substr(
+                            $photo->getClientOriginalName(),
+                            0,
+                            255
+                        ),
+                    ]);
+                });
+
+                $uploaded++;
+            } catch (Throwable $exception) {
+                // Remove the uploaded file if its database record could not be created.
+                if ($path) {
+                    Storage::disk('public')->delete($path);
+                }
+
+                report($exception);
+
+                $skipped++;
+            }
+        }
+
+        return [
+            'uploaded' => $uploaded,
+            'skipped' => $skipped,
+        ];
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public static function deleteCatalog(CatalogDTO $dto): void
+    {
+        $user = auth()->user();
+
+        if (! $user || $user->role != UserType::BRAND) {
+            throw new Exception('You are not authorised to manage this catalog.');
+        }
+
+        $brand = $user->brand;
+
+        if (! $brand || $brand->id !== $dto->brandId) {
+            throw new Exception('Brand not found.');
+        }
+
+        $item = CatalogItem::where('brand_id', $brand->id)
+            ->findOrFail($dto->catalogId);
+
+        $path = $item->image_path;
+
+        // Delete the database record first.
+        DB::transaction(function () use ($item) {
+            $item->delete();
+        });
+
+        // Remove the physical file after the database transaction succeeds.
+        Storage::disk('public')->delete($path);
     }
 }

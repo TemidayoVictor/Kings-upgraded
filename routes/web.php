@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\AdminUtilitiesController;
+use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FlutterwaveController;
 use App\Http\Controllers\ImpersonateController;
@@ -26,6 +26,7 @@ use App\Livewire\Auth\VerifyEmail;
 use App\Livewire\Brand\AddBrand;
 use App\Livewire\Brand\ApprovedDropshippers;
 use App\Livewire\Brand\BrandDashboard;
+use App\Livewire\Brand\ManageCatalog;
 use App\Livewire\Brand\ManageSales;
 use App\Livewire\Brand\Orders\DropshipperOrders;
 use App\Livewire\Brand\Orders\Index as BrandOrdersList;
@@ -68,6 +69,7 @@ use App\Livewire\ManageWishlist;
 use App\Livewire\SelectRole;
 use App\Livewire\Settings\ProfileSettings;
 use App\Livewire\Shop\About;
+use App\Livewire\Shop\Catalog;
 use App\Livewire\Shop\Orders;
 use App\Livewire\Shop\Products;
 use App\Livewire\Shop\Ratings;
@@ -89,6 +91,7 @@ Route::get('/brands/orders/{brand:slug}', Orders::class)->name('shop.orders');
 Route::get('/brands/ratings/{brand:slug}', Ratings::class)->name('shop.ratings');
 Route::get('/cart/{brand:slug}', CartIndex::class)->name('cart');
 Route::get('/checkout/{brand:slug}', CheckoutIndex::class)->name('checkout');
+Route::get('/catalog/{brand:slug}', Catalog::class)->name('catalog');
 
 // Dropshipper Stores
 Route::get('dropshippers/{store:slug}', Store::class)->name('dropshipper-store');
@@ -174,6 +177,7 @@ Route::middleware(['auth', 'role:brand', 'onboarding'])->prefix('brand')->name('
         Route::get('/product/edit-product/{product}', EditProduct::class)->name('edit-product');
         Route::get('/product/manage-delivery-locations', ManageDeliveryLocations::class)->name('manage-delivery-locations');
         Route::get('/product/coupons', Coupons::class)->name('product-coupon');
+        Route::get('/manage-catalog', ManageCatalog::class)->name('manage-catalog');
 
         Route::get('/pending-applications', PendingApplications::class)->name('pending-applications');
         Route::get('/approved-dropshipper', ApprovedDropshippers::class)->name('approved-dropshippers');
@@ -231,8 +235,15 @@ Route::middleware(['auth', 'role:dropshipper', 'onboarding'])->prefix('dropshipp
     });
 
 Route::get('/preview-email', function () {
-    return view('emails.password-reset', [
-        'name' => 'John Doe',
-        'url' => '#',
+    return view('emails.auth.email-verification', [
+        'title' => 'Verify Your Email',
+        'emailData' => [
+            'name' => request('name', 'John Doe'),
+            'code' => request('code', '481927'),
+        ],
     ]);
+});
+
+Route::get('/test', function () {
+    return view('test');
 });

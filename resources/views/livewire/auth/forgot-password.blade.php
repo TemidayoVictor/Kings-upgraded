@@ -1,84 +1,93 @@
-<div class="flex min-h-screen bg-[#1A1612]">
-    <!-- Deep Premium Form Side -->
-    <div class="flex-1 flex justify-center items-center px-6 dark">
-        <div class="w-full max-w-sm space-y-6">
-            <div class="flex flex-col items-center justify-center space-y-3">
-                <a href="{{ route('home') }}" class="group flex items-center transition duration-300 transform hover:scale-105">
-                    <img src="{{ asset('images/Logo-Crown.svg') }}" alt="Logo" class="w-12 h-12">
-                </a>
-                <flux:heading class="text-center font-black text-white tracking-tight" size="xl">Reset your password</flux:heading>
-                <p class="text-xs text-stone-400 text-center font-medium max-w-xs leading-relaxed">
-                    Enter your email address and we will send you a link to change your password.
-                </p>
-            </div>
+<div>
+    <main class="relative z-10 w-full min-h-screen flex items-center justify-center px-gutter-mobile lg:px-gutter py-6 lg:py-space-xl pt-safe pb-safe">
+        <div class="w-full max-w-[384px] mx-auto">
 
-            <form class="flex flex-col gap-5" wire:submit.prevent="sendResetLink">
-                <!-- Email Address -->
-                <flux:input
-                    name="email"
-                    :label="__('Email address')"
-                    type="email"
-                    required
-                    autocomplete="email"
-                    placeholder="email@example.com"
-                    wire:model="email"
-                />
+            {{-- ==================== RECOVERY CARD ==================== --}}
+            <div class="w-full bg-surface-container/60 backdrop-blur-md rounded-2xl p-space-lg lg:p-space-xl shadow-xl relative">
 
-                <!-- High-End Notification Badges formatted for Dark UI -->
-                @if(session()->has('message'))
-                    <div class="text-xs text-emerald-400 bg-emerald-950/40 p-4 rounded-xl border border-emerald-500/20 font-medium leading-relaxed">
-                        {{ session('message') }}
+                {{-- Ambient gold bloom behind crown --}}
+                <div class="absolute top-8 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
+
+                {{-- Heading --}}
+                <div class="text-center mt-space-md">
+                    <div class="flex justify-center mb-space-sm">
+                        <a href="{{ route('home') }}" class="transition-transform duration-300 hover:scale-105">
+                            <img src="{{ asset('images/Logo-Crown.svg') }}" alt="KING'S Crown Logo" class="w-12 h-12 object-contain filter drop-shadow-[0_2px_12px_rgba(233,163,93,0.35)]" />
+                        </a>
                     </div>
-                @endif
-
-                @error('email')
-                <div class="text-xs text-rose-400 bg-rose-950/40 p-4 rounded-xl border border-rose-500/20 font-medium leading-relaxed">
-                    {{ $message }}
+                    <h1 class="font-headline-md text-headline-md lg:font-headline-lg lg:text-headline-lg text-on-surface tracking-tight font-semibold">
+                        Forgot your password?
+                    </h1>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs px-2 leading-relaxed">
+                        Enter the email linked to your account and we'll send you a reset link.
+                    </p>
                 </div>
-                @enderror
 
-                <div class="flex items-center justify-end pt-1">
-                    <flux:button type="submit" variant="primary" class="w-full bg-[#e9a35d] hover:bg-amber-500 text-[#1A1612] font-black py-3 rounded-xl border-none transition shadow-xs">
-                        <flux:icon.loading wire:loading wire:target="sendResetLink" />
-                        <span wire:loading.remove wire:target="sendResetLink" class="text-xs tracking-wide uppercase">{{ __('Send Reset Link') }}</span>
+                {{-- ==================== FORM ==================== --}}
+                <form wire:submit="sendResetLink" class="w-full mt-space-lg flex flex-col space-y-space-md">
+
+                    {{-- Email input --}}
+                    <div class="flex flex-col space-y-1.5 text-left w-full">
+                        <label class="block font-label-md text-label-md text-on-surface-variant font-medium" for="email">
+                            Email address
+                        </label>
+                        <div class="relative">
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                required
+                                autocomplete="email"
+                                placeholder="name@domain.com"
+                                wire:model="email"
+                                class="w-full h-12 pl-4 pr-4 bg-surface-container-high text-on-surface placeholder:text-outline font-body-md text-body-md rounded-xl focus:outline-none focus:ring-2 focus:ring-primary shadow-sm transition duration-200"
+                            />
+                        </div>
+                        @error('email')
+                        <div class="error-message flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-error-container/15 border border-error/25">
+                                <span class="material-symbols-outlined text-[16px] text-error shrink-0 mt-px" style="font-variation-settings: 'FILL' 1;">
+                                    error
+                                </span>
+                            <p class="text-error text-[12px] font-medium leading-relaxed tracking-wide">{{ $message }}</p>
+                        </div>
+                        @enderror
+                    </div>
+
+                    {{-- Success message --}}
+                    @if(session()->has('message'))
+                        <div class="error-message flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25">
+                            <span class="material-symbols-outlined text-[16px] text-emerald-400 shrink-0 mt-px" style="font-variation-settings: 'FILL' 1;">
+                                check_circle
+                            </span>
+                            <p class="text-emerald-300 text-[12px] font-medium leading-relaxed tracking-wide">{{ session('message') }}</p>
+                        </div>
+                    @endif
+
+                    {{-- Submit --}}
+                    <flux:button
+                        type="submit"
+                        variant="primary"
+                        class="w-full bg-primary-container text-on-primary-container hover:bg-primary transition duration-200 focus:outline-none focus:ring-2 focus:ring-primary-fixed active:scale-[0.99] flex items-center justify-center gap-space-sm !py-3.5 !rounded-xl"
+                    >
+                        <span wire:loading.remove wire:target="sendResetLink" class="inline-flex items-center justify-center gap-2">
+                            {{ __('Send reset link') }}
+                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                        </span>
+                        <span wire:loading wire:target="sendResetLink" class="inline-flex items-center justify-center gap-2">
+                            {{ __('Securing link…') }}
+                            <span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+                        </span>
                     </flux:button>
-                </div>
-            </form>
+                </form>
 
-            <flux:subheading class="text-center text-xs font-medium text-stone-400">
-                Remember your password?
-                <flux:link href="{{ route('login') }}" wire:navigate class="font-bold text-[#e9a35d] hover:underline ml-1">
-                    Back to login
-                </flux:link>
-            </flux:subheading>
-        </div>
-    </div>
-
-    <!-- Image Billboard Side -->
-    <div class="flex-1 p-5 max-lg:hidden bg-[#1A1612]">
-        <div class="text-white relative rounded-[2rem] h-full w-full bg-stone-950 flex flex-col items-start justify-end p-16 overflow-hidden border border-white/5 shadow-xs">
-            <div class="absolute inset-0">
-                <!-- Rich vignette layer overlaying image asset -->
-                <div class="absolute inset-0 bg-gradient-to-t from-[#1A1612] via-[#1A1612]/50 to-transparent z-10"></div>
-                <div class="absolute inset-0 transform scale-105 transition duration-700 hover:scale-100"
-                     style="background-image: url('{{ asset('images/aurora-2.jpg') }}'); background-size: cover; background-position: center;">
-                </div>
-            </div>
-
-            <!-- Content Area overlaying image -->
-            <div class="relative z-20 space-y-4 max-w-lg">
-                <div class="flex gap-1 p-1 bg-white/5 border border-white/10 rounded-xl w-fit backdrop-blur-sm">
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                    <flux:icon.star variant="solid" class="text-[#e9a35d] w-4 h-4"/>
-                </div>
-
-                <div class="font-black text-white text-3xl xl:text-4xl leading-tight tracking-tight">
-                    Enabling businesses to grow revenue and reach customers everywhere
+                {{-- Back to login --}}
+                <div class="mt-space-lg flex items-center justify-center">
+                    <a href="{{ route('login') }}" wire:navigate class="inline-flex items-center gap-2 font-label-md text-label-md text-primary hover:text-primary-fixed transition-colors duration-150 py-1.5 px-3 rounded-lg hover:bg-surface-container-high/40">
+                        <span class="material-symbols-outlined text-base">arrow_back</span>
+                        <span>Back to login</span>
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </div>

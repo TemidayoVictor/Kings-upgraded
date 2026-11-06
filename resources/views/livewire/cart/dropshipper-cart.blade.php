@@ -154,7 +154,7 @@
                                 <div class="md:hidden divide-y divide-stone-100">
                                     @foreach($cartItems as $item)
                                         <div class="p-4 space-y-4" wire:key="mobile-item-{{ $item->id }}">
-                                            <div class="flex gap-4">
+                                            <div class="flex gap-4 items-center">
                                                 <div class="w-20 h-24 bg-stone-50 border border-stone-200 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                                                     @if($item->dropshipperProduct->originalProduct && $item->dropshipperProduct->originalProduct->primary_image_url)
                                                         <img src="{{ $item->dropshipperProduct->originalProduct->primary_image_url }}" alt="{{ $item->product_name }}" class="w-full h-full object-cover">
@@ -179,7 +179,7 @@
                                                         </div>
                                                     @endif
 
-                                                    <div class="text-xs font-semibold text-stone-900 mt-2.5">
+                                                    <div class="text-xs font-semibold text-stone-900 mt-1">
                                                         @if($item->discount_price)
                                                             <span>₦{{ number_format($item->discount_price) }}</span>
                                                             <span class="text-[10px] text-stone-400 line-through ml-1.5 font-normal">₦{{ number_format($item->unit_price) }}</span>

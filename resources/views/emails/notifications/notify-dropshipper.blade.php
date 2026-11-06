@@ -1,125 +1,107 @@
-@component('emails.layouts.layout', ['title' => 'Dropshipper Application Update']) <!-- Main Content Panel Frame -->
-    <!-- Top Body Content Panel -->
-    <tr>
-        <td style="padding: 40px 40px 32px 40px;">
+@component('emails.layouts.layout', ['title' => 'Dropshipper Application Update'])
 
-            <!-- Context Badge -->
-            <table border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
-                <tr>
-                    <td style="background-color: #f0fdf4; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #16a34a; text-transform: uppercase; letter-spacing: 0.5px;">
-                        Application Update
-                    </td>
-                </tr>
-            </table>
+    @php
+        $type = $emailData['type'] ?? 'approved';
+    @endphp
 
-            <!-- Greeting -->
-            <h1 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 500; color: #1a1a1a; letter-spacing: -0.3px;">
-                {{ 'Hello ' . ($emailData['name'] ?? 'there') . ',' }}
-            </h1>
+    {{-- Context badge (state-aware) --}}
+    <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="margin:0 0 16px 0;">
+        <tr>
+            <td style="background-color:{{ $type === 'approved' ? '#e8f5e9' : '#eeeeee' }}; border-radius:999px; padding:5px 12px;">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:3px; background-color:{{ $type === 'approved' ? '#2e7d32' : '#847467' }}; vertical-align:middle; margin-right:6px;"></span><span style="font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:11px; line-height:14px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:{{ $type === 'approved' ? '#1b5e20' : '#524439' }}; vertical-align:middle;">Application Update</span>
+            </td>
+        </tr>
+    </table>
 
-            @if($emailData['type'] == 'approved')
+    {{-- Greeting --}}
+    <h1 style="margin:0 0 16px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:22px; line-height:28px; font-weight:600; letter-spacing:-0.01em; color:#1a1c1c;">
+        Hello {{ $emailData['name'] ?? 'there' }},
+    </h1>
 
-                <h2 style="margin: 0 0 16px 0; font-size: 17px; font-weight: 600; color: #1a1a1a;">
-                    Your application has been accepted 🎉
-                </h2>
+    @if($type === 'approved')
 
-                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    Great news! Your application to become a dropshipper for
-                    <strong style="color: #1a1a1a;">{{ $emailData['brandName'] }}</strong>
-                    has been accepted.
-                </p>
+        <h2 style="margin:0 0 16px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:18px; line-height:24px; font-weight:600; letter-spacing:-0.005em; color:#1a1c1c;">
+            Your application has been accepted &#127881;
+        </h2>
 
-                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    You can now access the brand's available products and start your dropshipping journey. Log in to your dashboard to explore the products and get started.
-                </p>
+        <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+            Great news! Your application to become a dropshipper for <strong style="color:#1a1c1c;">{{ $emailData['brandName'] }}</strong> has been accepted.
+        </p>
 
-            @elseif($emailData['type'] == 'rejected')
+        <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+            You can now access the brand's available products and start your dropshipping journey. Log in to your dashboard to explore the products and get started.
+        </p>
 
-                <h2 style="margin: 0 0 16px 0; font-size: 17px; font-weight: 600; color: #1a1a1a;">
-                    Your application was not approved
-                </h2>
+    @elseif($type === 'rejected')
 
-                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    Thank you for your interest in partnering with
-                    <strong style="color: #1a1a1a;">{{ $emailData['brandName'] }}</strong>.
-                </p>
+        <h2 style="margin:0 0 16px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:18px; line-height:24px; font-weight:600; letter-spacing:-0.005em; color:#1a1c1c;">
+            Your application was not approved
+        </h2>
 
-                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    After reviewing your application, the brand owner has decided not to approve your request at this time.
-                    We appreciate your interest and encourage you to explore other brands and opportunities available on the platform.
-                </p>
+        <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+            Thank you for your interest in partnering with <strong style="color:#1a1c1c;">{{ $emailData['brandName'] }}</strong>.
+        </p>
 
-            @elseif($emailData['type'] == 'revoked')
+        <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+            After reviewing your application, the brand owner has decided not to approve your request at this time. We appreciate your interest and encourage you to explore other brands and opportunities available on the platform.
+        </p>
 
-                <h2 style="margin: 0 0 16px 0; font-size: 17px; font-weight: 600; color: #1a1a1a;">
-                    Your dropshipping partnership has been revoked
-                </h2>
+    @elseif($type === 'revoked')
 
-                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    We’re writing to let you know that your dropshipping partnership with
-                    <strong style="color: #1a1a1a;">{{ $emailData['brandName'] }}</strong>
-                    has been revoked by the brand owner.
-                </p>
+        <h2 style="margin:0 0 16px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:18px; line-height:24px; font-weight:600; letter-spacing:-0.005em; color:#1a1c1c;">
+            Your dropshipping partnership has been revoked
+        </h2>
 
-                <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                    As a result, you will no longer have access to this brand's dropshipping products and partnership benefits.
-                    If you believe this was done in error or would like further clarification, please contact the brand owner or reach out to our support team.
-                </p>
+        <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+            We're writing to let you know that your dropshipping partnership with <strong style="color:#1a1c1c;">{{ $emailData['brandName'] }}</strong> has been revoked by the brand owner.
+        </p>
 
-            @endif
+        <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+            As a result, you will no longer have access to this brand's dropshipping products and partnership benefits. If you believe this was done in error or would like further clarification, please contact the brand owner or reach out to our support team.
+        </p>
 
-            <!-- Brand Highlight Box -->
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #fafafa; border: 1px solid #f0f0f0; border-radius: 10px;">
-                <tr>
-                    <td style="padding: 16px 20px;">
-                        <span style="font-size: 12px; color: #737373; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px;">
-                            Brand
-                        </span>
+    @endif
 
-                        <span style="font-size: 15px; font-weight: 600; color: #1a1a1a;">
-                            {{ $emailData['brandName'] }}
-                        </span>
-                    </td>
-                </tr>
-            </table>
+    {{-- Brand highlight box --}}
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0 0 24px 0;">
+        <tr>
+            <td style="background-color:#f9f9f9; border:1px solid #e8e8e8; border-radius:10px; padding:16px 20px;">
+                <span style="display:block; margin-bottom:4px; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:11px; line-height:14px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#737373;">Brand</span>
+                <span style="display:block; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; font-weight:600; color:#1a1c1c;">{{ $emailData['brandName'] }}</span>
+            </td>
+        </tr>
+    </table>
 
-            <!-- Call to Action -->
-            <table border="0" cellspacing="0" cellpadding="0" style="margin: 32px 0;">
-                <tr>
-                    <td align="center" style="border-radius: 10px; background-color: #0a0a0a;">
-                        <a href="{{ $emailData['url'] }}" target="_blank" style="display: inline-block; padding: 14px 32px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 10px; letter-spacing: 0.5px;">
-                            @if($emailData['type'] == 'approved')
-                                View Brand
-                            @elseif($emailData['type'] == 'rejected')
-                                Explore Other Brands
-                            @else
-                                View Dashboard
-                            @endif
-                        </a>
-                    </td>
-                </tr>
-            </table>
+    {{-- CTA --}}
+    <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%" style="margin:32px 0 24px 0;">
+        <tr>
+            <td align="center" bgcolor="#1a1c1c" style="border-radius:8px;">
+                <a href="{{ $emailData['url'] }}" target="_blank" style="display:block; width:100%; box-sizing:border-box; padding:14px 24px; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; font-weight:600; color:#ffffff; text-decoration:none; text-align:center; border-radius:8px;">
+                    @if($type === 'approved')
+                        View Brand
+                    @elseif($type === 'rejected')
+                        Explore Other Brands
+                    @else
+                        View Dashboard
+                    @endif
+                </a>
+            </td>
+        </tr>
+    </table>
 
-            @if($emailData['type'] == 'approved')
-                <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #737373; font-weight: 400;">
-                    We’re excited to have you on board and look forward to seeing what you accomplish!
-                </p>
-            @elseif($emailData['type'] == 'rejected')
-                <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #737373; font-weight: 400;">
-                    Keep exploring — there are more brands and opportunities waiting for you on the platform.
-                </p>
-            @elseif($emailData['type'] == 'revoked')
-                <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #737373; font-weight: 400;">
-                    If you have any questions regarding this decision, please contact the brand owner or our support team.
-                </p>
-            @endif
+    {{-- Closing note --}}
+    @if($type === 'approved')
+        <p style="margin:0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:12px; line-height:18px; color:#737373;">
+            We're excited to have you on board and look forward to seeing what you accomplish!
+        </p>
+    @elseif($type === 'rejected')
+        <p style="margin:0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:12px; line-height:18px; color:#737373;">
+            Keep exploring — there are more brands and opportunities waiting for you on the platform.
+        </p>
+    @elseif($type === 'revoked')
+        <p style="margin:0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:12px; line-height:18px; color:#737373;">
+            If you have any questions regarding this decision, please contact the brand owner or our support team.
+        </p>
+    @endif
 
-        </td>
-    </tr>
-    <!-- Separator line Divider -->
-    <tr>
-        <td style="padding: 0 40px;">
-            <div style="border-top: 1px solid #f0f0f0; height: 1px; line-height: 1px;"></div>
-        </td>
-    </tr>
 @endcomponent

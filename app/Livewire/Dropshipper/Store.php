@@ -4,6 +4,7 @@ namespace App\Livewire\Dropshipper;
 
 use App\Actions\CartAction;
 use App\DTOs\CartDTO;
+use App\Enums\Status;
 use App\Enums\UserType;
 use App\Models\DropshipperProduct;
 use App\Models\DropshipperStore;
@@ -229,12 +230,32 @@ class Store extends Component
             $product->in_stock;
     }
 
+    public function getOtherStoresProperty(): Collection
+    {
+        return DropshipperStore::query()
+            ->where('dropshipper_id', $this->store->dropshipper_id)
+            ->where('id', '!=', $this->store->id)
+            ->where('status', Status::CLONED)
+            ->with([
+                'brand',
+                'dropshipperProducts' => function ($query) {
+                    $query->active()
+                        ->with('originalProduct')
+                        ->latest()
+                        ->limit(3);
+                },
+            ])
+            ->latest()
+            ->get();
+    }
+
     public function render()
     {
         return view('livewire.dropshipper.store', [
             'products' => $this->products,
             'sections' => $this->sections,
             'featuredProducts' => $this->featuredProducts,
+            'otherStores' => $this->otherStores,
             'store' => $this->store,
         ])->layout('layouts.store', [
             'store' => $this->store,

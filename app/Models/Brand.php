@@ -154,4 +154,9 @@ class Brand extends Model
     {
         return $this->belongsTo(Subcategory::class, 'sub_category');
     }
+
+    public function catalogItems(): HasMany
+    {
+        return $this->hasMany(CatalogItem::class);
+    }
 }

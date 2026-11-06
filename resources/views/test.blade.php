@@ -1,2489 +1,658 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrandHub — Scale Your E-commerce Empire</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter for high-end SaaS feel -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-900 antialiased overflow-x-hidden">
 
-<!-- NAVIGATION -->
-<nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
-
-            <!-- Logo -->
-            <a href="#" class="flex items-center gap-3 group focus:outline-none">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center shadow-md shadow-emerald-200 transition-transform group-hover:scale-105">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                </div>
-                <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-                    BrandHub
-                </span>
-            </a>
-
-            <!-- Desktop Nav Links -->
-            <div class="hidden lg:flex items-center gap-10">
-                <a href="#" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Brands</a>
-                <a href="#" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Stores</a>
-                <a href="#" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Deals</a>
-                <a href="#" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Dropshipping</a>
-                <a href="#" class="text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors">Community</a>
-            </div>
-
-            <!-- CTA Actions -->
-            <div class="flex items-center gap-4">
-                <a href="#" class="hidden sm:inline-flex text-sm font-semibold text-slate-700 hover:text-emerald-600 transition-colors px-3 py-2">
-                    Login
-                </a>
-                <button class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold shadow-lg shadow-slate-900/10 hover:bg-emerald-600 hover:shadow-emerald-600/20 active:scale-[0.98] transition-all duration-200">
-                    Start Selling
-                </button>
-            </div>
-
-        </div>
-    </div>
-</nav>
-
-<!-- HERO SECTION -->
-<section class="relative pt-12 pb-24 lg:pt-20 lg:pb-32 overflow-hidden">
-    <!-- Background glows -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none opacity-70">
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-emerald-100 blur-[120px]"></div>
-        <div class="absolute bottom-[10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-teal-100 blur-[100px]"></div>
-    </div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-
-            <!-- Hero Text Content -->
-            <div class="lg:col-span-6 text-center lg:text-left">
-                <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold tracking-wide uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Built For Modern E-Commerce
-                </span>
-
-                <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.1]">
-                    Build Your Brand. <br class="hidden sm:inline" />
-                    <span class="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Sell More.</span> <br />
-                    Scale Globally.
-                </h1>
-
-                <p class="mt-6 text-lg sm:text-xl text-slate-600 font-normal max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                    Create your autonomous digital storefront, manage products instantly, and unlock a massive, distributed army of dropshippers built to skyrocket your sales.
-                </p>
-
-                <div class="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                    <button class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold shadow-xl shadow-emerald-600/20 hover:opacity-95 active:scale-[0.98] transition-all">
-                        Create Store
-                    </button>
-                    <button class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all">
-                        Explore Brands
-                    </button>
-                </div>
-
-                <!-- Live Metrics -->
-                <div class="mt-16 pt-8 border-t border-slate-200/80 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-black text-slate-900">5k+</div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Global Brands</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-black text-slate-900">120k+</div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Live Products</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-black text-slate-900">50k+</div>
-                        <div class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Processed Orders</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dashboard Mockup (Visual Highlight) -->
-            <div class="lg:col-span-6 relative">
-                <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-3xl opacity-10 blur-xl -rotate-1 scale-105"></div>
-                <div class="relative bg-white rounded-3xl shadow-2xl border border-slate-100 p-5 sm:p-8 backdrop-blur-sm">
-
-                    <!-- App Mockup Header -->
-                    <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
-                        <div class="flex items-center gap-2">
-                            <span class="w-3 h-3 rounded-full bg-rose-400"></span>
-                            <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                            <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+<html class="scroll-smooth" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>KING'S — Sovereign Commerce Ecosystem</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary":"#885211","status-success":"#15803d","text-muted":"#71717a","tertiary-fixed-dim":"#ffb877","on-background":"#191c20","on-error":"#ffffff","error-container":"#ffdad6","on-secondary-container":"#646468","primary-container":"#e9a35d","on-secondary":"#ffffff","surface-cream":"#fbf9f5","text-tertiary":"#a1a1aa","surface":"#f9f9ff","surface-container-low":"#f3f3fa","on-primary":"#ffffff","on-surface-variant":"#524439","on-tertiary-container":"#683800","outline":"#847467","surface-container-high":"#e7e8ee","on-secondary-fixed":"#1b1b1f","on-error-container":"#93000a","on-tertiary":"#ffffff","surface-bright":"#f9f9ff","inverse-on-surface":"#f0f0f7","on-surface":"#191c20","secondary":"#5e5e62","background":"#f9f9ff","inverse-primary":"#ffb872","surface-card":"#ffffff","surface-container-highest":"#e2e2e9","secondary-fixed-dim":"#c7c6ca","surface-variant":"#e2e2e9","primary-fixed-dim":"#ffb872","secondary-fixed":"#e3e2e6","on-secondary-fixed-variant":"#46464a","outline-variant":"#d6c3b4","on-tertiary-fixed-variant":"#6b3b00","surface-container":"#ededf4","surface-tint":"#885211","on-primary-fixed-variant":"#6a3b00","tertiary-fixed":"#ffdcc0","inverse-surface":"#2e3036","secondary-container":"#e3e2e6","tertiary-container":"#eda159","on-tertiary-fixed":"#2d1600","tertiary":"#8b500b","primary-fixed":"#ffdcbf","surface-container-lowest":"#ffffff","border-hairline":"#e4dfd7","on-primary-container":"#663900","on-primary-fixed":"#2d1600","error":"#ba1a1a","surface-subtle":"#f4f0e8","status-warning":"#c2410c","surface-dim":"#d9d9e0"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-xl":"2.5rem","space-md":"1rem","space-sm":"0.5rem","space-xs":"0.25rem","gutter-mobile":"1rem","gutter":"1.5rem","margin":"3rem","space-lg":"1.5rem","margin-mobile":"1.25rem"},"fontFamily":{"currency-display":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"display-xl-mobile":["Newsreader"],"body-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg-mobile":["Newsreader"],"headline-lg":["Newsreader"],"label-md":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"display-xl":["Newsreader"]},"fontSize":{"currency-display":["28px",{"lineHeight":"34px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.005em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.06em","fontWeight":"700"}],"display-xl-mobile":["38px",{"lineHeight":"44px","letterSpacing":"-0.01em","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg-mobile":["28px",{"lineHeight":"34px","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-lg":["36px",{"lineHeight":"44px","letterSpacing":"-0.015em","fontWeight":"500"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"display-xl":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface-cream text-on-surface antialiased selection:bg-primary-container selection:text-on-surface"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-cream/90 backdrop-blur-xl border-b border-border-hairline transition-all"><div class="max-w-7xl mx-auto px-gutter h-20 flex items-center justify-between"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-3 transition-opacity hover:opacity-90" data-path="home" href="#"><img alt="KING'S Brand Mark" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WFCm2z9grh5IHez_cEmETAY8nPHaxXS_O-Bk5YHlAmmLRQtUvyBgVrAJCQzjQHGB3jr9xN1XGKMxIliukftNaHAbyp3h-VeRyCxPmwJT3SfBYHkscl8tTPSk1GEKzGfY8DImPmljDPyj_axS2LwlHfhr-I4eMPZ6RuZMeJsGzNyF5o3zkzsq1lEVHPuKc4C74-HRYjWqUWB0YRIujtQdStTjVYbPgqwqm_SLt39yINIQ"/><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-bold">KING'S</span></a><div class="hidden lg:block h-5 w-[1px] bg-border-hairline mx-1"></div><span class="hidden xl:inline-block font-label-sm text-label-sm uppercase tracking-widest text-text-muted">Sovereign Commerce</span></div><nav class="hidden md:flex items-center gap-8" data-active-classes="text-on-surface border-b-2 border-primary-container pb-1 font-semibold"><a aria-current="page" class="transition-colors text-on-surface border-b-2 border-primary-container pb-1 font-semibold" data-path="home" href="#">Home</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="brands" href="#">Brands</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="sales" href="#">Sales</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="features" href="#">Features</a></nav><div class="flex items-center gap-4"><a class="hidden sm:inline-flex font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors px-3 py-2" data-path="login" href="#">Log in</a><a class="inline-flex items-center justify-center font-label-lg text-label-lg bg-primary-container text-on-surface font-semibold px-5 py-2.5 rounded-lg shadow-sm hover:bg-tertiary-container transition-all duration-200 active:scale-[0.98]" data-path="join-kings" href="#">Join KING'S</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface-cream min-h-screen"><div class="flex flex-col w-full">
+        <!-- HERO SECTION -->
+        <section class="relative w-full overflow-hidden bg-surface-cream">
+            <!-- Ambient subtle background glow -->
+            <div class="absolute -top-32 -right-24 w-[36rem] h-[36rem] rounded-full bg-primary-container/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-12 w-[28rem] h-[28rem] rounded-full bg-tertiary-fixed-dim/20 blur-3xl pointer-events-none"></div>
+            <div class="max-w-7xl mx-auto px-gutter py-16 md:py-24 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                    <!-- Left Column: Typography & Conversion Funnel -->
+                    <div class="lg:col-span-6 flex flex-col space-y-6">
+                        <div class="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-surface-subtle shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-status-success animate-pulse"></span>
+                            <span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">The Sovereign Commerce Network • Lagos, NG</span>
                         </div>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 text-slate-500 uppercase tracking-wider">Live Merchant Dashboard</span>
+                        <h1 class="font-display-xl text-display-xl text-on-surface tracking-tight leading-[1.08]">
+                            Discover Brands.<br/>
+                            <span class="italic font-normal text-primary">Unlock Opportunities.</span><br/>
+                            Grow Together.
+                        </h1>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                            Discover great brands, shop products you love, and connect with lucrative sales opportunities — all within one cohesive, high-velocity business ecosystem.
+                        </p>
+                        <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                            <a class="inline-flex items-center justify-center font-label-lg text-label-lg bg-on-surface text-surface-card px-8 py-4 rounded-lg shadow-sm hover:bg-on-surface-variant transition-all duration-200" data-path="brands" href="#">
+                                Explore Brands
+                                <span class="material-symbols-outlined ml-2 text-[18px]">arrow_forward</span>
+                            </a>
+                            <a class="inline-flex items-center justify-center font-label-lg text-label-lg bg-primary-container text-on-primary-container px-8 py-4 rounded-lg shadow-sm hover:bg-tertiary-container transition-all duration-200" data-path="join-kings" href="#">
+                                Join KING'S
+                            </a>
+                        </div>
+                        <!-- Proof Metrics Bar -->
+                        <div class="pt-8 grid grid-cols-3 gap-6 bg-surface-card p-6 rounded-xl shadow-sm">
+                            <div>
+                                <div class="font-currency-display text-currency-display text-on-surface">450+</div>
+                                <div class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted mt-1">Verified Brands</div>
+                            </div>
+                            <div>
+                                <div class="font-currency-display text-currency-display text-primary">₦1.2B+</div>
+                                <div class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted mt-1">Settled Volume</div>
+                            </div>
+                            <div>
+                                <div class="font-currency-display text-currency-display text-status-success">12.4k</div>
+                                <div class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted mt-1">Active Partners</div>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Metrics Grid -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gradient-to-b from-emerald-50/60 to-emerald-50/10 border border-emerald-100/50 rounded-2xl p-5">
+                    <!-- Right Column: Curated Commerce Mosaic -->
+                    <div class="lg:col-span-6 relative">
+                        <div class="relative grid grid-cols-12 gap-4">
+                            <!-- Large Editorial Image: Leathercraft & Fashion -->
+                            <div class="col-span-7 row-span-2 relative rounded-xl overflow-hidden shadow-md group">
+                                <img class="w-full h-[430px] object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Editorial close-up of luxurious Nigerian hand-stitched tan cowhide leather bag and bespoke linen apparel, resting beside artisanal brass accents under warm golden Lagos studio daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9XRZnBL90B8ZHNMr-UagROPimVLkVhEQdfLx3sJlnf_HfEna_XMvr7f1dxDwFJGSTVLAcZ_I_c9E3JXAAjmq7C0gzW7biY7EJNGjP9ZDB4R6DmzGp-8mWpDTbvVXQe1YJiIFfT5GLcom0sveiT6mEbHrTb1pvX0Gzfv_SBZQkIb-BV1f96B6uuj-9PTHL83sJbxkIwjgTNxgrg241Gh0Zs1nTbUIW_tMC-cPppPRp"/>
+                                <div class="absolute inset-0 bg-gradient-to-t from-on-surface/75 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-4 left-4 right-4 text-surface-card">
+                                    <span class="inline-block px-2.5 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold uppercase mb-1">Curated Atelier</span>
+                                    <p class="font-headline-sm text-headline-sm font-semibold">Zaria Leatherworks</p>
+                                    <p class="font-body-sm text-body-sm text-surface-cream/80">Hand-finished cowhide accessories</p>
+                                </div>
+                            </div>
+                            <!-- Top Right: Botanical Skincare -->
+                            <div class="col-span-5 relative rounded-xl overflow-hidden shadow-sm group">
+                                <img class="w-full h-[205px] object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Minimalist amber glass dropper bottle of botanical hibiscus radiance serum displayed on natural sandstone rock with warm organic lighting and golden reflections." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmkanAgPKWtZbCezxd8TQ-ngllxcdXThlmnSc0PftUc82E5N_e07b4UbOM7GpCJ-2pIMqk_A4INLHzE0iivqJHWKg8TnSMQN9Ngi3kvB7FzLTyAvIOLLYwyK7IP9_1duYQ86oRlKCSaeNGL0qAVg2FaTnc6utFSkc1f86RC5osCaMmqKJe0JNk19SmkA4g5hQnjbVDqEEm2Dk8MCaFbzoyUJROuetr8Yx7SMFsyzuD"/>
+                                <div class="absolute top-3 right-3 bg-surface-card/90 backdrop-blur-sm px-2 py-1 rounded text-on-surface font-label-sm text-label-sm font-bold">
+                                    ₦18,500
+                                </div>
+                            </div>
+                            <!-- Bottom Right: Terracotta Ceramics & Living -->
+                            <div class="col-span-5 relative rounded-xl overflow-hidden shadow-sm group">
+                                <img class="w-full h-[205px] object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Contemporary ribbed terracotta ceramic table vase with dry pampas grass set in an elegant minimalist architectural African interior with soft cream shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQUdACcXwfFOfeNq-dfcOqrD47c1cFLQ87u7c2un35N7kD-kBunc5w6JRjp8GOHOSxCR1QI0kpb3hokOodRwV4ns07GZsGYyHg5CKW_Si0QSXHTtgCDNb-Y9b-yrkmVp4eseHys4x2SsQww2oc4eNuvHFvsNK1D_SD2JdPDtlyHXF5ZZuBRQoKGp_kwLq-D7CqWy-cJJDlu6yoFrtKX7CIBb-cU7b6c1g-OgqoBG3u"/>
+                                <div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-3 left-3 text-surface-card">
+                                    <span class="font-label-sm text-label-sm uppercase tracking-wide text-primary-fixed">Moyo Living</span>
+                                    <p class="font-label-lg text-label-lg font-bold">Artisanal Decor</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Floating Ecosystem Verified Badge -->
+                        <div class="absolute -bottom-6 -left-6 bg-surface-card p-4 rounded-xl shadow-lg hidden sm:flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+                                <span class="material-symbols-outlined text-[20px]">verified</span>
+                            </div>
+                            <div>
+                                <p class="font-label-md text-label-md text-on-surface font-bold">Escrow-Backed Commerce</p>
+                                <p class="font-body-sm text-body-sm text-text-muted">Instant partner commission routing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FEATURED BRANDS SECTION -->
+        <section class="w-full py-20 bg-surface-subtle">
+            <div class="max-w-7xl mx-auto px-gutter space-y-12">
+                <!-- Section Header -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="space-y-2 max-w-xl">
+                        <div class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">Verified Principals</div>
+                        <h2 class="font-headline-lg text-headline-lg text-on-surface">Brands Worth Discovering</h2>
+                        <p class="font-body-md text-body-md text-on-surface-variant">
+                            Explore businesses bringing distinct products, craft excellence, and profitable sales partnerships directly to market.
+                        </p>
+                    </div>
+                    <a class="inline-flex items-center gap-2 font-label-lg text-label-lg text-on-surface hover:text-primary transition-colors pb-1 group self-start md:self-auto" data-path="brands" href="#">
+                        <span>View All Brands</span>
+                        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+                <!-- Brand Cards Grid (4 Column Responsive) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Brand 1: Aura Botanicals -->
+                    <div class="bg-surface-card rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                        <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-semibold text-emerald-700 tracking-wide uppercase">Revenue</span>
-                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-headline-sm text-headline-sm font-bold text-primary">
+                                    AB
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full bg-surface-subtle font-label-sm text-label-sm text-on-surface-variant font-medium">
+                Skincare &amp; Wellness
+              </span>
                             </div>
-                            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">₦2.4M</h3>
+                            <div>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">Aura Botanicals</h3>
+                                <p class="font-body-sm text-body-sm text-text-muted mt-1">Formulations from wildcrafted Nigerian botanicals.</p>
+                            </div>
+                            <!-- Thumbnail Mosaic -->
+                            <div class="grid grid-cols-2 gap-2 rounded-lg overflow-hidden h-36">
+                                <img class="w-full h-full object-cover" data-alt="Glass amber skincare dropper bottle sitting on textured limestone with soft morning light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr3550vVY7G01s1XizcGM0MxX9tAL3nWR1KDIgTPeS1I5HHp8cG8KP__aX0Gdn_F6gTILuaWV-52BGUZbUxyfsHauW4uBKzqwlEchiTNLz9PWzCs8Cb-jzxiZEaJFdbyT7KjPspbC2j0h0Vq9XPva_S4Xrmk3F2j7En-zbpAURV9018KGWom34ra012mM03zwxS4RRkx8YAXp2hFUYJWicTI3lFqAfnFZ8mwP7QzWT"/>
+                                <img class="w-full h-full object-cover" data-alt="Whipped organic shea body souffle in frosted jar with botanical leaves background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvcfBEzGqhpKr3tHIWof8rSxm8ircND_VTNKq78M4ayHzlGKfjvt138XrlQ19F9wHN3rbEqKwyfJ0fGpY102oJvfH2JIw7daw9MVE-AdlOf-94T1X_Shh6Oy7JJF_xoW5EYKgQ5fdNJi2yDokK5n1i4SZZxWNVazAgPl73QryFumz76MB3_WKW5b6ARXeV6-BomiSes6TMlWEb4dESRY0SBWJNi2ZJcv58taU2cVNc"/>
+                            </div>
+                            <div class="flex items-center justify-between text-text-muted font-label-sm text-label-sm pt-2">
+                                <span>38 Active SKUs</span>
+                                <span class="text-status-success font-semibold">22% Commission Tier</span>
+                            </div>
                         </div>
-
-                        <div class="bg-gradient-to-b from-blue-50/60 to-blue-50/10 border border-blue-100/50 rounded-2xl p-5">
+                        <div class="pt-6">
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-2.5 px-4 rounded-lg bg-surface-subtle text-on-surface hover:bg-surface-container transition-colors font-semibold" data-path="brands" href="#">
+                                Explore Brand
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Brand 2: Zaria Atelier -->
+                    <div class="bg-surface-card rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                        <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-semibold text-blue-700 tracking-wide uppercase">Orders</span>
-                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-headline-sm text-headline-sm font-bold text-on-surface">
+                                    ZA
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full bg-surface-subtle font-label-sm text-label-sm text-on-surface-variant font-medium">
+                Footwear &amp; Leather
+              </span>
                             </div>
-                            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">456</h3>
-                        </div>
-                    </div>
-
-                    <!-- Data Visual Representation -->
-                    <div class="mt-5 bg-slate-50 border border-slate-100 rounded-2xl p-5">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-sm font-bold text-slate-800">Store Performance Growth</span>
-                            <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                +34%
-                            </span>
-                        </div>
-                        <!-- Abstract Wave / Chart Graph representation -->
-                        <div class="h-32 rounded-xl bg-slate-900 relative overflow-hidden flex items-end p-2 shadow-inner">
-                            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-600/20 to-transparent"></div>
-                            <div class="w-full h-24 flex items-end gap-1.5 px-2">
-                                <div class="w-full bg-emerald-500/30 rounded-t h-[40%]"></div>
-                                <div class="w-full bg-emerald-500/40 rounded-t h-[55%]"></div>
-                                <div class="w-full bg-emerald-500/50 rounded-t h-[45%]"></div>
-                                <div class="w-full bg-emerald-500/60 rounded-t h-[70%]"></div>
-                                <div class="w-full bg-emerald-500/70 rounded-t h-[60%]"></div>
-                                <div class="w-full bg-gradient-to-t from-emerald-400 to-teal-400 rounded-t h-[95%] shadow-lg shadow-emerald-400/50"></div>
+                            <div>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">Zaria Atelier</h3>
+                                <p class="font-body-sm text-body-sm text-text-muted mt-1">Artisanal loafers and structured cowhide travel goods.</p>
+                            </div>
+                            <!-- Thumbnail Mosaic -->
+                            <div class="grid grid-cols-2 gap-2 rounded-lg overflow-hidden h-36">
+                                <img class="w-full h-full object-cover" data-alt="Handcrafted men's brown leather penny loafers in warm editorial studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhoqXYlz_g6nye8UrY4DnnZ7RvmW2sXEKra3pKwNcuh3muf41W2R9N5gfMIJZ5kPh2WgVu1SK0P-KlTs7AwcqvHFzQ8dQ2pMGBjwSC8Ojx6mPS__Zn3OrImfznTPcdyG5VWk31tUR165IMBXTSGBG_-iqMV8acf-DelMLvs97eNwEjQDHWCgZSdoMC0NAhr1iYLdwFbBCO2WVSmveERc3bhDXR0R1dMfU1NuqczoQt"/>
+                                <img class="w-full h-full object-cover" data-alt="Hand-finished full-grain leather weekender bag with solid brass hardware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAocKckK2hzKRGixHTnHiNe1fZXj6RoyMtoQ2PQDzAatdMLYJS4jqmxGqP78DUKNZ548DU4CWquLJzzfokrl7OqpJJPNoP5YWcd3eYbXA-WeIhL4uWrhZMV5fWGz-Z1Zr3AbYsA50lnLhM-ptememusCFbKFdzkxlV1lSz8sIp2cT27yackSOptHoe-ZVJolNSddVTtCfBlBs0sfMnTggG9TZnnCZLuLyit6Izlt3cO"/>
+                            </div>
+                            <div class="flex items-center justify-between text-text-muted font-label-sm text-label-sm pt-2">
+                                <span>24 Active SKUs</span>
+                                <span class="text-status-success font-semibold">18% Commission Tier</span>
                             </div>
                         </div>
+                        <div class="pt-6">
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-2.5 px-4 rounded-lg bg-surface-subtle text-on-surface hover:bg-surface-container transition-colors font-semibold" data-path="brands" href="#">
+                                Explore Brand
+                            </a>
+                        </div>
                     </div>
-
+                    <!-- Brand 3: Moyo Living -->
+                    <div class="bg-surface-card rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-headline-sm text-headline-sm font-bold text-primary">
+                                    ML
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full bg-surface-subtle font-label-sm text-label-sm text-on-surface-variant font-medium">
+                Decor &amp; Aromas
+              </span>
+                            </div>
+                            <div>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">Moyo Living</h3>
+                                <p class="font-body-sm text-body-sm text-text-muted mt-1">Terracotta ceramics, scented wax, and warm textiles.</p>
+                            </div>
+                            <!-- Thumbnail Mosaic -->
+                            <div class="grid grid-cols-2 gap-2 rounded-lg overflow-hidden h-36">
+                                <img class="w-full h-full object-cover" data-alt="Earth-tone sculptural terracotta vase styled with dried foliage on cream backdrop." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjgVmecPpGf6UzM9xJIJu5E7GvL6WFK6p6bcmIaNAdddZFOdvzYRowJtoNmrf3lgO93QzCVP8JNOwDuFy9V1qg0pU9j52ttxMGhDTM6h4UhPKYI036cFPl2z6evxuGsmUdgmYEFWJEN7nHdz678cAniu1whrjVoet66UsWVzcDn_W6BKYjftfPpkZwJVHS4bdZ7bEf8dvgxDG8S8dgFoIr0CETADJCEYJ4Z0nw0REr"/>
+                                <img class="w-full h-full object-cover" data-alt="Luxury soy candle in hand-thrown ceramic vessel with flickering warm flame." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7bhXl8Rtyt4KA65vGvOrPN3nwrp1qGaDHfd6wzyZV-lH7DlIvThdyEhEqH-nueFCBA05Xs8jzoPksbR4TbVPKyPtSMTFet6Je5jFFlAwPMC9s5ZntIs2q2W6ghaG3c3u9hL6DHRGDFHoU2o5IxEAzSawvq8K5vou_UP0ezjHRuFBUCGNfzso4IXe6yLGUmTZyXGPLoy5OuH58zWIcjpk0jHUteK_1IDTcq39H5q_n"/>
+                            </div>
+                            <div class="flex items-center justify-between text-text-muted font-label-sm text-label-sm pt-2">
+                                <span>52 Active SKUs</span>
+                                <span class="text-status-success font-semibold">25% Commission Tier</span>
+                            </div>
+                        </div>
+                        <div class="pt-6">
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-2.5 px-4 rounded-lg bg-surface-subtle text-on-surface hover:bg-surface-container transition-colors font-semibold" data-path="brands" href="#">
+                                Explore Brand
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Brand 4: Kano & Co. -->
+                    <div class="bg-surface-card rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-headline-sm text-headline-sm font-bold text-on-surface">
+                                    KC
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full bg-surface-subtle font-label-sm text-label-sm text-on-surface-variant font-medium">
+                Bespoke Apparel
+              </span>
+                            </div>
+                            <div>
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">Kano &amp; Co.</h3>
+                                <p class="font-body-sm text-body-sm text-text-muted mt-1">Structured linen overshirts and tailored utilitarian wear.</p>
+                            </div>
+                            <!-- Thumbnail Mosaic -->
+                            <div class="grid grid-cols-2 gap-2 rounded-lg overflow-hidden h-36">
+                                <img class="w-full h-full object-cover" data-alt="Crisp tailored safari linen overshirt in warm khaki on wooden mannequin." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY76sGkP-kSsxOOhrXnktBFAIp_0a-lPzb69dN7TCS4I9mJv6_CnlAIkolXw07GyAgRry36nRr7JFWiVOFZqYxLSw6RWglymOCnMK0aeVBiaBVDtYHIQzICbG8peyjbXbo8_ZF1a20x0ubBRuuOzWbLraBm5WtJ_FksAuS9qsqgUBTkOVGhnqaM1_xXHoe6bAp9lRf4G2bSytrmb7oddi3nZIo15zdpqzu_Ui6jwVU"/>
+                                <img class="w-full h-full object-cover" data-alt="Textured cotton utility trousers with natural horn buttons in neutral studio light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANDMHzcBL1daBVg1UlwduCTjT21XkTlbMSrXdqqNzoI07jJnpsJ2kOgJWACt4olYZSIv8eAmQCBnAQfOHiHQSq2oetW1tglISxaNZQ9_HizFN5UspQClMYqOqYHHCe84-t1G5p0kFeu59Vd4N625SgLW8noV4Puwedn-EPVC3i1nBiKJq8kknq4NBp8AC1-XLI13EFde2iqB8Zr5Om-9VyZ9mS0YzWw6xH6CyxoDbn"/>
+                            </div>
+                            <div class="flex items-center justify-between text-text-muted font-label-sm text-label-sm pt-2">
+                                <span>19 Active SKUs</span>
+                                <span class="text-status-success font-semibold">20% Commission Tier</span>
+                            </div>
+                        </div>
+                        <div class="pt-6">
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-2.5 px-4 rounded-lg bg-surface-subtle text-on-surface hover:bg-surface-container transition-colors font-semibold" data-path="brands" href="#">
+                                Explore Brand
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- FEATURES SECTION -->
-<section class="py-24 bg-white relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div class="text-center max-w-3xl mx-auto">
-            <span class="text-emerald-600 text-xs font-bold tracking-widest uppercase block mb-3">All-In-One Ecosystem</span>
-            <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                Everything You Need To Dominate E-commerce
-            </h2>
-            <p class="mt-4 text-slate-600 text-lg">
-                Engineered with high-conversion infrastructure built specifically for brands, vendors, and dropship partners.
-            </p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
-
-            <!-- Feature 1 -->
-            <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-transparent hover:shadow-xl transition-all duration-300">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </section>
+        <!-- FEATURED PRODUCTS SECTION -->
+        <section class="w-full py-20 bg-surface-cream">
+            <div class="max-w-7xl mx-auto px-gutter space-y-12">
+                <!-- Section Header with Category Tabs -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="space-y-2">
+                        <div class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">Curated Showcase</div>
+                        <h2 class="font-headline-lg text-headline-lg text-on-surface">Discover Something You'll Love</h2>
+                    </div>
+                    <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+                        <button class="px-4 py-2 rounded-lg bg-on-surface text-surface-card font-label-md text-label-md">All Catalog</button>
+                        <button class="px-4 py-2 rounded-lg bg-surface-card text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">Wellness</button>
+                        <button class="px-4 py-2 rounded-lg bg-surface-card text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">Leathercraft</button>
+                        <button class="px-4 py-2 rounded-lg bg-surface-card text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors">Home Objects</button>
+                    </div>
                 </div>
-                <h3 class="font-bold text-xl text-slate-900 mt-6">Online Store Builder</h3>
-                <p class="mt-3 text-slate-600 leading-relaxed text-sm">
-                    Deploy breathtaking, premium digital flagship storefronts customized to maximize your product conversions effortlessly.
-                </p>
-            </div>
-
-            <!-- Feature 2 -->
-            <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-transparent hover:shadow-xl transition-all duration-300">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <!-- Product Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Product 1 -->
+                    <div class="bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between">
+                        <div class="relative">
+                            <div class="aspect-[4/5] overflow-hidden bg-surface-container">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Serum dropper bottle with radiant amber hibiscus serum on stone pedestal, warm sunlit luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACVnryBl9tHOyTEdRQCTBtqNZVhXyHa28iemGtPPfThd1rBuGNZlTa1CgyEa_gAxZOnvULeGTSaeJAzL2gja2_Gar8CaCBUH6Pas9uvGKe_Sx-7uDjt67TywA-HpnAYnoDbFqtGqsuii4AQNUtgqImsIeXuCrsWaEJFELTgzejhNxF_sDfPvuKnulmkyefKqR1tNeuBPmYWzwE8u_7GtsO8Y8uaTiQEhI9vM2cCeZI"/>
+                            </div>
+                            <!-- Discount Badge -->
+                            <div class="absolute top-3 left-3 px-2 py-1 bg-primary-container text-on-primary-container rounded font-label-sm text-label-sm font-bold">
+                                -16% OFF
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-card/80 backdrop-blur text-on-surface hover:bg-surface-card flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <p class="font-label-sm text-label-sm uppercase tracking-wide text-text-muted">Aura Botanicals</p>
+                                <h4 class="font-headline-sm text-headline-sm text-on-surface mt-1 group-hover:text-primary transition-colors">
+                                    Hibiscus &amp; Baobab Radiance Elixir
+                                </h4>
+                            </div>
+                            <div class="pt-2 flex items-baseline justify-between">
+                                <div>
+                                    <span class="font-currency-display text-currency-display text-on-surface">₦18,500</span>
+                                    <span class="ml-2 font-body-sm text-body-sm text-text-tertiary line-through">₦22,000</span>
+                                </div>
+                                <span class="font-label-sm text-label-sm text-status-success font-semibold">Earn ₦4,070/sale</span>
+                            </div>
+                            <button class="w-full mt-2 py-2.5 px-4 bg-on-surface text-surface-card rounded-lg font-label-md text-label-md hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+                                <span>Shop or Sell Product</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Product 2 -->
+                    <div class="bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between">
+                        <div class="relative">
+                            <div class="aspect-[4/5] overflow-hidden bg-surface-container">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Hand-stitched burnished cowhide leather loafers shot in editorial top-down lighting on stone slab." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPBwfBQ_ljuqUJyO-Ok9ZUsY3VS7kH69yDn1Diw3F2fciOplcghUXxxYu3Wf-v_jBPOV-lAMVGtI-CFW9UXqLbGswn3cYKblBbOAq0j4PpBf4QWeo2oA58zjaGZb7UhgxuTGDe5wYlot9VMug0q0MG3nUqib0yswEg8vdY2ZI7rZVHh-_ID5kG92tQZXtGHugOKjhfjkqJ4PlXXTGvH1aJsTIdWcv3kBIPvBoxXMLi"/>
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-card/80 backdrop-blur text-on-surface hover:bg-surface-card flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <p class="font-label-sm text-label-sm uppercase tracking-wide text-text-muted">Zaria Atelier</p>
+                                <h4 class="font-headline-sm text-headline-sm text-on-surface mt-1 group-hover:text-primary transition-colors">
+                                    Hand-Stitched Cowhide Loafers
+                                </h4>
+                            </div>
+                            <div class="pt-2 flex items-baseline justify-between">
+                                <div>
+                                    <span class="font-currency-display text-currency-display text-on-surface">₦45,000</span>
+                                </div>
+                                <span class="font-label-sm text-label-sm text-status-success font-semibold">Earn ₦8,100/sale</span>
+                            </div>
+                            <button class="w-full mt-2 py-2.5 px-4 bg-on-surface text-surface-card rounded-lg font-label-md text-label-md hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+                                <span>Shop or Sell Product</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Product 3 -->
+                    <div class="bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between">
+                        <div class="relative">
+                            <div class="aspect-[4/5] overflow-hidden bg-surface-container">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Tactile terracotta ribbed ceramic vessel displayed with natural morning sunlight in warm Nigerian living room." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzRQrfrc1z5DckMACvPO0pwFKHOgeYO2PXMpxSPZ0IC0e7nWvEFSAvKPaJ98x5NtSwJwJeI3TDjqMv9dfLsqzSra-CXso0egMQq9eyxtSUdjw3gi8sAIgSCoWzlgmCUrAkkdMubQZr1FvsEuQDImNoPPyNtDYdI7k-ZP5Ncrs0rlbWgCw3olf1457FxrSgu_pPi3hv_eNZ1_RIzcmxeDhLx3b9gF8NbwvhRwQ6_NbQ"/>
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-card/80 backdrop-blur text-on-surface hover:bg-surface-card flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <p class="font-label-sm text-label-sm uppercase tracking-wide text-text-muted">Moyo Living</p>
+                                <h4 class="font-headline-sm text-headline-sm text-on-surface mt-1 group-hover:text-primary transition-colors">
+                                    Terracotta Ribbed Table Vase
+                                </h4>
+                            </div>
+                            <div class="pt-2 flex items-baseline justify-between">
+                                <div>
+                                    <span class="font-currency-display text-currency-display text-on-surface">₦14,200</span>
+                                </div>
+                                <span class="font-label-sm text-label-sm text-status-success font-semibold">Earn ₦3,550/sale</span>
+                            </div>
+                            <button class="w-full mt-2 py-2.5 px-4 bg-on-surface text-surface-card rounded-lg font-label-md text-label-md hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+                                <span>Shop or Sell Product</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Product 4 -->
+                    <div class="bg-surface-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between">
+                        <div class="relative">
+                            <div class="aspect-[4/5] overflow-hidden bg-surface-container">
+                                <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Editorial look of structured neutral linen safari overshirt tailored with patch pockets and horn buttons." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnY7ZE6fE7ey3GzEZJFCPBrF7ijdADcH8EfQbWD13lsBzrpKaUjAe3JYnRF7-2d6vs6J8U_fOsHA0kptm4oU5E1PAys2d00gOF7R142w-pij72xu9yTIXE8oZDmGrmqmwxMQceAg1suM7l_-MOkT0B7TSJ4CF_RHiHzl3Pa-my-JZ2caWFuWe3cbvFiPgHOioUjUB0jPLKLzeUh_WNTbUTZg_BbMH0i5FrEjqX_rF4"/>
+                            </div>
+                            <!-- Discount Badge -->
+                            <div class="absolute top-3 left-3 px-2 py-1 bg-primary-container text-on-primary-container rounded font-label-sm text-label-sm font-bold">
+                                -20% OFF
+                            </div>
+                            <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-card/80 backdrop-blur text-on-surface hover:bg-surface-card flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <p class="font-label-sm text-label-sm uppercase tracking-wide text-text-muted">Kano &amp; Co.</p>
+                                <h4 class="font-headline-sm text-headline-sm text-on-surface mt-1 group-hover:text-primary transition-colors">
+                                    Structured Linen Safari Overshirt
+                                </h4>
+                            </div>
+                            <div class="pt-2 flex items-baseline justify-between">
+                                <div>
+                                    <span class="font-currency-display text-currency-display text-on-surface">₦28,000</span>
+                                    <span class="ml-2 font-body-sm text-body-sm text-text-tertiary line-through">₦35,000</span>
+                                </div>
+                                <span class="font-label-sm text-label-sm text-status-success font-semibold">Earn ₦5,600/sale</span>
+                            </div>
+                            <button class="w-full mt-2 py-2.5 px-4 bg-on-surface text-surface-card rounded-lg font-label-md text-label-md hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+                                <span>Shop or Sell Product</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="font-bold text-xl text-slate-900 mt-6">Dropshipping Network</h3>
-                <p class="mt-3 text-slate-600 leading-relaxed text-sm">
-                    Instantly syndicate your catalog to thousands of verified marketers ready to distribute and amplify your retail reach.
-                </p>
             </div>
-
-            <!-- Feature 3 -->
-            <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-transparent hover:shadow-xl transition-all duration-300">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </section>
+        <!-- ACTIVE SALES PREVIEW SECTION -->
+        <section class="w-full py-20 bg-surface-subtle">
+            <div class="max-w-7xl mx-auto px-gutter space-y-12">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="space-y-2">
+                        <div class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">Limited Brand Promotions</div>
+                        <h2 class="font-headline-lg text-headline-lg text-on-surface">Deals Worth Checking Out</h2>
+                        <p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+                            Partner discounts and high-demand commercial inventory running for a limited window.
+                        </p>
+                    </div>
+                    <a class="inline-flex items-center gap-2 font-label-lg text-label-lg text-on-surface hover:text-primary transition-colors pb-1 group self-start md:self-auto" data-path="sales" href="#">
+                        <span>Explore All Sales</span>
+                        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
                 </div>
-                <h3 class="font-bold text-xl text-slate-900 mt-6">Reviews & Global Trust</h3>
-                <p class="mt-3 text-slate-600 leading-relaxed text-sm">
-                    Incentivize and broadcast fully verified customer reviews, transparent trust scores, and real user media directly.
-                </p>
-            </div>
-
-            <!-- Feature 4 -->
-            <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-transparent hover:shadow-xl transition-all duration-300">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                <!-- 2-Column Split Feature Promos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Promo 1 -->
+                    <div class="relative bg-surface-card rounded-2xl overflow-hidden shadow-sm p-8 flex flex-col justify-between">
+                        <div class="relative z-10 space-y-4 max-w-md">
+<span class="px-3 py-1 rounded-full bg-status-warning/10 text-status-warning font-label-sm text-label-sm font-bold uppercase tracking-wider">
+              Ends in 48 Hours
+            </span>
+                            <h3 class="font-headline-lg text-headline-lg text-on-surface">Mid-Season Revival</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant">
+                                Up to 25% off select handmade footwear and structured accessories by <strong class="text-on-surface">Zaria Atelier</strong>. Dropshippers earn guaranteed 20% margin.
+                            </p>
+                            <div class="pt-2 flex items-center gap-4">
+                                <a class="inline-flex items-center justify-center font-label-md text-label-md bg-on-surface text-surface-card px-5 py-3 rounded-lg shadow-sm hover:bg-on-surface-variant transition-colors" data-path="sales" href="#">
+                                    Shop Mid-Season Sale
+                                </a>
+                                <span class="font-label-sm text-label-sm text-text-muted">Over 140 Items Claimed</span>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-6 flex items-center gap-4 border-t-0">
+                            <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                                <img class="w-full h-full object-cover" data-alt="Close up of rich oxblood leather footwear with artisanal stitching." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcfkBzPwVatQdjrO2L4nsxwzaFTJNI1QgbFCtZCCB5icaoVn48Is_Dn8rORlLpQZrYuxBT_oLjaE2njoMNXPh6EAOvyYPstbSEC_A_ZJaSnPmjuwLq4XOnvUxBb3Xl9fEAj-NMtUYUOxEq2Vs4qtygymh6RZ4DJjl1JqqDWif-sg6FZWIT2ox9sqpYMueZNpszMsloEF3qyFMq-28RaRQ5LE8Q5it6RCI51Bq6RA5H"/>
+                            </div>
+                            <div>
+                                <p class="font-label-md text-label-md text-on-surface font-semibold">Verified Direct Settlement</p>
+                                <p class="font-body-sm text-body-sm text-text-muted">Instant commission dispatch upon delivery confirmation.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Promo 2 -->
+                    <div class="relative bg-surface-card rounded-2xl overflow-hidden shadow-sm p-8 flex flex-col justify-between">
+                        <div class="relative z-10 space-y-4 max-w-md">
+<span class="px-3 py-1 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+              Exclusive Ecosystem Bundle
+            </span>
+                            <h3 class="font-headline-lg text-headline-lg text-on-surface">Skin Ritual Bundles</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant">
+                                Save 15% on complete 3-step restorative sets by <strong class="text-on-surface">Aura Botanicals</strong>. Highest customer re-order frequency across West Africa.
+                            </p>
+                            <div class="pt-2 flex items-center gap-4">
+                                <a class="inline-flex items-center justify-center font-label-md text-label-md bg-primary-container text-on-primary-container px-5 py-3 rounded-lg shadow-sm hover:bg-tertiary-container transition-colors font-semibold" data-path="sales" href="#">
+                                    View Bundle Offers
+                                </a>
+                                <span class="font-label-sm text-label-sm text-text-muted">Free Courier in Lagos</span>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-6 flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                                <img class="w-full h-full object-cover" data-alt="Curated bundle of amber glass cosmetic serum and restorative skin balms." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfCN9_0Q3fb3U-FhXOi47z2bVCYLfbsUywjPUTB6_LFo6XnLyRpsQeXG04uC0mfgiMJPOCbT2FiibnD2Zo20v_KVhes9UG4XmaCGusi6TqOm8xunuDO00NFIxOAIIF2nAY6Z4V-QbKJ5seiUkPPbctLKr3w9OEdhcZxL_zX2KpQs7ug-GaQTqdiJFVpJ7OafvQHkX_Mde4AcnG41rIygE4FzaKvEgE75-x5TSiQ5R9"/>
+                            </div>
+                            <div>
+                                <p class="font-label-md text-label-md text-on-surface font-semibold">Brand Direct Warranty</p>
+                                <p class="font-body-sm text-body-sm text-text-muted">Guaranteed authentic shelf-fresh batch releases.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="font-bold text-xl text-slate-900 mt-6">Sales Campaigns</h3>
-                <p class="mt-3 text-slate-600 leading-relaxed text-sm">
-                    Run sophisticated countdown triggers, automated holiday flash drops, and dynamic bulk discounts programmatically.
-                </p>
             </div>
-
-            <!-- Feature 5 -->
-            <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-transparent hover:shadow-xl transition-all duration-300">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </section>
+        <!-- EXPLAIN THE ECOSYSTEM SECTION -->
+        <section class="w-full py-24 bg-surface-cream">
+            <div class="max-w-7xl mx-auto px-gutter space-y-16">
+                <div class="text-center max-w-2xl mx-auto space-y-3">
+                    <div class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">A Unified Pan-African Engine</div>
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface">One Ecosystem. Multiple Opportunities.</h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant">
+                        KING'S unifies verified manufacturing principals, dynamic distributed sales forces, and quality-conscious customers under a single sovereign infrastructure.
+                    </p>
                 </div>
-                <h3 class="font-bold text-xl text-slate-900 mt-6">Deep Data Analytics</h3>
-                <p class="mt-3 text-slate-600 leading-relaxed text-sm">
-                    Track user acquisition loops, precise drop-off points, cohort performance, and localized revenue analytics in real-time.
-                </p>
-            </div>
-
-            <!-- Feature 6 -->
-            <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-transparent hover:shadow-xl transition-all duration-300">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                <!-- 3 Audience Pathways Bento -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Pathway 1: Brand Owners -->
+                    <div class="bg-surface-card rounded-2xl p-8 shadow-sm flex flex-col justify-between space-y-8">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined text-[26px]">storefront</span>
+                            </div>
+                            <div class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">Principals &amp; Makers</div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface">Brand Owners</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant">
+                                Showcase your products, build authoritative presence, and instantly connect with vetted sales partners who distribute your catalog without inventory friction.
+                            </p>
+                            <ul class="space-y-2.5 pt-2 text-on-surface-variant font-body-sm text-body-sm">
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Automated partner margin settlement</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Full pricing and brand integrity control</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Live dispatch tracking across Nigeria</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-3 px-4 rounded-lg bg-surface-subtle text-on-surface hover:bg-surface-container font-semibold transition-colors" data-path="for-brand-owners" href="#">
+                                Grow Your Brand
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Pathway 2: Dropshippers & Sales Partners -->
+                    <div class="bg-surface-card rounded-2xl p-8 shadow-md flex flex-col justify-between space-y-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 left-0 h-1.5 bg-primary-container"></div>
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined text-[26px]">trending_up</span>
+                            </div>
+                            <div class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Independent Distributors</div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface">Dropshippers &amp; Sales Partners</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant">
+                                Discover verified products from established brands and launch your commerce business without purchasing inventory or managing complex warehousing.
+                            </p>
+                            <ul class="space-y-2.5 pt-2 text-on-surface-variant font-body-sm text-body-sm">
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Instant access to high-margin products</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>White-label receipts &amp; dispatch tracking</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Weekly direct bank deposits in ₦ NGN</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-3 px-4 rounded-lg bg-primary-container text-on-primary-container font-semibold hover:bg-tertiary-container transition-colors shadow-sm" data-path="for-sales-partners" href="#">
+                                Explore Sales Opportunities
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Pathway 3: Customers -->
+                    <div class="bg-surface-card rounded-2xl p-8 shadow-sm flex flex-col justify-between space-y-8">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-on-surface">
+                                <span class="material-symbols-outlined text-[26px]">local_mall</span>
+                            </div>
+                            <div class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">Conscious Buyers</div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface">Direct Customers</h3>
+                            <p class="font-body-md text-body-md text-on-surface-variant">
+                                Discover unique emerging African brands, explore curated artisanal collections, and purchase with total peace of mind under escrow protection.
+                            </p>
+                            <ul class="space-y-2.5 pt-2 text-on-surface-variant font-body-sm text-body-sm">
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>100% genuine products direct from makers</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Safe escrow purchase protection</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-status-success text-[18px]">check_circle</span>
+                                    <span>Rapid reliable nationwide delivery</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <a class="w-full inline-flex items-center justify-center font-label-md text-label-md py-3 px-4 rounded-lg bg-surface-subtle text-on-surface hover:bg-surface-container font-semibold transition-colors" data-path="brands" href="#">
+                                Discover Brands
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="font-bold text-xl text-slate-900 mt-6">Brand Community</h3>
-                <p class="mt-3 text-slate-600 leading-relaxed text-sm">
-                    Cross-pollinate with top-tier entrepreneurs, swap fulfillment strategies, and find strategic synergy inside our masterminds.
-                </p>
             </div>
-
-        </div>
-
-    </div>
-</section>
-
-<!-- HOW IT WORKS SECTION -->
-<section class="bg-slate-900 text-white py-24 relative overflow-hidden">
-    <!-- Matrix mesh decoration -->
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#059669,transparent_25%)] opacity-20"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div class="text-center max-w-xl mx-auto">
-            <span class="text-emerald-400 text-xs font-bold tracking-widest uppercase block mb-3">Seamless Scaling</span>
-            <h2 class="text-3xl sm:text-4xl font-black tracking-tight">The Roadmap to Sales</h2>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-12 lg:gap-16 mt-20 relative">
-
-            <!-- Step 1 -->
-            <div class="text-center relative">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg shadow-emerald-500/20 relative z-10">
-                    1
+        </section>
+        <!-- HOW KING'S WORKS SECTION -->
+        <section class="w-full py-20 bg-surface-subtle">
+            <div class="max-w-7xl mx-auto px-gutter space-y-12">
+                <div class="space-y-2 max-w-lg">
+                    <div class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold">Streamlined Mechanics</div>
+                    <h2 class="font-headline-lg text-headline-lg text-on-surface">How KING'S Operates</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant">
+                        Built for clarity and efficiency at every touchpoint.
+                    </p>
                 </div>
-                <h3 class="mt-6 font-bold text-xl tracking-tight text-white">Create Your Identity</h3>
-                <p class="mt-3 text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">
-                    Quickly align your branding assets, customize layout properties, and claim your high-trust domain storefront hook.
-                </p>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="text-center relative">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg shadow-emerald-500/20 relative z-10">
-                    2
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Step 1 -->
+                    <div class="bg-surface-card p-8 rounded-xl shadow-sm space-y-4">
+                        <div class="w-10 h-10 rounded-full bg-surface-subtle text-on-surface font-currency-display text-currency-display flex items-center justify-center font-bold">
+                            1
+                        </div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface">Discover brands and products</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">
+                            Explore authentic Nigerian brands and curated merchandise with transparent specifications, pricing, and proven customer demand.
+                        </p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="bg-surface-card p-8 rounded-xl shadow-sm space-y-4">
+                        <div class="w-10 h-10 rounded-full bg-surface-subtle text-on-surface font-currency-display text-currency-display flex items-center justify-center font-bold">
+                            2
+                        </div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface">Connect with opportunities that fit you</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">
+                            Choose whether to shop as a buyer, distribute products as an independent partner, or onboard your brand to expand reach nationwide.
+                        </p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="bg-surface-card p-8 rounded-xl shadow-sm space-y-4">
+                        <div class="w-10 h-10 rounded-full bg-surface-subtle text-on-surface font-currency-display text-currency-display flex items-center justify-center font-bold">
+                            3
+                        </div>
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface">Shop, sell, and grow through the ecosystem</h3>
+                        <p class="font-body-md text-body-md text-on-surface-variant">
+                            Transact safely through integrated escrow settlements, automated payouts, and verified logistics partners that protect every party.
+                        </p>
+                    </div>
                 </div>
-                <h3 class="mt-6 font-bold text-xl tracking-tight text-white">Upload Your Catalog</h3>
-                <p class="mt-3 text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">
-                    List individual items or synchronize infinite wholesale product matrices instantly to await automated checkout fulfillment orders.
-                </p>
             </div>
-
-            <!-- Step 3 -->
-            <div class="text-center relative">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 flex items-center justify-center text-xl font-black shadow-lg shadow-emerald-400/30 relative z-10">
-                    3
+        </section>
+        <!-- CLOSING CTA SECTION -->
+        <section class="w-full py-24 bg-surface-cream relative overflow-hidden">
+            <!-- Ambient gold background glow -->
+            <div class="absolute inset-0 bg-gradient-to-r from-primary-container/10 via-transparent to-tertiary-fixed/15 pointer-events-none"></div>
+            <div class="max-w-5xl mx-auto px-gutter relative z-10 text-center space-y-8">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-subtle shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    <span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface">Join 12,000+ Entrepreneurs Across Nigeria</span>
                 </div>
-                <h3 class="mt-6 font-bold text-xl tracking-tight text-white">Unlock Scale Vectors</h3>
-                <p class="mt-3 text-slate-400 text-sm leading-relaxed max-w-xs mx-auto">
-                    Allow massive dropship structures to aggressively scale your marketing distribution while you simply fulfill inbound freight requests.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-<!-- DROPSHIPPING CALL TO ACTION -->
-<section class="py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="rounded-[32px] bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white p-8 sm:p-12 lg:p-20 shadow-2xl relative overflow-hidden">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,#10b981,transparent_45%)] opacity-20"></div>
-
-            <div class="max-w-3xl relative z-10">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.15]">
-                    Turn Every Distributed Marketer Into Your Sales Team
+                <h2 class="font-display-xl text-display-xl text-on-surface tracking-tight max-w-3xl mx-auto">
+                    Your Next Opportunity Starts Here.
                 </h2>
-                <p class="mt-6 text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
-                    Allow dropshippers to securely clone stylized variants of your active store nodes—boosting market velocity while your primary hub handles product fulfillment commands.
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    Whether you're building a brand, exploring sales opportunities, or looking for something great to buy, there's an empowered place for you on KING'S.
                 </p>
-                <button class="mt-10 px-8 py-4 bg-white text-slate-950 rounded-xl font-bold hover:bg-emerald-400 hover:text-slate-950 active:scale-[0.98] transition-all shadow-xl shadow-black/20">
-                    Become A Brand Owner
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- TESTIMONIALS SECTION -->
-<section class="bg-slate-50 py-24 border-y border-slate-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <h2 class="text-center text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            Trusted By High-Volume Stores
-        </h2>
-
-        <div class="grid md:grid-cols-3 gap-8 mt-16">
-
-            <!-- Card 1 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-                <div>
-                    <!-- Render Clean SVG Stars instead of Emoji stars -->
-                    <div class="flex items-center gap-1 text-amber-400 mb-5">
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                    <p class="text-slate-600 italic text-sm leading-relaxed">
-                        "Gross multi-channel operational revenue escalated drastically within forty-eight hours of opening up automated syndication nodes to our downstream network."
-                    </p>
+                <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a class="w-full sm:w-auto inline-flex items-center justify-center font-label-lg text-label-lg bg-primary-container text-on-primary-container px-10 py-4 rounded-lg shadow-md hover:bg-tertiary-container transition-all duration-200 font-bold active:scale-[0.98]" data-path="join-kings" href="#">
+                        Join KING'S Today
+                    </a>
+                    <a class="w-full sm:w-auto inline-flex items-center justify-center font-label-lg text-label-lg bg-surface-card text-on-surface px-8 py-4 rounded-lg shadow-sm hover:bg-surface-subtle transition-all duration-200" data-path="brands" href="#">
+                        Browse Directory
+                    </a>
                 </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-slate-200 font-bold text-xs flex items-center justify-center text-slate-700">TO</div>
-                    <span class="text-xs font-bold text-slate-900">Tunde O. — Foundational Director</span>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-1 text-amber-400 mb-5">
-                        <!-- Repeat SVG stars -->
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                    <p class="text-slate-600 italic text-sm leading-relaxed">
-                        "Constructed our primary storefront design architecture quickly inside a single calendar evening. Organic checkout cycles began logging into the hub immediately."
-                    </p>
-                </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-slate-200 font-bold text-xs flex items-center justify-center text-slate-700">AM</div>
-                    <span class="text-xs font-bold text-slate-900">Amara M. — Creative Lead</span>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-1 text-amber-400 mb-5">
-                        <!-- Repeat SVG stars -->
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                    <p class="text-slate-600 italic text-sm leading-relaxed">
-                        "The centralized group infrastructure vectors accelerated brand confidence. Our storefront scaled customer density parameters far quicker than legacy systems."
-                    </p>
-                </div>
-                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-slate-200 font-bold text-xs flex items-center justify-center text-slate-700">CE</div>
-                    <span class="text-xs font-bold text-slate-900">Chidi E. — Managing Partner</span>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section>
-
-<!-- CLOSING CALL TO ACTION SECTION -->
-<section class="py-28 bg-white relative overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_center,#e1f5fe,transparent_50%)] opacity-30"></div>
-    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none">
-            Ready To Multiply Your Business Velocity?
-        </h2>
-        <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Stand up your node, connect instantly to ready consumer nodes, and let network dropshippers handle automated distribution scaling parameters today.
-        </p>
-        <button class="mt-10 px-10 py-5 rounded-xl bg-slate-900 text-white font-bold text-lg shadow-xl shadow-slate-900/20 hover:bg-emerald-600 hover:shadow-emerald-600/20 active:scale-[0.98] transition-all duration-150">
-            Start Selling Today
-        </button>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
-
-            <!-- Company Info (Spans 2 columns on small desktops) -->
-            <div class="col-span-2">
-                <div class="flex items-center gap-3 text-white mb-6">
-                    <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center">
-                        <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    </div>
-                    <span class="font-black text-lg tracking-tight">BrandHub</span>
-                </div>
-                <p class="text-sm text-slate-400 leading-relaxed max-w-xs">
-                    Next-generation decentralised commerce syndication tools optimizing layout logic architectures globally.
-                </p>
-            </div>
-
-            <!-- Links Column 1 -->
-            <div>
-                <h4 class="font-bold text-xs uppercase text-slate-200 tracking-wider mb-4">Platform</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Core Features</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Dropship Portal</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Pricing Matrix</a></li>
-                </ul>
-            </div>
-
-            <!-- Links Column 2 -->
-            <div>
-                <h4 class="font-bold text-xs uppercase text-slate-200 tracking-wider mb-4">Resources</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">System API Docs</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Fulfillment Guides</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Status Logs</a></li>
-                </ul>
-            </div>
-
-            <!-- Links Column 3 -->
-            <div>
-                <h4 class="font-bold text-xs uppercase text-slate-200 tracking-wider mb-4">Company</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">About Corporate</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Press Resources</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 transition-colors">Security Rules</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-        <div class="mt-12 pt-8 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span>&copy; 2026 BrandHub Inc. All rights reserved globally.</span>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-slate-300 transition-colors">Terms of Use</a>
-                <a href="#" class="hover:text-slate-300 transition-colors">Privacy Policy</a>
-            </div>
-        </div>
-    </div>
-</footer>
-
-</body>
-</html>
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>CollabMark — Brand & Dropshipper Synergy Ecosystem</title>
-
-    <!-- Google Fonts + Tailwind + Font Awesome -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            dark: '#0B0F19',
-                            card: '#161F30',
-                            accent: '#10B981', /* Vibrant Emerald for growth/success */
-                            purple: '#6366F1',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            background-color: #FAFAFB;
-        }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .hero-gradient {
-            background: radial-gradient(133.44% 100% at 50% 0%, #1E2640 0%, #0B0F19 100%);
-        }
-        .card-premium {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-premium:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 22px 40px -12px rgba(11, 15, 25, 0.08);
-        }
-        .glow-button {
-            transition: all 0.2s ease;
-        }
-        .glow-button:hover {
-            box-shadow: 0 0 24px rgba(16, 185, 129, 0.4);
-            transform: translateY(-1px);
-        }
-        /* Hide scrollbars but keep functionality */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
-</head>
-<body class="antialiased text-slate-900 font-sans">
-
-<!-- ========== NAVIGATION ========== -->
-<nav class="glass-nav border-b border-slate-100 sticky top-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-6 sm:px-8 py-4 flex items-center justify-between">
-
-        <!-- Logo -->
-        <a href="#" class="flex items-center gap-2.5 group">
-            <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition">
-                <i class="fas fa-bolt text-white text-lg"></i>
-            </div>
-            <span class="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-600 bg-clip-text text-transparent">
-          Collab<span class="text-emerald-500">Mark</span>
+                <div class="pt-8 flex flex-wrap items-center justify-center gap-8 text-text-muted font-label-sm text-label-sm">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-status-success">lock</span>
+          Escrow Security
         </span>
-        </a>
-
-        <!-- Center Links -->
-        <div class="hidden md:flex items-center space-x-8 text-[15px] font-semibold text-slate-600">
-            <a href="#" class="text-emerald-600 border-b-2 border-emerald-500 pb-1">Discover</a>
-            <a href="#" class="hover:text-emerald-500 transition-colors pb-1">For Brands</a>
-            <a href="#" class="hover:text-emerald-500 transition-colors pb-1">For Dropshippers</a>
-            <a href="#" class="hover:text-emerald-500 transition-colors pb-1">Success Matrix</a>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="flex items-center gap-4">
-            <a href="#" class="text-slate-700 font-semibold text-[15px] hover:text-emerald-500 transition">Log In</a>
-            <a href="#" class="bg-slate-900 hover:bg-slate-800 text-white text-[14px] font-bold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
-                List Your Brand <i class="fas fa-arrow-right text-xs opacity-70"></i>
-            </a>
-        </div>
-    </div>
-</nav>
-
-<main>
-    <!-- ========== HERO SECTION ========== -->
-    <section class="relative overflow-hidden hero-gradient text-white pt-20 pb-28">
-        <!-- Decorative Background Elements -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-
-                <!-- Hero Left Column -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 bg-white/5 backdrop-blur-md rounded-full px-4 py-2 text-xs font-semibold tracking-wide border border-white/10 text-emerald-400 mx-auto lg:mx-0">
-              <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-                        SYNCING 2,400+ STORES RIGHT NOW
-                    </div>
-
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight">
-                        Multiply your ecom reach. <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Zero inventory stress.</span>
-                    </h1>
-
-                    <p class="text-slate-300 text-lg md:text-xl font-normal max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        The premium hub bridging top-tier supply brands with world-class digital dropshippers. Clone stores instantly, sync automatically, and scale revenue.
-                    </p>
-
-                    <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-                        <a href="#" class="glow-button bg-emerald-500 text-brand-dark px-8 py-4 rounded-xl font-bold text-[16px] flex items-center gap-3">
-                            Start Selling Instantly <i class="fas fa-rocket text-sm"></i>
-                        </a>
-                        <a href="#" class="bg-white/10 hover:bg-white/15 border border-white/10 px-8 py-4 rounded-xl font-semibold text-[16px] transition">
-                            Explore Top Brands
-                        </a>
-                    </div>
-
-                    <!-- Quick Features Micro-badges -->
-                    <div class="flex flex-wrap justify-center lg:justify-start items-center gap-6 pt-6 text-xs font-medium text-slate-400">
-                        <div class="flex items-center gap-2"><i class="fas fa-shield-halved text-emerald-400"></i> Vetted Suppliers Only</div>
-                        <div class="flex items-center gap-2"><i class="fas fa-bolt text-emerald-400"></i> 1-Click Infrastructure</div>
-                        <div class="flex items-center gap-2"><i class="fas fa-arrows-rotate text-emerald-400"></i> Real-Time Stock Sync</div>
-                    </div>
-                </div>
-
-                <!-- Hero Right Column (Dashboard Preview Mockup) -->
-                <div class="lg:col-span-5 hidden lg:block">
-                    <div class="bg-brand-card/60 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-2xl relative">
-                        <div class="absolute -top-4 -right-4 bg-emerald-500 text-brand-dark text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-lg">
-                            <i class="fas fa-chart-line mr-1"></i> +214% Ecosystem Growth
-                        </div>
-
-                        <!-- Mock Header -->
-                        <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                            </div>
-                            <span class="text-xs text-slate-400 font-mono">live_network_feed.json</span>
-                        </div>
-
-                        <!-- Analytics Content -->
-                        <div class="space-y-4">
-                            <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                                <span class="text-xs text-slate-400 block mb-1">Combined Network GMV (Monthly)</span>
-                                <div class="text-3xl font-black tracking-tight text-white">$14,248,900</div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-xs text-slate-400 block mb-1">Active Resellers</span>
-                                    <div class="text-xl font-bold text-emerald-400">4,812</div>
-                                </div>
-                                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-xs text-slate-400 block mb-1">Avg. Store Clone Time</span>
-                                    <div class="text-xl font-bold text-white">42 Seconds</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== CATEGORIES GRID SECTION ========== -->
-    <section class="py-24 -mt-12 relative z-20">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8">
-            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-slate-100">
-
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
-                    <div>
-                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Curated Niches</span>
-                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Explore High-Margin Sectors</h2>
-                    </div>
-                    <p class="text-slate-500 text-sm max-w-sm">
-                        We vet and categorize brands strictly based on consumer demand trends, shipping speeds, and reliable profit margins.
-                    </p>
-                </div>
-
-                <!-- Categories Cards Grid -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 card-premium cursor-pointer group">
-                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-lg">Next-Gen Tech</h3>
-                        <p class="text-xs text-slate-400 mt-1">142 Active Suppliers</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 card-premium cursor-pointer group">
-                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-                            <i class="fas fa-shirt"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-lg">Premium Apparel</h3>
-                        <p class="text-xs text-slate-400 mt-1">390+ Active Suppliers</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 card-premium cursor-pointer group">
-                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-                            <i class="fas fa-couch"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-lg">Minimalist Living</h3>
-                        <p class="text-xs text-slate-400 mt-1">210 Active Suppliers</p>
-                    </div>
-
-                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 card-premium cursor-pointer group">
-                        <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
-                            <i class="fas fa-heart-pulse"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-lg">Wellness & Bio</h3>
-                        <p class="text-xs text-slate-400 mt-1">95 Active Suppliers</p>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== FEATURED BRANDS SECTION ========== -->
-    <section class="pb-24 bg-gradient-to-b from-white to-slate-50/50">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8">
-
-            <div class="flex justify-between items-end mb-10">
-                <div>
-                    <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Verified Enterprises</span>
-                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">Featured Supply Hubs</h2>
-                </div>
-                <a href="#" class="text-emerald-600 font-bold text-sm hover:text-emerald-700 transition flex items-center gap-1.5">
-                    View All Verified Brands <i class="fas fa-arrow-right text-xs"></i>
-                </a>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <!-- Brand 1 -->
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-premium flex flex-col justify-between">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80" alt="Eco lifestyle" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">EcoEssentials</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">4.9</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">Sustainable, zero-waste domestic goods crafted for fast-shipping metrics.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-semibold text-xs py-2.5 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors">Inspect Catalogue</a>
-                    </div>
-                </div>
-
-                <!-- Brand 2 -->
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-premium flex flex-col justify-between">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Audio hardware" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">AudioForge</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">5.0</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">High-fidelity acoustic components and wireless headsets with customized packaging options.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-semibold text-xs py-2.5 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors">Inspect Catalogue</a>
-                    </div>
-                </div>
-
-                <!-- Brand 3 -->
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-premium flex flex-col justify-between">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Coffee craft" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">BrewHaven</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">4.7</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">Artisanal organic coffee blends and modern precision extraction equipment.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-semibold text-xs py-2.5 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors">Inspect Catalogue</a>
-                    </div>
-                </div>
-
-                <!-- Brand 4 (Special Clone Target Highlighted) -->
-                <div class="bg-white rounded-2xl overflow-hidden border-2 border-emerald-500/30 card-premium flex flex-col justify-between relative shadow-lg">
-            <span class="absolute top-3 right-3 bg-emerald-500 text-brand-dark text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-md shadow-md">
-              <i class="fas fa-fire mr-1"></i> 84 Clones Active
-            </span>
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80" alt="Organic wellness" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">PureSnack Co.</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">4.9</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">High-performance plant protein arrays. Exceptional 45% standard mark-up potential.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-emerald-500 text-brand-dark font-extrabold text-xs py-2.5 rounded-xl hover:bg-emerald-600 transition-colors">Instant 1-Click Clone</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== TRENDING PRODUCTS ========== -->
-    <section class="py-24 bg-slate-900 text-white relative">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8">
-
-            <div class="text-center max-w-xl mx-auto mb-16">
-                <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest block mb-2">Real-Time Global Pull</span>
-                <h2 class="text-3xl md:text-4xl font-black tracking-tight">Hottest API-Tracked SKUs</h2>
-                <p class="text-slate-400 text-sm mt-2">These individual products are yielding the highest conversion rates this week across our partner store nodes.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <!-- Product 1 -->
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Watch" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Aero Chrono Minimalist</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$89</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By AudioForge</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>4.8</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80" alt="Hoodie" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Heavyweight Core Hoodie</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$49</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By EcoEssentials</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>5.0</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=400&q=80" alt="Mug" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Insulated Thermal Vessel</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$24</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By BrewHaven</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>4.6</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1579758629938-03607ccdbaba?auto=format&fit=crop&w=400&q=80" alt="Protein" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Organic Superfood Pack</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$32</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By PureSnack</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>4.9</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== HOW IT WORKS (3-STEP) ========== -->
-    <section class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8">
-
-            <div class="text-center max-w-xl mx-auto mb-20">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Seamless Pipeline</span>
-                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">How the Ecosystem Integrates</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10 relative">
-                <!-- Step 1 -->
-                <div class="text-center space-y-4 relative">
-                    <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto shadow-sm text-emerald-600 text-2xl font-bold">
-                        <i class="fas fa-warehouse"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900">1. Brands Plug In</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
-                        Suppliers allocate automated inventory feeds, setting baseline wholesale margins and secure localized shipping thresholds.
-                    </p>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="text-center space-y-4 relative">
-                    <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto shadow-sm text-indigo-600 text-2xl font-bold">
-                        <i class="fas fa-clone"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900">2. Marketers Duplicate</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
-                        Dropshippers pick curated storefront configurations, establish customized consumer marks, and launch instant ad nodes.
-                    </p>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="text-center space-y-4 relative">
-                    <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto shadow-sm text-purple-600 text-2xl font-bold">
-                        <i class="fas fa-money-bill-trend-up"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900">3. Automated Splits</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
-                        Orders auto-route directly to the brand for instant fulfilment. Revenue micro-splits immediately arrive into corresponding wallets.
-                    </p>
+                    <span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-status-success">bolt</span>
+          Zero Inventory Overhead
+        </span>
+                    <span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-status-success">payments</span>
+          Real-Time NGN Settlement
+        </span>
                 </div>
             </div>
-
-            <!-- Margin Callout Banner -->
-            <div class="mt-20 bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-8 md:p-10 flex flex-col lg:flex-row justify-between items-center gap-6 border border-slate-800 shadow-xl text-white">
-                <div class="space-y-2 text-center lg:text-left">
-                    <div class="inline-block bg-emerald-500/10 text-emerald-400 font-bold text-xs px-3 py-1 rounded-md mb-1">MARKETER INCENTIVE</div>
-                    <h3 class="font-extrabold text-xl md:text-2xl">Retain up to 35% clean margin on standard collections</h3>
-                    <p class="text-slate-400 text-sm max-w-xl">Zero overhead inventory risks. No manual order detail copy-pasting. Focus entirely on your digital distribution networks.</p>
-                </div>
-                <a href="#" class="bg-emerald-500 hover:bg-emerald-600 text-brand-dark font-extrabold text-sm px-6 py-3.5 rounded-xl whitespace-nowrap transition shadow-lg shadow-emerald-500/10">
-                    Source Digital Inventories →
-                </a>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ========== REVIEWS / TESTIMONIALS ========== -->
-    <section class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8">
-
-            <div class="text-center max-w-xl mx-auto mb-16">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Ecosystem Voice</span>
-                <h2 class="text-3xl font-black text-slate-900 tracking-tight">Validated by Verified Commerce Entities</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-
-                <!-- Testimonial 1 -->
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex text-amber-500 text-xs gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-slate-600 italic text-sm leading-relaxed">
-                            "CollabMark amplified our manufacturing unit throughput metrics by 58% within sixty calendar days. Relieving our staff from individual customer acquisition logistics let us refine base product excellence."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                        <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-sm">SC</div>
-                        <div>
-                            <p class="font-bold text-slate-950 text-sm">Sarah Chen</p>
-                            <p class="text-xs text-slate-400">Managing Director, EcoEssentials</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex text-amber-500 text-xs gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-slate-600 italic text-sm leading-relaxed">
-                            "Duplicating pre-configured distribution frameworks saves thousands in web infrastructure deployment overhead. The automated order validation ledger scales fluidly."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                        <div class="w-10 h-10 rounded-full bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-bold text-sm">ML</div>
-                        <div>
-                            <p class="font-bold text-slate-950 text-sm">Marcus Lee</p>
-                            <p class="text-xs text-slate-400">Enterprise Digital Marketer</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex text-amber-500 text-xs gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <p class="text-slate-600 italic text-sm leading-relaxed">
-                            "The unified clearing protocol makes partner coordination stressless. Real-time product state validation prevents negative inventory scenarios entirely."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                        <div class="w-10 h-10 rounded-full bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-sm">DO</div>
-                        <div>
-                            <p class="font-bold text-slate-950 text-sm">David Okafor</p>
-                            <p class="text-xs text-slate-400">Principal, BrewHaven Network</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== FINAL CALL TO ACTION ========== -->
-    <section class="py-28 hero-gradient text-white relative text-center px-6">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-        <div class="max-w-3xl mx-auto relative z-10 space-y-6">
-            <div class="w-14 h-14 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
-                <i class="fas fa-chart-pie"></i>
-            </div>
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-[1.15]">
-                Ready to Optimize Your Digital Sales Velocity?
-            </h2>
-            <p class="text-slate-300 text-base md:text-lg max-w-xl mx-auto">
-                Align with hundreds of brand owners and distribution specialists aggregating transaction networks dynamically.
-            </p>
-
-            <div class="flex flex-wrap justify-center gap-4 pt-6">
-                <a href="#" class="glow-button bg-emerald-500 text-brand-dark px-8 py-3.5 rounded-xl font-bold transition">
-                    Onboard Your Supply Line
-                </a>
-                <a href="#" class="bg-white/10 hover:bg-white/15 border border-white/10 px-8 py-3.5 rounded-xl font-semibold transition">
-                    Apply As Distributor
-                </a>
-            </div>
-
-            <div class="flex flex-wrap justify-center items-center gap-6 pt-8 text-xs font-medium text-slate-400">
-                <div><i class="fas fa-circle-check text-emerald-400 mr-1.5"></i>No Implementation Premiums</div>
-                <div><i class="fas fa-circle-check text-emerald-400 mr-1.5"></i>Native Clearing Engine</div>
-                <div><i class="fas fa-circle-check text-emerald-400 mr-1.5"></i>Cancel Infrastructure Anytime</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== FOOTER ========== -->
-    <footer class="bg-brand-dark text-slate-400 py-16 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 grid grid-cols-2 md:grid-cols-5 gap-10 md:gap-6">
-
-            <!-- Identity Column -->
-            <div class="col-span-2 space-y-4">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shadow-md">
-                        <i class="fas fa-bolt text-white text-sm"></i>
-                    </div>
-                    <span class="font-bold text-xl text-white tracking-tight">CollabMark</span>
-                </div>
-                <p class="text-sm max-w-xs leading-relaxed text-slate-400">
-                    The next-generation community-powered commerce layer enabling flawless product orchestration and distribution.
-                </p>
-                <div class="flex gap-4 pt-2 text-lg text-slate-500">
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-x-twitter"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-
-            <!-- Navigation Pillars -->
-            <div>
-                <h4 class="font-semibold text-white text-sm tracking-wider uppercase mb-4">Architecture</h4>
-                <ul class="space-y-2.5 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Supplier Matrix</a></li>
-                    <li><a href="#" class="hover:text-white transition">Marketer Hub</a></li>
-                    <li><a href="#" class="hover:text-white transition">API Framework</a></li>
-                    <li><a href="#" class="hover:text-white transition">Clearing Protocols</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-semibold text-white text-sm tracking-wider uppercase mb-4">Resources</h4>
-                <ul class="space-y-2.5 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Documentation</a></li>
-                    <li><a href="#" class="hover:text-white transition">Ecosystem Metrics</a></li>
-                    <li><a href="#" class="hover:text-white transition">Developer Portal</a></li>
-                    <li><a href="#" class="hover:text-white transition">Security Ledger</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-semibold text-white text-sm tracking-wider uppercase mb-4">Governance</h4>
-                <ul class="space-y-2.5 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Privacy Architecture</a></li>
-                    <li><a href="#" class="hover:text-white transition">Terms of Protocol</a></li>
-                    <li><a href="#" class="hover:text-white transition">Compliance Node</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-        <div class="max-w-7xl mx-auto px-6 sm:px-8 pt-10 mt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-            <div>© 2026 CollabMark Technologies Inc. All nodes secured.</div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:underline">Ecosystem Status</a>
-                <a href="#" class="hover:underline">Contact Network</a>
-            </div>
-        </div>
-    </footer>
-</main>
-</body>
-</html>
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>CollabMark — Brand & Dropshipper Synergy Ecosystem</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            dark: '#0B0F19',
-                            card: '#161F30',
-                            accent: '#10B981',
-                            purple: '#6366F1',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            background-color: #FAFAFB;
-        }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .hero-gradient {
-            background: radial-gradient(133.44% 100% at 50% 0%, #1E2640 0%, #0B0F19 100%);
-        }
-        .card-premium {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-premium:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 22px 40px -12px rgba(11, 15, 25, 0.08);
-        }
-        .glow-button {
-            transition: all 0.2s ease;
-        }
-        .glow-button:hover {
-            box-shadow: 0 0 24px rgba(16, 185, 129, 0.4);
-            transform: translateY(-1px);
-        }
-
-        /* Smooth slide-down transition for mobile menu */
-        #mobile-menu {
-            max-height: 0;
-            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-            opacity: 0;
-            overflow: hidden;
-        }
-        #mobile-menu.open {
-            max-height: 450px;
-            opacity: 1;
-        }
-    </style>
-</head>
-<body class="antialiased text-slate-900 font-sans">
-
-<nav class="glass-nav border-b border-slate-100 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex items-center justify-between">
-
-            <a href="#" class="flex items-center gap-2.5 group">
-                <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition">
-                    <i class="fas fa-bolt text-white text-lg"></i>
-                </div>
-                <span class="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-600 bg-clip-text text-transparent">
-            Collab<span class="text-emerald-500">Mark</span>
-          </span>
-            </a>
-
-            <div class="hidden lg:flex items-center space-x-8 text-[15px] font-semibold text-slate-600">
-                <a href="#" class="text-emerald-600 border-b-2 border-emerald-500 pb-1">Discover</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors pb-1">For Brands</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors pb-1">For Dropshippers</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors pb-1">Success Matrix</a>
-            </div>
-
-            <div class="hidden sm:flex items-center gap-4">
-                <a href="#" class="text-slate-700 font-semibold text-[15px] hover:text-emerald-500 transition">Log In</a>
-                <a href="#" class="bg-slate-900 hover:bg-slate-800 text-white text-[14px] font-bold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
-                    List Your Brand <i class="fas fa-arrow-right text-xs opacity-70"></i>
-                </a>
-            </div>
-
-            <div class="flex lg:hidden items-center">
-                <button id="menu-toggle" class="text-slate-700 hover:text-emerald-500 focus:outline-none p-2 rounded-lg transition" aria-label="Toggle Menu">
-                    <i id="menu-icon" class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="lg:hidden">
-            <div class="pt-4 pb-3 space-y-3 border-t border-slate-100 mt-3">
-                <a href="#" class="block px-3 py-2 rounded-xl text-base font-semibold text-emerald-600 bg-emerald-50">Discover</a>
-                <a href="#" class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-600 hover:text-emerald-500 hover:bg-slate-50 transition">For Brands</a>
-                <a href="#" class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-600 hover:text-emerald-500 hover:bg-slate-50 transition">For Dropshippers</a>
-                <a href="#" class="block px-3 py-2 rounded-xl text-base font-semibold text-slate-600 hover:text-emerald-500 hover:bg-slate-50 transition">Success Matrix</a>
-
-                <div class="pt-4 border-t border-slate-100 flex flex-col gap-3 sm:hidden">
-                    <a href="#" class="text-center font-semibold text-slate-700 py-2 hover:text-emerald-500 transition">Log In</a>
-                    <a href="#" class="bg-slate-900 text-white text-center font-bold py-3 rounded-xl shadow-sm hover:bg-slate-800 transition">
-                        List Your Brand
-                    </a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</nav>
-
-<main>
-    <section class="relative overflow-hidden hero-gradient text-white pt-12 pb-20 md:pt-20 md:pb-28">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 bg-white/5 backdrop-blur-md rounded-full px-4 py-2 text-[11px] md:text-xs font-semibold tracking-wide border border-white/10 text-emerald-400 mx-auto lg:mx-0">
-              <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-                        SYNCING 2,400+ STORES RIGHT NOW
-                    </div>
-
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.15] lg:leading-[1.1] tracking-tight">
-                        Multiply your ecom reach. <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Zero inventory stress.</span>
-                    </h1>
-
-                    <p class="text-slate-300 text-base md:text-lg lg:text-xl font-normal max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        The premium hub bridging top-tier supply brands with world-class digital dropshippers. Clone stores instantly, sync automatically, and scale revenue.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#" class="glow-button bg-emerald-500 text-brand-dark px-8 py-4 rounded-xl font-bold text-[16px] flex items-center justify-center gap-3">
-                            Start Selling Instantly <i class="fas fa-rocket text-sm"></i>
-                        </a>
-                        <a href="#" class="bg-white/10 hover:bg-white/15 border border-white/10 px-8 py-4 rounded-xl font-semibold text-[16px] text-center transition">
-                            Explore Top Brands
-                        </a>
-                    </div>
-
-                    <div class="flex flex-wrap justify-center lg:justify-start items-center gap-x-6 gap-y-3 pt-4 text-xs font-medium text-slate-400">
-                        <div class="flex items-center gap-2"><i class="fas fa-shield-halved text-emerald-400"></i> Vetted Suppliers</div>
-                        <div class="flex items-center gap-2"><i class="fas fa-bolt text-emerald-400"></i> 1-Click Setup</div>
-                        <div class="flex items-center gap-2"><i class="fas fa-arrows-rotate text-emerald-400"></i> Real-Time Sync</div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 hidden lg:block">
-                    <div class="bg-brand-card/60 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-2xl relative">
-                        <div class="absolute -top-4 -right-4 bg-emerald-50 text-brand-dark text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-lg">
-                            <i class="fas fa-chart-line mr-1"></i> +214% Ecosystem Growth
-                        </div>
-
-                        <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
-                            <div class="flex items-center gap-2">
-                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                            </div>
-                            <span class="text-xs text-slate-400 font-mono">live_network_feed.json</span>
-                        </div>
-
-                        <div class="space-y-4">
-                            <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                                <span class="text-xs text-slate-400 block mb-1">Combined Network GMV (Monthly)</span>
-                                <div class="text-3xl font-black tracking-tight text-white">$14,248,900</div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-xs text-slate-400 block mb-1">Active Resellers</span>
-                                    <div class="text-xl font-bold text-emerald-400">4,812</div>
-                                </div>
-                                <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-                                    <span class="text-xs text-slate-400 block mb-1">Avg. Store Clone Time</span>
-                                    <div class="text-xl font-bold text-white">42 Seconds</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="py-12 md:py-20 -mt-10 relative z-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-2xl md:rounded-3xl p-6 md:p-12 shadow-xl border border-slate-100">
-
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8 md:mb-10">
-                    <div>
-                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Curated Niches</span>
-                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Explore High-Margin Sectors</h2>
-                    </div>
-                    <p class="text-slate-500 text-sm max-w-sm">
-                        We vet and categorize brands strictly based on consumer demand trends, shipping speeds, and reliable profit margins.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-
-                    <div class="bg-slate-50 p-6 rounded-xl md:rounded-2xl border border-slate-100 card-premium cursor-pointer group flex items-center md:block gap-4 md:gap-0">
-                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl md:mb-4 shrink-0 group-hover:scale-110 transition">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base md:text-lg">Next-Gen Tech</h3>
-                            <p class="text-xs text-slate-400 mt-0.5">142 Active Suppliers</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-50 p-6 rounded-xl md:rounded-2xl border border-slate-100 card-premium cursor-pointer group flex items-center md:block gap-4 md:gap-0">
-                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl md:mb-4 shrink-0 group-hover:scale-110 transition">
-                            <i class="fas fa-shirt"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base md:text-lg">Premium Apparel</h3>
-                            <p class="text-xs text-slate-400 mt-0.5">390+ Active Suppliers</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-50 p-6 rounded-xl md:rounded-2xl border border-slate-100 card-premium cursor-pointer group flex items-center md:block gap-4 md:gap-0">
-                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl md:mb-4 shrink-0 group-hover:scale-110 transition">
-                            <i class="fas fa-couch"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base md:text-lg">Minimalist Living</h3>
-                            <p class="text-xs text-slate-400 mt-0.5">210 Active Suppliers</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-50 p-6 rounded-xl md:rounded-2xl border border-slate-100 card-premium cursor-pointer group flex items-center md:block gap-4 md:gap-0">
-                        <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center text-xl md:mb-4 shrink-0 group-hover:scale-110 transition">
-                            <i class="fas fa-heart-pulse"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base md:text-lg">Wellness & Bio</h3>
-                            <p class="text-xs text-slate-400 mt-0.5">95 Active Suppliers</p>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="pb-16 md:pb-24 bg-gradient-to-b from-white to-slate-50/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 mb-8 md:mb-10">
-                <div>
-                    <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-1">Verified Enterprises</span>
-                    <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Featured Supply Hubs</h2>
-                </div>
-                <a href="#" class="text-emerald-600 font-bold text-sm hover:text-emerald-700 transition flex items-center gap-1.5 self-end sm:self-auto">
-                    View All Verified Brands <i class="fas fa-arrow-right text-xs"></i>
-                </a>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-premium flex flex-col justify-between">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80" alt="Eco lifestyle" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">EcoEssentials</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">4.9</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">Sustainable, zero-waste domestic goods crafted for fast-shipping metrics.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-semibold text-xs py-2.5 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors">Inspect Catalogue</a>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-premium flex flex-col justify-between">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Audio hardware" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">AudioForge</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">5.0</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">High-fidelity acoustic components and wireless headsets with customized packaging options.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-semibold text-xs py-2.5 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors">Inspect Catalogue</a>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-premium flex flex-col justify-between">
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Coffee craft" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">BrewHaven</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">4.7</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">Artisanal organic coffee blends and modern precision extraction equipment.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-semibold text-xs py-2.5 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 transition-colors">Inspect Catalogue</a>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl overflow-hidden border-2 border-emerald-500/30 card-premium flex flex-col justify-between relative shadow-lg">
-            <span class="absolute top-3 right-3 bg-emerald-500 text-brand-dark text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-md shadow-md">
-              <i class="fas fa-fire mr-1"></i> 84 Clones Active
-            </span>
-                    <div>
-                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80" alt="Organic wellness" class="w-full h-40 object-cover">
-                        <div class="p-5">
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-lg">PureSnack Co.</h3>
-                                <div class="flex items-center text-amber-500 text-xs gap-1">
-                                    <i class="fas fa-star"></i> <span class="font-bold text-slate-700">4.9</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-slate-500 leading-relaxed">High-performance plant protein arrays. Exceptional 45% standard mark-up potential.</p>
-                        </div>
-                    </div>
-                    <div class="p-5 pt-0">
-                        <a href="#" class="block w-full text-center bg-emerald-500 text-brand-dark font-extrabold text-xs py-2.5 rounded-xl hover:bg-emerald-600 transition-colors">Instant 1-Click Clone</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-slate-900 text-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="text-center max-w-xl mx-auto mb-12 md:mb-16">
-                <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest block mb-2">Real-Time Global Pull</span>
-                <h2 class="text-3xl font-black tracking-tight">Hottest API-Tracked SKUs</h2>
-                <p class="text-slate-400 text-sm mt-2">These individual products are yielding the highest conversion rates this week across our partner store nodes.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Watch" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Aero Chrono Minimalist</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$89</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By AudioForge</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>4.8</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=400&q=80" alt="Hoodie" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Heavyweight Core Hoodie</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$49</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By EcoEssentials</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>5.0</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=400&q=80" alt="Mug" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Insulated Thermal Vessel</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$24</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By BrewHaven</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>4.6</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="bg-brand-card rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
-                    <img src="https://images.unsplash.com/photo-1579758629938-03607ccdbaba?auto=format&fit=crop&w=400&q=80" alt="Protein" class="w-full h-48 object-cover">
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-base">Organic Superfood Pack</h3>
-                            <span class="text-emerald-400 font-extrabold text-lg">$32</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By PureSnack</span>
-                            <span class="text-amber-400"><i class="fas fa-star mr-1"></i>4.9</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-medium text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="text-center max-w-xl mx-auto mb-14 md:mb-20">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Seamless Pipeline</span>
-                <h2 class="text-3xl font-black text-slate-900 tracking-tight">How the Ecosystem Integrates</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-10 relative">
-                <div class="text-center space-y-4 relative">
-                    <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto shadow-sm text-emerald-600 text-2xl font-bold">
-                        <i class="fas fa-warehouse"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900">1. Brands Plug In</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
-                        Suppliers allocate automated inventory feeds, setting baseline wholesale margins and secure localized shipping thresholds.
-                    </p>
-                </div>
-
-                <div class="text-center space-y-4 relative">
-                    <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto shadow-sm text-indigo-600 text-2xl font-bold">
-                        <i class="fas fa-clone"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900">2. Marketers Duplicate</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
-                        Dropshippers pick curated storefront configurations, establish customized consumer marks, and launch instant ad nodes.
-                    </p>
-                </div>
-
-                <div class="text-center space-y-4 relative">
-                    <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto shadow-sm text-purple-600 text-2xl font-bold">
-                        <i class="fas fa-money-bill-trend-up"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900">3. Automated Splits</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
-                        Orders auto-route directly to the brand for instant fulfilment. Revenue micro-splits immediately arrive into corresponding wallets.
-                    </p>
-                </div>
-            </div>
-
-            <div class="mt-16 md:mt-20 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl md:rounded-3xl p-6 md:p-10 flex flex-col lg:flex-row justify-between items-center gap-6 border border-slate-800 shadow-xl text-white">
-                <div class="space-y-2 text-center lg:text-left">
-                    <div class="inline-block bg-emerald-500/10 text-emerald-400 font-bold text-xs px-3 py-1 rounded-md mb-1">MARKETER INCENTIVE</div>
-                    <h3 class="font-extrabold text-xl md:text-2xl">Retain up to 35% clean margin on standard collections</h3>
-                    <p class="text-slate-400 text-sm max-w-xl">Zero overhead inventory risks. No manual order detail copy-pasting. Focus entirely on your digital distribution networks.</p>
-                </div>
-                <a href="#" class="w-full lg:w-auto text-center bg-emerald-500 hover:bg-emerald-600 text-brand-dark font-extrabold text-sm px-6 py-3.5 rounded-xl whitespace-nowrap transition shadow-lg shadow-emerald-500/10">
-                    Source Digital Inventories →
-                </a>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="text-center max-w-xl mx-auto mb-12 md:mb-16">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest block mb-2">Ecosystem Voice</span>
-                <h2 class="text-3xl font-black text-slate-900 tracking-tight">Validated by Commerce Entities</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-
-                <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex text-amber-500 text-xs gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-slate-600 italic text-sm leading-relaxed">
-                            "CollabMark amplified our manufacturing unit throughput metrics by 58% within sixty calendar days. Relieving our staff from individual customer acquisition logistics let us refine base product excellence."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                        <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold text-sm">SC</div>
-                        <div>
-                            <p class="font-bold text-slate-950 text-sm">Sarah Chen</p>
-                            <p class="text-xs text-slate-400">Managing Director, EcoEssentials</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex text-amber-500 text-xs gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="text-slate-600 italic text-sm leading-relaxed">
-                            "Duplicating pre-configured distribution frameworks saves thousands in web infrastructure deployment overhead. The automated order validation ledger scales fluidly."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                        <div class="w-10 h-10 rounded-full bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-bold text-sm">ML</div>
-                        <div>
-                            <p class="font-bold text-slate-950 text-sm">Marcus Lee</p>
-                            <p class="text-xs text-slate-400">Enterprise Digital Marketer</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex text-amber-500 text-xs gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <p class="text-slate-600 italic text-sm leading-relaxed">
-                            "The unified clearing protocol makes partner coordination stressless. Real-time product state validation prevents negative inventory scenarios entirely."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3.5 pt-6 mt-6 border-t border-slate-100">
-                        <div class="w-10 h-10 rounded-full bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-sm">DO</div>
-                        <div>
-                            <p class="font-bold text-slate-950 text-sm">David Okafor</p>
-                            <p class="text-xs text-slate-400">Principal, BrewHaven Network</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 md:py-28 hero-gradient text-white relative text-center px-4 sm:px-6">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-        <div class="max-w-3xl mx-auto relative z-10 space-y-6">
-            <div class="w-14 h-14 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
-                <i class="fas fa-chart-pie"></i>
-            </div>
-            <h2 class="text-2xl sm:text-4xl font-black tracking-tight leading-[1.2]">
-                Ready to Optimize Your Digital Sales Velocity?
-            </h2>
-            <p class="text-slate-300 text-sm md:text-base max-w-xl mx-auto">
-                Align with hundreds of brand owners and distribution specialists aggregating transaction networks dynamically.
-            </p>
-
-            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4 max-w-md mx-auto sm:max-w-none">
-                <a href="#" class="glow-button bg-emerald-500 text-brand-dark px-8 py-3.5 rounded-xl font-bold text-center transition">
-                    Onboard Your Supply Line
-                </a>
-                <a href="#" class="bg-white/10 hover:bg-white/15 border border-white/10 px-8 py-3.5 rounded-xl font-semibold text-center transition">
-                    Apply As Distributor
-                </a>
-            </div>
-
-            <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 pt-6 text-xs font-medium text-slate-400">
-                <div><i class="fas fa-circle-check text-emerald-400 mr-1.5"></i>No Setup Fees</div>
-                <div><i class="fas fa-circle-check text-emerald-400 mr-1.5"></i>Native Clearing Engine</div>
-                <div><i class="fas fa-circle-check text-emerald-400 mr-1.5"></i>Cancel Anytime</div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-brand-dark text-slate-400 py-12 md:py-16 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-6">
-
-            <div class="sm:col-span-2 space-y-4">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shadow-md">
-                        <i class="fas fa-bolt text-white text-sm"></i>
-                    </div>
-                    <span class="font-bold text-xl text-white tracking-tight">CollabMark</span>
-                </div>
-                <p class="text-sm max-w-xs leading-relaxed text-slate-400">
-                    The next-generation community-powered commerce layer enabling flawless product orchestration and distribution.
-                </p>
-                <div class="flex gap-4 pt-2 text-lg text-slate-500">
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-x-twitter"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-
-            <div>
-                <h4 class="font-semibold text-white text-sm tracking-wider uppercase mb-3.5">Architecture</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Supplier Matrix</a></li>
-                    <li><a href="#" class="hover:text-white transition">Marketer Hub</a></li>
-                    <li><a href="#" class="hover:text-white transition">API Framework</a></li>
-                    <li><a href="#" class="hover:text-white transition">Clearing Protocols</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-semibold text-white text-sm tracking-wider uppercase mb-3.5">Resources</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Documentation</a></li>
-                    <li><a href="#" class="hover:text-white transition">Ecosystem Metrics</a></li>
-                    <li><a href="#" class="hover:text-white transition">Developer Portal</a></li>
-                    <li><a href="#" class="hover:text-white transition">Security Ledger</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-semibold text-white text-sm tracking-wider uppercase mb-3.5">Governance</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="hover:text-white transition">Privacy Architecture</a></li>
-                    <li><a href="#" class="hover:text-white transition">Terms of Protocol</a></li>
-                    <li><a href="#" class="hover:text-white transition">Compliance Node</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 mt-10 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-            <div>© 2026 CollabMark Technologies Inc. All nodes secured.</div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:underline">Ecosystem Status</a>
-                <a href="#" class="hover:underline">Contact Network</a>
-            </div>
-        </div>
-    </footer>
-</main>
-
-<script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuIcon = document.getElementById('menu-icon');
-
-    menuToggle.addEventListener('click', () => {
-        const isOpen = mobileMenu.classList.toggle('open');
-
-        // Swap icons between hamburger and close cross
-        if (isOpen) {
-            menuIcon.classList.remove('fa-bars');
-            menuIcon.classList.add('fa-xmark');
-        } else {
-            menuIcon.classList.remove('fa-xmark');
-            menuIcon.classList.add('fa-bars');
-        }
-    });
-</script>
-</body>
-</html>
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ecosystem Marketplace — Build, Sell, Scale</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            canvas: '#FAFAFB',
-                            dark: '#0B0F19',
-                            cardDark: '#161F30',
-                            primary: '#10B981', /* Emerald */
-                            secondary: '#6366F1', /* Indigo */
-                            accent: '#F59E0B', /* Amber */
-                            muted: '#64748B' /* Slate 500 */
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            background-color: #FAFAFB;
-        }
-
-        /* Reusable Component: Frosted Glass Navigation */
-        .nav-glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
-        /* Reusable Component: Dark Premium Backgrounds */
-        .bg-premium-dark {
-            background: radial-gradient(133.44% 100% at 50% 0%, #1E2640 0%, #0B0F19 100%);
-        }
-
-        /* Reusable Component: Interactive Grid Cards */
-        .card-interactive {
-            background: #FFFFFF;
-            border: 1px solid #F1F5F9;
-            border-radius: 1rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-interactive:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -15px rgba(11, 15, 25, 0.06);
-            border-color: #E2E8F0;
-        }
-
-        /* Reusable Component: Interactive Dark Mode Grid Cards */
-        .card-interactive-dark {
-            background: rgba(22, 31, 48, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .card-interactive-dark:hover {
-            transform: translateY(-5px);
-            background: rgba(22, 31, 48, 0.9);
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        /* Reusable Component: Buttons */
-        .btn-primary {
-            background-color: #10B981;
-            color: #0B0F19;
-            font-weight: 700;
-            border-radius: 0.75rem;
-            transition: all 0.2s ease;
-        }
-        .btn-primary:hover {
-            background-color: #059669;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background-color: #FFFFFF;
-            color: #1E293B;
-            font-weight: 600;
-            border: 1px solid #E2E8F0;
-            border-radius: 0.75rem;
-            transition: all 0.2s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #F8FAFC;
-            border-color: #CBD5E1;
-        }
-
-        /* Responsive Mobile Menu Animation Rules */
-        #mobile-menu {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-        }
-        #mobile-menu.open {
-            max-height: 500px;
-            opacity: 1;
-        }
-    </style>
-</head>
-<body class="antialiased text-slate-900 font-sans">
-
-<nav class="nav-glass border-b border-slate-100 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex items-center justify-between">
-
-            <a href="#" class="flex items-center gap-2.5 group">
-                <div class="w-9 h-9 bg-brand-primary rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition">
-                    <i class="fas fa-cubes text-white text-lg"></i>
-                </div>
-                <span class="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-slate-900 to-emerald-600 bg-clip-text text-transparent">
-            Nexus<span class="text-brand-primary">Hub</span>
-          </span>
-            </a>
-
-            <div class="hidden lg:flex items-center space-x-8 text-[15px] font-semibold text-slate-600">
-                <a href="#" class="text-brand-primary border-b-2 border-brand-primary pb-1">Discover</a>
-                <a href="#" class="hover:text-brand-primary transition-colors pb-1">For Brand Owners</a>
-                <a href="#" class="hover:text-brand-primary transition-colors pb-1">For Dropshippers</a>
-                <a href="#" class="hover:text-brand-primary transition-colors pb-1">Categories</a>
-            </div>
-
-            <div class="hidden sm:flex items-center gap-4">
-                <a href="#" class="text-slate-700 font-semibold text-[15px] hover:text-brand-primary transition">Log In</a>
-                <a href="#" class="bg-slate-900 hover:bg-slate-800 text-white text-[14px] font-bold px-5 py-2.5 rounded-xl transition flex items-center gap-2">
-                    Create Store <i class="fas fa-plus text-xs opacity-70"></i>
-                </a>
-            </div>
-
-            <div class="flex lg:hidden items-center">
-                <button id="menu-toggle" class="text-slate-700 hover:text-brand-primary focus:outline-none p-2 rounded-lg transition" aria-label="Toggle Navigation">
-                    <i id="menu-icon" class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="lg:hidden">
-            <div class="pt-4 pb-3 space-y-2 border-t border-slate-100 mt-3">
-                <a href="#" class="block px-3 py-2.5 rounded-xl text-base font-semibold text-brand-primary bg-emerald-50">Discover</a>
-                <a href="#" class="block px-3 py-2.5 rounded-xl text-base font-semibold text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition">For Brand Owners</a>
-                <a href="#" class="block px-3 py-2.5 rounded-xl text-base font-semibold text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition">For Dropshippers</a>
-                <a href="#" class="block px-3 py-2.5 rounded-xl text-base font-semibold text-slate-600 hover:text-brand-primary hover:bg-slate-50 transition">Categories</a>
-
-                <div class="pt-4 border-t border-slate-100 flex flex-col gap-3 sm:hidden">
-                    <a href="#" class="text-center font-semibold text-slate-700 py-2 hover:text-brand-primary transition">Log In</a>
-                    <a href="#" class="bg-slate-900 text-white text-center font-bold py-3 rounded-xl shadow-sm hover:bg-slate-800 transition">
-                        Create Store
-                    </a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</nav>
-
-<main>
-    <section class="relative overflow-hidden bg-premium-dark text-white pt-12 pb-20 md:pt-24 md:pb-32">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-brand-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-
-                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.15] lg:leading-[1.1] tracking-tight">
-                        Build Your Brand. <br>Sell More. <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-teal-300">Scale Through Dropshippers.</span>
-                    </h1>
-                    <p class="text-slate-300 text-base md:text-lg lg:text-xl font-normal max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        Create your online store, showcase your products, grow a community of customers, and let dropshippers sell for you.
-                    </p>
-                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#" class="btn-primary px-8 py-4 text-center flex items-center justify-center gap-3 text-[16px]">
-                            Start Selling Free <i class="fas fa-arrow-right text-sm"></i>
-                        </a>
-                        <a href="#" class="bg-white/10 hover:bg-white/15 border border-white/10 px-8 py-4 rounded-xl font-semibold text-[16px] text-center transition">
-                            Explore Brands
-                        </a>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-6">
-                    <div class="p-6 md:p-8 bg-white/5 rounded-3xl border border-white/10 relative shadow-2xl">
-                        <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none hidden sm:flex">
-                            <i class="fas fa-circle-nodes text-white text-[200px]"></i>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4 relative z-10">
-                            <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-brand-primary/20 text-brand-primary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-user-tie"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">1. Brand Owner</h4>
-                                <p class="text-xs text-slate-400 mt-1">Supplies & Hosts Products</p>
-                            </div>
-                            <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-store"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">2. Shared Store</h4>
-                                <p class="text-xs text-slate-400 mt-1">Ecom Engine Layer</p>
-                            </div>
-                            <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-brand-secondary/20 text-brand-secondary rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-people-arrows"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">3. Dropshippers</h4>
-                                <p class="text-xs text-slate-400 mt-1">Multiplies Global Reach</p>
-                            </div>
-                            <div class="p-5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 text-center sm:text-left">
-                                <div class="w-10 h-10 bg-brand-accent/20 text-brand-accent rounded-xl flex items-center justify-center text-lg mb-3 mx-auto sm:mx-0"><i class="fas fa-users text-sm"></i></div>
-                                <h4 class="font-bold text-white text-sm sm:text-base">4. Happy Customers</h4>
-                                <p class="text-xs text-slate-400 mt-1">Buys Directly Securely</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="py-10 bg-slate-900 border-y border-white/5 relative z-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 text-center divide-x-0 sm:divide-x divide-slate-800">
-                <div>
-                    <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white">5,200+</div>
-                    <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Total Verified Brands</div>
-                </div>
-                <div>
-                    <div class="text-2xl sm:text-3xl md:text-4xl font-black text-brand-primary">120,000+</div>
-                    <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Active Products</div>
-                </div>
-                <div>
-                    <div class="text-2xl sm:text-3xl md:text-4xl font-black text-white">38,000+</div>
-                    <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Completed Orders</div>
-                </div>
-                <div>
-                    <div class="text-2xl sm:text-3xl md:text-4xl font-black text-brand-secondary">2,400+</div>
-                    <div class="text-xs sm:text-sm text-slate-400 font-medium mt-1">Global Dropshippers</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-xl mx-auto mb-14">
-                <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block mb-2">Ecosystem Guide</span>
-                <h2 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Three Pillars. Seamless Workflow.</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="card-interactive p-8 border-t-4 border-t-brand-primary shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-12 h-12 bg-emerald-50 text-brand-primary rounded-xl flex items-center justify-center text-xl mb-6"><i class="fas fa-warehouse"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-4">For Brand Owners</h3>
-                        <ul class="space-y-3 text-slate-600 text-sm">
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-primary text-xs"></i> Create your store easily</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-primary text-xs"></i> Upload unlimited products</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-primary text-xs"></i> Receive automated orders</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="card-interactive p-8 border-t-4 border-t-brand-accent shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-12 h-12 bg-amber-50 text-brand-accent rounded-xl flex items-center justify-center text-xl mb-6"><i class="fas fa-bag-shopping"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-4">For Customers</h3>
-                        <ul class="space-y-3 text-slate-600 text-sm">
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-accent text-xs"></i> Discover premium niche brands</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-accent text-xs"></i> Securely checkout products</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-accent text-xs"></i> Leave real authenticated reviews</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="card-interactive p-8 border-t-4 border-t-brand-secondary shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-12 h-12 bg-indigo-50 text-brand-secondary rounded-xl flex items-center justify-center text-xl mb-6"><i class="fas fa-share-nodes"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-4">For Dropshippers</h3>
-                        <ul class="space-y-3 text-slate-600 text-sm">
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-secondary text-xs"></i> Clone verified stores in 1-click</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-secondary text-xs"></i> Promote premium trend items</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-circle-check text-brand-secondary text-xs"></i> Earn clean split commissions</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 bg-slate-50 border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-10">
-                <div>
-                    <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block mb-1">Top Tier Catalogues</span>
-                    <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Featured Brand Hubs</h2>
-                </div>
-                <a href="#" class="text-brand-primary font-bold text-sm hover:underline flex items-center gap-1.5 self-end sm:self-auto">
-                    View All Verified Brands <i class="fas fa-arrow-right text-xs"></i>
-                </a>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="card-interactive flex flex-col justify-between overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-xl border border-slate-200/50"><i class="fas fa-bolt text-brand-primary"></i></div>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-base leading-tight">EcoLife Labs</h3>
-                                <span class="text-xs text-brand-muted">Sustainable Living</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 text-xs text-slate-500 py-2 border-y border-slate-100/80 mb-4">
-                            <div><i class="fas fa-star text-brand-accent mr-1"></i>4.9</div>
-                            <div><strong class="text-slate-800">142</strong> Products Listed</div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-bold text-xs py-3 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-brand-primary hover:border-emerald-200 transition-all">Visit Store</a>
-                    </div>
-                </div>
-
-                <div class="card-interactive flex flex-col justify-between overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-xl border border-slate-200/50"><i class="fas fa-shirt text-brand-secondary"></i></div>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-base leading-tight">Aura Wear</h3>
-                                <span class="text-xs text-brand-muted">Minimal Apparel</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 text-xs text-slate-500 py-2 border-y border-slate-100/80 mb-4">
-                            <div><i class="fas fa-star text-brand-accent mr-1"></i>5.0</div>
-                            <div><strong class="text-slate-800">89</strong> Products Listed</div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-bold text-xs py-3 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-brand-primary hover:border-emerald-200 transition-all">Visit Store</a>
-                    </div>
-                </div>
-
-                <div class="card-interactive flex flex-col justify-between overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-xl border border-slate-200/50"><i class="fas fa-plug text-indigo-500"></i></div>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-base leading-tight">VoltForge</h3>
-                                <span class="text-xs text-brand-muted">Electronics</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 text-xs text-slate-500 py-2 border-y border-slate-100/80 mb-4">
-                            <div><i class="fas fa-star text-brand-accent mr-1"></i>4.8</div>
-                            <div><strong class="text-slate-800">230</strong> Products Listed</div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-bold text-xs py-3 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-brand-primary hover:border-emerald-200 transition-all">Visit Store</a>
-                    </div>
-                </div>
-
-                <div class="card-interactive flex flex-col justify-between overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-xl border border-slate-200/50"><i class="fas fa-cookie text-amber-600"></i></div>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-base leading-tight">Gourmet Grid</h3>
-                                <span class="text-xs text-brand-muted">Artisanal Food</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-4 text-xs text-slate-500 py-2 border-y border-slate-100/80 mb-4">
-                            <div><i class="fas fa-star text-brand-accent mr-1"></i>4.7</div>
-                            <div><strong class="text-slate-800">64</strong> Products Listed</div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0">
-                        <a href="#" class="block w-full text-center bg-slate-50 text-slate-700 font-bold text-xs py-3 rounded-xl border border-slate-200/60 hover:bg-emerald-50 hover:text-brand-primary hover:border-emerald-200 transition-all">Visit Store</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-xl mx-auto mb-12">
-                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Browse Dynamic Marketplace Niches</h2>
-                <p class="text-sm text-slate-500 mt-2">Filter premium source nodes instant via category matrix maps.</p>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-emerald-50 text-brand-primary rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-shirt"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Fashion</span>
-                </div>
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-indigo-50 text-brand-secondary rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-sparkles"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Beauty</span>
-                </div>
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-laptop text-sm"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Electronics</span>
-                </div>
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-amber-50 text-brand-accent rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-utensils"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Food</span>
-                </div>
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-couch"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Home & Living</span>
-                </div>
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-heart-pulse"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Health</span>
-                </div>
-                <div class="card-interactive p-5 text-center cursor-pointer flex flex-col items-center justify-center gap-2 group">
-                    <div class="w-10 h-10 bg-slate-100 text-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition"><i class="fas fa-handshake"></i></div>
-                    <span class="text-xs font-bold text-slate-800">Services</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-slate-50 border-y border-slate-200/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-xl mx-auto mb-14">
-                <span class="text-brand-secondary font-bold text-xs uppercase tracking-widest block mb-2">Unfair Advantages</span>
-                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">The Core Optimization Platform</h2>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-emerald-50 text-brand-primary rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-window-restore"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Online Store</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Instantly spawn fast-loading storefront designs optimized for search indexes natively.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-indigo-50 text-brand-secondary rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-hubspot"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Dropshipping Network</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Let thousands of hyper-focused digital marketers scale transaction volumes for your lines.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-amber-50 text-brand-accent rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-comment-nodes"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Reviews & Trust</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Aggregate customer ratings automatically to boost social proof across distributed pages.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-tags"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Sales Campaigns</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Deploy smart coupon splits and time-boxed discount sequences with absolute fluidity.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-chart-pie"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Analytics</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Track metrics across margins, distribution funnels, and store nodes inside a clean layout.</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-10 h-10 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center text-base shrink-0"><i class="fas fa-sliders"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Customer Management</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed">Synchronize dispatch coordinates and multi-party payment settlement rules seamlessly.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-slate-900 text-white relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-xl mx-auto mb-12">
-                <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block mb-1">Trending Aggregates</span>
-                <h2 class="text-2xl md:text-3xl font-black tracking-tight">Top High-Velocity Products</h2>
-                <p class="text-sm text-slate-400 mt-2">Source individual high-margin items currently performing across nodes.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-slate-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-slate-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Minimalist Leather Chronograph</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$89</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By VoltForge</span>
-                            <span class="text-brand-accent"><i class="fas fa-star mr-1"></i>4.9</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-slate-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-slate-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Heavyweight Organic Hoodie</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$65</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By Aura Wear</span>
-                            <span class="text-brand-accent"><i class="fas fa-star mr-1"></i>5.0</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-slate-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-slate-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Sonic-Blast ANC Headset</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$120</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By VoltForge</span>
-                            <span class="text-brand-accent"><i class="fas fa-star mr-1"></i>4.7</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-
-                <div class="card-interactive-dark flex flex-col justify-between overflow-hidden group">
-                    <div class="relative overflow-hidden aspect-video bg-slate-800">
-                        <div class="absolute inset-0 flex items-center justify-center text-slate-600"><i class="far fa-image text-3xl"></i></div>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <div class="flex justify-between items-start gap-2">
-                            <h3 class="font-bold text-white text-sm line-clamp-1 group-hover:text-brand-primary transition">Matte Thermal Mug Array</h3>
-                            <span class="text-brand-primary font-extrabold text-base">$28</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs text-slate-400">
-                            <span>By EcoLife Labs</span>
-                            <span class="text-brand-accent"><i class="fas fa-star mr-1"></i>4.8</span>
-                        </div>
-                        <button class="w-full bg-white/5 hover:bg-white/10 text-white font-semibold text-xs py-2.5 rounded-xl border border-white/10 transition">Push To Your Store</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-            <span class="text-brand-primary font-bold text-xs uppercase tracking-widest block">Social Validation</span>
-            <div class="text-brand-accent text-2xl flex justify-center gap-1"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-            <blockquote class="text-xl sm:text-2xl font-medium text-slate-800 italic leading-relaxed">
-                "We increased sales by 40% after allowing dropshippers to sell our products. The single ledger split-settlement system completely streamlined our logistics management operational stress."
-            </blockquote>
-            <div class="pt-2">
-                <div class="font-extrabold text-slate-950 text-base">Sarah Jenkins</div>
-                <div class="text-xs text-brand-muted font-medium mt-0.5">Founder & CEO, Aura Wear Premium</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-24 bg-slate-50 border-t border-slate-200/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 md:p-12 text-white border border-slate-700/50 shadow-xl relative overflow-hidden">
-                <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-brand-secondary/10 rounded-full blur-[80px] pointer-events-none"></div>
-
-                <div class="grid lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-5 space-y-4 text-center lg:text-left">
-                        <span class="bg-brand-secondary/20 text-brand-secondary border border-brand-secondary/30 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">High Margin Program</span>
-                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight">Become a Network Dropshipper</h2>
-                        <p class="text-slate-300 text-sm md:text-base max-w-sm mx-auto lg:mx-0">Skip manufacturing complexities entirely. Tap straight into pre-vetted active enterprise supply inventories immediately.</p>
-                        <div class="pt-2">
-                            <a href="#" class="inline-block bg-brand-secondary text-white font-bold text-sm px-6 py-3.5 rounded-xl hover:bg-indigo-600 transition shadow-lg shadow-indigo-500/20">Start Dropshipping</a>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-7 grid sm:grid-cols-5 gap-4 text-center sm:text-left">
-                        <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
-                            <div class="font-black text-brand-secondary text-xl">01</div>
-                            <h4 class="font-bold text-white text-xs">Join Nodes</h4>
-                        </div>
-                        <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
-                            <div class="font-black text-brand-secondary text-xl">02</div>
-                            <h4 class="font-bold text-white text-xs">Find Brands</h4>
-                        </div>
-                        <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
-                            <div class="font-black text-brand-secondary text-xl">03</div>
-                            <h4 class="font-bold text-white text-xs">Clone Store</h4>
-                        </div>
-                        <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
-                            <div class="font-black text-brand-secondary text-xl">04</div>
-                            <h4 class="font-bold text-white text-xs">Start Selling</h4>
-                        </div>
-                        <div class="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
-                            <div class="font-black text-brand-primary text-xl">05</div>
-                            <h4 class="font-bold text-white text-xs">Earn Profit</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-20 md:py-28 bg-premium-dark text-white text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-        <div class="max-w-2xl mx-auto px-4 relative z-10 space-y-6">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">Ready to Grow Your Business?</h2>
-            <p class="text-slate-300 text-sm md:text-base max-w-md mx-auto">Create your store in minutes and start configuring your distribution network today.</p>
-
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
-                <a href="#" class="btn-primary px-8 py-3.5 w-full sm:w-auto text-center text-sm">Create Store</a>
-                <a href="#" class="bg-white/10 hover:bg-white/15 text-white font-semibold border border-white/10 px-8 py-3.5 rounded-xl w-full sm:w-auto text-center transition text-sm">Explore Brands</a>
-            </div>
-        </div>
-    </section>
-</main>
-
-<footer class="bg-brand-dark text-slate-500 py-12 border-t border-white/5 text-xs text-center sm:text-left">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div>© 2026 NexusHub Inc. Reusable ecosystem boilerplate framework architecture. All elements secured.</div>
-        <div class="flex gap-6 font-medium text-slate-400">
-            <a href="#" class="hover:text-brand-primary transition">Privacy Engine</a>
-            <a href="#" class="hover:text-brand-primary transition">Terms of Node Protocol</a>
-        </div>
-    </div>
-</footer>
-
-<script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuIcon = document.getElementById('menu-icon');
-
-    menuToggle.addEventListener('click', () => {
-        const isDrawerOpen = mobileMenu.classList.toggle('open');
-
-        // Transform hamburger layout gracefully between structural states
-        if (isDrawerOpen) {
-            menuIcon.classList.replace('fa-bars', 'fa-xmark');
-        } else {
-            menuIcon.classList.replace('fa-xmark', 'fa-bars');
-        }
-    });
-</script>
-</body>
-</html>
+        </section>
+    </div></main><footer class="w-full bg-surface-cream border-t border-border-hairline"><div class="max-w-7xl mx-auto px-gutter pt-space-xl pb-12"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-space-xl border-b border-border-hairline"><div class="lg:col-span-4 space-y-4"><div class="flex items-center gap-3"><img alt="KING'S Brand Mark" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WFCm2z9grh5IHez_cEmETAY8nPHaxXS_O-Bk5YHlAmmLRQtUvyBgVrAJCQzjQHGB3jr9xN1XGKMxIliukftNaHAbyp3h-VeRyCxPmwJT3SfBYHkscl8tTPSk1GEKzGfY8DImPmljDPyj_axS2LwlHfhr-I4eMPZ6RuZMeJsGzNyF5o3zkzsq1lEVHPuKc4C74-HRYjWqUWB0YRIujtQdStTjVYbPgqwqm_SLt39yINIQ"/><span class="font-headline-sm text-headline-sm font-bold tracking-tight text-on-surface">KING'S</span></div><p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface-variant italic max-w-sm">More Than a Marketplace. An Ecosystem for Real Business Growth.</p><div class="pt-2"><div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-subtle border border-border-hairline"><span class="w-2 h-2 rounded-full bg-status-success"></span><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface font-semibold">Operating Hub • Lagos, NG</span></div></div></div><div class="lg:col-span-2 space-y-3"><div class="font-label-sm text-label-sm uppercase tracking-widest text-text-muted font-bold">Explore</div><ul class="space-y-2.5"><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#">Home</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="brands" href="#">Brands</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sales" href="#">Sales</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="features" href="#">Features</a></li></ul></div><div class="lg:col-span-3 space-y-3"><div class="font-label-sm text-label-sm uppercase tracking-widest text-text-muted font-bold">Ecosystem</div><ul class="space-y-2.5"><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="for-brand-owners" href="#">For Brand Owners</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="for-sales-partners" href="#">For Sales Partners</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="for-customers" href="#">For Customers</a></li></ul></div><div class="lg:col-span-3 space-y-3"><div class="font-label-sm text-label-sm uppercase tracking-widest text-text-muted font-bold">Support &amp; Legal</div><ul class="space-y-2.5"><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="contact" href="#">Contact</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacy-policy" href="#">Privacy Policy</a></li><li role="none"><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="terms-of-service" href="#">Terms of Service</a></li></ul><div class="pt-4"><div class="flex items-center gap-2"><span class="font-label-sm text-label-sm text-text-muted">Settlement Currency:</span><div class="inline-flex items-center px-2 py-1 bg-surface-subtle border border-border-hairline rounded"><span class="font-label-md text-label-md font-bold text-on-surface">₦ NGN</span></div></div></div></div></div><div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4"><p class="font-body-sm text-body-sm text-text-muted">© 2025 KING'S (knkings.com). All rights reserved. Pan-African Commercial Infrastructure.</p><div class="flex items-center gap-6"><a class="font-body-sm text-body-sm text-text-muted hover:text-on-surface transition-colors" data-path="privacy-policy" href="#">Privacy</a><a class="font-body-sm text-body-sm text-text-muted hover:text-on-surface transition-colors" data-path="terms-of-service" href="#">Terms</a><a class="font-body-sm text-body-sm text-text-muted hover:text-on-surface transition-colors" data-path="contact" href="#">Compliance</a></div></div></div></footer></body></html>

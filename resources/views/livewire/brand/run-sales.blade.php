@@ -4,157 +4,209 @@
     <flux:heading class="sr-only">{{ __('Create Sales Campaign') }}</flux:heading>
 
     <x-brands.sales :heading="__('Create Sales Campaign')" :subheading="__('Set up a new sales campaign for your products')">
-        @if($activeSale)
+        @php
+            $sale = $activeSale ?? $selectedSale;
+
+            $isLive = $sale?->is_active && $sale?->ongoing;
+            $isScheduled = $sale?->is_active
+                && $sale?->starts_at?->isFuture();
+
+            $saleStatus = match (true) {
+                $isLive => [
+                    'title' => 'Sale is Live!',
+                    'icon' => 'clock',
+                    'color' => 'green',
+                ],
+                $isScheduled => [
+                    'title' => 'Sale Scheduled',
+                    'icon' => 'clock',
+                    'color' => 'yellow',
+                ],
+                default => [
+                    'title' => 'Sale is Inactive',
+                    'icon' => 'pause',
+                    'color' => 'gray',
+                ],
+            };
+
+            $isActive = (bool) $sale?->is_active;
+        @endphp
+
+        @if($sale)
             <flux:callout
-                icon="{{ $activeSale->is_active && $activeSale->ongoing ? 'clock' : ($activeSale->is_active && $activeSale->starts_at > now() ? 'clock' : 'pause') }}"
+                icon="{{ $saleStatus['icon'] }}"
+                color="{{ $saleStatus['color'] }}"
                 class="mb-6 transition-all duration-300"
-                color="{{ $activeSale->is_active && $activeSale->ongoing ? 'green' : ($activeSale->is_active && $activeSale->starts_at > now() ? 'yellow' : 'gray') }}"
             >
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
+
+                    {{-- Sale Information --}}
                     <div class="flex-1">
                         <flux:callout.heading>
                             <strong class="text-[1rem]">
-                                @if($activeSale->is_active && $activeSale->ongoing)
-                                    Sale is Live!
-                                @elseif($activeSale->is_active && $activeSale->starts_at > now())
-                                    Sale Scheduled
-                                @else
-                                    Sale is Inactive
-                                @endif
+                                {{ $saleStatus['title'] }}
                             </strong>
                         </flux:callout.heading>
+
                         <flux:callout.text class="mt-1">
-                            @if($activeSale->is_active && $activeSale->ongoing)
-                                Your sale "{{ $activeSale->name }}" is currently running.
-                                {{ $activeSale->discount_type === 'percentage' ? $activeSale->discount_value . '% off' : '$' . number_format($activeSale->discount_value, 2) . ' off' }}.
-                                Ends {{ $activeSale->ends_at->diffForHumans() }}.
-                            @elseif($activeSale->is_active && $activeSale->starts_at > now())
-                                Your sale "{{ $activeSale->name }}" is scheduled to start
-                                {{ $activeSale->starts_at->diffForHumans() }}.
+                            @if($isLive)
+                                Your sale "{{ $sale->name }}" is currently running.
+                                {{ $sale->discount_type === 'percentage'
+                                    ? $sale->discount_value . '% off'
+                                    : '$' . number_format($sale->discount_value, 2) . ' off'
+                                }}.
+                                Ends {{ $sale->ends_at->diffForHumans() }}.
+
+                            @elseif($isScheduled)
+                                Your sale "{{ $sale->name }}" is scheduled to start
+                                {{ $sale->starts_at->diffForHumans() }}.
                                 It will automatically become active at that time.
+
                             @else
-                                Your sale "{{ $activeSale->name }}" is currently inactive.
+                                Your sale "{{ $sale->name }}" is currently inactive.
                                 Toggle the switch below to activate it and start offering discounts.
                             @endif
                         </flux:callout.text>
                     </div>
 
-                    {{-- Toggle Switch inside Callout --}}
+                    {{-- Status Switch --}}
                     <div class="flex items-center gap-3 shrink-0">
-                    <span class="text-xs font-medium {{ !$activeSale->is_active ? 'text-gray-500' : 'text-orange-600' }}">
-                        {{ $activeSale->is_active ? 'Active' : 'Inactive' }}
-                    </span>
 
-                        <button
-                            wire:click="toggleSaleStatus"
-                            wire:loading.attr="disabled"
-                            type="button"
-                            class="
+                        <span class="text-xs font-medium {{ $isActive ? 'text-orange-600' : 'text-gray-500' }}">
+                            {{ $isActive ? 'Active' : 'Inactive' }}
+                        </span>
+
+                        <div x-data="{ showStatusModal: false }">
+
+                            <button
+                                @click="showStatusModal = true"
+                                type="button"
+                                class="
                             relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full
                             border-2 border-transparent transition-colors duration-300 ease-in-out
                             focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
                             dark:focus:ring-offset-gray-900
-                            {{ $activeSale->is_active ? 'bg-orange-600' : 'bg-gray-300 dark:bg-gray-600' }}
+                            {{ $isActive ? 'bg-orange-600' : 'bg-gray-300 dark:bg-gray-600' }}
                         "
-                            role="switch"
-                            aria-checked="{{ $activeSale->is_active ? 'true' : 'false' }}"
-                        >
+                                role="switch"
+                                aria-checked="{{ $isActive ? 'true' : 'false' }}"
+                                aria-label="Toggle sale status"
+                            >
                         <span
                             aria-hidden="true"
                             class="
                                 pointer-events-none inline-block h-6 w-6 transform rounded-full
                                 bg-white shadow-lg ring-0 transition duration-300 ease-in-out
                                 flex items-center justify-center
-                                {{ $activeSale->is_active ? 'translate-x-5' : 'translate-x-0' }}
+                                {{ $isActive ? 'translate-x-5' : 'translate-x-0' }}
                             "
-                        >
-                        </span>
-                        </button>
+                        ></span>
+                            </button>
+
+                            {{-- Confirmation Modal --}}
+                            <div
+                                x-show="showStatusModal"
+                                x-cloak
+                                x-transition.opacity
+                                @keydown.escape.window="showStatusModal = false"
+                                class="fixed inset-0 bg-black/70 flex items-center justify-center p-4"
+                                style="z-index: 50;"
+                            >
+                                <div
+                                    @click.outside="showStatusModal = false"
+                                    x-transition
+                                    class="bg-[#27272a] rounded-xl shadow-xl max-w-md w-full p-6"
+                                >
+                                    <div class="space-y-4">
+
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex items-center justify-center size-10 rounded-full
+                                        {{ $isActive ? 'bg-red-500/10 text-red-400' : 'bg-orange-500/10 text-orange-400' }}">
+
+                                                <flux:icon
+                                                    name="{{ $isActive ? 'pause-circle' : 'play-circle' }}"
+                                                    class="size-6"
+                                                />
+                                            </div>
+
+                                            <h3 class="text-lg font-semibold text-white">
+                                                {{ $isActive ? 'Deactivate Sale?' : 'Activate Sale?' }}
+                                            </h3>
+                                        </div>
+
+                                        <p class="text-sm text-gray-300 leading-relaxed">
+                                            @if($isActive)
+                                                Are you sure you want to deactivate
+                                                <span class="font-semibold text-white">{{ $sale->name }}</span>?
+                                                Customers will no longer be able to access this sale.
+                                            @else
+                                                Are you sure you want to activate
+                                                <span class="font-semibold text-white">{{ $sale->name }}</span>?
+                                                Your sale will become available according to its scheduled dates.
+                                            @endif
+                                        </p>
+
+                                        <div class="flex justify-end items-center gap-2 pt-2">
+
+                                            <flux:button
+                                                type="button"
+                                                variant="subtle"
+                                                size="sm"
+                                                @click="showStatusModal = false"
+                                            >
+                                                Cancel
+                                            </flux:button>
+
+                                            <flux:button
+                                                type="button"
+                                                size="sm"
+                                                variant="{{ $isActive ? 'danger' : 'primary' }}"
+                                                wire:click="toggleSaleStatus"
+                                                wire:loading.attr="disabled"
+                                                wire:target="toggleSaleStatus"
+                                                @click="showStatusModal = false"
+                                            >
+                                                <flux:icon.loading
+                                                    wire:loading
+                                                    wire:target="toggleSaleStatus"
+                                                />
+
+                                                <span wire:loading.remove wire:target="toggleSaleStatus">
+                                            {{ $isActive ? 'Deactivate Sale' : 'Activate Sale' }}
+                                        </span>
+                                            </flux:button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         {{-- Loading Indicator --}}
                         <div wire:loading wire:target="toggleSaleStatus" class="ml-2">
-                            <svg class="animate-spin h-4 w-4 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <svg
+                                class="animate-spin h-4 w-4 text-orange-600"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    class="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    stroke-width="4"
+                                ></circle>
+
+                                <path
+                                    class="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l-2.647z"
+                                ></path>
                             </svg>
                         </div>
-                    </div>
-                </div>
-            </flux:callout>
-            @elseif($selectedSale)
-            <flux:callout
-                icon="{{ $selectedSale->is_active && $selectedSale->ongoing ? 'clock' : ($selectedSale->is_active && $selectedSale->starts_at > now() ? 'clock' : 'pause') }}"
-                class="mb-6 transition-all duration-300"
-                color="{{ $selectedSale->is_active && $selectedSale->ongoing ? 'green' : ($selectedSale->is_active && $selectedSale->starts_at > now() ? 'yellow' : 'gray') }}"
-            >
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
-                    <div class="flex-1">
-                        <flux:callout.heading>
-                            <strong class="text-[1rem]">
-                                @if($selectedSale->is_active && $selectedSale->ongoing)
-                                    Sale is Live!
-                                @elseif($selectedSale->is_active && $selectedSale->starts_at > now())
-                                    Sale Scheduled
-                                @else
-                                    Sale is Inactive
-                                @endif
-                            </strong>
-                        </flux:callout.heading>
-                        <flux:callout.text class="mt-1">
-                            @if($selectedSale->is_active && $selectedSale->ongoing)
-                                Your sale "{{ $selectedSale->name }}" is currently running.
-                                {{ $selectedSale->discount_type === 'percentage' ? $selectedSale->discount_value . '% off' : '$' . number_format($selectedSale->discount_value, 2) . ' off' }}.
-                                Ends {{ $selectedSale->ends_at->diffForHumans() }}.
-                            @elseif($selectedSale->is_active && $selectedSale->starts_at > now())
-                                Your sale "{{ $selectedSale->name }}" is scheduled to start
-                                {{ $selectedSale->starts_at->diffForHumans() }}.
-                                It will automatically become active at that time.
-                            @else
-                                Your sale "{{ $selectedSale->name }}" is currently inactive.
-                                Toggle the switch below to activate it and start offering discounts.
-                            @endif
-                        </flux:callout.text>
-                    </div>
 
-                    {{-- Toggle Switch inside Callout --}}
-                    <div class="flex items-center gap-3 shrink-0">
-                    <span class="text-xs font-medium {{ !$selectedSale->is_active ? 'text-gray-500' : 'text-orange-600' }}">
-                        {{ $selectedSale->is_active ? 'Active' : 'Inactive' }}
-                    </span>
-
-                        <button
-                            wire:click="toggleSaleStatus"
-                            wire:loading.attr="disabled"
-                            type="button"
-                            class="
-                            relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full
-                            border-2 border-transparent transition-colors duration-300 ease-in-out
-                            focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2
-                            dark:focus:ring-offset-gray-900
-                            {{ $selectedSale->is_active ? 'bg-orange-600' : 'bg-gray-300 dark:bg-gray-600' }}
-                        "
-                            role="switch"
-                            aria-checked="{{ $selectedSale->is_active ? 'true' : 'false' }}"
-                        >
-                        <span
-                            aria-hidden="true"
-                            class="
-                                pointer-events-none inline-block h-6 w-6 transform rounded-full
-                                bg-white shadow-lg ring-0 transition duration-300 ease-in-out
-                                flex items-center justify-center
-                                {{ $selectedSale->is_active ? 'translate-x-5' : 'translate-x-0' }}
-                            "
-                        >
-                        </span>
-                        </button>
-
-                        {{-- Loading Indicator --}}
-                        <div wire:loading wire:target="toggleSaleStatus" class="ml-2">
-                            <svg class="animate-spin h-4 w-4 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
                     </div>
                 </div>
             </flux:callout>
@@ -265,6 +317,104 @@
                             @endforeach
                         </flux:select>
                     </div>
+
+                    {{-- Search Tags --}}
+                    <div class="space-y-3">
+
+                        <div class="space-y-1">
+                            <flux:label>Search Tags</flux:label>
+
+                            <p class="text-xs text-zinc-500">
+                                Add words or phrases customers might search for
+                                when looking for this sale.
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-3 space-y-3">
+
+                            {{-- Existing Tags --}}
+                            <div class="flex flex-wrap gap-2">
+
+                                @foreach($tags as $index => $tag)
+                                    <span
+                                        wire:key="sale-tag-{{ $index }}"
+                                        class="inline-flex items-center gap-2 rounded-full
+                                       bg-white
+                                       px-3 py-1.5 text-xs font-medium
+                                       text-black"
+                                    >
+                                        {{ $tag }}
+
+                                        <button
+                                            type="button"
+                                            wire:click="removeTag({{ $index }})"
+                                            wire:loading.attr="disabled"
+                                            class="hover:opacity-60 transition"
+                                            aria-label="Remove {{ $tag }}"
+                                        >
+                                            <flux:icon name="x-mark" class="size-3.5" />
+                                        </button>
+                                    </span>
+                                @endforeach
+
+                            </div>
+
+                            {{-- Tag Input --}}
+                            <div class="flex items-center gap-2">
+
+                                <input
+                                    type="text"
+                                    wire:model="tagInput"
+                                    x-on:keydown="if ($event.key === ',' || $event.key === 'Enter') {
+                                        $event.preventDefault();
+                                        $wire.addTag();
+                                    }"
+                                    maxlength="50"
+                                    placeholder="e.g. Women's bags, Shoes, Clearance..."
+                                    @disabled(count($tags) >= 10)
+                                    class="min-w-0 flex-1 border-0 bg-transparent
+                                       text-sm text-zinc-900 dark:text-white
+                                       outline-none focus:ring-0
+                                       placeholder:text-zinc-400"
+                                />
+
+                                <flux:button
+                                    type="button"
+                                    variant="primary"
+                                    size="sm"
+                                    wire:click="addTag"
+                                    wire:loading.attr="disabled"
+                                    :disabled="count($tags) >= 10"
+                                >
+                                    Add
+                                </flux:button>
+
+                            </div>
+
+                        </div>
+
+                        {{-- Instructions and Counter --}}
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs text-zinc-500">
+                                Press Enter or comma to add a tag.
+                            </p>
+                            <p class="text-xs text-zinc-500">
+                                {{ count($tags) }}/10 tags
+                            </p>
+                        </div>
+                        @error('tags')
+                            <p class="text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+
+                        @error('tagInput')
+                            <p class="text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+
+                        @error('tags.*')
+                            <p class="text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
 
                     <flux:separator />
 

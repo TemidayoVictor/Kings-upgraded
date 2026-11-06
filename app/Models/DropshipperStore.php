@@ -83,14 +83,6 @@ class DropshipperStore extends Model
     }
 
     /**
-     * Get the store's URL
-     */
-    public function getUrlAttribute(): string
-    {
-        return route('dropshipper.store.show', $this->slug);
-    }
-
-    /**
      * Check if store is active
      */
     public function isActive(): bool

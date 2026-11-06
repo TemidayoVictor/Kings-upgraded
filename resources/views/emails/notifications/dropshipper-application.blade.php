@@ -1,66 +1,46 @@
-@component('emails.layouts.layout', ['title' => 'New Dropshipper Application']) <!-- Main Content Panel Frame -->
-    <!-- Top Body Content Panel -->
-    <tr>
-        <td style="padding: 40px 40px 32px 40px;">
+@component('emails.layouts.layout', ['title' => 'New Dropshipper Application'])
 
-            <!-- Context / Action Purpose Identifier Badge -->
-            <table border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
-                <tr>
-                    <td style="background-color: #f0fdf4; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #16a34a; text-transform: uppercase; letter-spacing: 0.5px;">
-                        New Application
-                    </td>
-                </tr>
-            </table>
+    {{-- Context badge (new application) --}}
+    <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="margin:0 0 16px 0;">
+        <tr>
+            <td style="background-color:#e8f5e9; border-radius:999px; padding:5px 12px;">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:3px; background-color:#2e7d32; vertical-align:middle; margin-right:6px;"></span><span style="font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:11px; line-height:14px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#1b5e20; vertical-align:middle;">New Application</span>
+            </td>
+        </tr>
+    </table>
 
-            <!-- Greeting -->
-            <h1 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 500; color: #1a1a1a; letter-spacing: -0.3px;">
-                {{ 'Hello ' . ($emailData['name'] ?? 'there') . ',' }}
-            </h1>
+    {{-- Greeting --}}
+    <h1 style="margin:0 0 16px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:22px; line-height:28px; font-weight:600; letter-spacing:-0.01em; color:#1a1c1c;">
+        Hello {{ $emailData['name'] ?? 'there' }},
+    </h1>
 
-            <!-- Main Message -->
-            <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #555555; font-weight: 400;">
-                A new dropshipper has applied to partner with your brand. You can review their application and decide whether to approve or decline the request.
-            </p>
+    {{-- Body copy --}}
+    <p style="margin:0 0 24px 0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:22px; color:#524439;">
+        A new dropshipper has applied to partner with your brand. You can review their application and decide whether to approve or decline the request.
+    </p>
 
-            <!-- Applicant Highlight Box -->
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #fafafa; border: 1px solid #f0f0f0; border-radius: 10px;">
-                <tr>
-                    <td style="padding: 16px 20px;">
-                        <span style="font-size: 12px; color: #737373; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px;">
-                            Applicant
-                        </span>
+    {{-- Applicant highlight box --}}
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin:0 0 24px 0;">
+        <tr>
+            <td style="background-color:#f9f9f9; border:1px solid #e8e8e8; border-radius:10px; padding:16px 20px;">
+                <span style="display:block; margin-bottom:4px; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:11px; line-height:14px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#737373;">Applicant</span>
+                <span style="display:block; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; font-weight:600; color:#1a1c1c;">{{ $emailData['dropshipper'] }}</span>
+            </td>
+        </tr>
+    </table>
 
-                        <span style="font-size: 15px; font-weight: 600; color: #1a1a1a;">
-                            {{ $emailData['dropshipper'] }}
-                        </span>
-                    </td>
-                </tr>
-            </table>
+    {{-- CTA --}}
+    <table role="presentation" border="0" cellspacing="0" cellpadding="0" width="100%" style="margin:32px 0 24px 0;">
+        <tr>
+            <td align="center" bgcolor="#1a1c1c" style="border-radius:8px;">
+                <a href="{{ $emailData['url'] }}" target="_blank" style="display:block; width:100%; box-sizing:border-box; padding:14px 24px; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; font-weight:600; color:#ffffff; text-decoration:none; text-align:center; border-radius:8px;">Review Application</a>
+            </td>
+        </tr>
+    </table>
 
-            <!-- Call to Action -->
-            <table border="0" cellspacing="0" cellpadding="0" style="margin: 32px 0;">
-                <tr>
-                    <td align="center" style="border-radius: 10px; background-color: #0a0a0a;">
-                        <a href="{{ $emailData['url'] }}" target="_blank" style="display: inline-block; padding: 14px 32px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 10px; letter-spacing: 0.5px;">
-                            Review Application
-                        </a>
-                    </td>
-                </tr>
-            </table>
-
-            <!-- Closing Message -->
-            <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #737373; font-weight: 400;">
-                Please visit your dashboard to review the application and take the appropriate action.
-            </p>
-
-        </td>
-    </tr>
-
-    <!-- Separator line Divider -->
-    <tr>
-        <td style="padding: 0 40px;">
-            <div style="border-top: 1px solid #f0f0f0; height: 1px; line-height: 1px;"></div>
-        </td>
-    </tr>
+    {{-- Closing note --}}
+    <p style="margin:0; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size:12px; line-height:18px; color:#737373;">
+        Please visit your dashboard to review the application and take the appropriate action.
+    </p>
 
 @endcomponent
