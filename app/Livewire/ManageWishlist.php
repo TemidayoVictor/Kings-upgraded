@@ -21,7 +21,7 @@ class ManageWishlist extends Component
 
     public function loadWishlist(): void
     {
-        $this->wishlistItems = Wishlist::with(['product'])
+        $this->wishlistItems = Wishlist::whereHas('product')
             ->where('user_id', auth()->id())
             ->latest()
             ->get();

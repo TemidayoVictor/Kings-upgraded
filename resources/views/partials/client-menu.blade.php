@@ -1,7 +1,7 @@
 <flux:sidebar.nav>
-    <flux:sidebar.item icon="chart-bar" :href="route('client-dashboard')" :current="request()->routeIs('client-dashboard')" wire:navigate>
-        {{ __('Dashboard') }}
-    </flux:sidebar.item>
+{{--    <flux:sidebar.item icon="chart-bar" :href="route('client-dashboard')" :current="request()->routeIs('client-dashboard')" wire:navigate>--}}
+{{--        {{ __('Dashboard') }}--}}
+{{--    </flux:sidebar.item>--}}
 
     <flux:sidebar.group :heading="__('Features')" class="grid">
         <flux:sidebar.item icon="shopping-bag" :href="route('wishlist')" :current="request()->routeIs('wishlist')" wire:navigate>
