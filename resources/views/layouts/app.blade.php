@@ -11,16 +11,8 @@
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
     <style>
         /* ---- Validation error slide-in ---- */
@@ -40,7 +32,7 @@
     </style>
 
     {{-- Vite (compiled app CSS) --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/css/app.css')
 
     {{--
         @fluxAppearance is intentionally OMITTED here.
@@ -53,27 +45,10 @@
 
     <style>
         @layer base {
-            html,
-            body {
-                width: 100%;
-                min-height: 100%;
-                margin: 0;
-                padding: 0;
-                font-family: 'Outfit', sans-serif;
-            }
-
-            body {
-                overscroll-behavior: none;
-                background-color: #17130f;
-            }
-
-            .pb-safe {
-                padding-bottom: env(safe-area-inset-bottom, 0px);
-            }
-
-            .pt-safe {
-                padding-top: env(safe-area-inset-top, 0px);
-            }
+            html, body { width: 100%; min-height: 100%; margin: 0; padding: 0; }
+            body { overscroll-behavior: none; background-color: #17130f; }
+            .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+            .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
         }
         ::-webkit-scrollbar { display: none; }
         .material-symbols-outlined {
