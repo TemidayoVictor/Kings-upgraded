@@ -11,7 +11,16 @@
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet"
+    >
 
     <style>
         /* ---- Validation error slide-in ---- */
@@ -102,16 +111,18 @@
                         "margin-mobile": "1.25rem"
                     },
                     fontFamily: {
-                        "display-lg": ["Outfit"],
-                        "label-lg": ["Outfit"],
-                        "label-sm": ["Outfit"],
-                        "label-md": ["Outfit"],
-                        "body-sm": ["Outfit"],
-                        "body-md": ["Outfit"],
-                        "body-lg": ["Outfit"],
-                        "headline-lg": ["Outfit"],
-                        "headline-sm": ["Outfit"],
-                        "headline-md": ["Outfit"]
+                        sans: ["Outfit", "sans-serif"],
+
+                        "display-lg": ["Outfit", "sans-serif"],
+                        "label-lg": ["Outfit", "sans-serif"],
+                        "label-sm": ["Outfit", "sans-serif"],
+                        "label-md": ["Outfit", "sans-serif"],
+                        "body-sm": ["Outfit", "sans-serif"],
+                        "body-md": ["Outfit", "sans-serif"],
+                        "body-lg": ["Outfit", "sans-serif"],
+                        "headline-lg": ["Outfit", "sans-serif"],
+                        "headline-sm": ["Outfit", "sans-serif"],
+                        "headline-md": ["Outfit", "sans-serif"]
                     },
                     fontSize: {
                         "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.03em", fontWeight: "600" }],
@@ -132,10 +143,27 @@
 
     <style>
         @layer base {
-            html, body { width: 100%; min-height: 100%; margin: 0; padding: 0; }
-            body { overscroll-behavior: none; background-color: #17130f; }
-            .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
-            .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+            html,
+            body {
+                width: 100%;
+                min-height: 100%;
+                margin: 0;
+                padding: 0;
+                font-family: 'Outfit', sans-serif;
+            }
+
+            body {
+                overscroll-behavior: none;
+                background-color: #17130f;
+            }
+
+            .pb-safe {
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+
+            .pt-safe {
+                padding-top: env(safe-area-inset-top, 0px);
+            }
         }
         ::-webkit-scrollbar { display: none; }
         .material-symbols-outlined {
