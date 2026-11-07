@@ -123,11 +123,13 @@ class RevenueAnalyticsService
      */
     public static function getTopProducts($brandId, $startDate, $endDate, $limit = 10): Collection
     {
-        return OrderItem::with('product')->whereHas('order', function ($query) use ($brandId, $startDate, $endDate) {
-            $query->where('brand_id', $brandId)
-                ->where('status', '!=', 'cancelled')
-                ->whereBetween('created_at', [$startDate, $endDate]);
-        })
+        return OrderItem::with('product.images')
+            ->whereHas('product')
+            ->whereHas('order', function ($query) use ($brandId, $startDate, $endDate) {
+                $query->where('brand_id', $brandId)
+                    ->where('status', '!=', 'cancelled')
+                    ->whereBetween('created_at', [$startDate, $endDate]);
+            })
             ->select([
                 'product_id',
                 'product_name',

@@ -303,7 +303,10 @@ class Index extends Component
     private function authorizeOrderAccess($order): void
     {
         $user = auth()->user();
-        if ((! $user->brand && $order->brand_id !== $user->brand->id) || (! $this->admin)) {
+        if (
+            ! $this->admin &&
+            (! $user->brand || $order->brand_id !== $user->brand->id)
+        ) {
             abort(403);
         }
     }

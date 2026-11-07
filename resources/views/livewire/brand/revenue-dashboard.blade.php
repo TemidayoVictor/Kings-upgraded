@@ -62,6 +62,22 @@
 
     <!-- Main Content Area - Chart + Revenue Summary -->
     <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-700 bg-[#3d3d40]">
+        {{-- Date Range Loading Overlay --}}
+        <div wire:loading.flex
+             wire:target="dateRange,startDate,endDate"
+             class="absolute inset-0 z-50 items-center justify-center bg-[#1a1a1d]/70 backdrop-blur-[2px] rounded-xl">
+            <div class="flex flex-col items-center gap-3">
+                <div class="relative flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full border-4 border-[#e9a35d]/20 border-t-[#e9a35d] animate-spin"></div>
+                    <div class="absolute w-2 h-2 rounded-full bg-[#e9a35d]"></div>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-sm font-semibold text-white">Updating Revenue</p>
+                    <p class="text-xs text-gray-400 mt-1">Please wait while we fetch your data...</p>
+                </div>
+            </div>
+        </div>
         <div class="p-4 sm:p-6">
             <!-- Date Range Selector -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
@@ -82,9 +98,37 @@
                     </select>
 
                     @if($dateRange === 'custom')
-                        <div class="flex gap-2">
-                            <input type="date" wire:model.live="startDate" class="bg-[#2a2a2e] text-white rounded-lg border border-neutral-600 px-3 py-2 text-sm">
-                            <input type="date" wire:model.live="endDate" class="bg-[#2a2a2e] text-white rounded-lg border border-neutral-600 px-3 py-2 text-sm">
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input
+                                type="date"
+                                wire:model="startDate"
+                                max="{{ now()->format('Y-m-d') }}"
+                                class="bg-[#2a2a2e] text-white rounded-lg border border-neutral-600 px-3 py-2 text-sm"
+                            >
+
+                            <input
+                                type="date"
+                                wire:model="endDate"
+                                min="{{ $startDate ? \Carbon\Carbon::parse($startDate)->format('Y-m-d') : '' }}"
+                                max="{{ now()->format('Y-m-d') }}"
+                                class="bg-[#2a2a2e] text-white rounded-lg border border-neutral-600 px-3 py-2 text-sm"
+                            >
+
+                            <button
+                                type="button"
+                                wire:click="applyDateRange"
+                                wire:loading.attr="disabled"
+                                wire:target="applyDateRange"
+                                class="px-4 py-2 rounded-lg bg-[#e9a35d] text-[#1a1612] text-sm font-semibold hover:bg-[#d9934c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                            >
+                                <span wire:loading.remove wire:target="applyDateRange">
+                                    Apply
+                                </span>
+
+                                <span wire:loading wire:target="applyDateRange">
+                                    Applying...
+                                </span>
+                            </button>
                         </div>
                     @endif
                 </div>
@@ -393,11 +437,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let revenueChart = null;
+        let dailyData = @json($dashboardData['daily_breakdown'] ?? []);
 
         document.addEventListener('livewire:initialized', function () {
             setTimeout(() => updateChart(), 100);
 
-            Livewire.on('dataLoaded', () => {
+            Livewire.on('dataLoaded', (event) => {
+                dailyData = event.dailyData ?? [];
+
                 setTimeout(() => updateChart(), 100);
             });
         });
@@ -414,7 +461,6 @@
 
         function updateChart() {
             const ctx = document.getElementById('revenueChart').getContext('2d');
-            const dailyData = @json($dashboardData['daily_breakdown'] ?? []);
 
             if (revenueChart) {
                 revenueChart.destroy();
@@ -533,8 +579,6 @@
         }
 
         function switchChart(type) {
-            const dailyData = @json($dashboardData['daily_breakdown'] ?? []);
-
             if (revenueChart) {
                 if (type === 'orders') {
                     revenueChart.data.datasets = [{

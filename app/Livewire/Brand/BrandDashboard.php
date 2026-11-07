@@ -59,9 +59,18 @@ class BrandDashboard extends Component
                 $this->endDate = Carbon::now();
                 break;
             case 'custom':
-                // Keep existing custom dates
-                break;
+                return;
         }
+
+        $this->loadData();
+    }
+
+    public function applyDateRange(): void
+    {
+        $this->validate([
+            'startDate' => ['required', 'date'],
+            'endDate' => ['required', 'date', 'after_or_equal:startDate'],
+        ]);
 
         $this->loadData();
     }
@@ -82,6 +91,11 @@ class BrandDashboard extends Component
                 'start_date' => $this->startDate,
                 'end_date' => $this->endDate,
             ]
+        );
+
+        $this->dispatch(
+            'dataLoaded',
+            dailyData: $this->dashboardData['daily_breakdown'] ?? []
         );
     }
 

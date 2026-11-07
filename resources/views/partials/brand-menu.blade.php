@@ -31,23 +31,20 @@
         <flux:sidebar.item icon="user-group" :href="route('brand-approved-dropshippers')" :current="request()->routeIs('brand-pending-applications', 'brand-approved-dropshippers')" wire:navigate>
             {{ __('Manage Dropshippers') }}
         </flux:sidebar.item>
-        <flux:sidebar.item icon="arrow-trending-up" :href="route('brand-revenue-analytics')" :current="request()->routeIs('brand-revenue-analytics')" wire:navigate>
-            {{ __('Revenue Analytics') }}
+{{--        <flux:sidebar.item icon="arrow-trending-up" :href="route('brand-revenue-analytics')" :current="request()->routeIs('brand-revenue-analytics')" wire:navigate>--}}
+{{--            {{ __('Revenue Analytics') }}--}}
+{{--        </flux:sidebar.item>--}}
+        <flux:sidebar.item icon="shopping-bag" :href="route('wishlist')" :current="request()->routeIs('wishlist')" wire:navigate>
+            {{ __('Wishlist') }}
+        </flux:sidebar.item>
+        <flux:sidebar.item icon="clipboard-document-list" :href="route('user-orders', ['user' => 'view'])" :current="request()->routeIs('user-orders')" wire:navigate>
+            {{ __('Orders By You') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 
     <flux:sidebar.group :heading="__('Subscription')" class="grid">
         <flux:sidebar.item icon="arrow-path" :href="route('brand-subscription-status')" :current="request()->routeIs('brand-subscription-status')" wire:navigate>
             {{ __('Subscription Status') }}
-        </flux:sidebar.item>
-    </flux:sidebar.group>
-
-    <flux:sidebar.group :heading="__('Personal')" class="grid">
-        <flux:sidebar.item icon="shopping-bag" :href="route('wishlist')" :current="request()->routeIs('wishlist')" wire:navigate>
-            {{ __('Wishlist') }}
-        </flux:sidebar.item>
-        <flux:sidebar.item icon="clipboard-document-list" :href="route('user-orders', ['user' => 'view'])" :current="request()->routeIs('user-orders')" wire:navigate>
-            {{ __('Orders By You') }}
         </flux:sidebar.item>
     </flux:sidebar.group>
 

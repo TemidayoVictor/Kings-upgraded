@@ -55,8 +55,7 @@ class RevenueDashboard extends Component
                 $this->endDate = Carbon::now();
                 break;
             case 'custom':
-                // Keep existing custom dates
-                break;
+                return;
         }
 
         $this->loadData();
@@ -79,6 +78,21 @@ class RevenueDashboard extends Component
                 'end_date' => $this->endDate,
             ]
         );
+
+        $this->dispatch(
+            'dataLoaded',
+            dailyData: $this->dashboardData['daily_breakdown'] ?? []
+        );
+    }
+
+    public function applyDateRange(): void
+    {
+        $this->validate([
+            'startDate' => ['required', 'date'],
+            'endDate' => ['required', 'date', 'after_or_equal:startDate'],
+        ]);
+
+        $this->loadData();
     }
 
     public function render(): View
