@@ -9,7 +9,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:mt-[2.5rem]">
-                <flux:card size="md" class="!p-6">
+                <flux:card size="md" class="!p-6 !rounded-xl">
                     <flux:icon.building-storefront variant="solid" class="text-[#e9a35d] dark:text-[#e9a35d] mb-2" />
                     <flux:heading size="lg" class="font-bold">Brand Owner</flux:heading>
                     <flux:text class="mt-2 mb-4">
@@ -18,7 +18,7 @@
                     <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('{{App\Enums\UserType::BRAND}}')">Continue as Brand</flux:button>
                 </flux:card>
 
-                <flux:card size="md" class="!p-6">
+                <flux:card size="md" class="!p-6 !rounded-xl">
                     <flux:icon.truck variant="solid" class="text-[#e9a35d] dark:text-[#e9a35d] mb-2" />
                     <flux:heading size="lg">Dropshipper</flux:heading>
                     <flux:text class="mt-2 mb-4">
@@ -28,7 +28,7 @@
                     <flux:button variant="primary" size="sm" class="w-full" wire:click="submit('{{App\Enums\UserType::DROPSHIPPER}}')">Continue as Dropshipper</flux:button>
                 </flux:card>
 
-                <flux:card size="md" class="!p-6">
+                <flux:card size="md" class="!p-6 !rounded-xl">
                     <flux:icon.shopping-bag variant="solid" class="text-[#e9a35d] dark:text-[#e9a35d] mb-2" />
                     <flux:heading size="lg" class="font-bold">Client</flux:heading>
                     <flux:text class="mt-2 mb-4">
