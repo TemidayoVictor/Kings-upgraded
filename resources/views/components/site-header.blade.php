@@ -64,7 +64,7 @@
 <header class="lg:hidden fixed top-0 w-full z-50 pt-safe bg-surface-cream/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]">
     <div class="h-16 px-margin-mobile flex items-center justify-between">
         <div class="flex items-start">
-            <div class="flex flex-col justify-center">
+            <a href="{{ route('home') }}" class="flex flex-col justify-center">
                 <div class="flex items-center">
                     <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl mr-1">
                         <img
@@ -81,7 +81,7 @@
                 <span class="mt-1 text-[0.57rem] font-semibold uppercase leading-none tracking-[0.24em] text-text-muted">
                     Discover. Connect. Grow.
                 </span>
-            </div>
+            </a>
         </div>
         <div class="flex items-center gap-1">
             <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-1">
