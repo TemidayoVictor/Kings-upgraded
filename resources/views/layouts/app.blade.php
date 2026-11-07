@@ -41,13 +41,7 @@
 
     {{-- Vite (compiled app CSS) --}}
     @vite('resources/css/app.css')
-
-    {{--
-        @fluxAppearance is intentionally OMITTED here.
-        This layout forces dark mode. Flux's appearance script can remove the
-        `dark` class based on user preference, which would break the design.
-        Flux components still render dark (they respond to class="dark" on <html>).
-    --}}
+    @fluxAppearance
 
     @livewireStyles
 

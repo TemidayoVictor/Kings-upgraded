@@ -14,8 +14,3 @@
     --font-sans: "Outfit", sans-serif;
     --font-heading: "Space Grotesk", sans-serif;
 }
-
-/* Ensure Flux cards have their expected default spacing */
-[data-flux-card] {
-    padding: 1.5rem;
-}
