@@ -16,9 +16,6 @@
 }
 
 /* Ensure Flux cards have their expected default spacing */
-@layer components {
-    [data-flux-card] {
-        --flux-card-px: calc(var(--spacing) * 6);
-        --flux-card-py: calc(var(--spacing) * 4);
-    }
+[data-flux-card] {
+    padding: 1.5rem;
 }
