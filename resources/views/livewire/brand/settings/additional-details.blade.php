@@ -59,6 +59,25 @@
                         </p>
                     </div>
                     <flux:input label="Brand Motto" wire:model="motto" placeholder="Brand Motto" class="max-full" />
+                    {{-- Social Links Information --}}
+                    <div class="flex items-start gap-3 rounded-lg border border-amber-200/70 bg-amber-50/60 p-3.5 dark:border-amber-900/40 dark:bg-amber-950/20">
+                        <div class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+                            <flux:icon.information-circle class="size-4" />
+                        </div>
+
+                        <div class="min-w-0">
+                            <p class="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                                Social media and website links
+                            </p>
+                            <p class="mt-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+                                Please ensure every link starts with
+                                <span class="font-semibold text-zinc-800 dark:text-zinc-200">https://</span>
+                                or
+                                <span class="font-semibold text-zinc-800 dark:text-zinc-200">http://</span>
+                                to ensure visitors can access your profiles correctly.
+                            </p>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:input label="Instagram" wire:model="instagram" placeholder="@username" />
                         <flux:input label="Tiktok" wire:model="tiktok" placeholder="@username" />
