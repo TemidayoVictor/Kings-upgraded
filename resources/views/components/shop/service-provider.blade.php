@@ -1,57 +1,96 @@
 <div class="pb-20 bg-[var(--surface)]">
 
-    {{-- Editorial Split Hero --}}
-    <section class="max-w-7xl mx-auto px-4 sm:px-8 pt-8">
-        <div class="bg-[var(--surface-low)] rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-center min-h-[520px] relative border border-[var(--outline-variant)]/30 shadow-xs">
-            <div class="absolute inset-0 bg-gradient-to-tr from-white/40 via-transparent to-black/[0.02] pointer-events-none"></div>
+    {{-- ==================== BRAND ACCENT SYSTEM ==================== --}}
+    <style>
+        /* Gradient accent bar — primary to secondary */
+        .brand-accent-bar {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
 
-            {{-- Left: copy --}}
-            <div class="p-8 sm:p-12 lg:p-16 lg:col-span-7 relative z-10 space-y-6 order-2 lg:order-1">
-                <span class="text-[10px] sm:text-xs font-semibold tracking-[0.22em] uppercase text-[var(--on-surface-variant)] block">
-                    {{ $brand->brandSetting->hero_tagline ?? 'Bespoke Consultations & Care' }}
-                </span>
+        /* Safe "brand fill" — darkened mix so white text stays readable */
+        .brand-sale-badge {
+            background: color-mix(in srgb, var(--primary) 85%, #000 15%);
+            color: #ffffff;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+        }
 
-                <h1 class="font-editorial text-4xl sm:text-5xl lg:text-6xl tracking-tight text-[var(--on-surface)] leading-[1.05] uppercase">
-                    {{ $brand->brandSetting->hero_title_line_1 ?? 'Elevate your' }}
-                    <br>
-                    <span class="text-[var(--secondary)] italic normal-case">
-                        {{ $brand->brandSetting->hero_title_line_2_italic ?? 'everyday experience.' }}
-                    </span>
-                </h1>
+        /* Hover fill using brand primary — for buttons */
+        .hover-brand-primary {
+            transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-brand-primary:hover {
+            background-color: color-mix(in srgb, var(--primary) 85%, #000 15%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
 
-                <p class="text-sm sm:text-base text-[var(--on-surface-variant)] max-w-md font-light leading-relaxed">
-                    {{ $brand->brandSetting->hero_description ?? 'Expertly designed sessions, specialized techniques, and personalized attention — crafted seamlessly to match your lifestyle and goals.' }}
+        /* Brand-tinted hover glow for product cards */
+        .brand-card-hover-glow {
+            transition: box-shadow 0.35s ease, transform 0.35s ease;
+        }
+        .brand-card-hover-glow:hover {
+            box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--primary) 35%, transparent);
+        }
+    </style>
+
+    {{-- ==================== SERVICE PROVIDER MASTHEAD ==================== --}}
+    <section class="relative w-full overflow-hidden bg-[var(--surface-low)] px-4 py-12 sm:px-8 sm:py-16">
+
+        {{-- Subtle decorative accents --}}
+        <div class="pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full opacity-[0.07] blur-3xl"
+             style="background: var(--primary);"></div>
+
+        <div class="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full opacity-[0.07] blur-3xl"
+             style="background: var(--secondary);"></div>
+
+        <div class="relative mx-auto flex max-w-7xl flex-col items-center text-center">
+
+            {{-- Provider identity --}}
+            <div class="mb-5 inline-flex max-w-full items-center gap-2 rounded-full bg-[var(--surface)] px-4 py-2 shadow-sm">
+            <span class="h-1.5 w-1.5 shrink-0 rounded-full"
+                  style="background: var(--secondary);"></span>
+
+                <span class="truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--on-surface-variant)]">
+                {{ $brand->brand_name }} · Service Provider
+            </span>
+            </div>
+
+            {{-- Main heading --}}
+            <h1 class="mb-4 max-w-4xl font-editorial text-3xl uppercase leading-tight tracking-tight text-[var(--on-surface)] sm:text-4xl lg:text-5xl">
+                Discover Our Services
+            </h1>
+
+            {{-- Description --}}
+            @if($brand->description)
+                <p class="mb-7 max-w-2xl text-sm font-light leading-relaxed text-[var(--on-surface-variant)] sm:text-base">
+                    {{ strip_tags($brand->description) }}
                 </p>
+            @else
+                <p class="mb-7 max-w-2xl text-sm font-light leading-relaxed text-[var(--on-surface-variant)] sm:text-base">
+                    Explore our range of professional services and find the right solution for your needs.
+                    We're here to help you get started.
+                </p>
+            @endif
 
-                <div class="flex flex-wrap items-center gap-3 pt-2">
-                    <a href="#services-grid"
-                       class="inline-flex items-center gap-2 bg-[var(--on-surface)] text-white text-[11px] font-semibold tracking-widest uppercase px-6 py-3.5 rounded-full hover:bg-[var(--secondary)] transition-all duration-300 shadow-lg">
-                        {{ $brand->brandSetting->hero_button_text ?? 'Explore Services' }}
-                        <i class="fa-solid fa-arrow-right-long text-xs transition-transform group-hover:translate-x-1"></i>
-                    </a>
-                    <a href="{{ route('shop.ratings', $brand) }}"
-                       class="inline-flex items-center gap-2 text-[11px] font-semibold tracking-widest uppercase text-[var(--on-surface-variant)] hover:text-[var(--on-surface)] px-4 py-3.5 transition-colors">
-                        <i class="fa-regular fa-star text-xs"></i>
-                        Read Reviews
-                    </a>
+            {{-- Service assurance --}}
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+
+                <div class="inline-flex items-center gap-2 rounded-full bg-[var(--surface)] px-4 py-2.5 shadow-sm">
+                    <i class="fa-solid fa-handshake text-xs" style="color: var(--secondary);"></i>
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-[var(--on-surface)]">
+                    Professional Service
+                </span>
                 </div>
+
+                <div class="inline-flex items-center gap-2 rounded-full bg-[var(--surface)] px-4 py-2.5 shadow-sm">
+                    <i class="fa-solid fa-calendar-check text-xs" style="color: var(--secondary);"></i>
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-[var(--on-surface)]">
+                    Easy Enquiries
+                </span>
+                </div>
+
             </div>
 
-            {{-- Right: image --}}
-            <div class="block lg:col-span-5 h-64 sm:h-80 lg:h-full relative self-stretch overflow-hidden order-1 lg:order-2">
-                @if($brand->image)
-                    <img src="{{ asset('storage/' . $brand->image) }}"
-                         alt="{{ $brand->brand_name }} service showcase"
-                         class="absolute inset-0 w-full h-full object-cover object-center">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[var(--surface-low)]/30 to-transparent lg:hidden"></div>
-                @else
-                    <div class="absolute inset-0 flex items-center justify-center p-6 sm:p-12 bg-[var(--surface-container)]/40">
-                        <div class="w-full h-full rounded-3xl border border-white/40 bg-gradient-to-b from-white/20 to-transparent backdrop-blur-md shadow-2xl flex items-center justify-center">
-                            <i class="fa-solid fa-concierge-bell text-5xl sm:text-7xl text-[var(--secondary)] opacity-70"></i>
-                        </div>
-                    </div>
-                @endif
-            </div>
         </div>
     </section>
 

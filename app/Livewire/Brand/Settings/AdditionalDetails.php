@@ -6,7 +6,6 @@ use App\Actions\Brand\AdditionalDetailsActions;
 use App\DTOs\Brand\AdditionalDetailsDTO;
 use App\Models\User;
 use App\Traits\Toastable;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -43,13 +42,13 @@ class AdditionalDetails extends Component
         'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048', // 2MB max
         'about' => 'string|nullable',
         'motto' => 'string|nullable',
-        'instagram' => 'string|nullable',
-        'tiktok' => 'string|nullable',
-        'linkedin' => 'string|nullable',
-        'twitter' => 'string|nullable',
-        'facebook' => 'string|nullable',
-        'youtube' => 'string|nullable',
-        'website' => 'string|nullable',
+        'website' => ['nullable', 'url', 'max:2048'],
+        'instagram' => ['nullable', 'url:http,https', 'max:2048'],
+        'facebook' => ['nullable', 'url:http,https', 'max:2048'],
+        'twitter' => ['nullable', 'url:http,https', 'max:2048'],
+        'youtube' => ['nullable', 'url:http,https', 'max:2048'],
+        'tiktok' => ['nullable', 'url:http,https', 'max:2048'],
+        'linkedin' => ['nullable', 'url:http,https', 'max:2048'],
     ];
 
     public function mount(): void

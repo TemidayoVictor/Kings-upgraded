@@ -2,17 +2,16 @@
 
 namespace App\Actions\Brand;
 
-use App\DTOs\Brand\StoreSettingsDTO;
 use App\DTOs\Brand\AdditionalDetailsDTO;
+use App\DTOs\Brand\StoreSettingsDTO;
 use App\Enums\UserType;
-use App\Models\User;
 use App\Models\BrandSetting;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class AdditionalDetailsActions
 {
-
     /**
      * @throws Exception
      */
@@ -46,13 +45,13 @@ class AdditionalDetailsActions
             'image' => $path,
             'about' => $dto->about,
             'motto' => $dto->motto,
-            'instagram' => $dto->instagram,
-            'facebook' => $dto->facebook,
-            'twitter' => $dto->twitter,
-            'youtube' => $dto->youtube,
-            'tiktok' => $dto->tiktok,
-            'linkedin' => $dto->linkedin,
-            'website' => $dto->website,
+            'instagram' => self::normalizeUrl($dto->instagram),
+            'facebook' => self::normalizeUrl($dto->facebook),
+            'twitter' => self::normalizeUrl($dto->twitter),
+            'youtube' => self::normalizeUrl($dto->youtube),
+            'tiktok' => self::normalizeUrl($dto->tiktok),
+            'linkedin' => self::normalizeUrl($dto->linkedin),
+            'website' => self::normalizeUrl($dto->website),
         ]);
 
         return $user;
@@ -87,5 +86,36 @@ class AdditionalDetailsActions
         );
 
         return $user;
+    }
+
+    private static function normalizeUrl(?string $url, ?string $platform = null): ?string
+    {
+        $url = trim($url ?? '');
+
+        if ($url === '') {
+            return null;
+        }
+
+        // Convert social media usernames to profile URLs.
+        if ($platform && str_starts_with($url, '@')) {
+            $username = ltrim($url, '@');
+
+            $domains = [
+                'instagram' => 'https://www.instagram.com/',
+                'twitter' => 'https://x.com/',
+                'tiktok' => 'https://www.tiktok.com/@',
+            ];
+
+            if (isset($domains[$platform])) {
+                return $domains[$platform].$username;
+            }
+        }
+
+        // Add HTTPS when no protocol is supplied.
+        if (! preg_match('/^https?:\/\//i', $url)) {
+            $url = 'https://'.$url;
+        }
+
+        return $url;
     }
 }

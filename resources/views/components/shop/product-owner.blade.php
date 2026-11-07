@@ -281,6 +281,64 @@
         @endif
     </section>
 
+    {{-- ==================== EXPLORE OUR OTHER STORE ==================== --}}
+    @if(filled($brand->website))
+        <section class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+            <div class="relative isolate overflow-hidden rounded-2xl border border-[var(--outline-variant)]/30 bg-[var(--surface-low)]">
+
+                {{-- Decorative brand accents --}}
+                <div class="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full opacity-10 blur-3xl"
+                     style="background: var(--primary);"></div>
+
+                <div class="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full opacity-10 blur-3xl"
+                     style="background: var(--secondary);"></div>
+
+                <div class="relative flex flex-col gap-5 p-5 sm:p-6 md:flex-row md:items-center md:justify-between md:gap-8 lg:p-8">
+
+                    {{-- Store information --}}
+                    <div class="flex min-w-0 items-start gap-3 sm:gap-4">
+
+                        {{-- Store icon --}}
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-sm sm:h-14 sm:w-14 sm:rounded-2xl"
+                             style="background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary);">
+                            <i class="fa-solid fa-store text-lg sm:text-xl"></i>
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                        <span class="mb-1.5 inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.16em] sm:text-[10px] sm:tracking-[0.2em]"
+                              style="color: var(--secondary);">
+                            <span class="h-1.5 w-1.5 shrink-0 rounded-full"
+                                  style="background: var(--secondary);"></span>
+                            More from {{ $brand->brand_name }}
+                        </span>
+
+                            <h3 class="text-base font-semibold leading-snug tracking-tight text-[var(--on-surface)] sm:text-lg md:text-xl">
+                                Discover Our Other Store
+                            </h3>
+
+                            <p class="mt-1 max-w-xl text-xs leading-relaxed text-[var(--on-surface-variant)] sm:text-sm">
+                                There's more to explore! Visit our other store and discover even more products and collections.
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Visit store button --}}
+                    <a href="{{ $brand->website }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="group inline-flex w-full shrink-0 items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 text-[11px] font-semibold uppercase tracking-wider text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 md:w-auto md:min-w-[175px] md:px-6"
+                       style="background: linear-gradient(135deg, var(--primary), var(--secondary));">
+
+                        <span>Visit Our Store</span>
+
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- ==================== ASSURANCE STRIP ==================== --}}
     <section class="w-full bg-[var(--surface-high)] py-12 px-4 sm:px-8">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
