@@ -29,7 +29,69 @@
             {{-- ==================== UPLOAD SECTION ==================== --}}
             <flux:fieldset>
 
-                <div class="space-y-6">
+                <div x-data="{
+                    previewImages: [],
+                    uploadProgress: 0,
+
+                    loadImages(event) {
+                        const selected = Array.from(event.target.files || []);
+
+                        const images = selected.filter(file =>
+                            file.type.startsWith('image/')
+                        );
+
+                        const skipped = selected.length - images.length;
+
+                        if (skipped > 0) {
+                            $wire.addSkippedFiles(skipped);
+                        }
+
+                        // Create local previews immediately.
+                        images.forEach(file => {
+                            this.previewImages.push({
+                                name: file.name,
+                                size: file.size,
+                                url: URL.createObjectURL(file)
+                            });
+                        });
+
+                        // Upload using the existing Livewire method.
+                        if (images.length > 0) {
+                            $wire.uploadMultiple(
+                                'photos',
+                                images,
+                                () => {
+                                    this.uploadProgress = 100;
+                                },
+                                (error) => {
+                                    console.error('Image upload failed:', error);
+                                },
+                                (event) => {
+                                    this.uploadProgress = event.detail.progress;
+                                }
+                            );
+                        }
+
+                        // Allow selecting the same files again.
+                        event.target.value = '';
+                    },
+
+                    clearPreviews() {
+                        this.previewImages.forEach(image => {
+                            URL.revokeObjectURL(image.url);
+                        });
+
+                        this.previewImages = [];
+                        this.uploadProgress = 0;
+                    },
+
+                    destroy() {
+                        this.clearPreviews();
+                    }
+                }"
+                     x-on:catalog-uploaded.window="clearPreviews()"
+                     class="space-y-6"
+                >
 
                     <div>
                         {{-- Multiple file input --}}
@@ -82,39 +144,12 @@
 
                                 <input
                                     id="catalog-upload"
+                                    x-ref="catalogInput"
                                     type="file"
                                     multiple
-                                    accept="image/*,video/*"
+                                    accept="image/*"
                                     class="hidden"
-                                    x-on:change="
-                                        const selected = Array.from($event.target.files || []);
-
-                                        const images = selected.filter(file =>
-                                            file.type.startsWith('image/')
-                                        );
-
-                                        const skipped = selected.length - images.length;
-
-                                        if (skipped > 0) {
-                                            $wire.addSkippedFiles(skipped);
-                                        }
-
-                                        if (images.length > 0) {
-                                            $wire.uploadMultiple(
-                                                'photos',
-                                                images,
-                                                () => {},
-                                                (error) => {
-                                                    console.error(error);
-                                                },
-                                                (event) => {
-                                                    progress = event.detail.progress;
-                                                }
-                                            );
-                                        }
-
-                                        $event.target.value = '';
-                                    "
+                                    x-on:change="loadImages($event)"
                                 />
 
                             </label>
@@ -165,21 +200,26 @@
 
                     </div>
 
-
                     {{-- ==================== SELECTED PHOTOS ==================== --}}
-                    @if ($photos && count($photos) > 0)
-
+                    <template x-if="previewImages.length > 0">
                         <div class="mb-6">
 
                             <div class="flex justify-between items-center mb-3">
 
                                 <flux:subheading>
-                                    Selected Photos ({{ count($photos) }})
+                                    Selected Photos
+                                    (<span x-text="previewImages.length"></span>)
                                 </flux:subheading>
 
                                 <button
                                     type="button"
-                                    wire:click="$set('photos', [])"
+                                    @click="
+                                        clearPreviews();
+                                        $refs.catalogInput.value = '';
+                                        $wire.set('photos', []);
+                                    "
+                                    wire:loading.attr="disabled"
+                                    wire:target="photos"
                                     class="text-sm text-orange-500 hover:text-red-500 transition"
                                 >
                                     Clear all
@@ -187,38 +227,33 @@
 
                             </div>
 
-
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 
-                                @foreach ($photos as $index => $photo)
+                                <template x-for="(photo, index) in previewImages" :key="photo.url">
 
-                                    <div
-                                        class="relative group"
-                                        wire:key="catalog-preview-{{ $index }}"
-                                    >
+                                    <div class="relative group">
 
-                                        {{-- Image Preview --}}
                                         <div class="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-700 group-hover:border-[#e9a35d] transition-all bg-[#3d3d40]">
 
+                                            {{-- Browser-side image preview --}}
                                             <img
-                                                src="{{ $photo->temporaryUrl() }}"
-                                                alt="Preview {{ $index + 1 }}"
+                                                :src="photo.url"
+                                                :alt="'Preview ' + (index + 1)"
                                                 class="w-full h-full object-cover"
                                                 loading="lazy"
-                                            >
+                                            />
 
-                                            {{-- File info overlay --}}
-                                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                            {{-- File information --}}
+                                            <div class="absolute inset-0 bg-black/50 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
 
                                                 <div class="text-white text-xs text-center px-2 break-all">
 
-                                                    <div>
-                                                        {{ $photo->getClientOriginalName() }}
-                                                    </div>
+                                                    <div x-text="photo.name"></div>
 
-                                                    <div class="mt-1">
-                                                        {{ round($photo->getSize() / 1024) }} KB
-                                                    </div>
+                                                    <div
+                                                        class="mt-1"
+                                                        x-text="Math.round(photo.size / 1024) + ' KB'"
+                                                    ></div>
 
                                                 </div>
 
@@ -226,22 +261,24 @@
 
                                         </div>
 
-
                                         {{-- Index badge --}}
-                                        <span class="absolute -top-2 -left-2 bg-white text-black text-xs rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
-                                            {{ $index + 1 }}
-                                        </span>
+                                        <span
+                                            class="absolute -top-2 -left-2 bg-white text-black text-xs rounded-full w-6 h-6 flex items-center justify-center shadow-lg"
+                                            x-text="index + 1"
+                                        ></span>
 
                                     </div>
 
-                                @endforeach
+                                </template>
 
                             </div>
 
-
                             {{-- Upload action --}}
-                            <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-
+                            <div
+                                x-show="previewImages.length > 0"
+                                x-cloak
+                                class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+                            >
                                 <p class="text-xs text-gray-400">
                                     Your selected images will be added to your public catalog.
                                 </p>
@@ -254,27 +291,20 @@
                                     wire:loading.attr="disabled"
                                     wire:target="save,photos"
                                 >
-
-                                    <flux:icon.loading
-                                        wire:loading
-                                        wire:target="save"
-                                    />
+                                    <flux:icon.loading wire:loading wire:target="save" />
 
                                     <span wire:loading.remove wire:target="save">
-                                        Upload {{ count($photos) }} Images
+                                        Upload Images
                                     </span>
 
                                     <span wire:loading wire:target="save">
                                         Processing...
                                     </span>
-
                                 </flux:button>
-
                             </div>
 
                         </div>
-
-                    @endif
+                    </template>
 
 
                     {{-- Skipped files --}}

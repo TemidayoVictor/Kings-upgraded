@@ -67,12 +67,6 @@ class AdditionalDetails extends Component
         $this->website = $user->brand->website;
     }
 
-    public function updatedLogo($logo): void
-    {
-        $this->logo = $logo;
-        $this->currentLogo = '';
-    }
-
     public function submit(): mixed
     {
         $validated = $this->validate();

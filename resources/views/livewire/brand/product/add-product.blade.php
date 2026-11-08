@@ -48,105 +48,180 @@
                 <flux:fieldset>
                     <div class="space-y-6">
                         <div>
-                            <div class="mb-4">
-                                <flux:label>Upload Images (max {{maxImages()}})</flux:label>
 
-                                <!-- Multiple file input -->
-                                <div class="flex items-center justify-center w-full mt-2">
-                                    <label for="images" class="flex flex-col items-center justify-center w-full h-35 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-[#3d3d40]]">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <svg class="w-8 h-8 mb-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            <div
+                                x-data="{
+        previewImages: [],
+
+        loadPreviews(event) {
+            this.clearPreviews();
+
+            this.previewImages = Array.from(event.target.files).map(file => ({
+                name: file.name,
+                size: file.size,
+                url: URL.createObjectURL(file)
+            }));
+        },
+
+        removePreview(index) {
+            const image = this.previewImages[index];
+
+            if (image) {
+                URL.revokeObjectURL(image.url);
+            }
+
+            this.previewImages.splice(index, 1);
+
+            // Keep Livewire's images array in sync.
+            $wire.removePhoto(index);
+        },
+
+        clearPreviews() {
+            this.previewImages.forEach(image => {
+                URL.revokeObjectURL(image.url);
+            });
+
+            this.previewImages = [];
+        },
+
+        destroy() {
+            this.clearPreviews();
+        }
+    }"
+                                class="mb-6"
+                            >
+                                <div class="mb-4">
+                                    <flux:label>Upload Images (max {{ maxImages() }})</flux:label>
+
+                                    <div class="flex items-center justify-center w-full mt-2">
+                                        <label for="images"
+                                               class="flex flex-col items-center justify-center w-full h-35 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-[#3d3d40]">
+
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg class="w-8 h-8 mb-4 text-white" aria-hidden="true"
+                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                     viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                          stroke-linejoin="round" stroke-width="2"
+                                                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                </svg>
+
+                                                <p class="mb-2 text-sm text-white">
+                                                    <span class="font-semibold text-[#e9a35d]">Click to upload</span>
+                                                    or drag and drop
+                                                </p>
+
+                                                <p class="text-xs text-white">
+                                                    JPG, JPEG, PNG or WEBP, up to {{ maxImages() }} files
+                                                </p>
+                                            </div>
+
+                                            <input
+                                                id="images"
+                                                type="file"
+                                                x-ref="imageInput"
+                                                wire:model="images"
+                                                multiple
+                                                accept="image/jpeg,image/png,image/jpg,image/webp"
+                                                class="hidden"
+                                                @change="loadPreviews($event)"
+                                            />
+                                        </label>
+                                    </div>
+
+                                    <!-- Loading indicator -->
+                                    <div wire:loading wire:target="images" class="mt-4 p-4">
+                                        <div class="flex items-center space-x-3">
+                                            <svg class="animate-spin h-5 w-5 text-blue-600"
+                                                 xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                        stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l2.647-2.647z"></path>
                                             </svg>
-                                            <p class="mb-2 text-sm text-white">
-                                                <span class="font-semibold text-[#e9a35d]">Click to upload</span> or drag and drop
-                                            </p>
-                                            <p class="text-xs text-white">
-                                                JPG, JPEG, PNG, WEBP or GIF, up to {{maxImages()}} files)
-                                            </p>
+
+                                            <span><i>Processing selected images...</i></span>
                                         </div>
-                                        <input
-                                            id="images"
-                                            type="file"
-                                            wire:model="images"
-                                            multiple
-                                            accept="image/jpeg,image/png,image/jpg,image/gif"
-                                            class="hidden"
-                                        />
-                                    </label>
-                                </div>
-
-                                <!-- Loading indicator -->
-                                <div wire:loading wire:target="images" class="mt-4 p-4">
-                                    <div class="flex items-center space-x-3">
-                                        <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        <span> <i> Processing selected images... </i></span>
-                                    </div>
-                                </div>
-                                <!-- Validation errors -->
-                                <flux:error name="images"/>
-                                <flux:error name="images.*"/>
-                            </div>
-
-                            <!-- Preview Section -->
-                            @if($images && count($images) > 0)
-                                <div class="mb-6">
-                                    <div class="flex justify-between items-center mb-3">
-                                        <flux:subheading>Selected Photos ({{ count($images) }})</flux:subheading>
-                                        <button
-                                            type="button"
-                                            wire:click="$set('images', [])"
-                                            class="text-sm text-orange-700 hover:text-red-800"
-                                        >
-                                            Clear all
-                                        </button>
                                     </div>
 
-                                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                        @foreach($images as $index => $image)
-                                            <div class="relative group" wire:key="preview-{{ $index }}-{{ now() }}">
-                                                <!-- Image Preview -->
-                                                <div class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden border-2 border-gray-200 group-hover:border-blue-500 transition-all">
-                                                    <img
-                                                        src="{{ $image->temporaryUrl() }}"
-                                                        alt="Preview {{ $index + 1 }}"
-                                                        class="w-full h-25 object-cover rounded-xl border border-[#eae8e4] bg-[#fcfcf9]"
-                                                        loading="lazy"
-                                                    >
+                                    <!-- Validation errors -->
+                                    <flux:error name="images"/>
+                                    <flux:error name="images.*"/>
+                                </div>
 
-                                                    <!-- File info overlay on hover -->
-                                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                                        <div class="text-white text-xs text-center px-2">
-                                                            <div>{{ $image->getClientOriginalName() }}</div>
-                                                            <div>{{ round($image->getSize() / 1024) }} KB</div>
+                                <!-- Image previews -->
+                                <template x-if="previewImages.length > 0">
+                                    <div>
+                                        <div class="flex justify-between items-center mb-3">
+                                            <flux:subheading>
+                                                Selected Photos
+                                                (<span x-text="previewImages.length"></span>)
+                                            </flux:subheading>
+
+                                            <button
+                                                type="button"
+                                                @click="
+                        clearPreviews();
+                        $refs.imageInput.value = '';
+                        $wire.set('images', []);
+                    "
+                                                wire:loading.attr="disabled"
+                                                wire:target="images"
+                                                class="text-sm text-orange-700 hover:text-red-800"
+                                            >
+                                                Clear all
+                                            </button>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                            <template x-for="(image, index) in previewImages" :key="image.url">
+                                                <div class="relative group">
+
+                                                    <div class="rounded-lg overflow-hidden border-2 border-gray-200 group-hover:border-blue-500 transition-all">
+                                                        <img
+                                                            :src="image.url"
+                                                            :alt="'Preview ' + (index + 1)"
+                                                            class="w-full h-25 object-cover rounded-xl border border-[#eae8e4] bg-[#fcfcf9]"
+                                                            loading="lazy"
+                                                        >
+
+                                                        <div class="absolute inset-0 bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                                            <div class="text-white text-xs text-center px-2">
+                                                                <div x-text="image.name"></div>
+                                                                <div x-text="Math.round(image.size / 1024) + ' KB'"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <button
+                                                        type="button"
+                                                        @click="removePreview(index)"
+                                                        wire:loading.attr="disabled"
+                                                        wire:target="images"
+                                                        class="absolute -top-2 -right-2 bg-orange-700 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 shadow-lg transform transition-transform hover:scale-110"
+                                                        title="Remove this photo"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                             class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                                             stroke="currentColor" stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 011 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+
+                                                    <span
+                                                        class="absolute -top-2 -left-2 bg-white text-black text-xs rounded-full w-6 h-6 flex items-center justify-center shadow-lg"
+                                                        x-text="index + 1">
+                                                    </span>
+
                                                 </div>
-
-                                                <!-- Remove button -->
-                                                <button
-                                                    type="button"
-                                                    wire:click="removePhoto({{ $index }})"
-                                                    class="absolute -top-2 -right-2 bg-orange-700 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 shadow-lg transform transition-transform hover:scale-110"
-                                                    title="Remove this photo"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </button>
-
-                                                <!-- Index badge -->
-                                                <span class="absolute -top-2 -left-2 bg-white text-black text-xs rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
-                                                {{ $index + 1 }}
-                                            </span>
-                                            </div>
-                                        @endforeach
+                                            </template>
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
+                                </template>
+                            </div>
+
 
                         </div>
                         <flux:input label="Name of Product" wire:model="name" placeholder="Name of Product" class="max-full" />

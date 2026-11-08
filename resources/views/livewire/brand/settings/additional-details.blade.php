@@ -7,25 +7,73 @@
         <form wire:submit="submit">
             <flux:fieldset>
                 <div class="space-y-6">
-                    <div class="flex gap-3 items-center">
-                        @if ($logo || $currentLogo)
-                            <div class="w-40 h-40 mt-4">
-                                @if($logo)
-                                    <img src="{{ $logo->temporaryUrl() }}" class="w-full h-full object-cover rounded-xl border border-[#eae8e4] bg-[#fcfcf9]" />
-                                @else
-                                    <img src="{{ $user->brand->image ? asset('storage/'.$currentLogo) : asset($currentLogo) }}" class="w-full h-full object-cover rounded-xl border border-[#eae8e4] bg-[#fcfcf9]" />
-                                @endif
-                            </div>
-                        @endif
+                    <div
+                        x-data="{
+                            preview: null,
+
+                            init() {
+                                this.$watch('$wire.logo', () => {
+                                    if (!this.$wire.logo) return;
+
+                                    // Livewire handles the actual upload.
+                                });
+                            },
+
+                            showPreview(event) {
+                                const file = event.target.files[0];
+
+                                if (!file) return;
+
+                                if (this.preview) {
+                                    URL.revokeObjectURL(this.preview);
+                                }
+
+                                this.preview = URL.createObjectURL(file);
+
+                                // Trigger Livewire upload normally.
+                                $wire.upload('logo', file);
+                            },
+
+                            clearPreview() {
+                                if (this.preview) {
+                                    URL.revokeObjectURL(this.preview);
+                                    this.preview = null;
+                                }
+                            }
+                        }"
+                        class="flex items-center gap-3"
+                    >
+                        <div class="w-40 h-40 mt-4 shrink-0">
+                            <template x-if="preview">
+                                <img
+                                    :src="preview"
+                                    class="w-full h-full object-cover rounded-xl border border-[#eae8e4] bg-[#fcfcf9]"
+                                />
+                            </template>
+
+                            @if ($currentLogo)
+                                <img
+                                    x-show="!preview"
+                                    src="{{ $user->brand->image ? asset('storage/'.$currentLogo) : asset($currentLogo) }}"
+                                    class="w-full h-full object-cover rounded-xl border border-[#eae8e4] bg-[#fcfcf9]"
+                                />
+                            @endif
+                        </div>
+
                         <div>
                             <flux:label>Brand Logo</flux:label>
-                            <input type="file" wire:model="logo" accept="image/*"
-                                   class="mt-2 block w-full text-sm text-[#2c2b28]
-                               file:py-1 file:px-3 file:rounded-sm file:border-0
-                               file:text-sm file:font-[440] file:bg-[#f1efec]
-                             file:text-[#2e2b28] hover:file:bg-[#e9e6e1] file:transition-colors
-                                file:cursor-pointer"
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                @change="showPreview($event)"
+                                class="mt-2 block w-full text-sm text-[#2c2b28]
+                                file:py-1 file:px-3 file:rounded-sm file:border-0
+                                file:text-sm file:font-[440] file:bg-[#f1efec]
+                                file:text-[#2e2b28] hover:file:bg-[#e9e6e1]
+                                file:transition-colors file:cursor-pointer"
                             />
+
                             <flux:error name="logo"/>
                         </div>
                     </div>

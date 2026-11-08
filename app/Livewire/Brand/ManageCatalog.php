@@ -66,6 +66,7 @@ class ManageCatalog extends Component
         $result = AddProductAction::addCatalog($dto);
 
         $this->reset('photos');
+        $this->dispatch('catalog-uploaded');
 
         $message = "{$result['uploaded']} image(s) uploaded successfully.";
         if ($result['skipped'] > 0) {
