@@ -64,7 +64,7 @@
                     <div>
                         <flux:label class="mb-2">Slug</flux:label>
                         <flux:input.group>
-                            <flux:input.group.prefix>knkings.com/</flux:input.group.prefix>
+                            <flux:input.group.prefix>knkings.shop/</flux:input.group.prefix>
                             <flux:input wire:model.live="slug" placeholder="your-store-name" />
                         </flux:input.group>
                         <small>This is the name for accessing your store. Only lowercase letters, numbers, and hyphens are allowed.</small>

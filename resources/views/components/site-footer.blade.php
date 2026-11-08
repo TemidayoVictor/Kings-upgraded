@@ -60,7 +60,7 @@
 
         <div class="pt-8 flex items-center justify-between gap-4">
             <p class="font-body-sm text-body-sm text-text-muted">
-                © {{ date('Y') }} KING'S (knkings.com). All rights reserved.
+                © {{ date('Y') }} KING'S (knkings.shop). All rights reserved.
             </p>
 
             <div class="flex items-center gap-6">
@@ -142,7 +142,7 @@
         {{-- Bottom: Copyright + Legal Micro-Links --}}
         <div class="flex flex-col gap-3 pt-2 border-t border-border-hairline">
             <p class="font-body-sm text-body-sm text-text-muted leading-relaxed">
-                © {{ date('Y') }} KING'S (knkings.com). All rights reserved.
+                © {{ date('Y') }} KING'S (knkings.shop). All rights reserved.
             </p>
 
             <div class="flex items-center gap-5">

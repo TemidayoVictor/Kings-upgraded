@@ -302,7 +302,7 @@
                                     <!-- URL preview -->
                                     @if(strlen($storeSlug ?? '') > 0 && !$errors->has('storeSlug'))
                                         <div class="mt-2 text-xs text-gray-500">
-                                            Full URL: <span class="text-blue-400">www.knkings.com/store/{{ $storeSlug }}</span>
+                                            Full URL: <span class="text-blue-400">https://knkings.store/store/{{ $storeSlug }}</span>
                                         </div>
                                     @endif
 

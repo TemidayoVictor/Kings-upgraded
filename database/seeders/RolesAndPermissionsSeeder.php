@@ -96,7 +96,7 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         // Super Admin User
         $superAdminUser = User::updateOrCreate(
-            ['email' => 'temidayo-super@knkings.com'],
+            ['email' => 'temidayo-super@knkings.shop'],
             [
                 'name' => 'Super Admin',
                 'password' => bcrypt('temidayo-super'),
@@ -108,6 +108,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $superAdminUser->assignRole(UserType::SUPERADMIN);
 
         $this->command->info('Super admin created:');
-        $this->command->info('temidayo-super@knkings.com / temidayo-super');
+        $this->command->info('temidayo-super@knkings.shop / temidayo-super');
     }
 }
