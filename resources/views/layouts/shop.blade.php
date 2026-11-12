@@ -90,7 +90,7 @@
                         {{ $brand->brand_name }}
                     </span>
                     <span class="text-[9px] tracking-[0.24em] text-[var(--on-surface-variant)] uppercase mt-1 truncate">
-                        Est. {{ $brand->created_at?->format('Y') ?? date('Y') }}
+                        Est. {{ $brand->year ?? date('Y') }}
                     </span>
                 </div>
             </a>

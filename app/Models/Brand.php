@@ -42,6 +42,7 @@ class Brand extends Model
         'mode',
         'brand_type',
         'slug',
+        'year',
         'account_name',
         'account_number',
         'bank_name',

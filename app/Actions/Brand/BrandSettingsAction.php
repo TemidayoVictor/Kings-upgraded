@@ -39,6 +39,7 @@ class BrandSettingsAction
             'sub_category' => $dto->selectedSubcategory,
             'brand_type' => $dto->type,
             'slug' => $dto->slug,
+            'year' => $dto->year,
             'description' => $dto->description,
             'position' => $dto->position,
             'state' => $dto->selectedState,

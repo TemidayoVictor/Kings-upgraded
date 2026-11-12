@@ -73,6 +73,15 @@
                         <flux:error name="slug" />
                     </div>
 
+                    <flux:input
+                        label="Year Established"
+                        wire:model="year"
+                        type="number"
+                        min="1900"
+                        max="{{ date('Y') }}"
+                        placeholder="e.g. 2020"
+                    />
+
                      <div class="grid grid-cols-2 gap-x-4 gap-y-6">
                         <flux:select label="State" wire:model.live="selectedState">
                             <option>Select State</option>

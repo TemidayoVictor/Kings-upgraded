@@ -228,8 +228,8 @@
                         <flux:textarea label="Brief Description" resize="none" wire:model="description" placeholder="A short description of the product"/>
                         <flux:input label="Original Price" type="number" wire:model="price" placeholder="Original Price" class="max-full"/>
                         <div class="grid grid-cols-2 gap-x-4 gap-y-6">
-                            <flux:input label="Sales Price" type="number" wire:model="salesPrice" placeholder="Sales Price" />
-                            <flux:input label="Dropshipping Price" type="number" wire:model="dropshippingPrice" placeholder="Dropshipping Price" />
+                            <flux:input label="Sales Price [optional]" type="number" wire:model="salesPrice" placeholder="Sales Price" />
+                            <flux:input label="Dropshipping Price [optional]" type="number" wire:model="dropshippingPrice" placeholder="Dropshipping Price" />
                         </div>
 
                         <div>

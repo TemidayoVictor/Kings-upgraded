@@ -89,15 +89,15 @@
                         </div>
                     </div>
 
-                    <div class="hidden lg:flex absolute -bottom-6 -left-6 bg-surface-card p-4 rounded-xl shadow-lg items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
-                            <span class="material-symbols-outlined text-[20px]">verified</span>
-                        </div>
-                        <div>
-                            <p class="font-label-md text-label-md text-on-surface font-bold">Commerce That Connects</p>
-                            <p class="font-body-sm text-body-sm text-text-muted">Brands, sellers, and customers in one ecosystem</p>
-                        </div>
-                    </div>
+{{--                    <div class="hidden lg:flex absolute -bottom-[4rem] -left-6 bg-surface-card p-4 rounded-xl shadow-lg items-center gap-3">--}}
+{{--                        <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">--}}
+{{--                            <span class="material-symbols-outlined text-[20px]">verified</span>--}}
+{{--                        </div>--}}
+{{--                        <div>--}}
+{{--                            <p class="font-label-md text-label-md text-on-surface font-bold">Commerce That Connects</p>--}}
+{{--                            <p class="font-body-sm text-body-sm text-text-muted">Brands, sellers, and customers in one ecosystem</p>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
 
             </div>

@@ -38,6 +38,8 @@ class BrandSettings extends Component
 
     public ?string $slug = '';
 
+    public ?string $year = '';
+
     public ?string $description = '';
 
     public ?string $position = '';
@@ -65,6 +67,7 @@ class BrandSettings extends Component
             'max:255',
             'regex:/^[A-Za-z0-9_]+$/',
         ],
+        'year' => 'required',
         'description' => 'required|max:50',
         'position' => 'required',
         'selectedState' => 'required',
@@ -107,6 +110,7 @@ class BrandSettings extends Component
         $this->description = $user->brand->description;
         $this->type = $user->brand->brand_type;
         $this->slug = $user->brand->slug;
+        $this->year = $user->brand->year;
         $this->address = $user->brand->address;
         $this->bankName = $user->brand->bank_name;
         $this->accountName = $user->brand->account_name;

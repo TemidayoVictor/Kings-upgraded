@@ -44,7 +44,7 @@ class AddProduct extends Component
         'images' => 'required|array|min:1',
         'images.*' => 'required|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
         'name' => 'string|required',
-        'description' => 'nullable|string|required',
+        'description' => 'nullable|string',
         'price' => 'integer|required',
         'salesPrice' => 'integer|nullable',
         'dropshippingPrice' => 'integer|nullable',
