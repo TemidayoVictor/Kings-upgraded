@@ -437,7 +437,7 @@
                                     @endif
                                 </div>
 
-                                @if($quickViewProduct->stock > 0)
+                                @if($brand->stock_alert && $quickViewProduct->stock > 0)
                                     <span class="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 text-[10px] font-medium px-2 py-1 rounded-full">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
                                         In stock
