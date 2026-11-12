@@ -430,14 +430,16 @@
 
                                 <div>
                                     <div class="mb-3">
-                                        @if($quickViewProduct->in_stock)
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                        @if($store->brand->stock_alert)
+                                            @if($quickViewProduct->in_stock)
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
                                                 <span class="w-1.5 h-1.5 bg-emerald-600 rounded-full"></span>In Stock
                                             </span>
-                                        @else
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-100">
+                                            @else
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-100">
                                                 <span class="w-1.5 h-1.5 bg-rose-600 rounded-full"></span>Out of Stock
                                             </span>
+                                            @endif
                                         @endif
                                     </div>
 
